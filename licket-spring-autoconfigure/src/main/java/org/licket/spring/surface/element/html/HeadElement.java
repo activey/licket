@@ -27,14 +27,10 @@ public class HeadElement extends BaseElement {
         resourcesStorage.getJavascriptResources().forEach(resource -> {
             LOGGER.debug("Using head JS resource: {}", resource.getName());
 
+            // TODO experimental
             ScriptElement scriptElement = new ScriptElement();
             scriptElement.setSrc(resourcesStorage.getResourceUrl(resource));
             addChildElement(scriptElement);
         });
-    }
-
-    @Override
-    public BaseElement provideElement() {
-        return this;
     }
 }

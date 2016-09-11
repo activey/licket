@@ -4,8 +4,6 @@ import java.io.InputStream;
 
 public class LicketComponentView {
 
-    private String componentViewTemplate;
-
     public static LicketComponentView fromComponentClass(Class<? extends AbstractLicketComponent<?>> componentClass) {
         return fromClassPathResource(componentClass.getName().replaceAll("\\.", "/").concat(".html"));
     }
@@ -15,15 +13,17 @@ public class LicketComponentView {
     }
 
     public static LicketComponentView fromCurrentMarkup() {
-        // TODO
+        // TODO think about it
         return new LicketComponentView("");
     }
 
-    private LicketComponentView(String componentViewTemplate) {
-        this.componentViewTemplate = componentViewTemplate;
+    private String componentViewLocation;
+
+    private LicketComponentView(String componentViewLocation) {
+        this.componentViewLocation = componentViewLocation;
     }
 
     public InputStream readViewContent() {
-        return LicketComponentView.class.getClassLoader().getResourceAsStream(componentViewTemplate);
+        return LicketComponentView.class.getClassLoader().getResourceAsStream(componentViewLocation);
     }
 }

@@ -6,7 +6,7 @@ import nu.xom.ParentNode;
 /**
  * @author activey
  */
-public class BaseElement extends Element implements ElementProvider {
+public class BaseElement extends Element {
 
     public BaseElement(String name, String namespace) {
         super(name, namespace);
@@ -31,10 +31,5 @@ public class BaseElement extends Element implements ElementProvider {
 
     protected final void addChildElement(BaseElement baseElement) {
         super.appendChild(baseElement);
-    }
-
-    @Override
-    public BaseElement provideElement() {
-        return this;
     }
 }

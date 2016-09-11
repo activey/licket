@@ -1,13 +1,15 @@
 package org.licket.surface;
 
 import java.util.Optional;
+import org.licket.surface.attribute.BaseAttribute;
 import org.licket.surface.element.BaseElement;
 import org.licket.surface.tag.ElementFactories;
+import org.licket.surface.tag.ElementFactory;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
-import org.licket.surface.tag.ElementFactory;
+import nu.xom.Attribute.Type;
 
 public class SurfaceNodeFactory extends NodeFactory {
 
@@ -27,8 +29,7 @@ public class SurfaceNodeFactory extends NodeFactory {
 
     @Override
     public Element startMakingElement(String name, String namespace) {
-        Optional<ElementFactory> elementFactoryOptional = elementFactories
-            .getElementFactoryByNamespace(namespace);
+        Optional<ElementFactory> elementFactoryOptional = elementFactories.getElementFactoryByNamespace(namespace);
         if (!elementFactoryOptional.isPresent()) {
             currentElement = new BaseElement(name, namespace);
         }
@@ -59,8 +60,22 @@ public class SurfaceNodeFactory extends NodeFactory {
     }
 
     @Override
-    public Nodes makeAttribute(String name, String namespace, String value, Attribute.Type type) {
-        return new Nodes(new Attribute(name, namespace, value));
+    public Nodes makeAttribute(String name, String namespace, String value, Type type) {
+        Optional<ElementFactory> elementFactoryOptional = elementFactories.getElementFactoryByNamespace(namespace);
+        if (!elementFactoryOptional.isPresent()) {
+            return new Nodes(new Attribute(name, namespace, value));
+        }
+        Attribute xmlAttribute = new Attribute(name, namespace, value);
+        Optional<BaseAttribute> attributeOptional = elementFactoryOptional.get()
+            .createAttribute(xmlAttribute.getLocalName());
+        if (attributeOptional.isPresent()) {
+            BaseAttribute attribute = attributeOptional.get();
+            attribute.setValue(value);
+            attribute.start(currentElement);
+
+            return new Nodes(attribute);
+        }
+        return new Nodes(xmlAttribute);
     }
 
     @Override

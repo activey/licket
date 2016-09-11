@@ -3,12 +3,9 @@ package org.licket.spring.web;
 import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.http.ResponseEntity.ok;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.util.Optional;
 
-import com.google.common.io.ByteStreams;
 import org.licket.core.LicketApplication;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.model.LicketControllerModel;
@@ -39,7 +36,7 @@ public class LicketComponentController {
     public @ResponseBody LicketControllerModel getLicketComponentModel(@PathVariable String compositeId) {
         Optional<AbstractLicketComponent<?>> component = licketApplication.findComponent(compositeId);
         if (!component.isPresent()) {
-            // TODO
+            // TODO return 404 when there is no such component
             return null;
         }
         return new LicketControllerModel(component.get().getComponentModel().get());
@@ -47,20 +44,20 @@ public class LicketComponentController {
 
     @GetMapping(value = "/{compositeId}/controller")
     public ResponseEntity<InputStreamResource> generateComponentControllerCode(@PathVariable String compositeId) {
-        // TODO
+        // TODO implement component js code
         return null;
     }
 
-    @Cacheable("component-view-cache")
+//    @Cacheable("component-view-cache")
     @GetMapping(value = "/{compositeId}/view", produces = "text/html")
     public ResponseEntity<ByteArrayResource> generateComponentViewCode(@PathVariable String compositeId) {
         Optional<AbstractLicketComponent<?>> component = licketApplication.findComponent(compositeId);
         if (!component.isPresent()) {
-            // TODO
+            // TODO return 404 when there is no such component
             return null;
         }
 
-        // TODO very temporary ...
+        // TODO very temporary, surface context should be invoked on session create, not here!
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
         new SurfaceContext(surfaceElementFactories)
             .processTemplateContent(component.get().getComponentView().readViewContent(), byteArrayStream, true);
