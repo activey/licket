@@ -18,8 +18,8 @@ public class HeadElement extends BaseElement {
     @Autowired
     private ResourcesStorage resourcesStorage;
 
-    public HeadElement() {
-        super("head", NAMESPACE);
+    public HeadElement(String name) {
+        super(name, NAMESPACE);
     }
 
     @Override

@@ -25,12 +25,18 @@ public class HtmlElementsConfiguration {
     @Bean
     @RequestScope
     public ElementProvider headElement() {
-        return provideElement("head", () -> new HeadElement());
+        return provideElement("head", (name) -> new HeadElement(name));
+    }
+
+    @Bean(name = "default")
+    @RequestScope
+    public ElementProvider defaultElement() {
+        return provideElement("default-licket-element", (name) -> new DefaultElement(name));
     }
 
     @Bean
     @RequestScope
     public AttributeProvider idAttribute() {
-        return provideAttribute("id", () -> new IdAttribute());
+        return provideAttribute("id", (name) -> new IdAttribute(name));
     }
 }

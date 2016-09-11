@@ -5,14 +5,12 @@ import org.licket.surface.element.ElementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
-import java.util.function.Supplier;
-
 /**
  * @author activey
  */
 public class SpringAutowiredElementProvider implements ElementProvider {
 
-    public static ElementProvider provideElement(String localName, Supplier<BaseElement> elementSupplier) {
+    public static ElementProvider provideElement(String localName, NodeSupplier<BaseElement> elementSupplier) {
         return new SpringAutowiredElementProvider(localName, elementSupplier);
     }
 
@@ -20,11 +18,11 @@ public class SpringAutowiredElementProvider implements ElementProvider {
     private AutowireCapableBeanFactory beanFactory;
 
     private String localName;
-    private Supplier<BaseElement> elementSupplier;
+    private NodeSupplier<BaseElement> nodeSupplier;
 
-    private SpringAutowiredElementProvider(String localName, Supplier<BaseElement> elementSupplier) {
+    private SpringAutowiredElementProvider(String localName, NodeSupplier<BaseElement> nodeSupplier) {
         this.localName = localName;
-        this.elementSupplier = elementSupplier;
+        this.nodeSupplier = nodeSupplier;
     }
 
     @Override
@@ -34,7 +32,7 @@ public class SpringAutowiredElementProvider implements ElementProvider {
 
     @Override
     public final BaseElement provideElement() {
-        BaseElement element = elementSupplier.get();
+        BaseElement element = nodeSupplier.get(localName);
         beanFactory.autowireBean(element);
         return element;
     }

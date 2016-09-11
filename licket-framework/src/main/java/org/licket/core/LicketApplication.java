@@ -1,12 +1,12 @@
 package org.licket.core;
 
 import static java.util.Optional.ofNullable;
+import static org.licket.core.id.CompositeId.fromStringValue;
 
 import java.io.Serializable;
 import java.util.Optional;
 import org.licket.core.id.CompositeId;
-import org.licket.core.view.AbstractLicketComponent;
-import org.licket.core.view.AbstractLicketPage;
+import org.licket.core.view.LicketComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class LicketApplication implements Serializable {
@@ -14,7 +14,7 @@ public class LicketApplication implements Serializable {
     private String name;
 
     @Autowired
-    private AbstractLicketPage<?> mainLicketPage;
+    private LicketComponent<?> rootComponent;
 
     public String getName() {
         return name;
@@ -24,11 +24,11 @@ public class LicketApplication implements Serializable {
         this.name = name;
     }
 
-    public AbstractLicketComponent<?> getRootComponent() {
-        return mainLicketPage;
+    public LicketComponent<?> getRootComponent() {
+        return rootComponent;
     }
 
-    public Optional<AbstractLicketComponent<?>> findComponent(String compositeIdValue) {
-        return ofNullable(mainLicketPage.findChild(new CompositeId(compositeIdValue)));
+    public Optional<LicketComponent<?>> findComponent(String compositeIdValue) {
+        return ofNullable(rootComponent.findChild(fromStringValue(compositeIdValue)));
     }
 }

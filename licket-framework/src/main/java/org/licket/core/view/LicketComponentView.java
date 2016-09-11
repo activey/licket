@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 public class LicketComponentView {
 
-    public static LicketComponentView fromComponentClass(Class<? extends AbstractLicketComponent<?>> componentClass) {
+    public static LicketComponentView fromComponentClass(Class<? extends LicketComponent<?>> componentClass) {
         return fromClassPathResource(componentClass.getName().replaceAll("\\.", "/").concat(".html"));
     }
 

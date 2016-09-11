@@ -7,13 +7,16 @@ import java.io.ByteArrayOutputStream;
 import java.util.Optional;
 
 import org.licket.core.LicketApplication;
-import org.licket.core.view.AbstractLicketComponent;
+import org.licket.core.resource.ByteArrayResource;
+import org.licket.core.resource.Resource;
+import org.licket.core.view.LicketComponent;
 import org.licket.core.view.model.LicketControllerModel;
+import org.licket.spring.resource.ResourcesStorage;
 import org.licket.surface.SurfaceContext;
 import org.licket.surface.tag.ElementFactories;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,9 +25,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
+
 @Controller
 @RequestMapping("/licket/component")
 public class LicketComponentController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LicketComponentController.class);
 
     @Autowired
     private LicketApplication licketApplication;
@@ -32,9 +39,25 @@ public class LicketComponentController {
     @Autowired
     private ElementFactories surfaceElementFactories;
 
+    @Autowired
+    private ResourcesStorage resourcesStorage;
+
+    @PostConstruct
+    private void initialize() {
+        LOGGER.debug("Initializing licket application: {}.", licketApplication.getName());
+
+        ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
+        LicketComponent component = licketApplication.getRootComponent();
+
+        new SurfaceContext(surfaceElementFactories)
+                .processTemplateContent(component.getComponentView().readViewContent(), byteArrayStream, true);
+        resourcesStorage
+                .putResource(new ByteArrayResource(component.getId(), "text/html", byteArrayStream.toByteArray()));
+    }
+
     @GetMapping(value = "/{compositeId}")
     public @ResponseBody LicketControllerModel getLicketComponentModel(@PathVariable String compositeId) {
-        Optional<AbstractLicketComponent<?>> component = licketApplication.findComponent(compositeId);
+        Optional<LicketComponent<?>> component = licketApplication.findComponent(compositeId);
         if (!component.isPresent()) {
             // TODO return 404 when there is no such component
             return null;
@@ -50,19 +73,18 @@ public class LicketComponentController {
 
 //    @Cacheable("component-view-cache")
     @GetMapping(value = "/{compositeId}/view", produces = "text/html")
-    public ResponseEntity<ByteArrayResource> generateComponentViewCode(@PathVariable String compositeId) {
-        Optional<AbstractLicketComponent<?>> component = licketApplication.findComponent(compositeId);
+    public ResponseEntity<InputStreamResource> generateComponentViewCode(@PathVariable String compositeId) {
+        Optional<LicketComponent<?>> component = licketApplication.findComponent(compositeId);
         if (!component.isPresent()) {
             // TODO return 404 when there is no such component
             return null;
         }
-
-        // TODO very temporary, surface context should be invoked on session create, not here!
-        ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-        new SurfaceContext(surfaceElementFactories)
-            .processTemplateContent(component.get().getComponentView().readViewContent(), byteArrayStream, true);
-
-        return ok().contentType(parseMediaType("text/html"))
-            .body(new ByteArrayResource(byteArrayStream.toByteArray()));
+        Optional<Resource> componentViewResourceOptional = resourcesStorage.getResource(compositeId);
+        if (!componentViewResourceOptional.isPresent()) {
+            // TODO return 404
+            return null;
+        }
+        return ok().contentType(parseMediaType(componentViewResourceOptional.get().getMimeType()))
+            .body(new InputStreamResource(componentViewResourceOptional.get().getStream()));
     }
 }

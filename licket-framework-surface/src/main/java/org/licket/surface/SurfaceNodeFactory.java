@@ -37,7 +37,7 @@ public class SurfaceNodeFactory extends NodeFactory {
         if (elementOptional.isPresent()) {
             currentElement = elementOptional.get();
         } else {
-            currentElement = new BaseElement(name, namespace);
+            currentElement = elementFactoryOptional.get().createDefaultElement(name);
         }
         currentElement.start();
         return currentElement;

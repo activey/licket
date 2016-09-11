@@ -1,9 +1,11 @@
 package org.licket.spring.surface.element.html;
 
 import org.licket.surface.attribute.AttributeProvider;
+import org.licket.surface.element.BaseElement;
 import org.licket.surface.element.ElementProvider;
 import org.licket.surface.tag.AbstractElementFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
@@ -23,6 +25,10 @@ public class HtmlElementFactory extends AbstractElementFactory {
     @Autowired(required = false)
     private Collection<AttributeProvider> factoryAttributesProviders = newArrayList();
 
+    @Autowired
+    @Qualifier("default")
+    private ElementProvider defaultElement;
+
     public HtmlElementFactory() {
         super(NAMESPACE);
     }
@@ -31,5 +37,12 @@ public class HtmlElementFactory extends AbstractElementFactory {
     private void fillFactory() {
         factoryElementsProviders.forEach(super::element);
         factoryAttributesProviders.forEach(super::attribute);
+    }
+
+    @Override
+    public BaseElement createDefaultElement(String name) {
+        BaseElement element = defaultElement.provideElement();
+        element.setLocalName(name);
+        return element;
     }
 }

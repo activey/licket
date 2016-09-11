@@ -10,6 +10,8 @@ import java.util.Optional;
  */
 public interface ElementFactory {
 
+    BaseElement createDefaultElement(String name);
+
     Optional<BaseElement> createElement(String name);
 
     Optional<BaseAttribute> createAttribute(String name);

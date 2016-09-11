@@ -1,11 +1,13 @@
 package org.licket.surface.element;
 
-import nu.xom.Element;
-
 /**
  * @author activey
  */
 public interface ElementTraverser {
 
-	boolean elementMatch(Element element);
+	static ElementTraverser withComponentIdSet() {
+		return element -> element.isComponentIdSet();
+	}
+
+	boolean elementMatch(BaseElement element);
 }

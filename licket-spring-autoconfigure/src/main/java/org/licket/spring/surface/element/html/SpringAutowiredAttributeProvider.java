@@ -13,7 +13,7 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
  */
 public class SpringAutowiredAttributeProvider implements AttributeProvider {
 
-    public static AttributeProvider provideAttribute(String localName, Supplier<BaseAttribute> attributeSupplier) {
+    public static AttributeProvider provideAttribute(String localName, NodeSupplier<BaseAttribute> attributeSupplier) {
         return new SpringAutowiredAttributeProvider(localName, attributeSupplier);
     }
 
@@ -21,9 +21,9 @@ public class SpringAutowiredAttributeProvider implements AttributeProvider {
     private AutowireCapableBeanFactory beanFactory;
 
     private String localName;
-    private Supplier<BaseAttribute> attributeSupplier;
+    private NodeSupplier<BaseAttribute> attributeSupplier;
 
-    private SpringAutowiredAttributeProvider(String localName, Supplier<BaseAttribute> attributeSupplier) {
+    private SpringAutowiredAttributeProvider(String localName, NodeSupplier<BaseAttribute> attributeSupplier) {
         this.localName = localName;
         this.attributeSupplier = attributeSupplier;
     }
@@ -35,7 +35,7 @@ public class SpringAutowiredAttributeProvider implements AttributeProvider {
 
     @Override
     public final BaseAttribute provideAttribute() {
-        BaseAttribute element = attributeSupplier.get();
+        BaseAttribute element = attributeSupplier.get(localName);
         beanFactory.autowireBean(element);
         return element;
     }
