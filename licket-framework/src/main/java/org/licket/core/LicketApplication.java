@@ -5,7 +5,9 @@ import static org.licket.core.id.CompositeId.fromStringValue;
 
 import java.io.Serializable;
 import java.util.Optional;
+
 import org.licket.core.id.CompositeId;
+import org.licket.core.view.AbstractLicketPage;
 import org.licket.core.view.LicketComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +16,7 @@ public class LicketApplication implements Serializable {
     private String name;
 
     @Autowired
-    private LicketComponent<?> rootComponent;
+    private AbstractLicketPage<?> mainPage;
 
     public String getName() {
         return name;
@@ -25,10 +27,14 @@ public class LicketApplication implements Serializable {
     }
 
     public LicketComponent<?> getRootComponent() {
-        return rootComponent;
+        return mainPage;
+    }
+
+    public Optional<LicketComponent<?>> findComponent(CompositeId compositeId) {
+        return ofNullable(mainPage.findChild(compositeId));
     }
 
     public Optional<LicketComponent<?>> findComponent(String compositeIdValue) {
-        return ofNullable(rootComponent.findChild(fromStringValue(compositeIdValue)));
+        return findComponent(fromStringValue(compositeIdValue));
     }
 }

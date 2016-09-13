@@ -8,10 +8,11 @@
         Here will be some kind contact list.
         <span>Just playing</span>
 
-        <div class="ui items" lick:id="contacts-list">
-            <div class="item">
+        <!-- this div will be extracted as a separate component -->
+        <div class="ui items" lick:id="contacts">
+            <div class="item" lick:id="contact">
                 <a class="ui tiny image">
-                    <img id="contact-picture-url"/>
+                    <img lick:id="contact-picture-url"/>
                 </a>
                 <div class="content">
                     <a class="header" lick:id="contact-name">Stevie Feliciano</a>

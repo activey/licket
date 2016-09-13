@@ -1,7 +1,7 @@
 package org.licket.surface.attribute;
 
 import nu.xom.Attribute;
-import org.licket.surface.element.BaseElement;
+import org.licket.surface.element.SurfaceElement;
 
 /**
  * @author activey
@@ -12,9 +12,9 @@ public class BaseAttribute extends Attribute {
         super(localName, namespace, "", type);
     }
 
-    public final void start(BaseElement relatedElement) {
+    public final void start(SurfaceElement relatedElement) {
         onStart(relatedElement);
     }
 
-    protected void onStart(BaseElement relatedElement) {}
+    protected void onStart(SurfaceElement relatedElement) {}
 }

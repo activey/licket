@@ -1,7 +1,7 @@
 package org.licket.spring.surface.element.html;
 
 import org.licket.surface.attribute.AttributeProvider;
-import org.licket.surface.element.BaseElement;
+import org.licket.surface.element.SurfaceElement;
 import org.licket.surface.element.ElementProvider;
 import org.licket.surface.tag.AbstractElementFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +40,8 @@ public class HtmlElementFactory extends AbstractElementFactory {
     }
 
     @Override
-    public BaseElement createDefaultElement(String name) {
-        BaseElement element = defaultElement.provideElement();
+    public SurfaceElement createDefaultElement(String name) {
+        SurfaceElement element = defaultElement.provideElement();
         element.setLocalName(name);
         return element;
     }

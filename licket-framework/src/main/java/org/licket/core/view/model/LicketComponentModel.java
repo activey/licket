@@ -3,11 +3,11 @@ package org.licket.core.view.model;
 /**
  * @author activey
  */
-public class LicketControllerModel {
+public class LicketComponentModel {
 
     private Object modelObject;
 
-    public LicketControllerModel(Object modelObject) {
+    public LicketComponentModel(Object modelObject) {
         this.modelObject = modelObject;
     }
 

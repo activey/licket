@@ -9,5 +9,5 @@ public interface ElementTraverser {
 		return element -> element.isComponentIdSet();
 	}
 
-	boolean elementMatch(BaseElement element);
+	boolean elementMatch(SurfaceElement element);
 }

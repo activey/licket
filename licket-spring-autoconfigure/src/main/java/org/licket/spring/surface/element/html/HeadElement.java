@@ -1,7 +1,7 @@
 package org.licket.spring.surface.element.html;
 
 import org.licket.spring.resource.ResourcesStorage;
-import org.licket.surface.element.BaseElement;
+import org.licket.surface.element.SurfaceElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import static org.licket.spring.surface.element.html.HtmlElementFactory.NAMESPAC
 /**
  * @author activey
  */
-public class HeadElement extends BaseElement {
+public class HeadElement extends SurfaceElement {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HeadElement.class);
 

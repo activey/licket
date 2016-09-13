@@ -37,9 +37,10 @@
         <pl.pragmatists.JUnitParams.version>1.0.2</pl.pragmatists.JUnitParams.version>
 
         <!-- Inner dependencies -->
-        <org.licket.licket-framework.version>0.0.1-SNAPSHOT</org.licket.licket-framework.version>
-        <org.licket.licket-framework-surface.version>0.0.1-SNAPSHOT</org.licket.licket-framework-surface.version>
-        <org.licket.licket-spring-autoconfigure.version>0.0.1-SNAPSHOT</org.licket.licket-spring-autoconfigure.version>
+        <org.licket.licket-framework.version>${project.version}</org.licket.licket-framework.version>
+        <org.licket.licket-common.version>${project.version}</org.licket.licket-common.version>
+        <org.licket.licket-framework-surface.version>${project.version}</org.licket.licket-framework-surface.version>
+        <org.licket.licket-spring-autoconfigure.version>${project.version}</org.licket.licket-spring-autoconfigure.version>
     </properties>
 
     <build>
@@ -127,6 +128,11 @@
             <!-- Inner dependencies -->
             <dependency>
                 <groupId>org.licket</groupId>
+                <artifactId>licket-common</artifactId>
+                <version>${org.licket.licket-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.licket</groupId>
                 <artifactId>licket-framework</artifactId>
                 <version>${org.licket.licket-framework.version}</version>
             </dependency>
@@ -144,6 +150,7 @@
     </dependencyManagement>
 
     <modules>
+        <module>licket-common</module>
         <module>licket-framework</module>
         <module>licket-framework-surface</module>
         <module>licket-spring-autoconfigure</module>

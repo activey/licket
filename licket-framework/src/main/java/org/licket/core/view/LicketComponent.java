@@ -2,6 +2,7 @@ package org.licket.core.view;
 
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
+import org.licket.core.view.render.ComponentRenderingContext;
 
 /**
  * @author activey
@@ -22,4 +23,6 @@ public interface LicketComponent<T> {
     String getId();
 
     void initialize();
+
+    void render(ComponentRenderingContext renderingContext);
 }

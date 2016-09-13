@@ -27,7 +27,7 @@
 
         <dependency>
             <groupId>org.licket</groupId>
-            <artifactId>licket-framework</artifactId>
+            <artifactId>licket-common</artifactId>
         </dependency>
 
         <!-- Logging -->

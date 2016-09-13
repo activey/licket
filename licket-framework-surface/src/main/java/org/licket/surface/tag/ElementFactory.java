@@ -1,7 +1,7 @@
 package org.licket.surface.tag;
 
 import org.licket.surface.attribute.BaseAttribute;
-import org.licket.surface.element.BaseElement;
+import org.licket.surface.element.SurfaceElement;
 
 import java.util.Optional;
 
@@ -10,9 +10,9 @@ import java.util.Optional;
  */
 public interface ElementFactory {
 
-    BaseElement createDefaultElement(String name);
+    SurfaceElement createDefaultElement(String name);
 
-    Optional<BaseElement> createElement(String name);
+    Optional<SurfaceElement> createElement(String name);
 
     Optional<BaseAttribute> createAttribute(String name);
 

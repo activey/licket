@@ -2,23 +2,20 @@ package org.licket.core.view;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.licket.core.model.LicketModel.empty;
+import static org.licket.core.view.LicketComponentView.fromComponentClass;
 import static org.licket.core.view.LicketComponentView.fromCurrentMarkup;
 import java.util.List;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
+import org.licket.core.view.render.ComponentRenderingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import javax.annotation.PostConstruct;
 
 public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLicketComponent.class);
-
-    @Autowired
-    private AutowireCapableBeanFactory beanFactory;
 
     private String id;
     private LicketComponentView componentView;
@@ -44,17 +41,22 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
     @PostConstruct
     public final void initialize() {
-        children.stream().forEach(this::initializeChildComponent);
+        LOGGER.debug("Initializing component: {}", id);
+
+        children.forEach(component -> component.initialize());
         onInitialize();
     }
 
-    private void initializeChildComponent(LicketComponent<?> licketComponent) {
-        LOGGER.debug("Initializing child component: {}", licketComponent.getId());
-        beanFactory.autowireBean(licketComponent);
-        licketComponent.initialize();
+    protected void onInitialize() {}
+
+    public final void render(ComponentRenderingContext renderingContext) {
+        LOGGER.debug("Rendering component: {}", id);
+
+        children.forEach(component -> component.render(renderingContext));
+        onRender(renderingContext);
     }
 
-    protected void onInitialize() {}
+    protected void onRender(ComponentRenderingContext renderingContext) {}
 
     protected void add(LicketComponent<?> licketComponent) {
         licketComponent.setParent(this);
@@ -83,11 +85,10 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
     @Override
     public LicketComponent<?> findChild(CompositeId compositeId) {
-        String currentId = compositeId.next();
-        if (this.id.equals(currentId) && !compositeId.hasMore()) {
-            return this;
-        }
         if (!compositeId.hasMore()) {
+            if (this.id.equals(compositeId.next())) {
+                return this;
+            }
             return null;
         }
         for (LicketComponent<?> child : children) {

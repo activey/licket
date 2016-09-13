@@ -7,7 +7,7 @@ public interface ElementProvider {
 
     String getLocalName();
 
-    BaseElement provideElement();
+    SurfaceElement provideElement();
 
     static ElementProvider empty(String localName) {
         return new ElementProvider() {
@@ -17,7 +17,7 @@ public interface ElementProvider {
             }
 
             @Override
-            public BaseElement provideElement() {
+            public SurfaceElement provideElement() {
                 return null;
             }
         };

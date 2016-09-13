@@ -2,7 +2,7 @@ package org.licket.surface;
 
 import java.util.Optional;
 import org.licket.surface.attribute.BaseAttribute;
-import org.licket.surface.element.BaseElement;
+import org.licket.surface.element.SurfaceElement;
 import org.licket.surface.tag.ElementFactories;
 import org.licket.surface.tag.ElementFactory;
 import nu.xom.Attribute;
@@ -15,7 +15,7 @@ public class SurfaceNodeFactory extends NodeFactory {
 
     private final SurfaceContext surfaceContext;
     private ElementFactories elementFactories;
-    private BaseElement currentElement;
+    private SurfaceElement currentElement;
 
     public SurfaceNodeFactory(SurfaceContext surfaceContext, ElementFactories elementFactories) {
         this.surfaceContext = surfaceContext;
@@ -31,9 +31,9 @@ public class SurfaceNodeFactory extends NodeFactory {
     public Element startMakingElement(String name, String namespace) {
         Optional<ElementFactory> elementFactoryOptional = elementFactories.getElementFactoryByNamespace(namespace);
         if (!elementFactoryOptional.isPresent()) {
-            currentElement = new BaseElement(name, namespace);
+            currentElement = new SurfaceElement(name, namespace);
         }
-        Optional<BaseElement> elementOptional = elementFactoryOptional.get().createElement(name);
+        Optional<SurfaceElement> elementOptional = elementFactoryOptional.get().createElement(name);
         if (elementOptional.isPresent()) {
             currentElement = elementOptional.get();
         } else {
@@ -80,7 +80,7 @@ public class SurfaceNodeFactory extends NodeFactory {
 
     @Override
     public Nodes finishMakingElement(Element element) {
-        BaseElement finishingElement = (BaseElement) element;
+        SurfaceElement finishingElement = (SurfaceElement) element;
         finishingElement.finish();
 
         return new Nodes(finishingElement);

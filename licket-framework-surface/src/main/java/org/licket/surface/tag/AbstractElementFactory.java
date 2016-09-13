@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.licket.surface.attribute.AttributeProvider;
 import org.licket.surface.attribute.BaseAttribute;
-import org.licket.surface.element.BaseElement;
+import org.licket.surface.element.SurfaceElement;
 import org.licket.surface.element.ElementProvider;
 
 /**
@@ -26,7 +26,7 @@ public abstract class AbstractElementFactory implements ElementFactory {
     }
 
     @Override
-    public final Optional<BaseElement> createElement(String name) {
+    public final Optional<SurfaceElement> createElement(String name) {
         return ofNullable(ofNullable(elements.get(name)).orElse(empty(name)).provideElement());
     }
 

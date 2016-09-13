@@ -1,7 +1,5 @@
 package org.licket.surface.attribute;
 
-import java.util.function.Supplier;
-
 /**
  * @author activey
  */

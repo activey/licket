@@ -8,17 +8,17 @@ import static org.licket.surface.element.ElementTraverser.withComponentIdSet;
 import java.util.Optional;
 
 import nu.xom.ParentNode;
-import org.licket.core.id.CompositeId;
 import nu.xom.Element;
+import org.licket.core.id.CompositeId;
 
 /**
  * @author activey
  */
-public class BaseElement extends Element {
+public class SurfaceElement extends Element {
 
     private String componentId;
 
-    public BaseElement(String name, String namespace) {
+    public SurfaceElement(String name, String namespace) {
         super(name, namespace);
     }
 
@@ -34,24 +34,24 @@ public class BaseElement extends Element {
 
     protected void onStart() {}
 
-    protected final BaseElement getParentElement() {
+    protected final SurfaceElement getParentElement() {
         ParentNode parentNode = getParent();
-        if (parentNode instanceof BaseElement) {
-            return (BaseElement) parentNode;
+        if (parentNode instanceof SurfaceElement) {
+            return (SurfaceElement) parentNode;
         }
         return null;
     }
 
-    protected final void addChildElement(BaseElement baseElement) {
-        super.appendChild(baseElement);
+    protected final void addChildElement(SurfaceElement surfaceElement) {
+        super.appendChild(surfaceElement);
     }
 
     public final void setComponentId(String componentId) {
         this.componentId = componentId;
     }
 
-    protected Optional<BaseElement> traverseUp(ElementTraverser elementTraverser) {
-        BaseElement parent = getParentElement();
+    protected Optional<SurfaceElement> traverseUp(ElementTraverser elementTraverser) {
+        SurfaceElement parent = getParentElement();
         if (parent == null) {
             return empty();
         }
@@ -73,7 +73,7 @@ public class BaseElement extends Element {
         if (!isComponentIdSet()) {
             return null;
         }
-        Optional<BaseElement> parentOptional = traverseUp(withComponentIdSet());
+        Optional<SurfaceElement> parentOptional = traverseUp(withComponentIdSet());
         if (!parentOptional.isPresent()) {
             return fromStringValue(componentId);
         }
@@ -81,8 +81,8 @@ public class BaseElement extends Element {
                 componentId);
     }
 
-    public final void replaceWith(BaseElement replacement) {
-        BaseElement parentElement = getParentElement();
+    public final void replaceWith(SurfaceElement replacement) {
+        SurfaceElement parentElement = getParentElement();
         if (parentElement == null) {
             return;
         }

@@ -1,10 +1,7 @@
 package org.licket.spring.surface.element.html;
 
-import java.util.function.Supplier;
-
 import org.licket.surface.attribute.AttributeProvider;
 import org.licket.surface.attribute.BaseAttribute;
-import org.licket.surface.element.BaseElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 

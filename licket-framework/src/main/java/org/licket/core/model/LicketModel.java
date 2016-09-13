@@ -1,7 +1,5 @@
 package org.licket.core.model;
 
-import org.licket.core.resource.image.ImageResource;
-
 import java.util.function.Supplier;
 
 import static org.licket.core.common.Suppliers.of;
@@ -28,7 +26,6 @@ public class LicketModel<T> {
     }
 
     public LicketModel(Supplier<T> modelObjectSupplier) {
-        this.modelObject = modelObjectSupplier.get();
         this.modelObjectSupplier = modelObjectSupplier;
     }
 

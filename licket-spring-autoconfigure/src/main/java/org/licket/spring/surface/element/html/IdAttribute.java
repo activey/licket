@@ -2,7 +2,7 @@ package org.licket.spring.surface.element.html;
 
 import org.licket.core.LicketApplication;
 import org.licket.surface.attribute.BaseAttribute;
-import org.licket.surface.element.BaseElement;
+import org.licket.surface.element.SurfaceElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static nu.xom.Attribute.Type.ID;
@@ -20,7 +20,7 @@ public class IdAttribute extends BaseAttribute {
     }
 
     @Override
-    protected void onStart(BaseElement relatedElement) {
+    protected void onStart(SurfaceElement relatedElement) {
         relatedElement.setComponentId(getValue());
     }
 }
