@@ -5,11 +5,11 @@ import org.licket.surface.attribute.BaseAttribute;
 import org.licket.surface.element.SurfaceElement;
 import org.licket.surface.tag.ElementFactories;
 import org.licket.surface.tag.ElementFactory;
-import nu.xom.Attribute;
-import nu.xom.Element;
-import nu.xom.NodeFactory;
-import nu.xom.Nodes;
-import nu.xom.Attribute.Type;
+import org.licket.xml.dom.Attribute;
+import org.licket.xml.dom.Attribute.Type;
+import org.licket.xml.dom.Element;
+import org.licket.xml.dom.NodeFactory;
+import org.licket.xml.dom.Nodes;
 
 public class SurfaceNodeFactory extends NodeFactory {
 
@@ -23,21 +23,16 @@ public class SurfaceNodeFactory extends NodeFactory {
     }
 
     @Override
-    public Element makeRootElement(String name, String namespace) {
-        return startMakingElement(name, namespace);
-    }
-
-    @Override
-    public Element startMakingElement(String name, String namespace) {
+    public Element startMakingElement(String localName, String namespace) {
         Optional<ElementFactory> elementFactoryOptional = elementFactories.getElementFactoryByNamespace(namespace);
         if (!elementFactoryOptional.isPresent()) {
-            currentElement = new SurfaceElement(name, namespace);
+            currentElement = new SurfaceElement(localName, namespace);
         }
-        Optional<SurfaceElement> elementOptional = elementFactoryOptional.get().createElement(name);
+        Optional<SurfaceElement> elementOptional = elementFactoryOptional.get().createElement(localName);
         if (elementOptional.isPresent()) {
             currentElement = elementOptional.get();
         } else {
-            currentElement = elementFactoryOptional.get().createDefaultElement(name);
+            currentElement = elementFactoryOptional.get().createDefaultElement(localName);
         }
         currentElement.start();
         return currentElement;
@@ -60,12 +55,12 @@ public class SurfaceNodeFactory extends NodeFactory {
     }
 
     @Override
-    public Nodes makeAttribute(String name, String namespace, String value, Type type) {
+    public Attribute makeAttribute(String name, String namespace, String value, Type type) {
         Optional<ElementFactory> elementFactoryOptional = elementFactories.getElementFactoryByNamespace(namespace);
-        if (!elementFactoryOptional.isPresent()) {
-            return new Nodes(new Attribute(name, namespace, value));
-        }
         Attribute xmlAttribute = new Attribute(name, namespace, value);
+        if (!elementFactoryOptional.isPresent()) {
+            return xmlAttribute;
+        }
         Optional<BaseAttribute> attributeOptional = elementFactoryOptional.get()
             .createAttribute(xmlAttribute.getLocalName());
         if (attributeOptional.isPresent()) {
@@ -73,16 +68,15 @@ public class SurfaceNodeFactory extends NodeFactory {
             attribute.setValue(value);
             attribute.start(currentElement);
 
-            return new Nodes(attribute);
+            return attribute;
         }
-        return new Nodes(xmlAttribute);
+        return xmlAttribute;
     }
 
     @Override
-    public Nodes finishMakingElement(Element element) {
+    public Element finishMakingElement(Element element) {
         SurfaceElement finishingElement = (SurfaceElement) element;
         finishingElement.finish();
-
-        return new Nodes(finishingElement);
+        return finishingElement;
     }
 }

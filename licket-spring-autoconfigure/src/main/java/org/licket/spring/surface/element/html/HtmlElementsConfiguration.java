@@ -28,6 +28,12 @@ public class HtmlElementsConfiguration {
         return provideElement("head", (name) -> new HeadElement(name));
     }
 
+    @Bean
+    @RequestScope
+    public ElementProvider bodyElement() {
+        return provideElement("body", (name) -> new BodyElement(name));
+    }
+
     @Bean(name = "default")
     @RequestScope
     public ElementProvider defaultElement() {

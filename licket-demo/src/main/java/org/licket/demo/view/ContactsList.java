@@ -20,8 +20,8 @@ public class ContactsList extends AbstractLicketList<Contact> {
     public ContactsList(String id, Supplier<Iterable<Contact>> contactsSupplier) {
         super(id, new LicketModel<>(contactsSupplier));
 
-        add(new LicketImage("contact-picture-url", fromClasspath("test.jpg", JPEG)));
-        add(new LicketLabel("contact-name"));
-        add(new LicketLabel("contact-description"));
+        add(new LicketLabel("name"));
+        add(new LicketLabel("description"));
+        add(new LicketImage("pictureUrl", fromClasspath("test.jpg", JPEG)));
     }
 }

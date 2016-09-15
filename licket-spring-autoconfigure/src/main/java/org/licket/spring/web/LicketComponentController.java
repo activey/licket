@@ -9,7 +9,9 @@ import javax.annotation.PostConstruct;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.Resource;
+import org.licket.core.view.ComponentContainerView;
 import org.licket.core.view.LicketComponent;
+import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.core.view.model.LicketComponentModel;
 import org.licket.spring.resource.ResourcesStorage;
 import org.licket.surface.SurfaceContext;
@@ -45,13 +47,14 @@ public class LicketComponentController {
         // TODO refactor whole method
         LOGGER.debug("Initializing licket application: {}.", licketApplication.getName());
 
-        LicketComponent rootComponent = licketApplication.getRootComponent();
+        LicketComponentContainer<?> rootContainer = licketApplication.getRootComponentContainer();
+
+        ComponentContainerView containerView = rootContainer.getComponentContainerView();
 
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-        new SurfaceContext(surfaceElementFactories)
-            .processTemplateContent(rootComponent.getComponentView().readViewContent(), byteArrayStream, true);
+        new SurfaceContext(surfaceElementFactories).processTemplateContent(containerView.readViewContent(), byteArrayStream);
         resourcesStorage
-            .putResource(new ByteArrayResource(rootComponent.getId(), TEXT_HTML_VALUE, byteArrayStream.toByteArray()));
+            .putResource(new ByteArrayResource(rootContainer.getId(), TEXT_HTML_VALUE, byteArrayStream.toByteArray()));
     }
 
     @GetMapping(value = "/{compositeId}")

@@ -15,7 +15,7 @@ public class SurfaceIntegrationTest {
     public void test() throws Exception {
         // given
         SurfaceContext surfaceContext = new SurfaceContext();
-        surfaceContext.processTemplateContent(readTemplate("TestPage.html"), System.out, true);
+        surfaceContext.processTemplateContent(readTemplate("TestPage.html"), System.out);
     }
 
     private InputStream readTemplate(String templateLocation) {

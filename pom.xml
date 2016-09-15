@@ -35,12 +35,6 @@
         <org.mockito.version>1.9.0</org.mockito.version>
         <fest-assert.version>1.4</fest-assert.version>
         <pl.pragmatists.JUnitParams.version>1.0.2</pl.pragmatists.JUnitParams.version>
-
-        <!-- Inner dependencies -->
-        <org.licket.licket-framework.version>${project.version}</org.licket.licket-framework.version>
-        <org.licket.licket-common.version>${project.version}</org.licket.licket-common.version>
-        <org.licket.licket-framework-surface.version>${project.version}</org.licket.licket-framework-surface.version>
-        <org.licket.licket-spring-autoconfigure.version>${project.version}</org.licket.licket-spring-autoconfigure.version>
     </properties>
 
     <build>
@@ -129,22 +123,27 @@
             <dependency>
                 <groupId>org.licket</groupId>
                 <artifactId>licket-common</artifactId>
-                <version>${org.licket.licket-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.licket</groupId>
                 <artifactId>licket-framework</artifactId>
-                <version>${org.licket.licket-framework.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.licket</groupId>
                 <artifactId>licket-framework-surface</artifactId>
-                <version>${org.licket.licket-framework-surface.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.licket</groupId>
                 <artifactId>licket-spring-autoconfigure</artifactId>
-                <version>${org.licket.licket-spring-autoconfigure.version}</version>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.licket</groupId>
+                <artifactId>licket-xml-parser</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -152,8 +151,10 @@
     <modules>
         <module>licket-common</module>
         <module>licket-framework</module>
+        <module>licket-xml-parser</module>
         <module>licket-framework-surface</module>
         <module>licket-spring-autoconfigure</module>
         <module>licket-demo</module>
+        <module>licket-framework-hippo</module>
     </modules>
 </project>

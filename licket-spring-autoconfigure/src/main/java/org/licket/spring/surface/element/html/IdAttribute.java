@@ -5,8 +5,6 @@ import org.licket.surface.attribute.BaseAttribute;
 import org.licket.surface.element.SurfaceElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static nu.xom.Attribute.Type.ID;
-
 /**
  * @author activey
  */
@@ -16,7 +14,7 @@ public class IdAttribute extends BaseAttribute {
     private LicketApplication licketApplication;
 
     public IdAttribute(String name) {
-        super(name, "", ID);
+        super(name, "");
     }
 
     @Override

@@ -36,8 +36,13 @@ public class CompositeId {
         return index + 1 < idParts.length;
     }
 
-    public String next() {
-        return idParts[index++];
+    public CompositeId forward() {
+        index = index + 1;
+        return this;
+    }
+
+    public String current() {
+        return idParts[index];
     }
 
     static String[] parseCompositeId(String compositeIdValue) {

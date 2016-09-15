@@ -1,7 +1,7 @@
 package org.licket.spring.surface.element.html;
 
-import nu.xom.Attribute;
 import org.licket.surface.element.SurfaceElement;
+import org.licket.xml.dom.Attribute;
 
 import static org.licket.spring.surface.element.html.HtmlElementFactory.NAMESPACE;
 
@@ -15,6 +15,8 @@ public class ScriptElement extends SurfaceElement {
     }
 
     public void setSrc(String src) {
-        addAttribute(new Attribute("src", src));
+        Attribute attribute = new Attribute("src", getNamespace());
+        attribute.setValue(src);
+        addAttribute(attribute);
     }
 }

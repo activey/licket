@@ -1,18 +1,25 @@
 package org.licket.core.view.list;
 
 import org.licket.core.model.LicketModel;
-import org.licket.core.view.AbstractLicketComponent;
+import org.licket.core.view.container.AbstractLicketContainer;
+import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.surface.attribute.BaseAttribute;
 
 import static org.licket.core.model.LicketModel.empty;
-import static org.licket.core.view.LicketComponentView.fromCurrentMarkup;
+import static org.licket.core.view.ComponentContainerView.internal;
 
-public abstract class AbstractLicketList<T> extends AbstractLicketComponent<Iterable<T>> {
+public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Iterable<T>> {
 
     public AbstractLicketList(String id, LicketModel<Iterable<T>> listModel) {
-        super(id, fromCurrentMarkup(), listModel);
+        super(id, internal(), listModel);
     }
 
     public AbstractLicketList(String id) {
-        super(id, fromCurrentMarkup(), empty());
+        this(id, empty());
+    }
+
+    @Override
+    protected final void onRenderContainer(ComponentRenderingContext renderingContext) {
+        renderingContext.onSurfaceElement(element -> element.addAttribute("*ngFor", "let value of values"));
     }
 }

@@ -7,9 +7,10 @@ import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.surface.element.ElementTraverser.withComponentIdSet;
 import java.util.Optional;
 
-import nu.xom.ParentNode;
-import nu.xom.Element;
 import org.licket.core.id.CompositeId;
+import org.licket.surface.attribute.BaseAttribute;
+import org.licket.xml.dom.Element;
+import org.licket.xml.dom.Node;
 
 /**
  * @author activey
@@ -28,22 +29,21 @@ public class SurfaceElement extends Element {
 
     protected void onFinish() {}
 
+    public final BaseAttribute addAttribute(String attributeName, String attributeValue) {
+        BaseAttribute newAttribute = new BaseAttribute(attributeName, getNamespace());
+        newAttribute.setValue(attributeValue);
+        addAttribute(newAttribute);
+        return newAttribute;
+    }
+
     public final void start() {
         onStart();
     }
 
     protected void onStart() {}
 
-    protected final SurfaceElement getParentElement() {
-        ParentNode parentNode = getParent();
-        if (parentNode instanceof SurfaceElement) {
-            return (SurfaceElement) parentNode;
-        }
-        return null;
-    }
-
     protected final void addChildElement(SurfaceElement surfaceElement) {
-        super.appendChild(surfaceElement);
+        super.appendChildElement(surfaceElement);
     }
 
     public final void setComponentId(String componentId) {
@@ -87,5 +87,13 @@ public class SurfaceElement extends Element {
             return;
         }
         parentElement.replaceChild(this, replacement);
+    }
+
+    protected SurfaceElement getParentElement() {
+        Node parentNode = getParent();
+        if (parentNode instanceof SurfaceElement) {
+            return (SurfaceElement) parentNode;
+        }
+        return null;
     }
 }

@@ -4,43 +4,142 @@ import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.view.AbstractLicketComponent;
-import org.licket.core.view.LicketComponentView;
+import org.licket.core.view.ComponentContainerView;
+import org.licket.core.view.LicketComponent;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.surface.element.SurfaceElement;
+import org.licket.xml.ParsingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.StringWriter;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static org.licket.core.model.LicketModel.empty;
 
 /**
  * @author activey
  */
-public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent<T> {
+public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent<T> implements LicketComponentContainer<T> {
 
-    public AbstractLicketContainer(String id) {
-        super(id);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLicketContainer.class);
+
+    private List<LicketComponentContainer<?>> branches = newArrayList();
+    private List<LicketComponent<?>> leaves = newArrayList();
+
+    private ComponentContainerView containerView;
+
+    public AbstractLicketContainer(String id, ComponentContainerView componentView) {
+        this(id, componentView, empty());
     }
 
-    public AbstractLicketContainer(String id, LicketComponentView componentView) {
-        super(id, componentView);
+    public AbstractLicketContainer(String id, ComponentContainerView containerView, LicketModel<T> componentModel) {
+        super(id, componentModel);
+        this.containerView = containerView;
     }
 
-    public AbstractLicketContainer(String id, LicketComponentView componentView, LicketModel<T> componentModel) {
-        super(id, componentView, componentModel);
+    protected void add(LicketComponent<?> licketComponent) {
+        if (branches.contains(licketComponent)) {
+            LOGGER.trace("Licket component [{}] already used as a branch!", licketComponent.getId());
+            return;
+        }
+        licketComponent.setParent(this);
+        leaves.add(licketComponent);
+    }
+
+    protected void add(LicketComponentContainer<?> licketComponentContainer) {
+        licketComponentContainer.setParent(this);
+        branches.add(licketComponentContainer);
     }
 
     @Override
+    protected final void onInitialize() {
+        branches.forEach(component -> component.initialize());
+        leaves.forEach(component -> component.initialize());
+        onInitializeContainer();
+    }
+
+    protected void onInitializeContainer() {}
+
+    @Override
     protected final void onRender(ComponentRenderingContext renderingContext) {
-        // extracting surface DOM element as separate static resource
+        doRenderContainer(renderingContext);
+        onRenderContainer(renderingContext);
+    }
+
+    private void doRenderContainer(ComponentRenderingContext renderingContext) {
+        if (!getComponentContainerView().isExternalized()) {
+            LOGGER.trace("Using non-externalized view for component container: [{}]", getId());
+            return;
+        }
+
+        renderingContext.onSurfaceElement(element -> {
+            StringWriter writer = new StringWriter();
+            XMLStreamWriter outputFactory = null;
+            try {
+                outputFactory = XMLOutputFactory.newInstance().createXMLStreamWriter(writer);
+                element.toXML(outputFactory);
+                renderingContext.renderResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", writer.toString().getBytes()));
+
+            } catch (XMLStreamException e) {
+            }
 
 
-        // extracting element content as separate licket resource - angular component view
-        CompositeId rootRelative = fromStringValueWithAdditionalParts(licketApplication.getRootComponent().getId(),
-                getComponentCompositeId().getIdParts());
+            element.replaceWith(new SurfaceElement(getId(), element.getNamespace()));
+            element.detach();
+        });
+    }
 
-        // creating new static resource
-        resourcesStorage.putResource(new ByteArrayResource(rootRelative.getValue(), "text/html", toXML().getBytes()));
+    protected void onRenderContainer(ComponentRenderingContext renderingContext) {}
 
-        // setting tag name
-        replaceWith(new SurfaceElement(getComponentId(), getBaseURI()));
-        detach();
+    @Override
+    public LicketComponent<?> findChild(CompositeId compositeId) {
+        if (!compositeId.hasMore()) {
+            if (compositeId.current().equals(getId())) {
+                return this;
+            }
+            for (LicketComponent<?> leaf : leaves) {
+                if (leaf.getId().equals(compositeId.current())) {
+                    return leaf;
+                }
+            }
+            for (LicketComponentContainer<?> branch : branches) {
+                if (!branch.getId().equals(compositeId.current())) {
+                    continue;
+                }
+                LicketComponent<?> childComponent = branch.findChild(compositeId);
+                if (childComponent != null) {
+                    return childComponent;
+                }
+            }
+            return null;
+        }
 
-        super.onRender(renderingContext);
+        compositeId.forward();
+
+        for (LicketComponent<?> leaf : leaves) {
+            if (leaf.getId().equals(compositeId.current())) {
+                return leaf;
+            }
+        }
+        for (LicketComponentContainer<?> branch : branches) {
+            if (!branch.getId().equals(compositeId.current())) {
+                continue;
+            }
+            LicketComponent<?> childComponent = branch.findChild(compositeId);
+            if (childComponent != null) {
+                return childComponent;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public final ComponentContainerView getComponentContainerView() {
+        return containerView;
     }
 }

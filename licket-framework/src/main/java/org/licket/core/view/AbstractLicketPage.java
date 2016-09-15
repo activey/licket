@@ -1,14 +1,15 @@
 package org.licket.core.view;
 
 import org.licket.core.model.LicketModel;
+import org.licket.core.view.container.AbstractLicketContainer;
 
-public abstract class AbstractLicketPage<T> extends AbstractLicketComponent<T> {
+public abstract class AbstractLicketPage<T> extends AbstractLicketContainer<T> {
 
-    public AbstractLicketPage(String id, LicketComponentView componentView) {
+    public AbstractLicketPage(String id, ComponentContainerView componentView) {
         super(id, componentView);
     }
 
-    public AbstractLicketPage(String id, LicketComponentView componentView, LicketModel<T> componentModel) {
+    public AbstractLicketPage(String id, ComponentContainerView componentView, LicketModel<T> componentModel) {
         super(id, componentView, componentModel);
     }
 }

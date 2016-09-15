@@ -10,24 +10,20 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>licket-framework-surface</artifactId>
 
-    <properties>
-        <xom.xom.version>1.2.5</xom.xom.version>
-    </properties>
-
     <dependencies>
-        <dependency>
-            <groupId>xom</groupId>
-            <artifactId>xom</artifactId>
-            <version>${xom.xom.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
 
+        <!-- Inner dependencies -->
         <dependency>
             <groupId>org.licket</groupId>
             <artifactId>licket-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.licket</groupId>
+            <artifactId>licket-xml-parser</artifactId>
         </dependency>
 
         <!-- Logging -->

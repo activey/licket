@@ -4,6 +4,10 @@ import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.view.render.ComponentRenderingContext;
 
+import java.util.Optional;
+
+import static java.util.Optional.of;
+
 /**
  * @author activey
  */
@@ -16,13 +20,15 @@ public interface LicketComponent<T> {
 
     void setParent(LicketComponent<?> parent);
 
-    LicketComponent<?> findChild(CompositeId compositeId);
-
-    LicketComponentView getComponentView();
-
     String getId();
+
+    CompositeId getCompositeId();
 
     void initialize();
 
     void render(ComponentRenderingContext renderingContext);
+
+    Optional<LicketComponent<?>> traverseUp(ComponentTraverser componentTraverser);
+
+    boolean hasParent();
 }

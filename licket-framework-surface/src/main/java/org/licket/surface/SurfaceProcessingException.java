@@ -1,6 +1,6 @@
 package org.licket.surface;
 
-import nu.xom.ParsingException;
+import org.licket.xml.ParsingException;
 
 import java.io.IOException;
 

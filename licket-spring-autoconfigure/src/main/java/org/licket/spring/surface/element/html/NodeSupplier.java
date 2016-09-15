@@ -1,6 +1,6 @@
 package org.licket.spring.surface.element.html;
 
-import nu.xom.Node;
+import org.licket.xml.dom.Node;
 
 /**
  * @author activey

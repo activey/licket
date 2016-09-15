@@ -9,7 +9,7 @@
         </layout>
     </appender>
 
-    <logger name="org.licket" level="debug" additivity="false">
+    <logger name="org.licket" level="trace" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 
