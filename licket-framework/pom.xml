@@ -33,6 +33,11 @@
             <artifactId>licket-framework-surface</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.licket</groupId>
+            <artifactId>licket-framework-hippo</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

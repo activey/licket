@@ -67,7 +67,7 @@ public class LicketComponentController {
         return new LicketComponentModel(component.get().getComponentModel().get());
     }
 
-    @GetMapping(value = "/{compositeId}/controller")
+    @GetMapping(value = "/{compositeId}/controller", produces = "application/javascript")
     public ResponseEntity<InputStreamResource> generateComponentControllerCode(@PathVariable String compositeId) {
         // TODO implement component js code
         return null;

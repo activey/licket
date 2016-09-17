@@ -1,5 +1,8 @@
 package org.licket.core.id;
 
+import com.google.common.base.CaseFormat;
+
+import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
 import static com.google.common.base.Joiner.on;
 import static com.google.common.collect.ObjectArrays.concat;
 
@@ -26,6 +29,10 @@ public class CompositeId {
 
     public String getValue() {
         return on(KEY_SEPARATOR).join(idParts);
+    }
+
+    public String getNormalizedValue() {
+        return LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, getValue());
     }
 
     public String[] getIdParts() {

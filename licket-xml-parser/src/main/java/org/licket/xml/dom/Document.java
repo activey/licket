@@ -19,9 +19,7 @@ public class Document {
         StringWriter writer = new StringWriter();
         try {
             XMLStreamWriter outputFactory = XMLOutputFactory.newInstance().createXMLStreamWriter(writer);
-            outputFactory.writeStartDocument();
             rootElement.toXML(outputFactory);
-            outputFactory.writeEndDocument();
             return writer.toString();
         } catch (XMLStreamException e) {
             throw new ParsingException(e);
@@ -31,9 +29,7 @@ public class Document {
     public void toXML(OutputStream outputStream) throws ParsingException {
         try {
             XMLStreamWriter outputFactory = XMLOutputFactory.newInstance().createXMLStreamWriter(outputStream);
-            outputFactory.writeStartDocument();
             rootElement.toXML(outputFactory);
-            outputFactory.writeEndDocument();
         } catch (XMLStreamException e) {
             throw new ParsingException(e);
         }

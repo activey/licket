@@ -18,14 +18,14 @@ public class LicketConfiguration {
         return new ContactsAppPage("contacts-page");
     }
 
-    @Bean
+    @Bean(name = "contactsPanel")
     @SessionScope
     public LicketComponentContainer contactsPanel() {
         return new ContactsPanel("contacts");
     }
 
-    @Bean
-    public HeadParticipatingResource semanticLibrary() {
-        return new SemanticLibraryResource();
-    }
+//    @Bean
+//    public HeadParticipatingResource semanticLibrary() {
+//        return new SemanticLibraryResource();
+//    }
 }

@@ -142,6 +142,11 @@
             </dependency>
             <dependency>
                 <groupId>org.licket</groupId>
+                <artifactId>licket-framework-hippo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.licket</groupId>
                 <artifactId>licket-xml-parser</artifactId>
                 <version>${project.version}</version>
             </dependency>

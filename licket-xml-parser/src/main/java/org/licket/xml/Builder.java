@@ -46,8 +46,6 @@ public class Builder extends DefaultHandler {
             currentElement.appendChildElement(newElement);
         }
         currentElement = newElement;
-
-
         addElementAttributes(attributes);
     }
 

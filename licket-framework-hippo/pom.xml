@@ -11,11 +11,20 @@
 
     <artifactId>licket-framework-hippo</artifactId>
 
+    <properties>
+        <org.mozilla.rhino.version>1.7.7.1</org.mozilla.rhino.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.mozilla</groupId>
             <artifactId>rhino</artifactId>
-            <version>1.7.7.1</version>
+            <version>${org.mozilla.rhino.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 

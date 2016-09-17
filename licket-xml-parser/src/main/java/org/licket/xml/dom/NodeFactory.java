@@ -22,7 +22,7 @@ public class NodeFactory {
     }
 
     public Attribute makeAttribute(String name, String namespace, String value, Attribute.Type type) {
-        return new Attribute("", "[("+name+")]", namespace, value, type);
+        return new Attribute("", name, namespace, value, type);
     }
 
     public Nodes makeComment(String data) {
@@ -37,6 +37,9 @@ public class NodeFactory {
         return new Nodes(new Text(data));
     }
 
+    /*
+        TODO consider if relevant at all ...
+     */
     public Nodes makeCDATASection(String data) {
         return makeText(data);
     }
