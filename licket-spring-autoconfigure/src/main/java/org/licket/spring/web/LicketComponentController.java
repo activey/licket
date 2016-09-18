@@ -55,7 +55,7 @@ public class LicketComponentController {
         new SurfaceContext(surfaceElementFactories).processTemplateContent(containerView.readViewContent(), byteArrayStream);
 
         resourcesStorage
-            .putResource(new ByteArrayResource(rootContainer.getId(), TEXT_HTML_VALUE, byteArrayStream.toByteArray()));
+            .putResource(new ByteArrayResource("index.html", TEXT_HTML_VALUE, byteArrayStream.toByteArray()));
     }
 
     @GetMapping(value = "/{compositeId}", produces = "application/json")
