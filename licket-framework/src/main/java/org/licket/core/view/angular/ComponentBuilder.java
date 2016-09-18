@@ -1,6 +1,7 @@
 package org.licket.core.view.angular;
 
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
+import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.mozilla.javascript.ast.ExpressionStatement;
 
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
@@ -8,7 +9,9 @@ import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionSt
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
+import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyGetBuilder.property;
+import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 /**
  * @author activey
@@ -18,6 +21,7 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
     private String selectorValue;
     private String templateUrl;
     private ComponentClassBuilder classBuilder;
+    private String name;
 
     private ComponentBuilder() {}
 
@@ -40,14 +44,28 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
         return this;
     }
 
+    public ComponentBuilder componentName(String name) {
+        this.name = name;
+        return this;
+    }
+
     @Override
     public ExpressionStatement build() {
         ExpressionStatement expressionStatement = expressionStatement(assignment()
-                .left(property(name("app"), name("ContactsPage")))
+                .left(property(name("app"), name(name)))
                 .right(functionCall()
-                        .target(property(functionCall().target(property(property(name("ng"), name("core")), name("Component"))), name("Class")))
+                        .target(property(functionCall()
+                                .target(property(property(name("ng"), name("core")), name("Component")))
+                                .argument(test())
+                        , name("Class")))
                         .argument(classBuilder)))
                 .build();
         return expressionStatement;
+    }
+
+    private ObjectLiteralBuilder test() {
+        return objectLiteral()
+                .objectProperty(propertyBuilder().name(name("selector")).value(stringLiteral(selectorValue)))
+                .objectProperty(propertyBuilder().name(name("templateUrl")).value(stringLiteral(templateUrl)));
     }
 }

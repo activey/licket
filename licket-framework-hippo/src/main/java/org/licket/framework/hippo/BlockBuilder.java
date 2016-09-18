@@ -1,6 +1,7 @@
 package org.licket.framework.hippo;
 
 import org.mozilla.javascript.ast.Block;
+import org.mozilla.javascript.ast.ExpressionStatement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class BlockBuilder extends AbstractAstNodeBuilder<Block> {
         return new BlockBuilder();
     }
 
-    public BlockBuilder statement(ExpressionStatementBuilder statementBuilder) {
+    public BlockBuilder statement(AbstractAstNodeBuilder<ExpressionStatement> statementBuilder) {
         statements.add(statementBuilder);
         return this;
     }

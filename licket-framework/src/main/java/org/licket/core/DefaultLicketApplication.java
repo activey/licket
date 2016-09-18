@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import org.licket.core.id.CompositeId;
+import org.licket.core.view.DefaultComponentVisitor;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,11 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
     @Override
     public Optional<LicketComponent<?>> findComponent(String compositeIdValue) {
         return findComponent(fromStringValue(compositeIdValue));
+    }
+
+    @Override
+    public void traverseDown(DefaultComponentVisitor defaultComponentVisitor) {
+        defaultComponentVisitor.visitComponentContainer(rootContainer);
+        rootContainer.traverseDown(defaultComponentVisitor);
     }
 }

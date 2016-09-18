@@ -27,24 +27,26 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
-        licketApplication.getRootComponentContainer().traverseDown(new DefaultComponentVisitor() {
+        licketApplication.traverseDown(new DefaultComponentVisitor() {
 
             @Override
             public void visitComponentContainer(LicketComponentContainer<?> container) {
-                generateComponentContainerCode(container);
+                generateComponentContainerCode(scriptBlockBuilder, container);
             }
         });
     }
 
-    private void generateComponentContainerCode(LicketComponentContainer<?> container) {
+    private void generateComponentContainerCode(BlockBuilder scriptBlockBuilder, LicketComponentContainer<?> container) {
         if (!container.getComponentContainerView().isExternalized()) {
             return;
         }
 
-        component()
-                .selector("test")
-                .templateUrl("")
+        scriptBlockBuilder.statement(component()
+                .selector(container.getId())
+                // TODO read component resource url!!!
+                .templateUrl("/licket/component/contacts-page/view")
+                .componentName(container.getCompositeId().getNormalizedValue())
                 .clazz(classBuilder()
-                        .constructor(constructorBuilder()));
+                        .constructor(constructorBuilder())));
     }
 }

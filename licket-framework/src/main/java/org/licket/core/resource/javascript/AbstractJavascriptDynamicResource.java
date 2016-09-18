@@ -41,7 +41,7 @@ public abstract class AbstractJavascriptDynamicResource implements Resource {
                                         .left(windowAppProperty())
                                         .right(objectLiteral()))))
         ).build();
-        return new ByteArrayInputStream(expressionStatement.toSource().getBytes());
+        return new ByteArrayInputStream(expressionStatement.toSource(4).getBytes());
     }
 
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {}

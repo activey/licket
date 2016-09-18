@@ -1,10 +1,10 @@
 package org.licket.core.id;
 
-import com.google.common.base.CaseFormat;
-
 import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
 import static com.google.common.base.Joiner.on;
 import static com.google.common.collect.ObjectArrays.concat;
+import java.util.Arrays;
+import com.google.common.base.CaseFormat;
 
 /**
  * @author activey
@@ -15,6 +15,10 @@ public class CompositeId {
     private String[] idParts = {};
     private int index = 0;
 
+    private CompositeId(String... compositeIdParts) {
+        idParts = compositeIdParts;
+    }
+
     public static CompositeId fromStringValueWithAdditionalParts(String compositeIdValue, String... additionalParts) {
         return new CompositeId(concat(parseCompositeId(compositeIdValue), additionalParts, String.class));
     }
@@ -23,20 +27,18 @@ public class CompositeId {
         return new CompositeId(parseCompositeId(compositeIdValue));
     }
 
-    private CompositeId(String... compositeIdParts) {
-        idParts = compositeIdParts;
+    static String[] parseCompositeId(String compositeIdValue) {
+        // TODO refactor composite id parsing
+        return compositeIdValue.split("" + KEY_SEPARATOR);
     }
 
     public String getValue() {
         return on(KEY_SEPARATOR).join(idParts);
     }
 
-    public String getValue(char separator) {
-        return on(separator).join(idParts);
-    }
-
     public String getNormalizedValue() {
-        return LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, getValue('.'));
+        return on(".")
+            .join(Arrays.stream(idParts).map(idPart -> LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, idPart)).toArray());
     }
 
     public String[] getIdParts() {
@@ -54,10 +56,5 @@ public class CompositeId {
 
     public String current() {
         return idParts[index];
-    }
-
-    static String[] parseCompositeId(String compositeIdValue) {
-        // TODO refactor composite id parsing
-        return compositeIdValue.split("" + KEY_SEPARATOR);
     }
 }

@@ -1,14 +1,11 @@
 package org.licket.core.view.angular;
 
 import org.licket.framework.hippo.*;
-import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.ObjectLiteral;
 
-import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
-import static org.licket.framework.hippo.ObjectPropertyBuilder.objectProperty;
-import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
+import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 
 /**
  * @author activey
@@ -31,6 +28,6 @@ public class ComponentClassBuilder extends AbstractAstNodeBuilder<ObjectLiteral>
     @Override
     public ObjectLiteral build() {
         return objectLiteral()
-                .objectProperty(objectProperty().name(name("constructor")).value(classConstructorBuilder)).build();
+                .objectProperty(propertyBuilder().name(name("constructor")).value(classConstructorBuilder)).build();
     }
 }

@@ -14,7 +14,7 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
 
     private ObjectPropertyBuilder() {}
 
-    public static ObjectPropertyBuilder objectProperty() {
+    public static ObjectPropertyBuilder propertyBuilder() {
         return new ObjectPropertyBuilder();
     }
 
