@@ -86,8 +86,9 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
                 renderingContext.renderResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", writer.toString().getBytes()));
 
             } catch (XMLStreamException e) {
+                LOGGER.error("An error occured while rendering component container.", e);
+                return;
             }
-
 
             element.replaceWith(new SurfaceElement(getId(), element.getNamespace()));
             element.detach();

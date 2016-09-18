@@ -19,7 +19,7 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 /**
  * @author activey
  */
-public class BootAngularApplicationJavascriptResource extends AbstractJavascriptDynamicResource implements HeadParticipatingResource {
+public class AngularBootApplicationJavascriptResource extends AbstractJavascriptDynamicResource implements HeadParticipatingResource {
 
     @Autowired
     private LicketApplication licketApplication;

@@ -6,7 +6,6 @@ import static org.licket.core.id.CompositeId.fromStringValue;
 import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.surface.element.ElementTraverser.withComponentIdSet;
 import java.util.Optional;
-
 import org.licket.core.id.CompositeId;
 import org.licket.surface.attribute.BaseAttribute;
 import org.licket.xml.dom.Element;
@@ -42,12 +41,8 @@ public class SurfaceElement extends Element {
 
     protected void onStart() {}
 
-    protected final void addChildElement(SurfaceElement surfaceElement) {
+    public final void addChildElement(SurfaceElement surfaceElement) {
         super.appendChildElement(surfaceElement);
-    }
-
-    public final void setComponentId(String componentId) {
-        this.componentId = componentId;
     }
 
     protected Optional<SurfaceElement> traverseUp(ElementTraverser elementTraverser) {
@@ -69,6 +64,10 @@ public class SurfaceElement extends Element {
         return componentId;
     }
 
+    public final void setComponentId(String componentId) {
+        this.componentId = componentId;
+    }
+
     public final CompositeId getComponentCompositeId() {
         if (!isComponentIdSet()) {
             return null;
@@ -78,7 +77,7 @@ public class SurfaceElement extends Element {
             return fromStringValue(componentId);
         }
         return fromStringValueWithAdditionalParts(parentOptional.get().getComponentCompositeId().getValue(),
-                componentId);
+            componentId);
     }
 
     public final void replaceWith(SurfaceElement replacement) {

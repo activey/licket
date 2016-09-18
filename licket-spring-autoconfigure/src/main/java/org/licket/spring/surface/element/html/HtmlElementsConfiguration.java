@@ -37,7 +37,7 @@ public class HtmlElementsConfiguration {
     @Bean(name = "default")
     @RequestScope
     public ElementProvider defaultElement() {
-        return provideElement("default-licket-element", (name) -> new DefaultElement(name));
+        return provideElement("default-licket-element", (name) -> new DefaultHtmlElement(name));
     }
 
     @Bean

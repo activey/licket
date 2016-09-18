@@ -4,7 +4,8 @@ import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.angular.AngularLibraryResource;
 import org.licket.core.resource.angular.AngularPolyfillsLibraryResource;
 import org.licket.core.resource.angular.RxLibraryResource;
-import org.licket.core.resource.boot.BootAngularApplicationJavascriptResource;
+import org.licket.core.resource.boot.AngularBootApplicationJavascriptResource;
+import org.licket.core.resource.boot.AngularComponentsJavascriptResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -43,7 +44,14 @@ public class LicketResourcesConfiguration {
     @Bean
     @Order(4)
     @SessionScope
+    public HeadParticipatingResource angularComponentsResource() {
+        return new AngularComponentsJavascriptResource();
+    }
+
+    @Bean
+    @Order(5)
+    @SessionScope
     public HeadParticipatingResource angularApplicationBootResource() {
-        return new BootAngularApplicationJavascriptResource();
+        return new AngularBootApplicationJavascriptResource();
     }
 }

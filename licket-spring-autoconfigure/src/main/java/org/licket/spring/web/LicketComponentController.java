@@ -53,11 +53,12 @@ public class LicketComponentController {
 
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
         new SurfaceContext(surfaceElementFactories).processTemplateContent(containerView.readViewContent(), byteArrayStream);
+
         resourcesStorage
             .putResource(new ByteArrayResource(rootContainer.getId(), TEXT_HTML_VALUE, byteArrayStream.toByteArray()));
     }
 
-    @GetMapping(value = "/{compositeId}")
+    @GetMapping(value = "/{compositeId}", produces = "application/json")
     public @ResponseBody LicketComponentModel getLicketComponentModel(@PathVariable String compositeId) {
         Optional<LicketComponent<?>> component = licketApplication.findComponent(compositeId);
         if (!component.isPresent()) {
@@ -67,11 +68,6 @@ public class LicketComponentController {
         return new LicketComponentModel(component.get().getComponentModel().get());
     }
 
-    @GetMapping(value = "/{compositeId}/controller", produces = "application/javascript")
-    public ResponseEntity<InputStreamResource> generateComponentControllerCode(@PathVariable String compositeId) {
-        // TODO implement component js code
-        return null;
-    }
 
     // @Cacheable("component-view-cache")
     @GetMapping(value = "/{compositeId}/view", produces = TEXT_HTML_VALUE)

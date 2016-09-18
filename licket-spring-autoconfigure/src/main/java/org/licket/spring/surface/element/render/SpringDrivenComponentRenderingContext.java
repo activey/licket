@@ -3,7 +3,6 @@ package org.licket.spring.surface.element.render;
 import org.licket.core.resource.Resource;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.spring.resource.ResourcesStorage;
-import org.licket.spring.surface.element.html.DefaultElement;
 import org.licket.surface.element.SurfaceElement;
 
 import java.util.function.Consumer;

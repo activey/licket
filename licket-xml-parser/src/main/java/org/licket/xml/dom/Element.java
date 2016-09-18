@@ -25,6 +25,10 @@ public class Element extends Node {
         attributes.add(attribute);
     }
 
+    public Iterable<Element> children() {
+        return children;
+    }
+
     public void appendChildElement(Element childElement) {
         childElement.setParent(this);
         children.add(childElement);
@@ -34,20 +38,22 @@ public class Element extends Node {
         for (int childIndex = 0; childIndex < children.size(); childIndex++) {
             if (children.get(childIndex).equals(element)) {
                 children.set(childIndex, replacement);
+                replacement.setParent(this);
             }
         }
     }
 
-    public void detach() {
-        getParent().removeChild(this);
+    public Element detach() {
+        return getParent().removeChild(this);
     }
 
-    private void removeChild(Element childElement) {
+    private Element removeChild(Element childElement) {
         for (int childIndex = 0; childIndex < children.size(); childIndex++) {
             if (children.get(childIndex).equals(childElement)) {
-                children.remove(childIndex);
+                return children.remove(childIndex);
             }
         }
+        return null;
     }
 
     @Override

@@ -22,4 +22,9 @@ public class LicketWebConfiguration {
     public LicketResourceController resourceController() {
         return new LicketResourceController();
     }
+
+    @Bean
+    public ErrorHandler errorHandler() {
+        return new ErrorHandler();
+    }
 }

@@ -1,5 +1,32 @@
 (function(app) {
 
+    app.ContactsPage = ng.core
+        .Component({
+            selector: 'contacts-page',
+            templateUrl: '/licket/component/contacts-page/view'
+        })
+        .Class({
+            constructor: function() {
+                this.model = {
+
+                };
+            }
+        });
+
+    app.ContactsPage.Contacts = ng.core
+        .Component({
+            selector: 'contacts',
+            templateUrl: '/licket/component/contacts-page:contacts/view'
+        })
+        .Class({
+            constructor: function() {
+                this.model = {
+
+                };
+            }
+        });
+
+
     app.TodosComponent = ng.core
         .Component({
             selector: 'todos',
@@ -22,6 +49,6 @@
             deleteTodo: function (index) {
                 this.todos.splice(index, 1);
             }
-        })
+        });
 
 })(window.app || (window.app = {}));
