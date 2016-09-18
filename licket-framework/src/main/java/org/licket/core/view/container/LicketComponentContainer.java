@@ -2,6 +2,8 @@ package org.licket.core.view.container;
 
 import org.licket.core.id.CompositeId;
 import org.licket.core.view.ComponentContainerView;
+import org.licket.core.view.ComponentTraverser;
+import org.licket.core.view.ComponentVisitor;
 import org.licket.core.view.LicketComponent;
 
 /**
@@ -12,4 +14,6 @@ public interface LicketComponentContainer<T> extends LicketComponent<T> {
     LicketComponent<?> findChild(CompositeId compositeId);
 
     ComponentContainerView getComponentContainerView();
+
+    void traverseDown(ComponentVisitor componentVisitor);
 }

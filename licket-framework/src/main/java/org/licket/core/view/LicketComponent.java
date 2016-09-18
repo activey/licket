@@ -12,6 +12,11 @@ import static java.util.Optional.of;
  * @author activey
  */
 public interface LicketComponent<T> {
+
+    String getId();
+
+    CompositeId getCompositeId();
+
     LicketModel<T> getComponentModel();
 
     void setComponentModel(LicketModel<T> componentModel);
@@ -20,15 +25,11 @@ public interface LicketComponent<T> {
 
     void setParent(LicketComponent<?> parent);
 
-    String getId();
-
-    CompositeId getCompositeId();
+    boolean hasParent();
 
     void initialize();
 
     void render(ComponentRenderingContext renderingContext);
 
     Optional<LicketComponent<?>> traverseUp(ComponentTraverser componentTraverser);
-
-    boolean hasParent();
 }

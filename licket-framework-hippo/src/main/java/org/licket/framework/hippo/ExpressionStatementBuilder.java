@@ -7,20 +7,24 @@ import org.mozilla.javascript.ast.ExpressionStatement;
  */
 public class ExpressionStatementBuilder extends AbstractAstNodeBuilder<ExpressionStatement> {
 
-    private FunctionCallBuilder functionCallBuilder;
+    private AbstractAstNodeBuilder<?> expr;
 
-    private ExpressionStatementBuilder(FunctionCallBuilder functionCallBuilder) {
-        this.functionCallBuilder = functionCallBuilder;
+    private ExpressionStatementBuilder(AbstractAstNodeBuilder<?> expr) {
+        this.expr = expr;
     }
 
     public static ExpressionStatementBuilder expressionStatement(FunctionCallBuilder functionCallBuilder) {
         return new ExpressionStatementBuilder(functionCallBuilder);
     }
 
+    public static ExpressionStatementBuilder expressionStatement(AssignmentBuilder assignmentBuilder) {
+        return new ExpressionStatementBuilder(assignmentBuilder);
+    }
+
     @Override
     public ExpressionStatement build() {
         ExpressionStatement expressionStatement = new ExpressionStatement();
-        expressionStatement.setExpression(functionCallBuilder.build());
+        expressionStatement.setExpression(expr.build());
         return expressionStatement;
     }
 }

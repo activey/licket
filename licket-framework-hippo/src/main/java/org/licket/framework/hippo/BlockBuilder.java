@@ -28,6 +28,11 @@ public class BlockBuilder extends AbstractAstNodeBuilder<Block> {
         return this;
     }
 
+    public BlockBuilder statement(AssignmentBuilder assignment) {
+        statements.add(assignment);
+        return this;
+    }
+
     @Override
     public Block build() {
         Block block = new Block();

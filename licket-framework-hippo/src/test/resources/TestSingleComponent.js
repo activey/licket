@@ -1,7 +1,6 @@
 (function(app) {
 
-    app.ContactsPage = ng.core
-        .Component({
+    app.ContactsPage = ng.core.Component({
             selector: 'contacts-page',
             templateUrl: '/licket/component/contacts-page/view'
         })

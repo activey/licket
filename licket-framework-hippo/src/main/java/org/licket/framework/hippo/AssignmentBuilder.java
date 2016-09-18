@@ -29,6 +29,11 @@ public class AssignmentBuilder extends AbstractAstNodeBuilder<Assignment> {
         return this;
     }
 
+    public AssignmentBuilder right(FunctionCallBuilder functionCall) {
+        this.right = functionCall;
+        return this;
+    }
+
     @Override
     public Assignment build() {
         Assignment assignment = new Assignment();

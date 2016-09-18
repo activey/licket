@@ -3,9 +3,7 @@ package org.licket.core.view.container;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.resource.ByteArrayResource;
-import org.licket.core.view.AbstractLicketComponent;
-import org.licket.core.view.ComponentContainerView;
-import org.licket.core.view.LicketComponent;
+import org.licket.core.view.*;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.surface.element.SurfaceElement;
 import org.licket.xml.ParsingException;
@@ -17,6 +15,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.licket.core.model.LicketModel.empty;
@@ -96,6 +95,11 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
     }
 
     protected void onRenderContainer(ComponentRenderingContext renderingContext) {}
+
+    public void traverseDown(ComponentVisitor componentVisitor) {
+        leaves.forEach(componentVisitor::visitSimpleComponent);
+        branches.forEach(componentVisitor::visitComponentContainer);
+    }
 
     @Override
     public LicketComponent<?> findChild(CompositeId compositeId) {

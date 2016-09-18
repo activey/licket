@@ -11,7 +11,7 @@ import static com.google.common.collect.ObjectArrays.concat;
  */
 public class CompositeId {
 
-    private static final String KEY_SEPARATOR = ":";
+    private static final char KEY_SEPARATOR = ':';
     private String[] idParts = {};
     private int index = 0;
 
@@ -31,8 +31,12 @@ public class CompositeId {
         return on(KEY_SEPARATOR).join(idParts);
     }
 
+    public String getValue(char separator) {
+        return on(separator).join(idParts);
+    }
+
     public String getNormalizedValue() {
-        return LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, getValue());
+        return LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, getValue('.'));
     }
 
     public String[] getIdParts() {
@@ -53,6 +57,7 @@ public class CompositeId {
     }
 
     static String[] parseCompositeId(String compositeIdValue) {
-        return compositeIdValue.split(KEY_SEPARATOR);
+        // TODO refactor composite id parsing
+        return compositeIdValue.split("" + KEY_SEPARATOR);
     }
 }

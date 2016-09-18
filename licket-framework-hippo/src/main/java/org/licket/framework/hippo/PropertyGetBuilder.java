@@ -15,6 +15,14 @@ public class PropertyGetBuilder extends AbstractAstNodeBuilder<PropertyGet> {
         this.right = right;
     }
 
+    public static PropertyGetBuilder property(KeywordLiteralBuilder keywordLiteral, NameBuilder right) {
+        return new PropertyGetBuilder(keywordLiteral, right);
+    }
+
+    public static PropertyGetBuilder property(FunctionCallBuilder functionCall, NameBuilder right) {
+        return new PropertyGetBuilder(functionCall, right);
+    }
+
     public static PropertyGetBuilder property(PropertyGetBuilder left, NameBuilder right) {
         return new PropertyGetBuilder(left, right);
     }

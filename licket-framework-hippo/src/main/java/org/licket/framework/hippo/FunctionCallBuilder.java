@@ -1,6 +1,7 @@
 package org.licket.framework.hippo;
 
 import org.mozilla.javascript.ast.FunctionCall;
+import org.mozilla.javascript.ast.ObjectLiteral;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,11 @@ public class FunctionCallBuilder extends AbstractAstNodeBuilder<FunctionCall> {
 
     public FunctionCallBuilder target(PropertyGetBuilder propertyGetBuilder) {
         this.target = propertyGetBuilder;
+        return this;
+    }
+
+    public FunctionCallBuilder argument(AbstractAstNodeBuilder<ObjectLiteral> objectLiteral) {
+        arguments.add(objectLiteral);
         return this;
     }
 

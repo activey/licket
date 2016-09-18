@@ -10,7 +10,7 @@ import org.springframework.web.context.annotation.SessionScope;
 @Controller
 @RequestMapping("/index.html")
 @SessionScope
-public class LicketMainPageController {
+public class LicketRootComponentController {
 
 
 

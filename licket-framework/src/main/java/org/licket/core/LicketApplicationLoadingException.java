@@ -18,6 +18,6 @@ public class LicketApplicationLoadingException extends RuntimeException {
     }
 
     public static LicketApplicationLoadingException missingConstructorError() {
-        return new LicketApplicationLoadingException("Unable to find page constructor with two parameters!");
+        return new LicketApplicationLoadingException("Unable to find page clazz with two parameters!");
     }
 }
