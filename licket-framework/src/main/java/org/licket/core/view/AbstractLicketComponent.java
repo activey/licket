@@ -1,11 +1,14 @@
 package org.licket.core.view;
 
+import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
 import static java.util.Optional.of;
 import static org.licket.core.id.CompositeId.fromStringValue;
 import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.core.model.LicketModel.empty;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
+
+import com.google.common.base.CaseFormat;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.view.render.ComponentRenderingContext;
@@ -67,6 +70,10 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     @Override
     public final String getId() {
         return id;
+    }
+
+    public final String getNormalizedId() {
+        return LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, id);
     }
 
     public final CompositeId getCompositeId() {

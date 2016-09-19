@@ -23,6 +23,11 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
         return this;
     }
 
+    public ObjectPropertyBuilder value(ArrayLiteralBuilder arrayLiteralBuilder) {
+        this.value = arrayLiteralBuilder;
+        return this;
+    }
+
     public ObjectPropertyBuilder value(StringLiteralBuilder literalBuilder) {
         this.value = literalBuilder;
         return this;

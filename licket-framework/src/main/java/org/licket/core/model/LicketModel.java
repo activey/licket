@@ -9,6 +9,10 @@ import static org.licket.core.common.Suppliers.of;
  */
 public class LicketModel<T> {
 
+    public static LicketModel<String> ofString(String stringValue) {
+        return new LicketModel<String>(stringValue);
+    }
+
     public static <T> LicketModel<T> empty() {
         return new LicketModel<>(() -> null);
     }

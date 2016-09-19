@@ -2,6 +2,7 @@ package org.licket.core.view.angular;
 
 
 import org.junit.Test;
+import org.licket.core.view.container.AbstractLicketContainer;
 
 import static org.licket.core.view.angular.ClassConstructorBuilder.constructorBuilder;
 import static org.licket.core.view.angular.ComponentBuilder.component;
@@ -12,6 +13,9 @@ import static org.licket.core.view.angular.ComponentClassBuilder.classBuilder;
  */
 public class ComponentBuilderTest {
 
+
+    private AbstractLicketContainer container;
+
     @Test
     public void test1() {
 
@@ -19,7 +23,7 @@ public class ComponentBuilderTest {
                 .selector("test")
                 .templateUrl("")
                 .clazz(classBuilder()
-                        .constructor(constructorBuilder())).build().toSource(4);
+                        .constructor(constructorBuilder(container))).build().toSource(4);
         System.out.println(output);
     }
 }

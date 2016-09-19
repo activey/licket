@@ -4,6 +4,7 @@ import org.mozilla.javascript.ast.Block;
 import org.mozilla.javascript.ast.ExpressionStatement;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class BlockBuilder extends AbstractAstNodeBuilder<Block> {
 
-    private List<AbstractAstNodeBuilder> statements = new ArrayList();
+    private List<AbstractAstNodeBuilder> statements = new LinkedList<>();
 
     private BlockBuilder() {}
 
@@ -20,17 +21,17 @@ public class BlockBuilder extends AbstractAstNodeBuilder<Block> {
     }
 
     public BlockBuilder statement(AbstractAstNodeBuilder<ExpressionStatement> statementBuilder) {
-        statements.add(statementBuilder);
+        statements.add(0, statementBuilder);
         return this;
     }
 
     public BlockBuilder statement(FunctionCallBuilder functionCallBuilder) {
-        statements.add(functionCallBuilder);
+        statements.add(0, functionCallBuilder);
         return this;
     }
 
     public BlockBuilder statement(AssignmentBuilder assignment) {
-        statements.add(assignment);
+        statements.add(0, assignment);
         return this;
     }
 

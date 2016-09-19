@@ -4,7 +4,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 import static java.util.stream.Stream.concat;
 import static org.licket.core.resource.javascript.JavascriptStaticResource.JAVASCRIPT_MIMETYPE;
-import static org.licket.spring.web.Contexts.CONTEXT_RESOURCES;
+import static org.licket.core.view.LicketUrls.CONTEXT_RESOURCES;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;

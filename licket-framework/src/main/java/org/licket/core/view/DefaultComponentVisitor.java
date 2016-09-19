@@ -8,12 +8,12 @@ import org.licket.core.view.container.LicketComponentContainer;
 public class DefaultComponentVisitor implements ComponentVisitor {
 
     @Override
-    public void visitComponentContainer(LicketComponentContainer<?> container) {
+    public void visitSimpleComponent(LicketComponent<?> component) {
 
     }
 
     @Override
-    public void visitSimpleComponent(LicketComponent<?> component) {
-
+    public boolean visitComponentContainer(LicketComponentContainer<?> container) {
+        return true;
     }
 }

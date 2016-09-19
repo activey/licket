@@ -37,7 +37,7 @@ public class CompositeId {
     }
 
     public String getNormalizedValue() {
-        return on(".")
+        return on("_")
             .join(Arrays.stream(idParts).map(idPart -> LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, idPart)).toArray());
     }
 

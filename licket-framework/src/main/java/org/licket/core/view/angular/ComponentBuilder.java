@@ -1,9 +1,15 @@
 package org.licket.core.view.angular;
 
+import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
+import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.mozilla.javascript.ast.ExpressionStatement;
 
+import java.util.List;
+
+import static com.google.common.collect.Lists.newLinkedList;
+import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
@@ -20,6 +26,7 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
 
     private String selectorValue;
     private String templateUrl;
+    private List<String> dependencies = newLinkedList();
     private ComponentClassBuilder classBuilder;
     private String name;
 
@@ -49,6 +56,10 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
         return this;
     }
 
+    public void componentDependency(LicketComponentContainer<?> child) {
+        dependencies.add(child.getCompositeId().getNormalizedValue());
+    }
+
     @Override
     public ExpressionStatement build() {
         ExpressionStatement expressionStatement = expressionStatement(assignment()
@@ -64,8 +75,18 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
     }
 
     private ObjectLiteralBuilder componentSettings() {
-        return objectLiteral()
+        ObjectLiteralBuilder literalBuilder = objectLiteral()
                 .objectProperty(propertyBuilder().name(name("selector")).value(stringLiteral(selectorValue)))
                 .objectProperty(propertyBuilder().name(name("templateUrl")).value(stringLiteral(templateUrl)));
+        if (dependencies.size() > 0) {
+            return literalBuilder.objectProperty(propertyBuilder().name(name("directives")).value(dependencies()));
+        }
+        return literalBuilder;
+    }
+
+    private ArrayLiteralBuilder dependencies() {
+        ArrayLiteralBuilder arrayLiteralBuilder = arrayLiteral();
+        dependencies.forEach(dependencyId -> arrayLiteralBuilder.element(name("app." + dependencyId)));
+        return arrayLiteralBuilder;
     }
 }

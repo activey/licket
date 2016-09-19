@@ -6,24 +6,27 @@ import org.licket.demo.view.ContactsAppRoot;
 import org.licket.demo.view.ContactsPanel;
 import org.licket.demo.view.semantic.JqueryLibraryResource;
 import org.licket.demo.view.semantic.SemanticLibraryResource;
+import org.licket.spring.annotation.LicketComponent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.context.annotation.SessionScope;
+
+import static org.springframework.context.annotation.ScopedProxyMode.INTERFACES;
 
 @Configuration
 public class LicketConfiguration {
 
-    @Bean(name = "root")
-    @SessionScope
+    @LicketComponent("root")
     public LicketComponentContainer root() {
-        return new ContactsAppRoot("contacts-page");
+        return new ContactsAppRoot("contacts-page", contactsPanel());
     }
 
-    @Bean(name = "contactsPanel")
-    @SessionScope
+    @LicketComponent("contactsPanel")
     public LicketComponentContainer contactsPanel() {
-        return new ContactsPanel("contacts");
+        return new ContactsPanel("contacts-panel");
     }
 
     @Bean

@@ -7,7 +7,7 @@ import org.licket.core.view.container.LicketComponentContainer;
  */
 public interface ComponentVisitor {
 
-    void visitComponentContainer(LicketComponentContainer<?> container);
+    boolean visitComponentContainer(LicketComponentContainer<?> container);
 
     void visitSimpleComponent(LicketComponent<?> component);
 }

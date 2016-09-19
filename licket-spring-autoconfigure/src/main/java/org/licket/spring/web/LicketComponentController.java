@@ -1,5 +1,6 @@
 package org.licket.spring.web;
 
+import static org.licket.core.view.LicketUrls.CONTEXT_COMPONENT;
 import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
 import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.http.ResponseEntity.ok;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/licket/component")
+@RequestMapping(CONTEXT_COMPONENT)
 public class LicketComponentController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LicketComponentController.class);

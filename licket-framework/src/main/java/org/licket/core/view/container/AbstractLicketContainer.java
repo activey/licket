@@ -96,9 +96,13 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
 
     protected void onRenderContainer(ComponentRenderingContext renderingContext) {}
 
-    public void traverseDown(ComponentVisitor componentVisitor) {
+    public final void traverseDown(ComponentVisitor componentVisitor) {
         leaves.forEach(componentVisitor::visitSimpleComponent);
-        branches.forEach(componentVisitor::visitComponentContainer);
+        branches.forEach(branch -> {
+            if (componentVisitor.visitComponentContainer(branch)) {
+                branch.traverseDown(componentVisitor);
+            }
+        });
     }
 
     @Override
@@ -147,4 +151,5 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
     public final ComponentContainerView getComponentContainerView() {
         return containerView;
     }
+
 }

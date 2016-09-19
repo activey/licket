@@ -15,6 +15,8 @@ public interface LicketComponent<T> {
 
     String getId();
 
+    String getNormalizedId();
+
     CompositeId getCompositeId();
 
     LicketModel<T> getComponentModel();

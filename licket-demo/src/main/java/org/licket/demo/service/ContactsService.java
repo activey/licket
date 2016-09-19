@@ -4,10 +4,12 @@ import org.licket.demo.model.Contact;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
+import java.util.List;
+
 @Service
 public class ContactsService {
 
-    public Iterable<Contact> getAllContacts() {
+    public List<Contact> getAllContacts() {
         return Lists.newArrayList(contact("picture1.jpg", "Andrew Golota", "Ble ble ble ble ble"),
             contact("picture2.jpg", "Jonh Doe", "Trala la lalalal ala"),
             contact("picture3.jpg", "Chuck Norris", "Trolololo!"));

@@ -1,25 +1,24 @@
 package org.licket.core.view.list;
 
+import static java.lang.String.format;
+import static org.licket.core.view.ComponentContainerView.internal;
 import org.licket.core.model.LicketModel;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.core.view.render.ComponentRenderingContext;
-import org.licket.surface.attribute.BaseAttribute;
 
-import static org.licket.core.model.LicketModel.empty;
-import static org.licket.core.view.ComponentContainerView.internal;
+public abstract class AbstractLicketList<T> extends AbstractLicketContainer<String> {
 
-public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Iterable<T>> {
+    private Class<T> elementClass;
 
-    public AbstractLicketList(String id, LicketModel<Iterable<T>> listModel) {
-        super(id, internal(), listModel);
-    }
-
-    public AbstractLicketList(String id) {
-        this(id, empty());
+    public AbstractLicketList(String id, LicketModel<String> enclosingComponentPropertyModel, Class<T> elementClass) {
+        super(id, internal(), enclosingComponentPropertyModel);
+        this.elementClass = elementClass;
+        // TODO analyze element class provided and check its properties against passed enclosingComponentPropertyModel
     }
 
     @Override
     protected final void onRenderContainer(ComponentRenderingContext renderingContext) {
-        renderingContext.onSurfaceElement(element -> element.addAttribute("*ngFor", "let value of values"));
+        renderingContext.onSurfaceElement(element -> element.addAttribute("*ngFor",
+            format("#%s of model.%s", getId(), getComponentModel().get())));
     }
 }

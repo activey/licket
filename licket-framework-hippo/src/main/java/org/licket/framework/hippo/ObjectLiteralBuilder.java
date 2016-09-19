@@ -1,5 +1,6 @@
 package org.licket.framework.hippo;
 
+import org.mozilla.javascript.ast.ArrayLiteral;
 import org.mozilla.javascript.ast.ObjectLiteral;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 public class ObjectLiteralBuilder extends AbstractAstNodeBuilder<ObjectLiteral> {
 
     private List<ObjectPropertyBuilder> properties = new ArrayList();
+    private ObjectLiteral objectLiteral;
 
     private ObjectLiteralBuilder() {}
 
@@ -23,9 +25,19 @@ public class ObjectLiteralBuilder extends AbstractAstNodeBuilder<ObjectLiteral> 
         return this;
     }
 
+    public ObjectLiteralBuilder fromObjectLiteral(ObjectLiteral objectLiteral) {
+        this.objectLiteral = objectLiteral;
+        return this;
+    }
+
+    public void fromArrayLiteral(ArrayLiteral node) {
+    }
+
     @Override
     public ObjectLiteral build() {
-        ObjectLiteral objectLiteral = new ObjectLiteral();
+        if (objectLiteral == null) {
+            objectLiteral = new ObjectLiteral();
+        }
         properties.forEach(property -> objectLiteral.addElement(property.build()));
         return objectLiteral;
     }

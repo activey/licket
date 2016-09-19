@@ -1,6 +1,6 @@
 package org.licket.spring.web;
 
-import static org.licket.spring.web.Contexts.CONTEXT_RESOURCES;
+import static org.licket.core.view.LicketUrls.CONTEXT_RESOURCES;
 import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;

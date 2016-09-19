@@ -4,10 +4,13 @@ import org.licket.core.LicketApplication;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.DefaultComponentVisitor;
+import org.licket.core.view.LicketUrls;
+import org.licket.core.view.angular.ComponentBuilder;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.framework.hippo.BlockBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.licket.core.view.LicketUrls.getContainerViewUrl;
 import static org.licket.core.view.angular.ClassConstructorBuilder.constructorBuilder;
 import static org.licket.core.view.angular.ComponentBuilder.component;
 import static org.licket.core.view.angular.ComponentClassBuilder.classBuilder;
@@ -30,8 +33,9 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
         licketApplication.traverseDown(new DefaultComponentVisitor() {
 
             @Override
-            public void visitComponentContainer(LicketComponentContainer<?> container) {
+            public boolean visitComponentContainer(LicketComponentContainer<?> container) {
                 generateComponentContainerCode(scriptBlockBuilder, container);
+                return true;
             }
         });
     }
@@ -41,12 +45,24 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
             return;
         }
 
-        scriptBlockBuilder.statement(component()
+        ComponentBuilder componentBuilder = component();
+        container.traverseDown(new DefaultComponentVisitor() {
+
+            @Override
+            public boolean visitComponentContainer(LicketComponentContainer<?> child) {
+                if (!child.getComponentContainerView().isExternalized()) {
+                    return false;
+                }
+                componentBuilder.componentDependency(child);
+                return false;
+            }
+        });
+
+        scriptBlockBuilder.statement(componentBuilder
                 .selector(container.getId())
-                // TODO read component resource url!!!
-                .templateUrl("/licket/component/contacts-page/view")
+                .templateUrl(getContainerViewUrl(container))
                 .componentName(container.getCompositeId().getNormalizedValue())
                 .clazz(classBuilder()
-                        .constructor(constructorBuilder())));
+                        .constructor(constructorBuilder(container))));
     }
 }

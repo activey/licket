@@ -3,6 +3,7 @@ package org.licket.demo.view;
 import static org.licket.core.view.ComponentContainerView.fromComponentContainerClass;
 import static org.licket.demo.model.Contacts.fromIterable;
 
+import org.licket.core.model.LicketModel;
 import org.licket.core.view.ComponentContainerView;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.demo.model.Contacts;
@@ -20,7 +21,7 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
     public ContactsPanel(String id) {
         super(id, fromComponentContainerClass(ContactsPanel.class));
 
-        add(new ContactsList("contact", () -> getComponentModel().get().getContacts()));
+        add(new ContactsList("contact", new LicketModel("contacts")));
     }
 
     @Override
