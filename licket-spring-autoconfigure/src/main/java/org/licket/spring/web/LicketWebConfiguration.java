@@ -11,6 +11,12 @@ import javax.servlet.http.HttpSessionListener;
 @EnableCaching
 public class LicketWebConfiguration {
 
+//    @Bean
+//    @SessionScope
+//    public LicketRootController rootController() {
+//        return new LicketRootController();
+//    }
+
     @Bean
     @SessionScope
     public LicketComponentController componentController() {

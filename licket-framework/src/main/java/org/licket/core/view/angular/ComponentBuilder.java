@@ -56,14 +56,14 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
                 .right(functionCall()
                         .target(property(functionCall()
                                 .target(property(property(name("ng"), name("core")), name("Component")))
-                                .argument(test())
-                        , name("Class")))
+                                .argument(componentSettings())
+                        ,name("Class")))
                         .argument(classBuilder)))
                 .build();
         return expressionStatement;
     }
 
-    private ObjectLiteralBuilder test() {
+    private ObjectLiteralBuilder componentSettings() {
         return objectLiteral()
                 .objectProperty(propertyBuilder().name(name("selector")).value(stringLiteral(selectorValue)))
                 .objectProperty(propertyBuilder().name(name("templateUrl")).value(stringLiteral(templateUrl)));
