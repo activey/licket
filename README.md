@@ -55,16 +55,17 @@ As mentioned in preface, Licket derives many concepts from Apache Wicket like lo
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:lick="http://www.w3.org/1999/xhtml">
     <head>
             <title>Contacts Page</title>
-        </head>
-        <body>
-            <h1>Contacts list</h1>
-    
-            <div lick:id="contacts-panel">
-                <div lick:id="contact">
-                    Name: <span lick:id="name">here will be name</span>
-                    Description: <span lick:id="description">and here description</span>
-                </div>
+    </head>
+    <body>
+        <h1>Contacts list</h1>
+
+        <div lick:id="contacts-panel">
+            <div lick:id="contact">
+                Name: <span lick:id="name">here will be name</span>
+                Description: <span lick:id="description">and here description</span>
             </div>
+        </div>
+    </body>
 </html>
 ```
 
