@@ -10,7 +10,7 @@ While being influenced a lot by Apache Wicket (http://wicket.apache.org, I love 
 First, grab this repo code and build all by yourself on your local beast or ask build automation to do it for you.
 Take this dependency with you:
 
-```
+```xml
 <dependency>
     <groupId>org.licket</groupId>
     <artifactId>licket-spring-autoconfigure</artifactId>
@@ -20,20 +20,20 @@ Take this dependency with you:
 
 Let's start with simple model first:
 
-```
+```java
 public class Contact {
 
     private String name;
     private String description;
     
-    ... getters/setters ...
+    // getters/setters ...
 }
     
 ```
 
 Then a simple Spring service providing some data:
 
-```
+```java
 @Service
 public class ContactsService {
 
@@ -50,7 +50,7 @@ public class ContactsService {
 
 As mentioned in preface, Licket derives many concepts from Apache Wicket like logic less HTML templates. You can define view in very similar way:
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:lick="http://www.w3.org/1999/xhtml">
     <head>
@@ -71,7 +71,7 @@ As mentioned in preface, Licket derives many concepts from Apache Wicket like lo
 
 Then you can model out the components:
 
-```
+```java
 public class ContactsAppRoot extends AbstractLicketContainer<Void> {
 
   public ContactsAppRoot(String id,
@@ -104,11 +104,11 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
 }
 
 public ContactsList(String id, LicketModel<String> enclosingComponentPropertyModel) {
-        super(id, enclosingComponentPropertyModel, Contact.class);
+    super(id, enclosingComponentPropertyModel, Contact.class);
 
-        add(new LicketLabel("name"));
-        add(new LicketLabel("description"));
-    }
+    add(new LicketLabel("name"));
+    add(new LicketLabel("description"));
+}
 ```
 
 Next,coin your own Spring Boot configuration class and glue all together:
