@@ -39,9 +39,9 @@ public class ContactsService {
 
     public List<Contact> getAllContacts() {
         return newArrayList(
-                contact("picture1.jpg", "Chuck Norris", "That's him."),
-                contact("picture2.jpg", "Jonh Doe", "Lorem ipsum"),
-                contact("picture3.jpg", "Bob Marley", "Je je je")
+                contact("Chuck Norris", "That's him."),
+                contact("Jonh Doe", "Lorem ipsum"),
+                contact("Bob Marley", "Je je je")
         );
     }
 
