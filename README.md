@@ -113,7 +113,7 @@ public ContactsList(String id, LicketModel<String> enclosingComponentPropertyMod
 
 Next,coin your own Spring Boot configuration class and glue all together:
 
-```
+```java
 @Configuration
 public class LicketConfiguration {
 
