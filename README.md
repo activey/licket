@@ -132,7 +132,7 @@ public class LicketConfiguration {
         return new ContactsService();
     }
     
-    ... other beans ...
+    // other beans ...
 
 }
 ```
