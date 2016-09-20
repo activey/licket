@@ -9,4 +9,4 @@
  * Navigate in web browser: http://localhost:9081
  * Feel magic ;D
  
- ![](https://github.com/activey/licket/licket.svg)
+ ![](https://raw.githubusercontent.com/activey/licket/master/licket.svg)
