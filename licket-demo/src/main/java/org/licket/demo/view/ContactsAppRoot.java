@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 public class ContactsAppRoot extends AbstractLicketContainer<List<Contact>> {
 
-    public ContactsAppRoot(String id,
-                           @Autowired @Qualifier("contactsPanel") LicketComponentContainer contactsPanel) {
-        super(id, fromComponentContainerClass(ContactsAppRoot.class));
+  public ContactsAppRoot(String id,
+      @Autowired @Qualifier("contactsPanel") LicketComponentContainer contactsPanel) {
+    super(id, fromComponentContainerClass(ContactsAppRoot.class));
 
-        add(contactsPanel);
-    }
+    add(contactsPanel);
+  }
 }

@@ -1,19 +1,12 @@
 package org.licket.demo.view;
 
 import org.licket.core.model.LicketModel;
-import org.licket.core.resource.image.ImageResource;
-import org.licket.core.resource.image.ImageType;
 import org.licket.core.view.LicketLabel;
 import org.licket.core.view.list.AbstractLicketList;
-import org.licket.core.view.media.LicketImage;
 import org.licket.demo.model.Contact;
-import org.licket.demo.service.ContactsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.licket.demo.model.EmailAddress;
 
-import java.util.function.Supplier;
-
-import static org.licket.core.resource.image.ImageResource.fromClasspath;
-import static org.licket.core.resource.image.ImageType.JPEG;
+import static org.licket.core.model.LicketModel.ofString;
 
 public class ContactsList extends AbstractLicketList<Contact> {
 
@@ -22,6 +15,12 @@ public class ContactsList extends AbstractLicketList<Contact> {
 
         add(new LicketLabel("name"));
         add(new LicketLabel("description"));
-//        add(new LicketImage("pictureUrl", fromClasspath("test.jpg", JPEG)));
+
+        add(new AbstractLicketList<EmailAddress>("email", ofString("emails"), EmailAddress.class) {
+            @Override
+            protected void onInitializeContainer() {
+                add(new LicketLabel("email"));
+            }
+        });
     }
 }

@@ -25,6 +25,12 @@ public class Element extends Node {
         attributes.add(attribute);
     }
 
+    public void setAttribute(String name, String value) {
+        Attribute newAttribute = new Attribute(name, getNamespace());
+        newAttribute.setValue(value);
+        addAttribute(newAttribute);
+    }
+
     public Iterable<Element> children() {
         return children;
     }

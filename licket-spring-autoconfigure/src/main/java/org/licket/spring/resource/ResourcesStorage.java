@@ -3,6 +3,7 @@ package org.licket.spring.resource;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 import static java.util.stream.Stream.concat;
+import static org.licket.core.resource.css.StylesheetResource.CSS_MIMETYPE;
 import static org.licket.core.resource.javascript.JavascriptStaticResource.JAVASCRIPT_MIMETYPE;
 import static org.licket.core.view.LicketUrls.CONTEXT_RESOURCES;
 import java.util.Collection;
@@ -71,6 +72,10 @@ public class ResourcesStorage {
 
     public Stream<HeadParticipatingResource> getJavascriptResources() {
         return headParticipatingResources.stream().filter(byMimetype(JAVASCRIPT_MIMETYPE));
+    }
+
+    public Stream<HeadParticipatingResource> getStylesheetResources() {
+        return headParticipatingResources.stream().filter(byMimetype(CSS_MIMETYPE));
     }
 
     public String getResourceUrl(Resource resource) {

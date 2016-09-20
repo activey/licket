@@ -1,6 +1,6 @@
 package org.licket.spring.surface.element.html;
 
-import static org.licket.spring.surface.element.html.HtmlElementFactory.NAMESPACE;
+import static org.licket.spring.surface.element.html.HtmlElementFactory.HTML_NAMESPACE;
 import java.util.Optional;
 import org.licket.core.LicketApplication;
 import org.licket.core.id.CompositeId;
@@ -26,7 +26,7 @@ public class DefaultHtmlElement extends SurfaceElement {
     private ResourcesStorage resourcesStorage;
 
     public DefaultHtmlElement(String name) {
-        super(name, NAMESPACE);
+        super(name, HTML_NAMESPACE);
     }
 
     @Override

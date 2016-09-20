@@ -1,10 +1,23 @@
 package org.licket.demo.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Contact {
 
     private String pictureUrl;
     private String name;
     private String description;
+
+    private List<EmailAddress> emails = new ArrayList<>();
+
+    public void addEmail(String emailAddress) {
+        emails.add(new EmailAddress(emailAddress));
+    }
+
+    public List<EmailAddress> getEmails() {
+        return emails;
+    }
 
     public String getPictureUrl() {
         return pictureUrl;

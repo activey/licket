@@ -6,7 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.licket.spring.surface.element.html.HtmlElementFactory.NAMESPACE;
+import static org.licket.spring.surface.element.html.HtmlElementFactory.HTML_NAMESPACE;
+import static org.licket.spring.surface.element.html.LinkElement.LinkRelType.STYLESHEET;
 
 /**
  * @author activey
@@ -19,7 +20,7 @@ public class HeadElement extends SurfaceElement {
     private ResourcesStorage resourcesStorage;
 
     public HeadElement(String name) {
-        super(name, NAMESPACE);
+        super(name, HTML_NAMESPACE);
     }
 
     @Override
@@ -31,6 +32,16 @@ public class HeadElement extends SurfaceElement {
             ScriptElement scriptElement = new ScriptElement();
             scriptElement.setSrc(resourcesStorage.getResourceUrl(resource));
             addChildElement(scriptElement);
+        });
+
+        resourcesStorage.getStylesheetResources().forEach(resource -> {
+            LOGGER.debug("Using head CSS resource: {}", resource.getName());
+
+            LinkElement linkElement = new LinkElement();
+            linkElement.setHref(resourcesStorage.getResourceUrl(resource));
+            linkElement.setType(resource.getMimeType());
+            linkElement.setRelType(STYLESHEET);
+            addChildElement(linkElement);
         });
     }
 }

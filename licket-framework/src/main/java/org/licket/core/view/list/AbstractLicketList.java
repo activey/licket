@@ -3,8 +3,11 @@ package org.licket.core.view.list;
 import static java.lang.String.format;
 import static org.licket.core.view.ComponentContainerView.internal;
 import org.licket.core.model.LicketModel;
+import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.core.view.render.ComponentRenderingContext;
+
+import java.util.Optional;
 
 public abstract class AbstractLicketList<T> extends AbstractLicketContainer<String> {
 
@@ -18,7 +21,19 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
 
     @Override
     protected final void onRenderContainer(ComponentRenderingContext renderingContext) {
-        renderingContext.onSurfaceElement(element -> element.addAttribute("*ngFor",
-            format("#%s of model.%s", getId(), getComponentModel().get())));
+        Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketContainer);
+        if (!parent.isPresent()) {
+            return;
+        }
+        AbstractLicketContainer parentContainer = (AbstractLicketContainer) parent.get();
+        renderingContext.onSurfaceElement(element -> {
+            // TODO refactor
+            String firstPart = "model";
+            if (!parentContainer.getComponentContainerView().isExternalized()) {
+                firstPart = parentContainer.getId();
+            }
+            element.addAttribute("*ngFor",
+                    format("let %s of %s.%s", getId(), firstPart, getComponentModel().get()));
+        });
     }
 }

@@ -17,7 +17,7 @@ import static com.google.common.collect.Lists.newArrayList;
  */
 public class HtmlElementFactory extends AbstractElementFactory {
 
-    public static final String NAMESPACE = "http://www.w3.org/1999/xhtml";
+    public static final String HTML_NAMESPACE = "http://www.w3.org/1999/xhtml";
 
     @Autowired(required = false)
     private Collection<ElementProvider> factoryElementsProviders = newArrayList();
@@ -30,7 +30,7 @@ public class HtmlElementFactory extends AbstractElementFactory {
     private ElementProvider defaultElement;
 
     public HtmlElementFactory() {
-        super(NAMESPACE);
+        super(HTML_NAMESPACE);
     }
 
     @PostConstruct

@@ -1,7 +1,7 @@
 package org.licket.spring.surface.element.html;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.licket.spring.surface.element.html.HtmlElementFactory.NAMESPACE;
+import static org.licket.spring.surface.element.html.HtmlElementFactory.HTML_NAMESPACE;
 import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
 import java.io.StringWriter;
 import javax.xml.stream.XMLOutputFactory;
@@ -26,7 +26,7 @@ public class BodyElement extends SurfaceElement {
     private ResourcesStorage resourcesStorage;
 
     public BodyElement(String name) {
-        super(name, NAMESPACE);
+        super(name, HTML_NAMESPACE);
     }
 
     @Override

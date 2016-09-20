@@ -6,6 +6,8 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
+import static java.lang.String.format;
+
 @Service
 public class ContactsService {
 
@@ -20,6 +22,9 @@ public class ContactsService {
         contact.setPictureUrl(pictureUrl);
         contact.setName(name);
         contact.setDescription(description);
+        contact.addEmail(format("%s@test.com", name));
+        contact.addEmail(format("%s@gmail.com", name));
+        contact.addEmail(format("%s@microsoft.com", name));
         return contact;
     }
 }

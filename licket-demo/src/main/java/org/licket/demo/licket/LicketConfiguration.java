@@ -6,15 +6,12 @@ import org.licket.demo.view.ContactsAppRoot;
 import org.licket.demo.view.ContactsPanel;
 import org.licket.demo.view.semantic.JqueryLibraryResource;
 import org.licket.demo.view.semantic.SemanticLibraryResource;
+import org.licket.demo.view.semantic.SemanticStylesheetResource;
 import org.licket.spring.annotation.LicketComponent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.context.annotation.SessionScope;
 
-import static org.springframework.context.annotation.ScopedProxyMode.INTERFACES;
 
 @Configuration
 public class LicketConfiguration {
@@ -39,5 +36,11 @@ public class LicketConfiguration {
     @Order(11)
     public HeadParticipatingResource semanticLibrary() {
         return new SemanticLibraryResource();
+    }
+
+    @Bean
+    @Order(12)
+    public HeadParticipatingResource semanticStylesheet() {
+        return new SemanticStylesheetResource();
     }
 }
