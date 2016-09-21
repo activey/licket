@@ -4,35 +4,22 @@ import static org.licket.core.view.LicketUrls.CONTEXT_COMPONENT;
 import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
 import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.http.ResponseEntity.ok;
-import java.io.ByteArrayOutputStream;
 import java.util.Optional;
-import javax.annotation.PostConstruct;
 import org.licket.core.LicketApplication;
-import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.Resource;
-import org.licket.core.view.ComponentContainerView;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.core.view.model.LicketComponentModel;
 import org.licket.spring.resource.ResourcesStorage;
-import org.licket.surface.SurfaceContext;
 import org.licket.surface.tag.ElementFactories;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(CONTEXT_COMPONENT)
 public class LicketComponentController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LicketComponentController.class);
 
     @Autowired
     private LicketApplication licketApplication;
@@ -42,22 +29,6 @@ public class LicketComponentController {
 
     @Autowired
     private ResourcesStorage resourcesStorage;
-
-    @PostConstruct
-    private void initialize() {
-        // TODO refactor whole method
-        LOGGER.debug("Initializing licket application: {}.", licketApplication.getName());
-
-        LicketComponentContainer<?> rootContainer = licketApplication.getRootComponentContainer();
-
-        ComponentContainerView containerView = rootContainer.getComponentContainerView();
-
-        ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-        new SurfaceContext(surfaceElementFactories).processTemplateContent(containerView.readViewContent(), byteArrayStream);
-
-        resourcesStorage
-            .putResource(new ByteArrayResource("index.html", TEXT_HTML_VALUE, byteArrayStream.toByteArray()));
-    }
 
     @GetMapping(value = "/{compositeId}", produces = "application/json")
     public @ResponseBody LicketComponentModel getLicketComponentModel(@PathVariable String compositeId) {
@@ -69,6 +40,15 @@ public class LicketComponentController {
         return new LicketComponentModel(component.get().getComponentModel().get());
     }
 
+    @PostMapping(value = "/{compositeId}")
+    public @ResponseBody LicketComponentModel invokeComponentAction(@PathVariable String compositeId) {
+        Optional<LicketComponent<?>> component = licketApplication.findComponent(compositeId);
+        if (!component.isPresent()) {
+            // TODO return 404 when there is no such component
+            return null;
+        }
+        return null;
+    }
 
     // @Cacheable("component-view-cache")
     @GetMapping(value = "/{compositeId}/view", produces = TEXT_HTML_VALUE)

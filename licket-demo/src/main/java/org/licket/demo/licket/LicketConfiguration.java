@@ -8,6 +8,7 @@ import org.licket.demo.view.semantic.JqueryLibraryResource;
 import org.licket.demo.view.semantic.SemanticLibraryResource;
 import org.licket.demo.view.semantic.SemanticStylesheetResource;
 import org.licket.spring.annotation.LicketComponent;
+import org.licket.spring.annotation.LicketRootContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -16,7 +17,7 @@ import org.springframework.core.annotation.Order;
 @Configuration
 public class LicketConfiguration {
 
-    @LicketComponent("root")
+    @LicketRootContainer
     public LicketComponentContainer root() {
         return new ContactsAppRoot("contacts-page", contactsPanel());
     }

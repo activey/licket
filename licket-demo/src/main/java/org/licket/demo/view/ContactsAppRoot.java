@@ -8,7 +8,7 @@ import org.licket.demo.model.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class ContactsAppRoot extends AbstractLicketContainer<List<Contact>> {
+public class ContactsAppRoot extends AbstractLicketContainer<Void> {
 
   public ContactsAppRoot(String id,
       @Autowired @Qualifier("contactsPanel") LicketComponentContainer contactsPanel) {

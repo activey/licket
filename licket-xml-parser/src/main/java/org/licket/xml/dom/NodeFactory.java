@@ -32,15 +32,4 @@ public class NodeFactory {
     public Nodes makeDocType(String rootElementName, String publicID, String systemID) {
         return null;
     }
-
-    public Nodes makeText(String data) {
-        return new Nodes(new Text(data));
-    }
-
-    /*
-        TODO consider if relevant at all ...
-     */
-    public Nodes makeCDATASection(String data) {
-        return makeText(data);
-    }
 }

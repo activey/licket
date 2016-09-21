@@ -3,10 +3,11 @@ package org.licket.core.view.container;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.resource.ByteArrayResource;
-import org.licket.core.view.*;
+import org.licket.core.view.AbstractLicketComponent;
+import org.licket.core.view.ComponentContainerView;
+import org.licket.core.view.LicketComponent;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.surface.element.SurfaceElement;
-import org.licket.xml.ParsingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.StringWriter;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.licket.core.model.LicketModel.empty;
@@ -96,11 +97,20 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
 
     protected void onRenderContainer(ComponentRenderingContext renderingContext) {}
 
-    public final void traverseDown(ComponentVisitor componentVisitor) {
-        leaves.forEach(componentVisitor::visitSimpleComponent);
+    public final void traverseDown(Predicate<LicketComponent<?>> componentVisitor) {
+        leaves.forEach(componentVisitor::test);
         branches.forEach(branch -> {
-            if (componentVisitor.visitComponentContainer(branch)) {
+            if (componentVisitor.test(branch)) {
                 branch.traverseDown(componentVisitor);
+            }
+        });
+    }
+
+    @Override
+    public void traverseDownContainers(Predicate<LicketComponentContainer<?>> containerVisitor) {
+        branches.forEach(branch -> {
+            if (containerVisitor.test(branch)) {
+                branch.traverseDownContainers(containerVisitor);
             }
         });
     }

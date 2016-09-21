@@ -13,7 +13,7 @@ public class LicketUrls {
 
     public static final String CONTEXT_COMPONENT = "/licket/component";
 
-    public static String getContainerViewUrl(LicketComponentContainer<?> licketComponent) {
+    public static String componentContainerViewUrl(LicketComponentContainer<?> licketComponent) {
         return CONTEXT_COMPONENT + format("/%s/view", licketComponent.getCompositeId().getValue());
     }
 }

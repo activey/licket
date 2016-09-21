@@ -20,17 +20,17 @@ public class BlockBuilder extends AbstractAstNodeBuilder<Block> {
         return new BlockBuilder();
     }
 
-    public BlockBuilder statement(AbstractAstNodeBuilder<ExpressionStatement> statementBuilder) {
+    public BlockBuilder prependStatement(AbstractAstNodeBuilder<ExpressionStatement> statementBuilder) {
         statements.add(0, statementBuilder);
         return this;
     }
 
-    public BlockBuilder statement(FunctionCallBuilder functionCallBuilder) {
+    public BlockBuilder prependStatement(FunctionCallBuilder functionCallBuilder) {
         statements.add(0, functionCallBuilder);
         return this;
     }
 
-    public BlockBuilder statement(AssignmentBuilder assignment) {
+    public BlockBuilder prependStatement(AssignmentBuilder assignment) {
         statements.add(0, assignment);
         return this;
     }

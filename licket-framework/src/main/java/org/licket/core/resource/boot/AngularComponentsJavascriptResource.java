@@ -3,14 +3,12 @@ package org.licket.core.resource.boot;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
-import org.licket.core.view.DefaultComponentVisitor;
-import org.licket.core.view.LicketUrls;
 import org.licket.core.view.angular.ComponentBuilder;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.framework.hippo.BlockBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.licket.core.view.LicketUrls.getContainerViewUrl;
+import static org.licket.core.view.LicketUrls.componentContainerViewUrl;
 import static org.licket.core.view.angular.ClassConstructorBuilder.constructorBuilder;
 import static org.licket.core.view.angular.ComponentBuilder.component;
 import static org.licket.core.view.angular.ComponentClassBuilder.classBuilder;
@@ -30,14 +28,11 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
-        licketApplication.traverseDown(new DefaultComponentVisitor() {
-
-            @Override
-            public boolean visitComponentContainer(LicketComponentContainer<?> container) {
-                generateComponentContainerCode(scriptBlockBuilder, container);
-                return true;
-            }
+        licketApplication.traverseDownContainers(container -> {
+            generateComponentContainerCode(scriptBlockBuilder, container);
+            return true;
         });
+
     }
 
     private void generateComponentContainerCode(BlockBuilder scriptBlockBuilder, LicketComponentContainer<?> container) {
@@ -45,24 +40,32 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
             return;
         }
 
-        ComponentBuilder componentBuilder = component();
-        container.traverseDown(new DefaultComponentVisitor() {
+        ComponentBuilder componentBuilder = component(container.getCompositeId());
+        appendContainerChildren(container, componentBuilder);
 
-            @Override
-            public boolean visitComponentContainer(LicketComponentContainer<?> child) {
-                if (!child.getComponentContainerView().isExternalized()) {
-                    return false;
-                }
-                componentBuilder.componentDependency(child);
-                return false;
-            }
-        });
-
-        scriptBlockBuilder.statement(componentBuilder
-                .selector(container.getId())
-                .templateUrl(getContainerViewUrl(container))
-                .componentName(container.getCompositeId().getNormalizedValue())
+        scriptBlockBuilder.prependStatement(componentBuilder
+                .selector(componentSelector(container))
+                .templateUrl(componentContainerViewUrl(container))
+                .componentName(componentName(container))
                 .clazz(classBuilder()
                         .constructor(constructorBuilder(container))));
+    }
+
+    private void appendContainerChildren(LicketComponentContainer<?> container, final ComponentBuilder componentBuilder) {
+        container.traverseDownContainers(childContainer -> {
+            if (!childContainer.getComponentContainerView().isExternalized()) {
+                return false;
+            }
+            componentBuilder.componentDependency(childContainer);
+            return true;
+        });
+    }
+
+    private String componentSelector(LicketComponentContainer<?> container) {
+        return container.getId();
+    }
+
+    private String componentName(LicketComponentContainer<?> container) {
+        return container.getCompositeId().getNormalizedValue();
     }
 }

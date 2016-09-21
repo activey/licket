@@ -1,30 +1,35 @@
 package org.licket.demo.service;
 
+import com.github.javafaker.Faker;
+import com.github.javafaker.Internet;
 import org.licket.demo.model.Contact;
 import org.springframework.stereotype.Service;
-import com.google.common.collect.Lists;
 
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 
 @Service
 public class ContactsService {
 
     public List<Contact> getAllContacts() {
-        return Lists.newArrayList(contact("picture1.jpg", "Andrew Golota", "Ble ble ble ble ble"),
-            contact("picture2.jpg", "Jonh Doe", "Trala la lalalal ala"),
-            contact("picture3.jpg", "Chuck Norris", "Trolololo!"));
+        Faker faker = new Faker();
+
+        return newArrayList(
+                contact(faker.internet(), faker.name().fullName(), faker.lorem().paragraph()),
+                contact(faker.internet(), faker.name().fullName(), faker.lorem().paragraph()),
+                contact(faker.internet(), faker.name().fullName(), faker.lorem().paragraph())
+        );
     }
 
-    private Contact contact(String pictureUrl, String name, String description) {
+    private Contact contact(Internet internet, String name, String description) {
         Contact contact = new Contact();
-        contact.setPictureUrl(pictureUrl);
         contact.setName(name);
         contact.setDescription(description);
-        contact.addEmail(format("%s@test.com", name));
-        contact.addEmail(format("%s@gmail.com", name));
-        contact.addEmail(format("%s@microsoft.com", name));
+        contact.addEmail(internet.emailAddress());
+        contact.addEmail(internet.emailAddress());
+        contact.addEmail(internet.emailAddress());
         return contact;
     }
 }

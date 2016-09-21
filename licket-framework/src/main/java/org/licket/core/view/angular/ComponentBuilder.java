@@ -1,5 +1,6 @@
 package org.licket.core.view.angular;
 
+import org.licket.core.id.CompositeId;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
 import org.licket.framework.hippo.ArrayLiteralBuilder;
@@ -29,11 +30,14 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
     private List<String> dependencies = newLinkedList();
     private ComponentClassBuilder classBuilder;
     private String name;
+    private CompositeId compositeId;
 
-    private ComponentBuilder() {}
+    private ComponentBuilder(CompositeId compositeId) {
+        this.compositeId = compositeId;
+    }
 
-    public static ComponentBuilder component() {
-        return new ComponentBuilder();
+    public static ComponentBuilder component(CompositeId compositeId) {
+        return new ComponentBuilder(compositeId);
     }
 
     public ComponentBuilder clazz(ComponentClassBuilder classBuilder) {

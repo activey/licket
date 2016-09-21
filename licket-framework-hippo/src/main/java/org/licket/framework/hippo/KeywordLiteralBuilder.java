@@ -1,5 +1,6 @@
 package org.licket.framework.hippo;
 
+import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.KeywordLiteral;
 
 /**
@@ -16,7 +17,7 @@ public class KeywordLiteralBuilder extends AbstractAstNodeBuilder<KeywordLiteral
     @Override
     public KeywordLiteral build() {
         KeywordLiteral keywordLiteral = new KeywordLiteral();
-        keywordLiteral.setType(43); // TODO use constant from Rhino
+        keywordLiteral.setType(Token.THIS);
         return keywordLiteral;
     }
 }

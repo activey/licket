@@ -32,10 +32,10 @@ public class Testing {
             functionCall()
                 .target(parenthesizedExpression(functionNode()
                         .param(name("app"))
-                        .body(block().statement(expressionStatement(functionCall()
+                        .body(block().prependStatement(expressionStatement(functionCall()
                                 .argument(stringLiteral("DOMContentLoaded"))
                                 .argument(functionNode().body(
-                                        block().statement(functionCall()
+                                        block().prependStatement(functionCall()
                                                 .argument(property(name("app"), name("TodosComponent")))
                                                 .target(property(property(property(name("ng"), name("platform")), name("browser")), name("bootstrap"))))))
                                 .target(property(name("document"), name("addEventListener"))))))))

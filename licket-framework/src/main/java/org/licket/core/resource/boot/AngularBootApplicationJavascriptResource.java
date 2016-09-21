@@ -31,7 +31,7 @@ public class AngularBootApplicationJavascriptResource extends AbstractJavascript
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
-        scriptBlockBuilder.statement(expressionStatement(functionCall()
+        scriptBlockBuilder.prependStatement(expressionStatement(functionCall()
                 .argument(domLoadedEventName())
                 .argument(functionNode().body(bootstrapAngularLogic()))
                 .target(property(name("document"), name("addEventListener")))));
@@ -42,13 +42,12 @@ public class AngularBootApplicationJavascriptResource extends AbstractJavascript
     }
 
     private BlockBuilder bootstrapAngularLogic() {
-        return  block().statement(functionCall()
+        return  block().prependStatement(functionCall()
                 .argument(property(name("app"), rootComponentName()))
                 .target(property(property(property(name("ng"), name("platform")), name("browser")), name("bootstrap"))));
     }
 
     private NameBuilder rootComponentName() {
-        // TODO think about it little bit more and refactor
         return name(licketApplication.getRootComponentContainer().getCompositeId().getNormalizedValue());
     }
 
