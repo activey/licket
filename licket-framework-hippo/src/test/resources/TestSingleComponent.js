@@ -11,6 +11,8 @@
                 this.model = {
 
                 };
+
+                this.compositeId = "test";
             }
         });
 

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.licket.core.model.LicketModel.empty;
+import static org.licket.core.model.LicketModel.emptyModel;
 
 /**
  * @author activey
@@ -34,7 +34,7 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
     private ComponentContainerView containerView;
 
     public AbstractLicketContainer(String id, ComponentContainerView componentView) {
-        this(id, componentView, empty());
+        this(id, componentView, emptyModel());
     }
 
     public AbstractLicketContainer(String id, ComponentContainerView containerView, LicketModel<T> componentModel) {
@@ -58,8 +58,8 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
 
     @Override
     protected final void onInitialize() {
-        branches.forEach(component -> component.initialize());
-        leaves.forEach(component -> component.initialize());
+        branches.forEach(LicketComponent::initialize);
+        leaves.forEach(LicketComponent::initialize);
         onInitializeContainer();
     }
 

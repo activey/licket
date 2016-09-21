@@ -24,6 +24,16 @@ public class AssignmentBuilder extends AbstractAstNodeBuilder<Assignment> {
         return this;
     }
 
+    public AssignmentBuilder right(NameBuilder nameBuilder) {
+        this.right = nameBuilder;
+        return this;
+    }
+
+    public AssignmentBuilder right(StringLiteralBuilder stringLiteralBuilder) {
+        this.right = stringLiteralBuilder;
+        return this;
+    }
+
     public AssignmentBuilder right(ObjectLiteralBuilder objectLiteralBuilder) {
         this.right = objectLiteralBuilder;
         return this;

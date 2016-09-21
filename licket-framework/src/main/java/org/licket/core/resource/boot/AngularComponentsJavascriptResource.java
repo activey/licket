@@ -12,6 +12,7 @@ import static org.licket.core.view.LicketUrls.componentContainerViewUrl;
 import static org.licket.core.view.angular.ClassConstructorBuilder.constructorBuilder;
 import static org.licket.core.view.angular.ComponentBuilder.component;
 import static org.licket.core.view.angular.ComponentClassBuilder.classBuilder;
+import static org.licket.core.view.angular.ComponentCommunicationServiceBuilder.componentCommunicationService;
 
 /**
  * @author activey
@@ -33,14 +34,17 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
             return true;
         });
 
+        // generating component services
+        scriptBlockBuilder.prependStatement(componentCommunicationService()
+                .serviceName("ComponentCommunicationService"));
+
     }
 
     private void generateComponentContainerCode(BlockBuilder scriptBlockBuilder, LicketComponentContainer<?> container) {
         if (!container.getComponentContainerView().isExternalized()) {
             return;
         }
-
-        ComponentBuilder componentBuilder = component(container.getCompositeId());
+        ComponentBuilder componentBuilder = component();
         appendContainerChildren(container, componentBuilder);
 
         scriptBlockBuilder.prependStatement(componentBuilder

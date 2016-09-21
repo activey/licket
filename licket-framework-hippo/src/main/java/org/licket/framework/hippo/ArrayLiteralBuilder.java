@@ -1,6 +1,8 @@
 package org.licket.framework.hippo;
 
 import org.mozilla.javascript.ast.ArrayLiteral;
+import org.mozilla.javascript.ast.FunctionNode;
+import org.mozilla.javascript.ast.PropertyGet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +22,16 @@ public class ArrayLiteralBuilder extends AbstractAstNodeBuilder<ArrayLiteral> {
 
     public ArrayLiteralBuilder element(NameBuilder name) {
         elements.add(name);
+        return this;
+    }
+
+    public ArrayLiteralBuilder element(AbstractAstNodeBuilder<PropertyGet> propertyGet) {
+        elements.add(propertyGet);
+        return this;
+    }
+
+    public ArrayLiteralBuilder element(FunctionNodeBuilder functionNode) {
+        elements.add(functionNode);
         return this;
     }
 

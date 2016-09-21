@@ -51,7 +51,7 @@ public class Testing {
     @Test
     public void test() throws IOException {
         AstRoot astRoot = new Parser().parse(
-            new InputStreamReader(Test.class.getClassLoader().getResourceAsStream("TestSingleComponent.js")), "test.js", 0);
+            new InputStreamReader(Test.class.getClassLoader().getResourceAsStream("TestService.js")), "test.js", 0);
 
         astRoot.forEach(visitor());
     }

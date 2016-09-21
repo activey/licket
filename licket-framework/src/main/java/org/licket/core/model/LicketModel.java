@@ -13,12 +13,12 @@ public class LicketModel<T> {
         return new LicketModel<String>(stringValue);
     }
 
-    public static <T> LicketModel<T> empty() {
+    public static <T> LicketModel<T> emptyModel() {
         return new LicketModel<>(() -> null);
     }
 
     public static <T> LicketModel<T> ofModelObject(T modelObject) {
-        return new LicketModel<T>(modelObject);
+        return new LicketModel<>(modelObject);
     }
 
     private T modelObject;
@@ -45,6 +45,6 @@ public class LicketModel<T> {
     }
 
     public static <T> LicketModel<T> fromParent(LicketModel<T> parentModel) {
-        return new LicketModel<T>(parentModel.modelObjectSupplier);
+        return new LicketModel<>(parentModel.modelObjectSupplier);
     }
 }

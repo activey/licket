@@ -32,7 +32,7 @@ public class CompositeId {
         return new CompositeId(parseCompositeId(compositeIdValue));
     }
 
-    static String[] parseCompositeId(String compositeIdValue) {
+    private static String[] parseCompositeId(String compositeIdValue) {
         return toArray(Splitter.on(SEPARATOR_DEFAULT).split(compositeIdValue), String.class);
     }
 
@@ -43,10 +43,6 @@ public class CompositeId {
     public String getNormalizedValue() {
         return on(SEPARATOR_NORMALIZED)
             .join(stream(idParts).map(idPart -> LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, idPart)).toArray());
-    }
-
-    public String[] getIdParts() {
-        return idParts;
     }
 
     public boolean hasMore() {

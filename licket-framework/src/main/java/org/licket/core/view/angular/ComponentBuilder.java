@@ -1,6 +1,5 @@
 package org.licket.core.view.angular;
 
-import org.licket.core.id.CompositeId;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
 import org.licket.framework.hippo.ArrayLiteralBuilder;
@@ -10,6 +9,7 @@ import org.mozilla.javascript.ast.ExpressionStatement;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newLinkedList;
+import static com.google.common.collect.Lists.reverse;
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
@@ -30,14 +30,11 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
     private List<String> dependencies = newLinkedList();
     private ComponentClassBuilder classBuilder;
     private String name;
-    private CompositeId compositeId;
 
-    private ComponentBuilder(CompositeId compositeId) {
-        this.compositeId = compositeId;
-    }
+    private ComponentBuilder() {}
 
-    public static ComponentBuilder component(CompositeId compositeId) {
-        return new ComponentBuilder(compositeId);
+    public static ComponentBuilder component() {
+        return new ComponentBuilder();
     }
 
     public ComponentBuilder clazz(ComponentClassBuilder classBuilder) {
@@ -66,7 +63,7 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
 
     @Override
     public ExpressionStatement build() {
-        ExpressionStatement expressionStatement = expressionStatement(assignment()
+        return expressionStatement(assignment()
                 .left(property(name("app"), name(name)))
                 .right(functionCall()
                         .target(property(functionCall()
@@ -75,7 +72,6 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
                         ,name("Class")))
                         .argument(classBuilder)))
                 .build();
-        return expressionStatement;
     }
 
     private ObjectLiteralBuilder componentSettings() {

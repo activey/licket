@@ -5,6 +5,7 @@ import org.licket.core.model.LicketModel;
 import org.licket.core.view.render.ComponentRenderingContext;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static java.util.Optional.of;
 
@@ -33,5 +34,5 @@ public interface LicketComponent<T> {
 
     void render(ComponentRenderingContext renderingContext);
 
-    Optional<LicketComponent<?>> traverseUp(ComponentTraverser componentTraverser);
+    Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser);
 }

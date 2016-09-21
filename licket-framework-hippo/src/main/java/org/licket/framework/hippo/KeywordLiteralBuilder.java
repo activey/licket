@@ -8,16 +8,20 @@ import org.mozilla.javascript.ast.KeywordLiteral;
  */
 public class KeywordLiteralBuilder extends AbstractAstNodeBuilder<KeywordLiteral> {
 
-    private KeywordLiteralBuilder() {}
+    private int tokenValue;
 
-    public static KeywordLiteralBuilder keywordLiteral() {
-        return new KeywordLiteralBuilder();
+    private KeywordLiteralBuilder(int tokenValue) {
+        this.tokenValue = tokenValue;
+    }
+
+    public static KeywordLiteralBuilder thisLiteral() {
+        return new KeywordLiteralBuilder(Token.THIS);
     }
 
     @Override
     public KeywordLiteral build() {
         KeywordLiteral keywordLiteral = new KeywordLiteral();
-        keywordLiteral.setType(Token.THIS);
+        keywordLiteral.setType(tokenValue);
         return keywordLiteral;
     }
 }

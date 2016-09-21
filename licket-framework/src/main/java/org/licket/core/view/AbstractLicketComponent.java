@@ -1,11 +1,13 @@
 package org.licket.core.view;
 
 import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
+import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.licket.core.id.CompositeId.fromStringValue;
 import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
-import static org.licket.core.model.LicketModel.empty;
+import static org.licket.core.model.LicketModel.emptyModel;
 import java.util.Optional;
+import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
 
 import com.google.common.base.CaseFormat;
@@ -24,7 +26,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     private LicketComponent<?> parent;
 
     public AbstractLicketComponent(String id) {
-        this(id, empty());
+        this(id, emptyModel());
     }
 
     public AbstractLicketComponent(String id, LicketModel<T> componentModel) {
@@ -84,11 +86,11 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         return fromStringValueWithAdditionalParts(parentOptional.get().getCompositeId().getValue(), id);
     }
 
-    public final Optional<LicketComponent<?>> traverseUp(ComponentTraverser componentTraverser) {
+    public final Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser) {
         if (parent == null) {
-            return Optional.empty();
+            return empty();
         }
-        if (componentTraverser.componentMatch(parent)) {
+        if (componentTraverser.test(parent)) {
             return of(parent);
         }
         return parent.traverseUp(componentTraverser);
