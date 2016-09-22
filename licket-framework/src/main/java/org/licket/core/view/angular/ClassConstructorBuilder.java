@@ -5,10 +5,12 @@ import static java.lang.String.format;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
+import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
+import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyGetBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
@@ -16,9 +18,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import org.licket.core.view.container.LicketComponentContainer;
-import org.licket.framework.hippo.AbstractAstNodeBuilder;
-import org.licket.framework.hippo.ArrayLiteralBuilder;
-import org.licket.framework.hippo.ObjectLiteralBuilder;
+import org.licket.framework.hippo.*;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.ArrayLiteral;
 import org.mozilla.javascript.ast.AstRoot;
@@ -37,6 +37,7 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral
 
     private static final String PROPERTY_MODEL = "model";
     private static final String PROPERTY_COMPOSITE_ID = "compositeId";
+    private static final String PROPERTY_INVOKE_ACTION = "invokeAction";
 
     private LicketComponentContainer<?> container;
 
@@ -64,9 +65,36 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral
                                 expressionStatement(
                                     assignment()
                                         .left(property(thisLiteral(), name(PROPERTY_COMPOSITE_ID)))
-                                        .right(stringLiteral(container.getCompositeId().getValue()))))))
+                                        .right(stringLiteral(container.getCompositeId().getValue()))))
+                            .appendStatement(
+                                expressionStatement(
+                                    assignment()
+                                        .left(property(thisLiteral(), name(PROPERTY_INVOKE_ACTION)))
+                                        .right(invokeComponentAction())
+                                )
+                            )))
             .build();
         }
+
+    private FunctionNodeBuilder invokeComponentAction() {
+        return functionNode().
+                body(
+                    block().
+                        appendStatement(
+                            expressionStatement(functionCall()
+                                .target(property(name("LicketRemote"), name("invokeComponentAction")))
+                                .argument(objectLiteral()
+                                        .objectProperty(propertyBuilder()
+                                                .name("compositeId")
+                                                .value(stringLiteral(container.getCompositeId().getValue())))
+                                        .objectProperty(propertyBuilder().name("childCompositeId").value(name("callerId")))
+                                ).argument(updateComponentModelHandler()))))
+                .param(name("callerId"));
+    }
+
+    private FunctionNodeBuilder updateComponentModelHandler() {
+        return functionNode().param(name("response")).body(block());
+    }
 
     // TODO very experimental, rewrite!
     private ObjectLiteralBuilder componentInitialModel() {

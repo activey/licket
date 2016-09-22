@@ -35,8 +35,18 @@ public class FunctionCallBuilder extends AbstractAstNodeBuilder<FunctionCall> {
         return this;
     }
 
+    public FunctionCallBuilder argument(NameBuilder nameBuilder) {
+        arguments.add(nameBuilder);
+        return this;
+    }
+
     public FunctionCallBuilder argument(FunctionNodeBuilder functionNodeBuilder) {
         arguments.add(functionNodeBuilder);
+        return this;
+    }
+
+    public FunctionCallBuilder argument(FunctionCallBuilder functionCallBuilder) {
+        arguments.add(functionCallBuilder);
         return this;
     }
 

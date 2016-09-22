@@ -5,7 +5,7 @@ import static org.licket.demo.model.Contacts.fromIterable;
 
 import org.licket.core.model.LicketModel;
 import org.licket.core.view.container.AbstractLicketContainer;
-import org.licket.core.view.link.AbstractActionLink;
+import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.demo.model.Contacts;
 import org.licket.demo.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
         super(id, fromComponentContainerClass(ContactsPanel.class));
 
         add(new ContactsList("contact", new LicketModel("contacts")));
-        add(new AbstractActionLink("reload") {
+        add(new AbstractLicketActionLink("reload") {
 
             @Override
             protected void onInvokeAction() {

@@ -10,6 +10,9 @@
                 this.model = {
 
                 };
+                this.invokeComponentAction = function(actionData) {
+                    http.post("/licket/component/action", actionData);
+                };
             }
         });
 

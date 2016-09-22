@@ -1,8 +1,6 @@
 package org.licket.core.view.angular;
 
-import org.licket.framework.hippo.AbstractAstNodeBuilder;
-import org.licket.framework.hippo.FunctionNodeBuilder;
-import org.licket.framework.hippo.ObjectLiteralBuilder;
+import org.licket.framework.hippo.*;
 import org.mozilla.javascript.ast.ExpressionStatement;
 
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
@@ -16,6 +14,7 @@ import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyGetBuilder.property;
+import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 /**
  * @author activey
@@ -51,18 +50,34 @@ public class ComponentCommunicationServiceBuilder extends AbstractAstNodeBuilder
                         .name("constructor")
                         .arrayValue(arrayLiteral()
                                 .element(property(property(name("ng"), name("http")), name("Http")))
-                                .element(invokeComponentAction()
+                                .element(functionNode()
                                         .body(block().appendStatement(
                                                 expressionStatement(assignment()
-                                                        .left(property(thisLiteral(), name("http")))
-                                                        .right(name("http"))
-                                                )))
+                                                        .left(property(thisLiteral(), name("http"))).right(name("http"))
+                                                )).appendStatement(
+                                                    expressionStatement(assignment()
+                                                            .left(property(thisLiteral(), name("invokeComponentAction"))).right(invokeComponentAction())
+                                                    )
+                                                ))
                                         .param(name("http"))
-                                )))
-                .objectProperty(propertyBuilder().name("invokeComponentAction").value(invokeComponentAction()));
+                                )));
     }
 
     private FunctionNodeBuilder invokeComponentAction() {
-        return functionNode().body(block());
+        return functionNode()
+                .param(name("actionData"))
+                .param(name("responseListener"))
+                .body(block().appendStatement(expressionStatement(executeHttpPost())));
+    }
+
+    private FunctionCallBuilder executeHttpPost() {
+        return functionCall()
+                .target(property(
+                        functionCall()
+                            .target(property(name("http"), name("post")))
+                            .argument(stringLiteral("/licket/component/action"))
+                            .argument(name("actionData")),
+                        name("subscribe")))
+                .argument(name("responseListener"));
     }
 }
