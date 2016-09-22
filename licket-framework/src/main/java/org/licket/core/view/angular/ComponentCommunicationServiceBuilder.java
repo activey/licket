@@ -49,15 +49,15 @@ public class ComponentCommunicationServiceBuilder extends AbstractAstNodeBuilder
         return objectLiteral()
                 .objectProperty(propertyBuilder()
                         .name("constructor")
-                        .value(arrayLiteral()
-                                .element(property(name("ng"), name("http")))
+                        .arrayValue(arrayLiteral()
+                                .element(property(property(name("ng"), name("http")), name("Http")))
                                 .element(invokeComponentAction()
                                         .body(block().appendStatement(
                                                 expressionStatement(assignment()
-                                                        .left(property(thisLiteral(), name("httpService")))
-                                                        .right(name("angularHttpService"))
+                                                        .left(property(thisLiteral(), name("http")))
+                                                        .right(name("http"))
                                                 )))
-                                        .param(name("angularHttpService"))
+                                        .param(name("http"))
                                 )))
                 .objectProperty(propertyBuilder().name("invokeComponentAction").value(invokeComponentAction()));
     }

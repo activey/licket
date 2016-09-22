@@ -17,8 +17,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
+import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.mozilla.javascript.Parser;
+import org.mozilla.javascript.ast.ArrayLiteral;
 import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.ObjectLiteral;
@@ -29,7 +31,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author activey
  */
-public class ClassConstructorBuilder extends AbstractAstNodeBuilder<FunctionNode> {
+public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassConstructorBuilder.class);
 
@@ -47,21 +49,24 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<FunctionNode
     }
 
     @Override
-    public FunctionNode build() {
-        return functionNode()
-            .body(block()
-                .appendStatement(
-                        expressionStatement(
-                            assignment()
-                                .left(property(thisLiteral(), name(PROPERTY_MODEL)))
-                                .right(componentInitialModel())))
-                .appendStatement(
-                        expressionStatement(
-                            assignment()
-                                .left(property(thisLiteral(), name(PROPERTY_COMPOSITE_ID)))
-                                .right(stringLiteral(container.getCompositeId().getValue())))))
+    public ArrayLiteral build() {
+        return ArrayLiteralBuilder.arrayLiteral()
+                .element(property(name("app"), name("ComponentCommunicationService")))
+                .element(functionNode()
+                        .param(name("LicketRemote"))
+                        .body(block()
+                            .appendStatement(
+                                expressionStatement(
+                                    assignment()
+                                        .left(property(thisLiteral(), name(PROPERTY_MODEL)))
+                                        .right(componentInitialModel())))
+                            .appendStatement(
+                                expressionStatement(
+                                    assignment()
+                                        .left(property(thisLiteral(), name(PROPERTY_COMPOSITE_ID)))
+                                        .right(stringLiteral(container.getCompositeId().getValue()))))))
             .build();
-    }
+        }
 
     // TODO very experimental, rewrite!
     private ObjectLiteralBuilder componentInitialModel() {

@@ -30,9 +30,6 @@ public class ObjectLiteralBuilder extends AbstractAstNodeBuilder<ObjectLiteral> 
         return this;
     }
 
-    public void fromArrayLiteral(ArrayLiteral node) {
-    }
-
     @Override
     public ObjectLiteral build() {
         if (objectLiteral == null) {

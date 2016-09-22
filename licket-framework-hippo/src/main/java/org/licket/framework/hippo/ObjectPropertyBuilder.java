@@ -1,5 +1,6 @@
 package org.licket.framework.hippo;
 
+import org.mozilla.javascript.ast.ArrayLiteral;
 import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.ObjectProperty;
 
@@ -28,7 +29,7 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
         return this;
     }
 
-    public ObjectPropertyBuilder value(ArrayLiteralBuilder arrayLiteralBuilder) {
+    public ObjectPropertyBuilder arrayValue(AbstractAstNodeBuilder<ArrayLiteral> arrayLiteralBuilder) {
         this.value = arrayLiteralBuilder;
         return this;
     }

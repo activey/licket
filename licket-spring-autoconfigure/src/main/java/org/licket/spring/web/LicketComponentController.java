@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(CONTEXT_COMPONENT)
+@CrossOrigin(origins = {"*"})
 public class LicketComponentController {
 
     @Autowired

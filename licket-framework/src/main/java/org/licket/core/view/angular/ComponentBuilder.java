@@ -4,12 +4,12 @@ import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
 import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
+import org.licket.framework.hippo.StringLiteralBuilder;
 import org.mozilla.javascript.ast.ExpressionStatement;
 
 import java.util.List;
 
 import static com.google.common.collect.Lists.newLinkedList;
-import static com.google.common.collect.Lists.reverse;
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
@@ -76,15 +76,30 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
 
     private ObjectLiteralBuilder componentSettings() {
         ObjectLiteralBuilder literalBuilder = objectLiteral()
-                .objectProperty(propertyBuilder().name(name("selector")).value(stringLiteral(selectorValue)))
-                .objectProperty(propertyBuilder().name(name("templateUrl")).value(stringLiteral(templateUrl)));
+                .objectProperty(propertyBuilder().name("selector").value(selector()))
+                .objectProperty(propertyBuilder().name("templateUrl").value(templateUrl()))
+                .objectProperty(propertyBuilder().name("providers").arrayValue(providers()));
         if (dependencies.size() > 0) {
-            return literalBuilder.objectProperty(propertyBuilder().name(name("directives")).value(dependencies()));
+            return literalBuilder.objectProperty(propertyBuilder().name(name("directives")).arrayValue(directives()));
         }
         return literalBuilder;
     }
 
-    private ArrayLiteralBuilder dependencies() {
+    private StringLiteralBuilder selector() {
+        return stringLiteral(selectorValue);
+    }
+
+    private StringLiteralBuilder templateUrl() {
+        return stringLiteral(templateUrl);
+    }
+
+    private ArrayLiteralBuilder providers() {
+        return arrayLiteral()
+                .element(property(name("app"), name("ComponentCommunicationService")));
+        // TODO implement way to include all necessary angular services for given component
+    }
+
+    private ArrayLiteralBuilder directives() {
         ArrayLiteralBuilder arrayLiteralBuilder = arrayLiteral();
         dependencies.forEach(dependencyId -> arrayLiteralBuilder.element(name("app." + dependencyId)));
         return arrayLiteralBuilder;

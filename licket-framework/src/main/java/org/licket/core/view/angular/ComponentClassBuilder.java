@@ -28,6 +28,6 @@ public class ComponentClassBuilder extends AbstractAstNodeBuilder<ObjectLiteral>
     @Override
     public ObjectLiteral build() {
         return objectLiteral()
-                .objectProperty(propertyBuilder().name(name("constructor")).value(classConstructorBuilder)).build();
+                .objectProperty(propertyBuilder().name(name("constructor")).arrayValue(classConstructorBuilder)).build();
     }
 }

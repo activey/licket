@@ -150,6 +150,11 @@
                 <artifactId>licket-xml-parser</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.licket</groupId>
+                <artifactId>licket-npm-libraries</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -161,5 +166,6 @@
         <module>licket-spring-autoconfigure</module>
         <module>licket-demo</module>
         <module>licket-framework-hippo</module>
+        <module>licket-npm-libraries</module>
     </modules>
 </project>
