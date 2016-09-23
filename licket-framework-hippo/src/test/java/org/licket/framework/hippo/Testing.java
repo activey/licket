@@ -1,4 +1,4 @@
-package org.licket.framework.hipp;
+package org.licket.framework.hippo;
 
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;

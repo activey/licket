@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.String.format;
-
 @Service
 public class ContactsService {
 
