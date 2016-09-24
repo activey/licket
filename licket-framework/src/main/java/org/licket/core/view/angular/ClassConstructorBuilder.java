@@ -13,6 +13,8 @@ import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyGetBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
+import static org.licket.framework.hippo.VariableDeclarationBuilder.variableDeclaration;
+import static org.licket.framework.hippo.VariableInitializerBuilder.variableInitializer;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -79,8 +81,11 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral
     private FunctionNodeBuilder invokeComponentAction() {
         return functionNode().
                 body(
-                    block().
-                        appendStatement(
+                    block()
+                        .appendStatement(expressionStatement(
+                                variableDeclaration()
+                                        .variable(variableInitializer().target(name("_this")).initializer(thisLiteral()))))
+                        .appendStatement(
                             expressionStatement(functionCall()
                                 .target(property(name("LicketRemote"), name("invokeComponentAction")))
                                 .argument(objectLiteral()
@@ -93,7 +98,18 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral
     }
 
     private FunctionNodeBuilder updateComponentModelHandler() {
-        return functionNode().param(name("response")).body(block());
+        return functionNode()
+                .param(name("response")).body(
+                    block()
+                        .appendStatement(expressionStatement(functionCall()
+                                .target(property(name("console"), name("log")))
+                                .argument(functionCall().target(property(name("response"), name("json")))))
+                        )
+                        .appendStatement(expressionStatement(
+                                assignment()
+                                        .left(property(name("_this"), name("model")))
+                                        .right(property(functionCall().target(property(name("response"), name("json"))), name("modelObject")))
+                        )));
     }
 
     // TODO very experimental, rewrite!

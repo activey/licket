@@ -7,8 +7,8 @@ import org.mozilla.javascript.ast.VariableInitializer;
  */
 public class VariableInitializerBuilder extends AbstractAstNodeBuilder<VariableInitializer> {
 
-    private AbstractAstNodeBuilder target;
-    private AbstractAstNodeBuilder initializer;
+    private AbstractAstNodeBuilder<?> target;
+    private AbstractAstNodeBuilder<?> initializer;
 
     private VariableInitializerBuilder() {}
 
@@ -23,6 +23,11 @@ public class VariableInitializerBuilder extends AbstractAstNodeBuilder<VariableI
 
     public VariableInitializerBuilder initializer(FunctionCallBuilder functionCall) {
         this.initializer = functionCall;
+        return this;
+    }
+
+    public VariableInitializerBuilder initializer(KeywordLiteralBuilder keywordLiteral) {
+        this.initializer = keywordLiteral;
         return this;
     }
 

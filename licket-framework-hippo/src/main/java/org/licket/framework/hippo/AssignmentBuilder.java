@@ -10,13 +10,18 @@ import static org.mozilla.javascript.Token.ASSIGN;
  */
 public class AssignmentBuilder extends AbstractAstNodeBuilder<Assignment> {
 
-    private AbstractAstNodeBuilder left;
-    private AbstractAstNodeBuilder right;
+    private AbstractAstNodeBuilder<?> left;
+    private AbstractAstNodeBuilder<?> right;
 
     private AssignmentBuilder() {}
 
     public static AssignmentBuilder assignment() {
         return new AssignmentBuilder();
+    }
+
+    public AssignmentBuilder left(NameBuilder nameBuilder) {
+        this.left = nameBuilder;
+        return this;
     }
 
     public AssignmentBuilder left(PropertyGetBuilder propertyGetBuilder) {
@@ -26,6 +31,11 @@ public class AssignmentBuilder extends AbstractAstNodeBuilder<Assignment> {
 
     public AssignmentBuilder right(NameBuilder nameBuilder) {
         this.right = nameBuilder;
+        return this;
+    }
+
+    public AssignmentBuilder right(PropertyGetBuilder propertyGetBuilder) {
+        this.right = propertyGetBuilder;
         return this;
     }
 

@@ -13,6 +13,10 @@ public class ExpressionStatementBuilder extends AbstractAstNodeBuilder<Expressio
         this.expr = expr;
     }
 
+    public static ExpressionStatementBuilder expressionStatement(VariableDeclarationBuilder variableDeclaration) {
+        return new ExpressionStatementBuilder(variableDeclaration);
+    }
+
     public static ExpressionStatementBuilder expressionStatement(FunctionCallBuilder functionCallBuilder) {
         return new ExpressionStatementBuilder(functionCallBuilder);
     }

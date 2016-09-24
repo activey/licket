@@ -34,5 +34,7 @@ public interface LicketComponent<T> {
 
     void render(ComponentRenderingContext renderingContext);
 
+    void invokeAction();
+
     Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser);
 }

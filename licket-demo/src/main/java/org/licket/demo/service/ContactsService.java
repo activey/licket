@@ -11,8 +11,9 @@ import static com.google.common.collect.Lists.newArrayList;
 @Service
 public class ContactsService {
 
+    private Faker faker = new Faker();
+
     public List<Contact> getAllContacts() {
-        Faker faker = new Faker();
 
         return newArrayList(
                 contact(faker.internet(), faker.name().fullName(), faker.lorem().paragraph()),

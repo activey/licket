@@ -100,4 +100,11 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     public final boolean hasParent() {
         return parent != null;
     }
+
+    @Override
+    public final void invokeAction() {
+        onInvokeAction();
+    }
+
+    protected void onInvokeAction() {}
 }

@@ -6,6 +6,7 @@ import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
 import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.http.ResponseEntity.ok;
 import java.util.Optional;
+
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.Resource;
 import org.licket.core.view.LicketComponent;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,9 +61,16 @@ public class LicketComponentController {
             // TODO return 404 when there is no such component
             return null;
         }
+        Optional<LicketComponent<?>> actionComponent = licketApplication
+                .findComponent(fromStringValue(actionRequest.getChildCompositeId()));
+        if (!actionComponent.isPresent()) {
+            // TODO return 404 when there is no such component
+            return null;
+        }
+        // TODO very temporary ...
+        actionComponent.get().invokeAction();
 
-
-
+        // returning fresh component model
         return new LicketComponentModel(component.get().getComponentModel().get());
     }
 

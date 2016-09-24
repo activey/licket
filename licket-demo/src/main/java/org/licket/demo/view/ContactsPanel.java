@@ -26,7 +26,7 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
 
             @Override
             protected void onInvokeAction() {
-                System.out.println("ACTION IVOKED!");
+                reloadList();
             }
         });
     }
