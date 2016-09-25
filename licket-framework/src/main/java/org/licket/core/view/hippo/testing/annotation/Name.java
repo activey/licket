@@ -1,8 +1,8 @@
-package org.licket.framework.hippo.testing;
-
-import java.lang.annotation.Retention;
+package org.licket.core.view.hippo.testing.annotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
 
 /**
  * @author grabslu
@@ -10,5 +10,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Name {
 
-    String value();
+    String value() default "";
 }

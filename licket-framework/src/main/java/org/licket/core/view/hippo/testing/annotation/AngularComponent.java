@@ -1,4 +1,4 @@
-package org.licket.framework.hippo.testing.annotation;
+package org.licket.core.view.hippo.testing.annotation;
 
 /**
  * @author grabslu

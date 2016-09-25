@@ -2,6 +2,8 @@ package org.licket.demo.licket;
 
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.view.container.LicketComponentContainer;
+import org.licket.demo.model.Contact;
+import org.licket.demo.view.AddContactForm;
 import org.licket.demo.view.ContactsAppRoot;
 import org.licket.demo.view.ContactsPanel;
 import org.licket.demo.view.semantic.JqueryLibraryResource;
@@ -24,7 +26,12 @@ public class LicketConfiguration {
 
     @LicketComponent("contactsPanel")
     public LicketComponentContainer contactsPanel() {
-        return new ContactsPanel("contacts-panel");
+        return new ContactsPanel("contacts-panel", addContactForm());
+    }
+
+    @LicketComponent("addContactForm")
+    public LicketComponentContainer addContactForm() {
+        return new AddContactForm("add-contact-form");
     }
 
     @Bean

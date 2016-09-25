@@ -1,11 +1,11 @@
-package org.licket.core.view.angular;
-
-import org.licket.framework.hippo.*;
-import org.mozilla.javascript.ast.ObjectLiteral;
+package org.licket.core.view.hippo.testing;
 
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
+
+import org.licket.framework.hippo.AbstractAstNodeBuilder;
+import org.mozilla.javascript.ast.ObjectLiteral;
 
 /**
  * @author activey

@@ -1,4 +1,4 @@
-package org.licket.framework.hippo;
+package org.licket.core.view.hippo;
 
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;
@@ -12,9 +12,11 @@ import static org.licket.framework.hippo.ParenthesizedExpressionBuilder.parenthe
 import static org.licket.framework.hippo.ParenthesizedExpressionBuilder.parenthesizedExpression;
 import static org.licket.framework.hippo.PropertyGetBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.function.Consumer;
+
 import org.junit.Test;
 import org.mozilla.javascript.Node;
 import org.mozilla.javascript.Parser;

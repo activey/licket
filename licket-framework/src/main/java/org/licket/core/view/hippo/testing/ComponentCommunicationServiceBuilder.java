@@ -1,7 +1,4 @@
-package org.licket.core.view.angular;
-
-import org.licket.framework.hippo.*;
-import org.mozilla.javascript.ast.ExpressionStatement;
+package org.licket.core.view.hippo.testing;
 
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
@@ -14,7 +11,12 @@ import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyGetBuilder.property;
-import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
+
+import org.licket.framework.hippo.AbstractAstNodeBuilder;
+import org.licket.framework.hippo.FunctionCallBuilder;
+import org.licket.framework.hippo.FunctionNodeBuilder;
+import org.licket.framework.hippo.ObjectLiteralBuilder;
+import org.mozilla.javascript.ast.ExpressionStatement;
 
 /**
  * @author activey
@@ -67,6 +69,7 @@ public class ComponentCommunicationServiceBuilder extends AbstractAstNodeBuilder
         return functionNode()
                 .param(name("actionData"))
                 .param(name("responseListener"))
+                .param(name("method"))
                 .body(block().appendStatement(expressionStatement(executeHttpPost())));
     }
 
@@ -75,7 +78,7 @@ public class ComponentCommunicationServiceBuilder extends AbstractAstNodeBuilder
                 .target(property(
                         functionCall()
                             .target(property(name("http"), name("post")))
-                            .argument(stringLiteral("/licket/component/action"))
+                            .argument(name("`/licket/component/action/${method}`"))
                             .argument(name("actionData")),
                         name("subscribe")))
                 .argument(name("responseListener"));

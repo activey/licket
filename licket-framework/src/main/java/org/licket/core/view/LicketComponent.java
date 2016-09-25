@@ -20,6 +20,8 @@ public interface LicketComponent<T> {
 
     CompositeId getCompositeId();
 
+    Class<T> getComponentModelClass();
+
     LicketModel<T> getComponentModel();
 
     void setComponentModel(LicketModel<T> componentModel);
@@ -34,7 +36,7 @@ public interface LicketComponent<T> {
 
     void render(ComponentRenderingContext renderingContext);
 
-    void invokeAction();
+    void invokeAction(T componentModel);
 
     Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser);
 }

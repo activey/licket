@@ -14,7 +14,7 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
     private Class<T> elementClass;
 
     public AbstractLicketList(String id, LicketModel<String> enclosingComponentPropertyModel, Class<T> elementClass) {
-        super(id, internal(), enclosingComponentPropertyModel);
+        super(id, String.class, internal(), enclosingComponentPropertyModel);
         this.elementClass = elementClass;
         // TODO analyze element class provided and check its properties against passed enclosingComponentPropertyModel
     }

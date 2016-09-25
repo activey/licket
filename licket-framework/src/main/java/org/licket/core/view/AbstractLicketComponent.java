@@ -22,15 +22,17 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLicketComponent.class);
 
     private String id;
+    private Class<T> modelClass;
     private LicketModel<T> componentModel;
     private LicketComponent<?> parent;
 
-    public AbstractLicketComponent(String id) {
-        this(id, emptyModel());
+    public AbstractLicketComponent(String id, Class<T> modelClass) {
+        this(id, modelClass, emptyModel());
     }
 
-    public AbstractLicketComponent(String id, LicketModel<T> componentModel) {
+    public AbstractLicketComponent(String id, Class<T> modelClass, LicketModel<T> componentModel) {
         this.id = id;
+        this.modelClass = modelClass;
         this.componentModel = componentModel;
     }
 
@@ -52,6 +54,11 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     @Override
     public final LicketModel<T> getComponentModel() {
         return componentModel;
+    }
+
+    @Override
+    public final Class<T> getComponentModelClass() {
+        return modelClass;
     }
 
     @Override
@@ -102,9 +109,9 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     @Override
-    public final void invokeAction() {
-        onInvokeAction();
+    public final void invokeAction(T componentModel) {
+        onInvokeAction(componentModel);
     }
 
-    protected void onInvokeAction() {}
+    protected void onInvokeAction(T componentModel) {}
 }

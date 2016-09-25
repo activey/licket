@@ -1,13 +1,4 @@
-package org.licket.core.view.angular;
-
-import org.licket.core.view.container.LicketComponentContainer;
-import org.licket.framework.hippo.AbstractAstNodeBuilder;
-import org.licket.framework.hippo.ArrayLiteralBuilder;
-import org.licket.framework.hippo.ObjectLiteralBuilder;
-import org.licket.framework.hippo.StringLiteralBuilder;
-import org.mozilla.javascript.ast.ExpressionStatement;
-
-import java.util.List;
+package org.licket.core.view.hippo.testing;
 
 import static com.google.common.collect.Lists.newLinkedList;
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
@@ -19,6 +10,15 @@ import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyGetBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
+
+import java.util.List;
+
+import org.licket.core.view.container.LicketComponentContainer;
+import org.licket.framework.hippo.AbstractAstNodeBuilder;
+import org.licket.framework.hippo.ArrayLiteralBuilder;
+import org.licket.framework.hippo.ObjectLiteralBuilder;
+import org.licket.framework.hippo.StringLiteralBuilder;
+import org.mozilla.javascript.ast.ExpressionStatement;
 
 /**
  * @author activey
@@ -96,7 +96,7 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
     private ArrayLiteralBuilder providers() {
         return arrayLiteral()
                 .element(property(name("app"), name("ComponentCommunicationService")));
-        // TODO implement way to include all necessary angular services for given component
+        // TODO implement way to include all necessary hippo services for given component
     }
 
     private ArrayLiteralBuilder directives() {

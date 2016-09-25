@@ -49,6 +49,14 @@ public class Element extends Node {
         }
     }
 
+    public final void replaceWith(Element replacement) {
+        Element parentElement = getParent();
+        if (parentElement == null) {
+            return;
+        }
+        parentElement.replaceChild(this, replacement);
+    }
+
     public Element detach() {
         return getParent().removeChild(this);
     }
@@ -64,6 +72,13 @@ public class Element extends Node {
 
     @Override
     public void toXML(XMLStreamWriter writer) throws XMLStreamException {
+        if (!writeEmpty() && children.size() == 0) {
+            writer.writeEmptyElement(getPrefix(), getLocalName(), getNamespace());
+            for (Attribute attribute : attributes) {
+                attribute.toXML(writer);
+            }
+            return;
+        }
         writer.writeStartElement(getPrefix(), getLocalName(), getNamespace());
         for (Attribute attribute : attributes) {
             attribute.toXML(writer);
@@ -76,5 +91,9 @@ public class Element extends Node {
 
     public void removeChildren() {
         children.clear();
+    }
+
+    protected boolean writeEmpty() {
+        return false;
     }
 }

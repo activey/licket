@@ -1,4 +1,4 @@
-package org.licket.core.view.angular;
+package org.licket.core.view.hippo;
 
 import static com.fasterxml.jackson.core.JsonGenerator.Feature.QUOTE_FIELD_NAMES;
 import static java.lang.String.format;
@@ -24,7 +24,6 @@ import org.licket.framework.hippo.*;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.ArrayLiteral;
 import org.mozilla.javascript.ast.AstRoot;
-import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.ObjectLiteral;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -92,8 +91,15 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral
                                         .objectProperty(propertyBuilder()
                                                 .name("compositeId")
                                                 .value(stringLiteral(container.getCompositeId().getValue())))
-                                        .objectProperty(propertyBuilder().name("childCompositeId").value(name("callerId")))
-                                ).argument(updateComponentModelHandler()))))
+                                        .objectProperty(propertyBuilder()
+                                                .name("childCompositeId")
+                                                .value(name("callerId")))
+                                        .objectProperty(propertyBuilder()
+                                                .name("model")
+                                                .value(property(thisLiteral(), name("model"))))
+                                )
+                                .argument(updateComponentModelHandler())
+                                .argument(stringLiteral("invokeAction")))))
                 .param(name("callerId"));
     }
 

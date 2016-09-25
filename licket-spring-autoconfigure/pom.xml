@@ -38,6 +38,18 @@
             <version>0.9.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.jodah</groupId>
+            <artifactId>typetools</artifactId>
+            <version>0.4.7</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
         <!-- Inner dependencies -->
         <dependency>
             <groupId>org.licket</groupId>
@@ -53,6 +65,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.9.10</version>
         </dependency>
     </dependencies>
 </project>

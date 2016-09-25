@@ -47,8 +47,10 @@ public class AngularApplicationModuleJavascriptResource extends AbstractJavascri
     }
 
     private ArrayLiteralBuilder moduleImports() {
-        return arrayLiteral().element(property(property(name("ng"), name("platformBrowser")), name("BrowserModule")))
-            .element(property(property(name("ng"), name("http")), name("HttpModule")));
+        return arrayLiteral()
+                .element(property(property(name("ng"), name("platformBrowser")), name("BrowserModule")))
+                .element(property(property(name("ng"), name("http")), name("HttpModule")))
+                .element(property(property(name("ng"), name("forms")), name("FormsModule")));
     }
 
     private ArrayLiteralBuilder declarations() {

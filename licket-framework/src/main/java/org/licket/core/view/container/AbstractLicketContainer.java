@@ -1,44 +1,49 @@
 package org.licket.core.view.container;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static org.licket.core.model.LicketModel.emptyModel;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.function.Predicate;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.ComponentContainerView;
 import org.licket.core.view.LicketComponent;
+import org.licket.core.view.hippo.testing.AngularClass;
+import org.licket.core.view.hippo.testing.annotation.AngularClassConstructor;
+import org.licket.core.view.hippo.testing.annotation.AngularClassProperty;
 import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.framework.hippo.ObjectPropertyBuilder;
 import org.licket.surface.element.SurfaceElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.function.Predicate;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static org.licket.core.model.LicketModel.emptyModel;
-
 /**
  * @author activey
  */
-public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent<T> implements LicketComponentContainer<T> {
+public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent<T> implements LicketComponentContainer<T>,
+        AngularClass {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLicketContainer.class);
-
     private List<LicketComponentContainer<?>> branches = newArrayList();
     private List<LicketComponent<?>> leaves = newArrayList();
-
     private ComponentContainerView containerView;
 
-    public AbstractLicketContainer(String id, ComponentContainerView componentView) {
-        this(id, componentView, emptyModel());
+    @AngularClassProperty("model")
+    private ObjectPropertyBuilder model;
+
+    public AbstractLicketContainer(String id, Class<T> modelClass, ComponentContainerView componentView) {
+        this(id, modelClass, componentView, emptyModel());
     }
 
-    public AbstractLicketContainer(String id, ComponentContainerView containerView, LicketModel<T> componentModel) {
-        super(id, componentModel);
+    public AbstractLicketContainer(String id, Class<T> modelClass, ComponentContainerView containerView,
+                                   LicketModel<T> componentModel) {
+        super(id, modelClass, componentModel);
         this.containerView = containerView;
     }
 
@@ -83,7 +88,8 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
             try {
                 outputFactory = XMLOutputFactory.newInstance().createXMLStreamWriter(writer);
                 element.toXML(outputFactory);
-                renderingContext.renderResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", writer.toString().getBytes()));
+                renderingContext.renderResource(
+                    new ByteArrayResource(getCompositeId().getValue(), "text/html", writer.toString().getBytes()));
 
             } catch (XMLStreamException e) {
                 LOGGER.error("An error occured while rendering component container.", e);
@@ -162,4 +168,13 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
         return containerView;
     }
 
+    @Override
+    public final String getAngularClassName() {
+        return getCompositeId().getNormalizedValue();
+    }
+
+    @AngularClassConstructor
+    public void constructor() {
+
+    }
 }

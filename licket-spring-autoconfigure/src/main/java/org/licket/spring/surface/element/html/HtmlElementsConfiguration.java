@@ -1,5 +1,6 @@
 package org.licket.spring.surface.element.html;
 
+import org.licket.spring.surface.element.html.form.InputElement;
 import org.licket.surface.attribute.AttributeProvider;
 import org.licket.surface.element.ElementProvider;
 import org.licket.surface.tag.ElementFactory;
@@ -26,6 +27,12 @@ public class HtmlElementsConfiguration {
     @RequestScope
     public ElementProvider headElement() {
         return provideElement("head", (name) -> new HeadElement(name));
+    }
+
+    @Bean
+    @RequestScope
+    public ElementProvider inputElement() {
+        return provideElement("input", (name) -> new InputElement(name));
     }
 
     @Bean

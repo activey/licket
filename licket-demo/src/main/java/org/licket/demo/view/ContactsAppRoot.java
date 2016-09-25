@@ -12,7 +12,7 @@ public class ContactsAppRoot extends AbstractLicketContainer<Void> {
 
   public ContactsAppRoot(String id,
       @Autowired @Qualifier("contactsPanel") LicketComponentContainer contactsPanel) {
-    super(id, fromComponentContainerClass(ContactsAppRoot.class));
+    super(id, Void.class, fromComponentContainerClass(ContactsAppRoot.class));
 
     add(contactsPanel);
   }

@@ -9,6 +9,13 @@ public class Contact {
     private String name;
     private String description;
 
+    public Contact() {}
+
+    public Contact(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     private List<EmailAddress> emails = new ArrayList<>();
 
     public void addEmail(String emailAddress) {

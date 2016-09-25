@@ -9,11 +9,11 @@ import static org.licket.core.model.LicketModel.ofModelObject;
 public class LicketImage extends AbstractLicketComponent<ImageResource> {
 
     public LicketImage(String id) {
-        super(id);
+        super(id, ImageResource.class);
     }
 
     public LicketImage(String id, ImageResource imageResource) {
-        super(id, ofModelObject(imageResource));
+        super(id, ImageResource.class, ofModelObject(imageResource));
     }
 
     @Override

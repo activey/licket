@@ -15,7 +15,6 @@ public class ContactsList extends AbstractLicketList<Contact> {
 
         add(new LicketLabel("name"));
         add(new LicketLabel("description"));
-
         add(new AbstractLicketList<EmailAddress>("email", ofString("emails"), EmailAddress.class) {
             @Override
             protected void onInitializeContainer() {
