@@ -50,7 +50,7 @@ public class ResourcesStorage {
 
     public void putResource(Resource resource) {
         if (hasResource(resource.getName(), resource.getMimeType())) {
-            LOGGER.debug("Resource with name = {} and mimetype = {} is already there, skipping...", resource.getName(),
+            LOGGER.debug("Resource with angularName = {} and mimetype = {} is already there, skipping...", resource.getName(),
                 resource.getMimeType());
             return;
         }

@@ -1,9 +1,15 @@
 package org.licket.xml.dom;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.WeakHashMap;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 /**
  * @author grabslu

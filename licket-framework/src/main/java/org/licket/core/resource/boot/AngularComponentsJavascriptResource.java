@@ -55,7 +55,7 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
                         .constructor(constructorBuilder(container))));
     }
 
-    private void appendContainerChildren(LicketComponentContainer<?> container, final ComponentBuilder componentBuilder) {
+    private void appendContainerChildren(LicketComponentContainer<?> container, ComponentBuilder componentBuilder) {
         container.traverseDownContainers(childContainer -> {
             if (!childContainer.getComponentContainerView().isExternalized()) {
                 return false;

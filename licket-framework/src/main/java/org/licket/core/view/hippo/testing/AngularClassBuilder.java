@@ -10,17 +10,17 @@ import org.mozilla.javascript.ast.ObjectLiteral;
 /**
  * @author activey
  */
-public class ComponentClassBuilder extends AbstractAstNodeBuilder<ObjectLiteral> {
+public class AngularClassBuilder extends AbstractAstNodeBuilder<ObjectLiteral> {
 
     private ClassConstructorBuilder classConstructorBuilder;
 
-    private ComponentClassBuilder() {}
+    private AngularClassBuilder() {}
 
-    public static ComponentClassBuilder classBuilder() {
-        return new ComponentClassBuilder();
+    public static AngularClassBuilder classBuilder() {
+        return new AngularClassBuilder();
     }
 
-    public ComponentClassBuilder constructor(ClassConstructorBuilder classConstructor) {
+    public AngularClassBuilder constructor(ClassConstructorBuilder classConstructor) {
         this.classConstructorBuilder = classConstructor;
         return this;
     }

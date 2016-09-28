@@ -17,7 +17,7 @@ import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
-import static org.licket.framework.hippo.PropertyGetBuilder.property;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 /**

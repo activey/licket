@@ -10,7 +10,7 @@ import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.OrExpressionBuilder.orExpression;
 import static org.licket.framework.hippo.ParenthesizedExpressionBuilder.parenthesizedAssignment;
 import static org.licket.framework.hippo.ParenthesizedExpressionBuilder.parenthesizedExpression;
-import static org.licket.framework.hippo.PropertyGetBuilder.property;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 import java.io.IOException;

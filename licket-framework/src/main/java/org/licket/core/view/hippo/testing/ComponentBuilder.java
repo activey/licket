@@ -8,7 +8,7 @@ import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
-import static org.licket.framework.hippo.PropertyGetBuilder.property;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
     private String selectorValue;
     private String templateUrl;
     private List<String> dependencies = newLinkedList();
-    private ComponentClassBuilder classBuilder;
+    private AngularClassBuilder classBuilder;
     private String name;
 
     private ComponentBuilder() {}
@@ -37,7 +37,7 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
         return new ComponentBuilder();
     }
 
-    public ComponentBuilder clazz(ComponentClassBuilder classBuilder) {
+    public ComponentBuilder clazz(AngularClassBuilder classBuilder) {
         this.classBuilder = classBuilder;
         return this;
     }

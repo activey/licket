@@ -1,7 +1,9 @@
 package org.licket.xml.dom;
 
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.ByteArrayOutputStream;
 
 /**
  * @author grabslu
@@ -44,4 +46,11 @@ public abstract class Node {
     }
 
     public abstract void toXML(XMLStreamWriter writer) throws XMLStreamException;
+
+    public final byte[] toBytes() throws XMLStreamException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        XMLStreamWriter outputFactory = XMLOutputFactory.newInstance().createXMLStreamWriter(output);
+        toXML(outputFactory);
+        return output.toByteArray();
+    }
 }

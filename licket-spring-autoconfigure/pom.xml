@@ -33,12 +33,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>joor</artifactId>
-            <version>0.9.6</version>
-        </dependency>
-
-        <dependency>
             <groupId>net.jodah</groupId>
             <artifactId>typetools</artifactId>
             <version>0.4.7</version>
@@ -58,6 +52,10 @@
         <dependency>
             <groupId>org.licket</groupId>
             <artifactId>licket-framework-surface</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.licket</groupId>
+            <artifactId>licket-framework-angular-modules</artifactId>
         </dependency>
 
         <!-- Logging -->

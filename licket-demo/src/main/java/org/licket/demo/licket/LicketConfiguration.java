@@ -2,7 +2,6 @@ package org.licket.demo.licket;
 
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.view.container.LicketComponentContainer;
-import org.licket.demo.model.Contact;
 import org.licket.demo.view.AddContactForm;
 import org.licket.demo.view.ContactsAppRoot;
 import org.licket.demo.view.ContactsPanel;

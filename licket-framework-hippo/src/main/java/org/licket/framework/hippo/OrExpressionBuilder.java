@@ -18,8 +18,8 @@ public class OrExpressionBuilder extends AbstractAstNodeBuilder<InfixExpression>
         return new OrExpressionBuilder();
     }
 
-    public OrExpressionBuilder left(PropertyGetBuilder propertyGetBuilder) {
-        this.left = propertyGetBuilder;
+    public OrExpressionBuilder left(PropertyNameBuilder propertyNameBuilder) {
+        this.left = propertyNameBuilder;
         return this;
     }
 

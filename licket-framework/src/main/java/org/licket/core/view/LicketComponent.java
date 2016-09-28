@@ -2,6 +2,7 @@ package org.licket.core.view;
 
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
+import org.licket.core.view.hippo.testing.ngclass.AngularClass;
 import org.licket.core.view.render.ComponentRenderingContext;
 
 import java.util.Optional;
@@ -12,11 +13,9 @@ import static java.util.Optional.of;
 /**
  * @author activey
  */
-public interface LicketComponent<T> {
+public interface LicketComponent<T> extends AngularClass {
 
     String getId();
-
-    String getNormalizedId();
 
     CompositeId getCompositeId();
 
@@ -30,13 +29,9 @@ public interface LicketComponent<T> {
 
     void setParent(LicketComponent<?> parent);
 
-    boolean hasParent();
-
     void initialize();
 
     void render(ComponentRenderingContext renderingContext);
-
-    void invokeAction(T componentModel);
 
     Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser);
 }

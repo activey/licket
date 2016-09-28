@@ -39,7 +39,7 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
         return this;
     }
 
-    public ObjectPropertyBuilder value(PropertyGetBuilder propertyGetBuilder) {
+    public ObjectPropertyBuilder value(PropertyNameBuilder propertyGetBuilder) {
         this.value = propertyGetBuilder;
         return this;
     }

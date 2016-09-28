@@ -1,19 +1,22 @@
 package org.licket.core.view;
 
-import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.licket.core.id.CompositeId.fromStringValue;
 import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.core.model.LicketModel.emptyModel;
+import static org.licket.framework.hippo.NameBuilder.name;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
+
 import java.util.Optional;
 import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
 
-import com.google.common.base.CaseFormat;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.framework.hippo.NameBuilder;
+import org.licket.framework.hippo.PropertyNameBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,10 +84,6 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         return id;
     }
 
-    public final String getNormalizedId() {
-        return LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, id);
-    }
-
     public final CompositeId getCompositeId() {
         Optional<LicketComponent<?>> parentOptional = traverseUp(component -> true);
         if (!parentOptional.isPresent()) {
@@ -104,14 +103,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     @Override
-    public final boolean hasParent() {
-        return parent != null;
+    public PropertyNameBuilder angularName() {
+        return property(name("app"), name(getCompositeId().getNormalizedValue()));
     }
-
-    @Override
-    public final void invokeAction(T componentModel) {
-        onInvokeAction(componentModel);
-    }
-
-    protected void onInvokeAction(T componentModel) {}
 }
