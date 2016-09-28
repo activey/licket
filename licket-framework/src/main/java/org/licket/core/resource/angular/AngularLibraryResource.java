@@ -13,7 +13,7 @@ import static org.licket.core.resource.javascript.JavascriptStaticResource.javas
 public class AngularLibraryResource extends MergedJavascriptStaticResource implements HeadParticipatingResource {
 
     public AngularLibraryResource() {
-        super("Licket.hippo.all.js",
+        super("angular.all.js",
                 javascriptResource("Rx.js", "rxjs/bundles/Rx.js"),
                 javascriptResource("Reflect.js", "reflect-metadata/Reflect.js"),
                 javascriptResource("zone.js", "zone.js/dist/zone.js"),

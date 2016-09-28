@@ -3,6 +3,7 @@ package org.licket.core.view;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.view.hippo.testing.ngclass.AngularClass;
+import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
 import org.licket.core.view.render.ComponentRenderingContext;
 
 import java.util.Optional;
@@ -13,7 +14,7 @@ import static java.util.Optional.of;
 /**
  * @author activey
  */
-public interface LicketComponent<T> extends AngularClass {
+public interface LicketComponent<T> extends AngularClass, AngularInjectable {
 
     String getId();
 

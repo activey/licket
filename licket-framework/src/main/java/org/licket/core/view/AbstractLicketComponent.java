@@ -28,6 +28,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     private Class<T> modelClass;
     private LicketModel<T> componentModel;
     private LicketComponent<?> parent;
+    private boolean initialized;
 
     public AbstractLicketComponent(String id, Class<T> modelClass) {
         this(id, modelClass, emptyModel());
@@ -41,8 +42,13 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
     @PostConstruct
     public final void initialize() {
+        if (initialized) {
+            return;
+        }
         LOGGER.debug("Initializing component: {}", id);
         onInitialize();
+
+        this.initialized = true;
     }
 
     protected void onInitialize() {}

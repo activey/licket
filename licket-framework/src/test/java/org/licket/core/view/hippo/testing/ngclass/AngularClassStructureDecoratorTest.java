@@ -1,10 +1,8 @@
 package org.licket.core.view.hippo.testing.ngclass;
 
-import static org.licket.core.view.hippo.testing.ngclass.AngularClassStructureDecorator.fromAngularClass;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import org.junit.Before;
 import org.junit.Test;
-import org.licket.core.view.hippo.testing.service.LicketRemoteCommunication;
 import org.licket.framework.hippo.AssignmentBuilder;
 
 /**
@@ -22,10 +20,10 @@ public class AngularClassStructureDecoratorTest {
         // given
         AssignmentBuilder assignment = assignment();
 
-        AngularClass angularClass = new LicketRemoteCommunication();
+//        AngularClass angularClass = new LicketRemoteCommunication();
 
         // when
-        fromAngularClass(angularClass).decorate(assignment);
+//        fromAngularClass(angularClass).decorate(assignment);
 
         System.out.println(assignment.build().toSource());
     }

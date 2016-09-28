@@ -25,15 +25,15 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
     public AddContactForm(String id) {
         super(id, Contact.class, fromComponentContainerClass(AddContactForm.class), ofModelObject(new Contact()));
 
-        add(new LicketInput("angularName"));
+        add(new LicketInput("name"));
         add(new LicketInput("description"));
-        add(new AbstractLicketActionLink("add") {
-
-            @Override
-            protected void onInvokeAction() {
-                contactsService.addContact(new Contact(faker.name().fullName(), faker.lorem().paragraph()));
-            }
-        });
+//        add(new AbstractLicketActionLink("add") {
+//
+//            @Override
+//            protected void onInvokeAction() {
+//                contactsService.addContact(new Contact(faker.name().fullName(), faker.lorem().paragraph()));
+//            }
+//        });
 
         add(new AbstractLicketFormSubmitButton<>("add", Contact.class));
     }

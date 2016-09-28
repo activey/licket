@@ -1,4 +1,4 @@
-package org.licket.core.view.hippo;
+package org.licket.framework.hippo;
 
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;
@@ -53,7 +53,7 @@ public class Testing {
     @Test
     public void test() throws IOException {
         AstRoot astRoot = new Parser().parse(
-            new InputStreamReader(Test.class.getClassLoader().getResourceAsStream("TestService.js")), "test.js", 0);
+            new InputStreamReader(Test.class.getClassLoader().getResourceAsStream("TestSomething.js")), "test.js", 0);
 
         astRoot.forEach(visitor());
     }

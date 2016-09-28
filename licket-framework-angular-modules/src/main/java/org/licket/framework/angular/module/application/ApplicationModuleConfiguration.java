@@ -1,8 +1,9 @@
 package org.licket.framework.angular.module.application;
 
-import org.licket.core.LicketApplication;
+import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
 import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,7 +14,12 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationModuleConfiguration {
 
     @Bean(name = "applicationModule")
-    public AngularModule applicationModule(@Autowired LicketApplication application) {
-        return new ApplicationModule();
+    public AngularModule applicationModule(@Autowired @Qualifier("communicationService") AngularInjectable communicationService) {
+        return new ApplicationModule(communicationService);
+    }
+
+    @Bean(name = "communicationService")
+    public AngularInjectable httpCommunicationService() {
+        return new LicketRemoteCommunication();
     }
 }

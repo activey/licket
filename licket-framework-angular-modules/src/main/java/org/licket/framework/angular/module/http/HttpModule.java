@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Arrays.asList;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 
 /**
@@ -19,7 +20,7 @@ public class HttpModule implements AngularModule {
     private final List<AngularInjectable> injectables;
 
     public HttpModule(AngularInjectable... injectables) {
-        this.injectables = Arrays.asList(injectables);
+        this.injectables = asList(injectables);
     }
 
     @Override

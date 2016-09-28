@@ -5,8 +5,10 @@ import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.hippo.ComponentBuilder;
 import org.licket.core.view.container.LicketComponentContainer;
+import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
 import org.licket.framework.hippo.BlockBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import static org.licket.core.view.LicketUrls.componentContainerViewUrl;
 import static org.licket.core.view.hippo.ClassConstructorBuilder.constructorBuilder;
@@ -22,6 +24,10 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
     @Autowired
     private LicketApplication licketApplication;
 
+    @Autowired
+    @Qualifier("applicationModule")
+    public AngularModule applicationModule;
+
     @Override
     public String getName() {
         return "Licket.components.js";
@@ -29,6 +35,8 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
+//        applicationModule.getInjectables().forEach(injectable ->);
+
         licketApplication.traverseDownContainers(container -> {
             generateComponentContainerCode(scriptBlockBuilder, container);
             return true;
