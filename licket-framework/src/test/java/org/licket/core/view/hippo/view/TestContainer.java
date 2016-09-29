@@ -2,7 +2,7 @@ package org.licket.core.view.hippo.view;
 
 import org.licket.core.view.container.AbstractLicketContainer;
 
-import static org.licket.core.view.ComponentContainerView.fromComponentContainerClass;
+import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 
 /**
  * @author activey

@@ -1,20 +1,15 @@
 package org.licket.core.resource.boot;
 
+import static org.licket.core.view.hippo.testing.ngclass.AngularClassStructureDecorator.fromAngularClass;
+import static org.licket.framework.hippo.AssignmentBuilder.assignment;
+import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
-import org.licket.core.view.hippo.ComponentBuilder;
-import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
 import org.licket.framework.hippo.BlockBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import static org.licket.core.view.LicketUrls.componentContainerViewUrl;
-import static org.licket.core.view.hippo.ClassConstructorBuilder.constructorBuilder;
-import static org.licket.core.view.hippo.ComponentBuilder.component;
-import static org.licket.core.view.hippo.ComponentClassBuilder.classBuilder;
-import static org.licket.core.view.hippo.ComponentCommunicationServiceBuilder.componentCommunicationService;
 
 /**
  * @author activey
@@ -22,11 +17,10 @@ import static org.licket.core.view.hippo.ComponentCommunicationServiceBuilder.co
 public class AngularComponentsJavascriptResource extends AbstractJavascriptDynamicResource implements HeadParticipatingResource {
 
     @Autowired
-    private LicketApplication licketApplication;
-
-    @Autowired
     @Qualifier("applicationModule")
     public AngularModule applicationModule;
+    @Autowired
+    private LicketApplication licketApplication;
 
     @Override
     public String getName() {
@@ -35,49 +29,9 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
-//        applicationModule.getInjectables().forEach(injectable ->);
-
-        licketApplication.traverseDownContainers(container -> {
-            generateComponentContainerCode(scriptBlockBuilder, container);
-            return true;
-        });
-
-        // generating component services
-        scriptBlockBuilder.prependStatement(componentCommunicationService()
-                .serviceName("ComponentCommunicationService"));
-
-    }
-
-    private void generateComponentContainerCode(BlockBuilder scriptBlockBuilder, LicketComponentContainer<?> container) {
-        if (!container.getComponentContainerView().isExternalized()) {
-            return;
-        }
-        ComponentBuilder componentBuilder = component();
-        appendContainerChildren(container, componentBuilder);
-
-        scriptBlockBuilder.prependStatement(componentBuilder
-                .selector(componentSelector(container))
-                .templateUrl(componentContainerViewUrl(container))
-                .componentName(componentName(container))
-                .clazz(classBuilder()
-                        .constructor(constructorBuilder(container))));
-    }
-
-    private void appendContainerChildren(LicketComponentContainer<?> container, ComponentBuilder componentBuilder) {
-        container.traverseDownContainers(childContainer -> {
-            if (!childContainer.getComponentContainerView().isExternalized()) {
-                return false;
-            }
-            componentBuilder.componentDependency(childContainer);
-            return true;
-        });
-    }
-
-    private String componentSelector(LicketComponentContainer<?> container) {
-        return container.getId();
-    }
-
-    private String componentName(LicketComponentContainer<?> container) {
-        return container.getCompositeId().getNormalizedValue();
+        licketApplication.modules().forEach(module -> module.classes().forEach(angularClass -> {
+            scriptBlockBuilder
+                .appendStatement(expressionStatement(fromAngularClass(angularClass).decorate(assignment())));
+        }));
     }
 }

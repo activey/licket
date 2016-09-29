@@ -2,6 +2,7 @@ package org.licket.core.view;
 
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
+import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.core.view.hippo.testing.ngclass.AngularClass;
 import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
 import org.licket.core.view.render.ComponentRenderingContext;
@@ -9,12 +10,16 @@ import org.licket.core.view.render.ComponentRenderingContext;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static java.util.Optional.of;
-
 /**
  * @author activey
  */
 public interface LicketComponent<T> extends AngularClass, AngularInjectable {
+
+    static boolean hasExternalizedView(LicketComponentContainer<?> container) {
+        return container.getView().isExternalized();
+    }
+
+    ComponentView getView();
 
     String getId();
 

@@ -19,6 +19,8 @@ import static org.licket.framework.hippo.VariableInitializerBuilder.variableInit
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+
+import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.framework.hippo.*;
 import org.mozilla.javascript.Parser;
@@ -40,14 +42,14 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral
     private static final String PROPERTY_COMPOSITE_ID = "compositeId";
     private static final String PROPERTY_INVOKE_ACTION = "invokeAction";
 
-    private LicketComponentContainer<?> container;
+    private LicketComponent<?> component;
 
-    private ClassConstructorBuilder(LicketComponentContainer<?> container) {
-        this.container = container;
+    private ClassConstructorBuilder(LicketComponent<?> component) {
+        this.component = component;
     }
 
-    public static ClassConstructorBuilder constructorBuilder(LicketComponentContainer<?> container) {
-        return new ClassConstructorBuilder(container);
+    public static ClassConstructorBuilder constructorBuilder(LicketComponent<?> component) {
+        return new ClassConstructorBuilder(component);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral
                                 expressionStatement(
                                     assignment()
                                         .left(property(thisLiteral(), name(PROPERTY_COMPOSITE_ID)))
-                                        .right(stringLiteral(container.getCompositeId().getValue()))))
+                                        .right(stringLiteral(component.getCompositeId().getValue()))))
                             .appendStatement(
                                 expressionStatement(
                                     assignment()
@@ -90,7 +92,7 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral
                                 .argument(objectLiteral()
                                         .objectProperty(propertyBuilder()
                                                 .name("compositeId")
-                                                .value(stringLiteral(container.getCompositeId().getValue())))
+                                                .value(stringLiteral(component.getCompositeId().getValue())))
                                         .objectProperty(propertyBuilder()
                                                 .name("childCompositeId")
                                                 .value(name("callerId")))
@@ -126,7 +128,7 @@ public class ClassConstructorBuilder extends AbstractAstNodeBuilder<ArrayLiteral
             mapper.configure(QUOTE_FIELD_NAMES, false);
 
             // serialize component model to string json
-            String modelStringValue = mapper.writeValueAsString(container.getComponentModel().get());
+            String modelStringValue = mapper.writeValueAsString(component.getComponentModel().get());
 
             // parse model declaration object literal
             AstRoot astRoot = new Parser().parse(modelObjectLiteralReader(modelStringValue), "test.js", 0);

@@ -38,7 +38,7 @@ public class LicketInput extends AbstractLicketComponent<String> {
         renderingContext.onSurfaceElement(element -> {
             // TODO refactor
             String firstPart = "model";
-            if (!parentContainer.getComponentContainerView().isExternalized()) {
+            if (!parentContainer.getView().isExternalized()) {
                 firstPart = parentContainer.getId();
             }
             element.addAttribute("[(ngModel)]", format("%s.%s", firstPart, getComponentModel().get()));

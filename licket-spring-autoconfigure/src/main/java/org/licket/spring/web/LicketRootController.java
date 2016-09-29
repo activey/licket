@@ -3,7 +3,7 @@ package org.licket.spring.web;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.Resource;
-import org.licket.core.view.ComponentContainerView;
+import org.licket.core.view.ComponentView;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.spring.resource.ResourcesStorage;
 import org.licket.surface.SurfaceContext;
@@ -52,7 +52,7 @@ public class LicketRootController {
         LOGGER.debug("Initializing licket application: {}.", licketApplication.getName());
 
         LicketComponentContainer<?> rootContainer = licketApplication.rootComponentContainer();
-        ComponentContainerView containerView = rootContainer.getComponentContainerView();
+        ComponentView containerView = rootContainer.getView();
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
         new SurfaceContext(surfaceElementFactories).processTemplateContent(containerView.readViewContent(), byteArrayStream);
         resourcesStorage

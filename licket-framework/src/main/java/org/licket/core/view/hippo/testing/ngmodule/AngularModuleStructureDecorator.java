@@ -75,7 +75,7 @@ public class AngularModuleStructureDecorator implements AngularStructuralDecorat
 
     private ArrayLiteralBuilder declarations() {
         ArrayLiteralBuilder arrayLiteralBuilder = arrayLiteral();
-        angularModule.getInjectables().forEach(injectable -> arrayLiteralBuilder.element(injectable.angularName()));
+        angularModule.injectables().forEach(injectable -> arrayLiteralBuilder.element(injectable.angularName()));
         return arrayLiteralBuilder;
     }
 

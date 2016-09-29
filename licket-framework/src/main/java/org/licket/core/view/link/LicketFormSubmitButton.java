@@ -11,10 +11,10 @@ import org.licket.xml.dom.Comment;
 /**
  * @author activey
  */
-public class AbstractLicketFormSubmitButton<T> extends AbstractLicketComponent<T> {
+public final class LicketFormSubmitButton<T> extends AbstractLicketComponent<Void> {
 
-    public AbstractLicketFormSubmitButton(String id, Class<T> formModelClass) {
-        super(id, formModelClass);
+    public LicketFormSubmitButton(String id) {
+        super(id, Void.class);
     }
 
     @Override

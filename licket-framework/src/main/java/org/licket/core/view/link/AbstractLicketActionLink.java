@@ -1,6 +1,9 @@
 package org.licket.core.view.link;
 
 import static java.lang.String.format;
+import static org.licket.core.model.LicketModel.emptyModel;
+import static org.licket.core.view.ComponentView.fromComponentContainerClass;
+
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.render.ComponentRenderingContext;
 
@@ -10,7 +13,7 @@ import org.licket.core.view.render.ComponentRenderingContext;
 public abstract class AbstractLicketActionLink extends AbstractLicketComponent<Void> {
 
     public AbstractLicketActionLink(String id) {
-        super(id, Void.class);
+        super(id, Void.class, emptyModel(), fromComponentContainerClass(AbstractLicketActionLink.class));
     }
 
     @Override

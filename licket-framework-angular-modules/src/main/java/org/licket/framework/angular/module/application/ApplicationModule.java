@@ -20,12 +20,14 @@ import static org.licket.framework.hippo.PropertyNameBuilder.property;
 public class ApplicationModule implements AngularModule, AngularClass {
 
     private final List<AngularInjectable> injectables;
+    private final List<AngularClass> classes = newArrayList();
 
     @Autowired
     private LicketApplication application;
 
-    public ApplicationModule(AngularInjectable... injectables) {
-        this.injectables = asList(injectables);
+    public ApplicationModule(AngularClass communicationService) {
+        this.injectables = asList(communicationService);
+        this.classes.add(communicationService);
     }
 
     @Override
@@ -34,16 +36,30 @@ public class ApplicationModule implements AngularModule, AngularClass {
     }
 
     @Override
-    public Iterable<AngularInjectable> getInjectables() {
+    public Iterable<AngularInjectable> injectables() {
         List<AngularInjectable> injectables = newArrayList(this.injectables);
         // TODO make up decision how to define list of application module injectables, should all the licket components be there?
-        application.traverseDownContainers(container -> {
-            if (!container.getComponentContainerView().isExternalized()) {
+        application.traverseDown(component -> {
+            if (!component.getView().isExternalized()) {
                 return false;
             }
-            injectables.add(container);
+            injectables.add(component);
             return true;
         });
         return injectables;
+    }
+
+    @Override
+    public Iterable<AngularClass> classes() {
+        List<AngularClass> classes = newArrayList(this.classes);
+        // TODO make up decision how to define list of application module classes, should all the licket components be there?
+        application.traverseDown(component -> {
+            if (!component.getView().isExternalized()) {
+                return false;
+            }
+            classes.add(component);
+            return true;
+        });
+        return classes;
     }
 }

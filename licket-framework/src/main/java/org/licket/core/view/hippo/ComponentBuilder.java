@@ -1,5 +1,6 @@
 package org.licket.core.view.hippo;
 
+import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
 import org.licket.framework.hippo.ArrayLiteralBuilder;
@@ -57,7 +58,7 @@ public class ComponentBuilder extends AbstractAstNodeBuilder<ExpressionStatement
         return this;
     }
 
-    public void componentDependency(LicketComponentContainer<?> child) {
+    public void componentDependency(LicketComponent<?> child) {
         dependencies.add(child.getCompositeId().getNormalizedValue());
     }
 

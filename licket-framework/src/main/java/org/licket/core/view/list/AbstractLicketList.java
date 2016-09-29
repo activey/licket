@@ -1,7 +1,7 @@
 package org.licket.core.view.list;
 
 import static java.lang.String.format;
-import static org.licket.core.view.ComponentContainerView.internal;
+import static org.licket.core.view.ComponentView.internal;
 import org.licket.core.model.LicketModel;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketContainer;
@@ -14,13 +14,13 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
     private Class<T> elementClass;
 
     public AbstractLicketList(String id, LicketModel<String> enclosingComponentPropertyModel, Class<T> elementClass) {
-        super(id, String.class, internal(), enclosingComponentPropertyModel);
+        super(id, String.class, enclosingComponentPropertyModel, internal());
         this.elementClass = elementClass;
         // TODO analyze element class provided and check its properties against passed enclosingComponentPropertyModel
     }
 
     @Override
-    protected final void onRenderContainer(ComponentRenderingContext renderingContext) {
+    protected final void onRender(ComponentRenderingContext renderingContext) {
         Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketContainer);
         if (!parent.isPresent()) {
             return;
@@ -29,7 +29,7 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
         renderingContext.onSurfaceElement(element -> {
             // TODO refactor
             String firstPart = "model";
-            if (!parentContainer.getComponentContainerView().isExternalized()) {
+            if (!parentContainer.getView().isExternalized()) {
                 firstPart = parentContainer.getId();
             }
             element.addAttribute("*ngFor",

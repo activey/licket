@@ -1,15 +1,15 @@
 package org.licket.core.view.container;
 
 import org.licket.core.resource.Resource;
-import org.licket.core.view.ComponentContainerView;
+import org.licket.core.view.ComponentView;
 
 import java.io.InputStream;
 
-public class ExternalizedComponentContainerView implements ComponentContainerView {
+public class ExternalizedComponentView implements ComponentView {
 
     private Resource componentViewResource;
 
-    public ExternalizedComponentContainerView(Resource componentViewResource) {
+    public ExternalizedComponentView(Resource componentViewResource) {
         this.componentViewResource = componentViewResource;
     }
 

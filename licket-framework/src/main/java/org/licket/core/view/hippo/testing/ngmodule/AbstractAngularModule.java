@@ -1,28 +1,24 @@
 package org.licket.core.view.hippo.testing.ngmodule;
 
 import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
-import org.licket.framework.hippo.PropertyNameBuilder;
 
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 /**
  * @author activey
  */
 public abstract class AbstractAngularModule implements AngularModule {
 
-    private List<AngularInjectable> injectables;
+    private final List<AngularInjectable> injectables;
 
-    public AbstractAngularModule(List<AngularInjectable> injectables) {
-        this.injectables = injectables;
+    public AbstractAngularModule(AngularInjectable... injectables) {
+        this.injectables = asList(injectables);
     }
 
     @Override
-    public PropertyNameBuilder angularName() {
-        return null;
-    }
-
-    @Override
-    public Iterable<AngularInjectable> getInjectables() {
+    public final Iterable<AngularInjectable> injectables() {
         return injectables;
     }
 }

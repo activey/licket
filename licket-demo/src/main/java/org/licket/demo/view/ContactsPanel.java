@@ -1,9 +1,10 @@
 package org.licket.demo.view;
 
 import static org.licket.core.model.LicketModel.ofModelObject;
-import static org.licket.core.view.ComponentContainerView.fromComponentContainerClass;
+import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 import static org.licket.demo.model.Contacts.fromIterable;
 import org.licket.core.model.LicketModel;
+import org.licket.core.view.ComponentView;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.core.view.link.AbstractLicketActionLink;

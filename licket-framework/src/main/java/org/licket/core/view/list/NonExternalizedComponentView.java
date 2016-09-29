@@ -1,13 +1,13 @@
 package org.licket.core.view.list;
 
-import org.licket.core.view.ComponentContainerView;
+import org.licket.core.view.ComponentView;
 
 import java.io.InputStream;
 
 /**
  * @author grabslu
  */
-public class NonExternalizedComponentContainerView implements ComponentContainerView {
+public class NonExternalizedComponentView implements ComponentView {
 
     @Override
     public InputStream readViewContent() {

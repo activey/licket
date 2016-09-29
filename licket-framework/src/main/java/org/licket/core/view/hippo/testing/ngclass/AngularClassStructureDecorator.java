@@ -71,7 +71,7 @@ public class AngularClassStructureDecorator implements AngularStructuralDecorato
         // function constructor definition
         BlockBuilder constructorFunctionBody = block();
         // declaring all member functions
-        stream(angularClass.getClass().getDeclaredMethods())
+        stream(angularClass.getClass().getMethods())
                 .forEach(method -> writeMemberFunctionBody(constructorFunctionBody, method));
 
         // declaring constructor

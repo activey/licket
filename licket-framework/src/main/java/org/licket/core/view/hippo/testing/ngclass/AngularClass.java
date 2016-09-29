@@ -5,7 +5,7 @@ import org.licket.framework.hippo.PropertyNameBuilder;
 /**
  * @author activey
  */
-public interface AngularClass {
+public interface AngularClass extends AngularInjectable {
 
     PropertyNameBuilder angularName();
 }

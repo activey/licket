@@ -1,7 +1,5 @@
 package org.licket.core.view;
 
-import org.licket.core.view.container.LicketComponentContainer;
-
 import static java.lang.String.format;
 
 /**
@@ -13,7 +11,7 @@ public class LicketUrls {
 
     public static final String CONTEXT_COMPONENT = "/licket/component";
 
-    public static String componentContainerViewUrl(LicketComponentContainer<?> licketComponent) {
+    public static String componentViewUrl(LicketComponent<?> licketComponent) {
         return CONTEXT_COMPONENT + format("/%s/view", licketComponent.getCompositeId().getValue());
     }
 }

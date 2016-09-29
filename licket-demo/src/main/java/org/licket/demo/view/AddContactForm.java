@@ -3,14 +3,13 @@ package org.licket.demo.view;
 import com.github.javafaker.Faker;
 import org.licket.core.view.form.AbstractLicketForm;
 import org.licket.core.view.form.LicketInput;
-import org.licket.core.view.link.AbstractLicketActionLink;
-import org.licket.core.view.link.AbstractLicketFormSubmitButton;
+import org.licket.core.view.link.LicketFormSubmitButton;
 import org.licket.demo.model.Contact;
 import org.licket.demo.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.licket.core.model.LicketModel.ofModelObject;
-import static org.licket.core.view.ComponentContainerView.fromComponentContainerClass;
+import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 
 /**
  * @author activey
@@ -23,7 +22,7 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
     private ContactsService contactsService;
 
     public AddContactForm(String id) {
-        super(id, Contact.class, fromComponentContainerClass(AddContactForm.class), ofModelObject(new Contact()));
+        super(id, Contact.class, ofModelObject(new Contact()), fromComponentContainerClass(AddContactForm.class));
 
         add(new LicketInput("name"));
         add(new LicketInput("description"));
@@ -35,7 +34,7 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
 //            }
 //        });
 
-        add(new AbstractLicketFormSubmitButton<>("add", Contact.class));
+        add(new LicketFormSubmitButton("add"));
     }
 
     @Override
