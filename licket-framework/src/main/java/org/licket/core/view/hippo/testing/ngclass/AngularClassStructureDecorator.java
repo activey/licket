@@ -1,12 +1,13 @@
 package org.licket.core.view.hippo.testing.ngclass;
 
 import static com.google.common.base.Objects.firstNonNull;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.util.Arrays.stream;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang.StringUtils.trimToNull;
+import static org.licket.core.view.hippo.testing.ngclass.AngularClassPropertiesDecorator.fromAngularClassProperties;
+import static org.licket.core.view.hippo.testing.ngclass.AngularInjectablesDecorator.fromAngularClassDependencies;
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;
@@ -20,10 +21,14 @@ import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import java.lang.reflect.Method;
 import java.util.Optional;
-
 import org.licket.core.view.hippo.testing.AngularStructuralDecorator;
 import org.licket.core.view.hippo.testing.annotation.AngularClassFunction;
-import org.licket.framework.hippo.*;
+import org.licket.framework.hippo.AssignmentBuilder;
+import org.licket.framework.hippo.BlockBuilder;
+import org.licket.framework.hippo.FunctionCallBuilder;
+import org.licket.framework.hippo.NameBuilder;
+import org.licket.framework.hippo.ObjectLiteralBuilder;
+import org.licket.framework.hippo.PropertyNameBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,15 +49,11 @@ public class AngularClassStructureDecorator implements AngularStructuralDecorato
     }
 
     public final AssignmentBuilder decorate(AssignmentBuilder assignment) {
-        return assignment
-                .left(angularClass.angularName())
-                .right(right());
+        return assignment.left(angularClass.angularName()).right(right());
     }
 
     private FunctionCallBuilder right() {
-        return functionCall()
-                .target(createClassFunctionCall())
-                .argument(body());
+        return functionCall().target(createClassFunctionCall()).argument(body());
     }
 
     private PropertyNameBuilder createClassFunctionCall() {
@@ -66,20 +67,21 @@ public class AngularClassStructureDecorator implements AngularStructuralDecorato
 
     @Override
     public ObjectLiteralBuilder body() {
-        ObjectLiteralBuilder definition = objectLiteral();
-
         // function constructor definition
         BlockBuilder constructorFunctionBody = block();
         // declaring all member functions
         stream(angularClass.getClass().getMethods())
-                .forEach(method -> writeMemberFunctionBody(constructorFunctionBody, method));
+            .forEach(method -> writeMemberFunctionBody(constructorFunctionBody, method));
 
         // declaring constructor
-        definition.objectProperty(propertyBuilder().name("constructor")
-                .arrayValue(arrayLiteral()
-                        // .element() ... dependencies
-                        .element(functionNode().body(constructorFunctionBody))));
-        return definition;
+        AngularInjectablesDecorator injectablesDecorator = fromAngularClassDependencies(angularClass);
+        return fromAngularClassProperties(angularClass).decorate(objectLiteral())
+                .objectProperty(
+                        propertyBuilder()
+                                .name("constructor")
+                                .arrayValue(injectablesDecorator.decorate(arrayLiteral())
+                                    .element(injectablesDecorator.decorate(functionNode())
+                                        .body(constructorFunctionBody))));
     }
 
     private void writeMemberFunctionBody(BlockBuilder constructorFunctionBody, Method method) {
@@ -93,11 +95,10 @@ public class AngularClassStructureDecorator implements AngularStructuralDecorato
 
         // appending statement
         constructorFunctionBody
-                .appendStatement(expressionStatement(
-                        assignment()
-                                .left(property(thisLiteral(),
-                                        name(firstNonNull(trimToNull(classFunction.get().value()), method.getName()))))
-                                .right(memberFunction.toFunctionNode(method, angularClass))));
+            .appendStatement(expressionStatement(assignment()
+                .left(property(thisLiteral(),
+                    name(firstNonNull(trimToNull(classFunction.get().value()), method.getName()))))
+                .right(memberFunction.toFunctionNode(method, angularClass))));
     }
 
     private Optional<AngularClassFunction> getClassFunction(Method method) {

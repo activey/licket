@@ -1,6 +1,6 @@
 package org.licket.spring.web;
 
-import org.licket.framework.angular.module.AngularModulesConfiguration;
+import org.licket.core.module.AngularModulesConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

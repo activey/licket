@@ -1,4 +1,4 @@
-package org.licket.framework.angular.module.application;
+package org.licket.core.module.application;
 
 import org.licket.core.view.hippo.testing.ngclass.AngularClass;
 import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
@@ -19,7 +19,7 @@ public class ApplicationModuleConfiguration {
     }
 
     @Bean(name = "communicationService")
-    public AngularClass httpCommunicationService() {
+    public AngularClass communicationService() {
         return new LicketRemoteCommunication();
     }
 }

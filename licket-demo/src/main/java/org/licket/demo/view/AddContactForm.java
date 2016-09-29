@@ -1,7 +1,7 @@
 package org.licket.demo.view;
 
 import com.github.javafaker.Faker;
-import org.licket.core.view.form.AbstractLicketForm;
+import org.licket.core.module.forms.component.AbstractLicketForm;
 import org.licket.core.view.form.LicketInput;
 import org.licket.core.view.link.LicketFormSubmitButton;
 import org.licket.demo.model.Contact;

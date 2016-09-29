@@ -1,7 +1,6 @@
-package org.licket.framework.angular.module.forms;
+package org.licket.core.module.platform;
 
 import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
-import org.licket.framework.angular.module.platform.BrowserModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
  * @author activey
  */
 @Configuration
-public class FormsModuleConfiguration {
+public class BrowserModuleConfiguration {
 
     @Bean
-    public AngularModule formsModule() {
-        return new FormsModule();
+    public AngularModule browserModule() {
+        return new BrowserModule();
     }
 }

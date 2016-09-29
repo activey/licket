@@ -183,6 +183,5 @@
         <module>licket-demo</module>
         <module>licket-framework-hippo</module>
         <module>licket-npm-libraries</module>
-        <module>licket-framework-angular-modules</module>
     </modules>
 </project>

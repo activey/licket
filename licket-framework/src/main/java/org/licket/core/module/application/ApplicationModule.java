@@ -1,4 +1,4 @@
-package org.licket.framework.angular.module.application;
+package org.licket.core.module.application;
 
 import org.licket.core.LicketApplication;
 import org.licket.core.view.hippo.testing.ngclass.AngularClass;
@@ -25,8 +25,8 @@ public class ApplicationModule implements AngularModule, AngularClass {
     @Autowired
     private LicketApplication application;
 
-    public ApplicationModule(AngularClass communicationService) {
-        this.injectables = asList(communicationService);
+    public ApplicationModule(AngularClass communicationService, AngularInjectable... injectables) {
+        this.injectables = asList(injectables);
         this.classes.add(communicationService);
     }
 
@@ -37,27 +37,17 @@ public class ApplicationModule implements AngularModule, AngularClass {
 
     @Override
     public Iterable<AngularInjectable> injectables() {
-        List<AngularInjectable> injectables = newArrayList(this.injectables);
-        // TODO make up decision how to define list of application module injectables, should all the licket components be there?
-        application.traverseDown(component -> {
-            if (!component.getView().isExternalized()) {
-                return false;
-            }
-            injectables.add(component);
-            return true;
-        });
-        return injectables;
+        return newArrayList(this.injectables);
     }
 
     @Override
     public Iterable<AngularClass> classes() {
         List<AngularClass> classes = newArrayList(this.classes);
-        // TODO make up decision how to define list of application module classes, should all the licket components be there?
         application.traverseDown(component -> {
             if (!component.getView().isExternalized()) {
                 return false;
             }
-            classes.add(component);
+            classes.add(0, component);
             return true;
         });
         return classes;

@@ -54,6 +54,11 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
         return this;
     }
 
+    public ObjectPropertyBuilder value(ObjectLiteralBuilder objectLiteral) {
+        this.value = objectLiteral;
+        return this;
+    }
+
     @Override
     public ObjectProperty build() {
         ObjectProperty objectProperty = new ObjectProperty();

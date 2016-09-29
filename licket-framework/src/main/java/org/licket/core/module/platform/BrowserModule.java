@@ -1,4 +1,4 @@
-package org.licket.framework.angular.module.platform;
+package org.licket.core.module.platform;
 
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;

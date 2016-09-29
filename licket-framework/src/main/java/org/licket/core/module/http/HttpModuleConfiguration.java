@@ -1,4 +1,4 @@
-package org.licket.framework.angular.module.http;
+package org.licket.core.module.http;
 
 import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
 import org.licket.core.view.hippo.testing.ngmodule.AngularModule;

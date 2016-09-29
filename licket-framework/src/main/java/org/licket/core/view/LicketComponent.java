@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 /**
  * @author activey
  */
-public interface LicketComponent<T> extends AngularClass, AngularInjectable {
+public interface LicketComponent<T> extends AngularClass {
 
     static boolean hasExternalizedView(LicketComponentContainer<?> container) {
         return container.getView().isExternalized();
