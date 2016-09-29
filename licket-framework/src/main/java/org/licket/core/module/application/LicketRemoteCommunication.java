@@ -27,8 +27,8 @@ public class LicketRemoteCommunication implements AngularClass, AngularInjectabl
 
     @AngularClassFunction
     public void invokeComponentAction(@Name("actionData") NameBuilder actionData,
-                                      @Name("responseListener") NameBuilder responseListener,
                                       @Name("method") NameBuilder method,
+                                      @Name("responseListener") NameBuilder responseListener,
                                       BlockBuilder body) {
         body.appendStatement(expressionStatement(executeHttpPost(actionData, responseListener)));
     }

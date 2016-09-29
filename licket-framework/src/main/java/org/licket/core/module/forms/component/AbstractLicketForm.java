@@ -9,8 +9,6 @@ import org.licket.core.view.hippo.testing.annotation.AngularComponent;
 import org.licket.core.view.hippo.testing.annotation.Name;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
@@ -24,8 +22,6 @@ import static org.licket.framework.hippo.PropertyNameBuilder.property;
  */
 @AngularComponent
 public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLicketForm.class);
 
     @Autowired
     @Name("licketRemote")
@@ -50,7 +46,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
                 expressionStatement(
                         functionCall()
                                 .target(property(name("licketRemote"), name("invokeComponentAction")))
-                                .argument(property(thisLiteral(), name("formModel")))
+                                .argument(property(thisLiteral(), name("model")))
                 )
         );
     }
