@@ -67,16 +67,15 @@ public class AngularClassStructureDecorator implements AngularStructuralDecorato
 
     @Override
     public ObjectLiteralBuilder body() {
-        // function constructor definition
-        BlockBuilder constructorFunctionBody = block();
+        // function constructor definition, decorated with properties
+        BlockBuilder constructorFunctionBody = fromAngularClassProperties(angularClass).decorate(block());
         // declaring all member functions
         stream(angularClass.getClass().getMethods())
             .forEach(method -> writeMemberFunctionBody(constructorFunctionBody, method));
 
         // declaring constructor
         AngularInjectablesDecorator injectablesDecorator = fromAngularClassDependencies(angularClass);
-        return fromAngularClassProperties(angularClass).decorate(objectLiteral())
-                .objectProperty(
+        return objectLiteral().objectProperty(
                         propertyBuilder()
                                 .name("constructor")
                                 .arrayValue(injectablesDecorator.decorate(arrayLiteral())
