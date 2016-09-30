@@ -1,13 +1,13 @@
 package org.licket.core.resource.boot;
 
-import static org.licket.core.view.hippo.testing.ngclass.AngularClassStructureDecorator.fromAngularClass;
-import static org.licket.core.view.hippo.testing.ngmodule.AngularModuleStructureDecorator.fromAngularModule;
+import static org.licket.core.view.hippo.ngclass.AngularClassStructureDecorator.fromAngularClass;
+import static org.licket.core.view.hippo.ngmodule.AngularModuleStructureDecorator.fromAngularModule;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
-import org.licket.core.view.hippo.testing.ngclass.AngularClass;
-import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
+import org.licket.core.view.hippo.ngclass.AngularClass;
+import org.licket.core.view.hippo.ngmodule.AngularModule;
 import org.licket.framework.hippo.BlockBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

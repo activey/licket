@@ -6,10 +6,10 @@ import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 
 import org.licket.core.module.http.HttpCommunicationService;
-import org.licket.core.view.hippo.testing.annotation.AngularClassFunction;
-import org.licket.core.view.hippo.testing.annotation.Name;
-import org.licket.core.view.hippo.testing.ngclass.AngularClass;
-import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
+import org.licket.core.view.hippo.annotation.AngularClassFunction;
+import org.licket.core.view.hippo.annotation.Name;
+import org.licket.core.view.hippo.ngclass.AngularClass;
+import org.licket.core.view.hippo.ngclass.AngularInjectable;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.FunctionCallBuilder;
 import org.licket.framework.hippo.NameBuilder;
@@ -26,8 +26,8 @@ public class LicketRemoteCommunication implements AngularClass, AngularInjectabl
     private HttpCommunicationService httpCommunicationService;
 
     @AngularClassFunction
-    public void invokeComponentAction(@Name("actionData") NameBuilder actionData,
-                                      @Name("method") NameBuilder method,
+    public void invokeComponentAction(@Name("method") NameBuilder method,
+                                      @Name("actionData") NameBuilder actionData,
                                       @Name("responseListener") NameBuilder responseListener,
                                       BlockBuilder body) {
         body.appendStatement(expressionStatement(executeHttpPost(actionData, responseListener)));

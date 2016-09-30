@@ -1,6 +1,6 @@
 package org.licket.core.module.http;
 
-import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
+import org.licket.core.view.hippo.ngclass.AngularInjectable;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
 

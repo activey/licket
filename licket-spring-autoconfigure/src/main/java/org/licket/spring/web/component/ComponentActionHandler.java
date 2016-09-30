@@ -17,14 +17,18 @@ public class ComponentActionHandler {
 
     private LicketComponent<?> actionComponent;
 
-    public ComponentActionHandler(LicketComponent<?> actionComponent, LicketComponent<?> directParent) {
+    public ComponentActionHandler(LicketComponent<?> actionComponent) {
         this.actionComponent = actionComponent;
     }
 
     public void callAction(String method, ComponentActionRequest actionRequest) {
+        if (actionRequest.getData() == null) {
+            on(actionComponent).call(method);
+            return;
+        }
         ObjectMapper mapper = new ObjectMapper();
         try {
-            Object value = mapper.treeToValue(actionRequest.getModel(), actionComponent.getComponentModelClass());
+            Object value = mapper.treeToValue(actionRequest.getData(), actionComponent.getComponentModelClass());
             on(actionComponent).call(method, value);
         } catch (JsonProcessingException e) {
             LOGGER.error("An error occurred while deserializing component model for: [%s]", actionComponent.getId(), e);

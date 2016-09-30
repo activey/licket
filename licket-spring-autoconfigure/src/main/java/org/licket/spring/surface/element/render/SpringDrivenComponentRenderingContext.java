@@ -1,8 +1,8 @@
 package org.licket.spring.surface.element.render;
 
 import org.licket.core.resource.Resource;
+import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.render.ComponentRenderingContext;
-import org.licket.spring.resource.ResourcesStorage;
 import org.licket.surface.element.SurfaceElement;
 
 import java.util.function.Consumer;
@@ -13,9 +13,9 @@ import java.util.function.Consumer;
 public class SpringDrivenComponentRenderingContext implements ComponentRenderingContext {
 
     private SurfaceElement surfaceElement;
-    private ResourcesStorage resourcesStorage;
+    private ResourceStorage resourcesStorage;
 
-    public SpringDrivenComponentRenderingContext(SurfaceElement surfaceElement, ResourcesStorage resourcesStorage) {
+    public SpringDrivenComponentRenderingContext(SurfaceElement surfaceElement, ResourceStorage resourcesStorage) {
         this.surfaceElement = surfaceElement;
         this.resourcesStorage = resourcesStorage;
     }

@@ -1,6 +1,6 @@
 package org.licket.spring.surface.element.html;
 
-import org.licket.spring.resource.ResourcesStorage;
+import org.licket.core.resource.ResourceStorage;
 import org.licket.surface.element.SurfaceElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public class HeadElement extends SurfaceElement {
     private static final Logger LOGGER = LoggerFactory.getLogger(HeadElement.class);
 
     @Autowired
-    private ResourcesStorage resourcesStorage;
+    private ResourceStorage resourcesStorage;
 
     public HeadElement(String name) {
         super(name, HTML_NAMESPACE);

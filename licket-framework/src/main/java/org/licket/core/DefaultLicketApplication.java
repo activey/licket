@@ -5,7 +5,6 @@ import static java.util.Optional.ofNullable;
 import static org.licket.core.id.CompositeId.fromStringValue;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -13,11 +12,9 @@ import java.util.function.Predicate;
 import org.licket.core.id.CompositeId;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.LicketComponentContainer;
-import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
+import org.licket.core.view.hippo.ngmodule.AngularModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import javax.annotation.PostConstruct;
 
 public class DefaultLicketApplication implements LicketApplication, Serializable  {
 

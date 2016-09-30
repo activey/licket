@@ -21,6 +21,11 @@ public class ReturnStatementBuilder extends AbstractAstNodeBuilder<ReturnStateme
         return this;
     }
 
+    public ReturnStatementBuilder returnValue(NameBuilder nameBuilder) {
+        this.returnValue = nameBuilder;
+        return this;
+    }
+
     @Override
     public ReturnStatement build() {
         ReturnStatement returnStatement = new ReturnStatement();

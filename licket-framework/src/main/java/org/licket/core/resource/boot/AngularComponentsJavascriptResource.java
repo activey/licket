@@ -1,12 +1,14 @@
 package org.licket.core.resource.boot;
 
-import static org.licket.core.view.hippo.testing.ngclass.AngularClassStructureDecorator.fromAngularClass;
+import static com.google.common.base.Predicates.instanceOf;
+import static org.licket.core.view.hippo.ngclass.AngularClassStructureDecorator.fromAngularClass;
+import static org.licket.core.view.hippo.ngcomponent.AngularComponentStructureDecorator.fromLicketComponent;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
-import org.licket.core.LicketApplication;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
-import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
+import org.licket.core.view.LicketComponent;
+import org.licket.core.view.hippo.ngmodule.AngularModule;
 import org.licket.framework.hippo.BlockBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,9 +20,7 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
 
     @Autowired
     @Qualifier("applicationModule")
-    public AngularModule applicationModule;
-    @Autowired
-    private LicketApplication licketApplication;
+    private AngularModule applicationModule;
 
     @Override
     public String getName() {
@@ -29,9 +29,18 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
-        licketApplication.modules().forEach(module -> module.classes().forEach(angularClass -> {
+        applicationModule.classes().forEach(angularClass -> {
+            // TODO not really nice, rework ...
+            if (instanceOf(LicketComponent.class).apply(angularClass)) {
+                // decorating ng.core.Class with ng.core.Component
+                LicketComponent<?> licketComponent = (LicketComponent<?>) angularClass;
+                scriptBlockBuilder.appendStatement(
+                    expressionStatement(fromLicketComponent(licketComponent).decorate(fromAngularClass(angularClass))));
+                return;
+            }
+            // just simple ng.core.Class
             scriptBlockBuilder
-                .appendStatement(expressionStatement(fromAngularClass(angularClass).decorate(assignment())));
-        }));
+                .prependStatement(expressionStatement(fromAngularClass(angularClass).decorate(assignment())));
+        });
     }
 }

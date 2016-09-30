@@ -33,10 +33,14 @@ public final class LicketFormSubmitButton extends AbstractLicketComponent<Void> 
     private Optional<LicketComponent<?>> getEnclosingForm() {
         return traverseUp(component -> {
             if (component instanceof AbstractLicketForm) {
+                /*
                 AbstractLicketForm form = (AbstractLicketForm) component;
+                TODO how about some additional checking?
                 if (form.getComponentModelClass().equals(getComponentModelClass())) {
                     return true;
                 }
+                */
+                return true;
             }
             return false;
         });

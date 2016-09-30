@@ -9,9 +9,9 @@ import static org.springframework.http.ResponseEntity.ok;
 import java.util.Optional;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.Resource;
+import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.model.LicketComponentModel;
-import org.licket.spring.resource.ResourcesStorage;
 import org.licket.spring.web.component.ComponentActionHandler;
 import org.licket.spring.web.component.ComponentActionRequest;
 import org.licket.surface.tag.ElementFactories;
@@ -37,7 +37,7 @@ public class LicketComponentController {
     private ElementFactories surfaceElementFactories;
 
     @Autowired
-    private ResourcesStorage resourcesStorage;
+    private ResourceStorage resourcesStorage;
 
     @GetMapping(value = "/{compositeId}", produces = "application/json")
     public @ResponseBody LicketComponentModel getLicketComponentModel(@PathVariable String compositeId) {
@@ -55,21 +55,16 @@ public class LicketComponentController {
         if (!component.isPresent()) {
             throw componentNotFound(actionRequest.getCompositeId());
         }
-        Optional<LicketComponent<?>> actionComponent = licketApplication
-            .findComponent(fromStringValue(actionRequest.getChildCompositeId()));
-        if (!actionComponent.isPresent()) {
-            throw componentNotFound(actionRequest.getChildCompositeId());
-        }
         // invoking action method with JSON converted into component model instance
-        callComponentActionMethod(actionRequest, method, component.get(), actionComponent.get());
+        callComponentActionMethod(actionRequest, method, component.get());
 
         // returning fresh component model
         return new LicketComponentModel(component.get().getComponentModel().get());
     }
 
     private void callComponentActionMethod(@RequestBody ComponentActionRequest actionRequest,
-                                           String method, LicketComponent<?> actionComponent, LicketComponent<?> directParent) {
-        new ComponentActionHandler(actionComponent, directParent).callAction(method, actionRequest);
+                                           String method, LicketComponent<?> actionComponent) {
+        new ComponentActionHandler(actionComponent).callAction(method, actionRequest);
     }
 
     // @Cacheable("component-view-cache")

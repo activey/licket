@@ -3,9 +3,9 @@ package org.licket.spring.web;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.Resource;
+import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.ComponentView;
 import org.licket.core.view.container.LicketComponentContainer;
-import org.licket.spring.resource.ResourcesStorage;
 import org.licket.surface.SurfaceContext;
 import org.licket.surface.tag.ElementFactories;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class LicketRootController {
     private LicketApplication licketApplication;
 
     @Autowired
-    private ResourcesStorage resourcesStorage;
+    private ResourceStorage resourcesStorage;
 
     @Autowired
     private ElementFactories surfaceElementFactories;

@@ -1,7 +1,7 @@
 package org.licket.core.module.http;
 
-import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
-import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
+import org.licket.core.view.hippo.ngclass.AngularInjectable;
+import org.licket.core.view.hippo.ngmodule.AngularModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

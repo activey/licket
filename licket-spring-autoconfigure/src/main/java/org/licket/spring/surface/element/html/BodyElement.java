@@ -6,7 +6,7 @@ import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
 import javax.xml.stream.XMLStreamException;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.ByteArrayResource;
-import org.licket.spring.resource.ResourcesStorage;
+import org.licket.core.resource.ResourceStorage;
 import org.licket.surface.element.SurfaceElement;
 import org.licket.xml.dom.Nodes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class BodyElement extends SurfaceElement {
     private LicketApplication application;
 
     @Autowired
-    private ResourcesStorage resourcesStorage;
+    private ResourceStorage resourcesStorage;
 
     public BodyElement(String name) {
         super(name, HTML_NAMESPACE);

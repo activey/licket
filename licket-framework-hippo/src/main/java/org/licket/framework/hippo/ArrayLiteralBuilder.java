@@ -41,4 +41,8 @@ public class ArrayLiteralBuilder extends AbstractAstNodeBuilder<ArrayLiteral> {
         elements.forEach(element -> arrayLiteral.addElement(element.build()));
         return arrayLiteral;
     }
+
+    public final int elementsSize() {
+        return elements.size();
+    }
 }

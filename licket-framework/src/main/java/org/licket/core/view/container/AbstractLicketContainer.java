@@ -17,7 +17,7 @@ import org.licket.core.model.LicketModel;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.ComponentView;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.hippo.testing.annotation.Name;
+import org.licket.core.view.hippo.annotation.Name;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
@@ -35,7 +35,7 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
     private List<LicketComponent<?>> leaves = newArrayList();
 
     @Name("model")
-    private ObjectLiteralBuilder modelProperty = ObjectLiteralBuilder.objectLiteral();
+    private ObjectLiteralBuilder modelProperty;
 
     public AbstractLicketContainer(String id, Class<T> modelClass, ComponentView view) {
         this(id, modelClass, emptyModel(), view);
@@ -66,10 +66,10 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
         leaves.forEach(LicketComponent::initialize);
 
         onInitializeContainer();
-        generateComponentModel();
     }
 
-    private void generateComponentModel() {
+    public ObjectLiteralBuilder getModelProperty() {
+        ObjectLiteralBuilder modelProperty = ObjectLiteralBuilder.objectLiteral();
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(QUOTE_FIELD_NAMES, false);
@@ -88,7 +88,9 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
             });
         } catch (IOException e) {
             LOGGER.error("An error occurred while creating Angular class constructor.", e);
+            return modelProperty;
         }
+        return modelProperty;
     }
 
     private Reader modelObjectLiteralReader(String modelStringValue) {

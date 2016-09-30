@@ -12,7 +12,5 @@ public interface LicketComponentContainer<T> extends LicketComponent<T> {
 
     LicketComponent<?> findChild(CompositeId compositeId);
 
-    void traverseDown(Predicate<LicketComponent<?>> componentConsumer);
-
     void traverseDownContainers(Predicate<LicketComponentContainer<?>> containerConsumer);
 }

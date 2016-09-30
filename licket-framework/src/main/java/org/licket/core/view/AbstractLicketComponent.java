@@ -8,12 +8,10 @@ import static org.licket.core.model.LicketModel.emptyModel;
 import static org.licket.core.view.ComponentView.internal;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
-
 import java.util.Optional;
 import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
 import javax.xml.stream.XMLStreamException;
-
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.resource.ByteArrayResource;
@@ -68,13 +66,13 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     @Override
-    public final Class<T> getComponentModelClass() {
-        return modelClass;
+    public final void setComponentModel(LicketModel<T> componentModel) {
+        this.componentModel = componentModel;
     }
 
     @Override
-    public final void setComponentModel(LicketModel<T> componentModel) {
-        this.componentModel = componentModel;
+    public final Class<T> getComponentModelClass() {
+        return modelClass;
     }
 
     @Override
@@ -122,10 +120,9 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
     public final void render(ComponentRenderingContext renderingContext) {
         LOGGER.debug("Rendering component: {}", id);
+        onRender(renderingContext);
         doRender(renderingContext);
-        onRender(renderingContext);    }
-
-    protected void onRender(ComponentRenderingContext renderingContext) {}
+    }
 
     private void doRender(ComponentRenderingContext renderingContext) {
         if (!getView().isExternalized()) {
@@ -144,5 +141,12 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
                 return;
             }
         });
+    }
+
+    protected void onRender(ComponentRenderingContext renderingContext) {}
+
+    @Override
+    public void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {
+        // do nothing by default
     }
 }

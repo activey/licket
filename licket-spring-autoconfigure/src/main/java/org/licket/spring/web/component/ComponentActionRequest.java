@@ -10,8 +10,7 @@ import java.io.Serializable;
 public class ComponentActionRequest implements Serializable {
 
     private String compositeId;
-    private String childCompositeId;
-    private JsonNode model;
+    private JsonNode data;
 
     public String getCompositeId() {
         return compositeId;
@@ -21,19 +20,11 @@ public class ComponentActionRequest implements Serializable {
         this.compositeId = compositeId;
     }
 
-    public String getChildCompositeId() {
-        return childCompositeId;
+    public JsonNode getData() {
+        return data;
     }
 
-    public void setChildCompositeId(String childCompositeId) {
-        this.childCompositeId = childCompositeId;
-    }
-
-    public JsonNode getModel() {
-        return model;
-    }
-
-    public void setModel(JsonNode model) {
-        this.model = model;
+    public void setData(JsonNode data) {
+        this.data = data;
     }
 }

@@ -1,9 +1,9 @@
 package org.licket.core.module.application;
 
 import org.licket.core.LicketApplication;
-import org.licket.core.view.hippo.testing.ngclass.AngularClass;
-import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
-import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
+import org.licket.core.view.hippo.ngclass.AngularClass;
+import org.licket.core.view.hippo.ngclass.AngularInjectable;
+import org.licket.core.view.hippo.ngmodule.AngularModule;
 import org.licket.framework.hippo.PropertyNameBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -2,9 +2,7 @@ package org.licket.core.view;
 
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
-import org.licket.core.view.container.LicketComponentContainer;
-import org.licket.core.view.hippo.testing.ngclass.AngularClass;
-import org.licket.core.view.hippo.testing.ngclass.AngularInjectable;
+import org.licket.core.view.hippo.ngclass.AngularClass;
 import org.licket.core.view.render.ComponentRenderingContext;
 
 import java.util.Optional;
@@ -14,10 +12,6 @@ import java.util.function.Predicate;
  * @author activey
  */
 public interface LicketComponent<T> extends AngularClass {
-
-    static boolean hasExternalizedView(LicketComponentContainer<?> container) {
-        return container.getView().isExternalized();
-    }
 
     ComponentView getView();
 
@@ -40,4 +34,8 @@ public interface LicketComponent<T> extends AngularClass {
     void render(ComponentRenderingContext renderingContext);
 
     Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser);
+
+    // maybe it would make sense to have some components more complicated inner hidden structure?
+    void traverseDown(Predicate<LicketComponent<?>> componentConsumer);
+
 }

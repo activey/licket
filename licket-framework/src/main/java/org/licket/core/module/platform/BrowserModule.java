@@ -2,7 +2,7 @@ package org.licket.core.module.platform;
 
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
-import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
+import org.licket.core.view.hippo.ngmodule.AngularModule;
 import org.licket.framework.hippo.PropertyNameBuilder;
 
 /**

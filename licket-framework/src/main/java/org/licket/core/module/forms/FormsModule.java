@@ -1,6 +1,6 @@
 package org.licket.core.module.forms;
 
-import org.licket.core.view.hippo.testing.ngmodule.AngularModule;
+import org.licket.core.view.hippo.ngmodule.AngularModule;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
 

@@ -18,6 +18,5 @@ public class InputElement extends DefaultHtmlElement {
 
     @Override
     protected void onStart() {
-        System.out.println("PROCESSING INPUT");
     }
 }
