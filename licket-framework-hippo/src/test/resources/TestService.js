@@ -7,7 +7,7 @@
         ],
         invokeComponentAction: function(data) {
             var _this = this;
-            return http.post("/ble", data);
+            return http.post("`", data);
         }
     });
 })(window.app || (window.app = {}));

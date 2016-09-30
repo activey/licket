@@ -25,8 +25,8 @@ public class FunctionCallBuilder extends AbstractAstNodeBuilder<FunctionCall> {
         return this;
     }
 
-    public FunctionCallBuilder target(PropertyGetBuilder propertyGetBuilder) {
-        this.target = propertyGetBuilder;
+    public FunctionCallBuilder target(PropertyNameBuilder propertyNameBuilder) {
+        this.target = propertyNameBuilder;
         return this;
     }
 
@@ -55,8 +55,8 @@ public class FunctionCallBuilder extends AbstractAstNodeBuilder<FunctionCall> {
         return this;
     }
 
-    public FunctionCallBuilder argument(PropertyGetBuilder propertyGetBuilder) {
-        arguments.add(propertyGetBuilder);
+    public FunctionCallBuilder argument(PropertyNameBuilder propertyNameBuilder) {
+        arguments.add(propertyNameBuilder);
         return this;
     }
 

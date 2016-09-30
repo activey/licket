@@ -8,7 +8,7 @@ import static org.springframework.http.ResponseEntity.status;
 import java.util.Optional;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.Resource;
-import org.licket.spring.resource.ResourcesStorage;
+import org.licket.core.resource.ResourceStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class LicketResourceController {
     private LicketApplication licketApplication;
 
     @Autowired
-    private ResourcesStorage resourcesStorage;
+    private ResourceStorage resourcesStorage;
 
     @GetMapping(value = "/{resourceName:.+}")
     public ResponseEntity<InputStreamResource> getResource(@PathVariable String resourceName) {

@@ -1,6 +1,7 @@
 package org.licket.spring.resource;
 
 import org.licket.core.resource.HeadParticipatingResource;
+import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.angular.AngularLibraryResource;
 import org.licket.core.resource.boot.AngularApplicationModuleJavascriptResource;
 import org.licket.core.resource.boot.AngularBootApplicationJavascriptResource;
@@ -18,8 +19,8 @@ public class LicketResourcesConfiguration {
 
     @Bean
     @SessionScope
-    public ResourcesStorage resourcesContainer() {
-        return new ResourcesStorage();
+    public ResourceStorage resourcesContainer() {
+        return new SpringResourceStorage();
     }
 
     @Bean

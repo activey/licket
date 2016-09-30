@@ -1,6 +1,5 @@
 package org.licket.framework.hippo;
 
-import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.Assignment;
 
 import static org.mozilla.javascript.Token.ASSIGN;
@@ -24,38 +23,13 @@ public class AssignmentBuilder extends AbstractAstNodeBuilder<Assignment> {
         return this;
     }
 
-    public AssignmentBuilder left(PropertyGetBuilder propertyGetBuilder) {
-        this.left = propertyGetBuilder;
+    public AssignmentBuilder left(PropertyNameBuilder propertyNameBuilder) {
+        this.left = propertyNameBuilder;
         return this;
     }
 
-    public AssignmentBuilder right(NameBuilder nameBuilder) {
-        this.right = nameBuilder;
-        return this;
-    }
-
-    public AssignmentBuilder right(PropertyGetBuilder propertyGetBuilder) {
-        this.right = propertyGetBuilder;
-        return this;
-    }
-
-    public AssignmentBuilder right(StringLiteralBuilder stringLiteralBuilder) {
-        this.right = stringLiteralBuilder;
-        return this;
-    }
-
-    public AssignmentBuilder right(ObjectLiteralBuilder objectLiteralBuilder) {
-        this.right = objectLiteralBuilder;
-        return this;
-    }
-
-    public AssignmentBuilder right(FunctionCallBuilder functionCall) {
-        this.right = functionCall;
-        return this;
-    }
-
-    public AssignmentBuilder right(FunctionNodeBuilder functionNode) {
-        this.right = functionNode;
+    public AssignmentBuilder right(AbstractAstNodeBuilder<?> nodeBuilder) {
+        this.right = nodeBuilder;
         return this;
     }
 

@@ -3,6 +3,7 @@ package org.licket.core;
 import org.licket.core.id.CompositeId;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.LicketComponentContainer;
+import org.licket.core.view.hippo.ngmodule.AngularModule;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -14,7 +15,7 @@ public interface LicketApplication {
 
     String getName();
 
-    LicketComponentContainer<?> getRootComponentContainer();
+    LicketComponentContainer<?> rootComponentContainer();
 
     Optional<LicketComponent<?>> findComponent(CompositeId compositeId);
 
@@ -23,4 +24,6 @@ public interface LicketApplication {
     void traverseDown(Predicate<LicketComponent<?>> componentVisitor);
 
     void traverseDownContainers(Predicate<LicketComponentContainer<?>> containerVisitor);
+
+    Iterable<AngularModule> modules();
 }

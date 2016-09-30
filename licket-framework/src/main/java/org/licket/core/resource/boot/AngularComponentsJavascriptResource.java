@@ -1,18 +1,17 @@
 package org.licket.core.resource.boot;
 
-import org.licket.core.LicketApplication;
+import static com.google.common.base.Predicates.instanceOf;
+import static org.licket.core.view.hippo.ngclass.AngularClassStructureDecorator.fromAngularClass;
+import static org.licket.core.view.hippo.ngcomponent.AngularComponentStructureDecorator.fromLicketComponent;
+import static org.licket.framework.hippo.AssignmentBuilder.assignment;
+import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
-import org.licket.core.view.angular.ComponentBuilder;
-import org.licket.core.view.container.LicketComponentContainer;
+import org.licket.core.view.LicketComponent;
+import org.licket.core.view.hippo.ngmodule.AngularModule;
 import org.licket.framework.hippo.BlockBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.licket.core.view.LicketUrls.componentContainerViewUrl;
-import static org.licket.core.view.angular.ClassConstructorBuilder.constructorBuilder;
-import static org.licket.core.view.angular.ComponentBuilder.component;
-import static org.licket.core.view.angular.ComponentClassBuilder.classBuilder;
-import static org.licket.core.view.angular.ComponentCommunicationServiceBuilder.componentCommunicationService;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * @author activey
@@ -20,7 +19,8 @@ import static org.licket.core.view.angular.ComponentCommunicationServiceBuilder.
 public class AngularComponentsJavascriptResource extends AbstractJavascriptDynamicResource implements HeadParticipatingResource {
 
     @Autowired
-    private LicketApplication licketApplication;
+    @Qualifier("applicationModule")
+    private AngularModule applicationModule;
 
     @Override
     public String getName() {
@@ -29,47 +29,18 @@ public class AngularComponentsJavascriptResource extends AbstractJavascriptDynam
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
-        licketApplication.traverseDownContainers(container -> {
-            generateComponentContainerCode(scriptBlockBuilder, container);
-            return true;
-        });
-
-        // generating component services
-        scriptBlockBuilder.prependStatement(componentCommunicationService()
-                .serviceName("ComponentCommunicationService"));
-
-    }
-
-    private void generateComponentContainerCode(BlockBuilder scriptBlockBuilder, LicketComponentContainer<?> container) {
-        if (!container.getComponentContainerView().isExternalized()) {
-            return;
-        }
-        ComponentBuilder componentBuilder = component();
-        appendContainerChildren(container, componentBuilder);
-
-        scriptBlockBuilder.prependStatement(componentBuilder
-                .selector(componentSelector(container))
-                .templateUrl(componentContainerViewUrl(container))
-                .componentName(componentName(container))
-                .clazz(classBuilder()
-                        .constructor(constructorBuilder(container))));
-    }
-
-    private void appendContainerChildren(LicketComponentContainer<?> container, final ComponentBuilder componentBuilder) {
-        container.traverseDownContainers(childContainer -> {
-            if (!childContainer.getComponentContainerView().isExternalized()) {
-                return false;
+        applicationModule.classes().forEach(angularClass -> {
+            // TODO not really nice, rework ...
+            if (instanceOf(LicketComponent.class).apply(angularClass)) {
+                // decorating ng.core.Class with ng.core.Component
+                LicketComponent<?> licketComponent = (LicketComponent<?>) angularClass;
+                scriptBlockBuilder.appendStatement(
+                    expressionStatement(fromLicketComponent(licketComponent).decorate(fromAngularClass(angularClass))));
+                return;
             }
-            componentBuilder.componentDependency(childContainer);
-            return true;
+            // just simple ng.core.Class
+            scriptBlockBuilder
+                .prependStatement(expressionStatement(fromAngularClass(angularClass).decorate(assignment())));
         });
-    }
-
-    private String componentSelector(LicketComponentContainer<?> container) {
-        return container.getId();
-    }
-
-    private String componentName(LicketComponentContainer<?> container) {
-        return container.getCompositeId().getNormalizedValue();
     }
 }

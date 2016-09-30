@@ -39,7 +39,7 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
         return this;
     }
 
-    public ObjectPropertyBuilder value(PropertyGetBuilder propertyGetBuilder) {
+    public ObjectPropertyBuilder value(PropertyNameBuilder propertyGetBuilder) {
         this.value = propertyGetBuilder;
         return this;
     }
@@ -51,6 +51,11 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
 
     public ObjectPropertyBuilder value(AbstractAstNodeBuilder<FunctionNode> functionNode) {
         this.value = functionNode;
+        return this;
+    }
+
+    public ObjectPropertyBuilder value(ObjectLiteralBuilder objectLiteral) {
+        this.value = objectLiteral;
         return this;
     }
 

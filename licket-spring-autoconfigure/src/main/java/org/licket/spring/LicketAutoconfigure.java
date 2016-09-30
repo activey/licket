@@ -23,7 +23,7 @@ import org.springframework.web.context.annotation.SessionScope;
 @PropertySource("classpath:/licket.properties")
 public class LicketAutoconfigure {
 
-    @Value("${application.name:default}")
+    @Value("${application.angularName:default}")
     private String applicationName;
 
     @Bean

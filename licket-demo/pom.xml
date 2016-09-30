@@ -16,10 +16,6 @@
             <groupId>org.licket</groupId>
             <artifactId>licket-spring-autoconfigure</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.licket</groupId>
-            <artifactId>licket-framework</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.github.javafaker</groupId>

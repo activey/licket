@@ -2,6 +2,8 @@ package org.licket.demo.licket;
 
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.view.container.LicketComponentContainer;
+import org.licket.core.view.link.LicketActionLink;
+import org.licket.demo.view.AddContactForm;
 import org.licket.demo.view.ContactsAppRoot;
 import org.licket.demo.view.ContactsPanel;
 import org.licket.demo.view.semantic.JqueryLibraryResource;
@@ -22,9 +24,19 @@ public class LicketConfiguration {
         return new ContactsAppRoot("contacts-page", contactsPanel());
     }
 
-    @LicketComponent("contactsPanel")
+    @LicketComponent
     public LicketComponentContainer contactsPanel() {
-        return new ContactsPanel("contacts-panel");
+        return new ContactsPanel("contacts-panel", addContactForm(), reloadContactsList());
+    }
+
+    @LicketComponent
+    public LicketActionLink reloadContactsList() {
+        return new LicketActionLink("reload");
+    }
+
+    @LicketComponent
+    public LicketComponentContainer addContactForm() {
+        return new AddContactForm("add-contact-form");
     }
 
     @Bean

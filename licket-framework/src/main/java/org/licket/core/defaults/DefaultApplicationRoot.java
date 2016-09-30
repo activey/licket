@@ -1,16 +1,16 @@
 package org.licket.core.defaults;
 
 import org.licket.core.view.container.AbstractLicketContainer;
-import org.licket.core.view.container.ExternalizedComponentContainerView;
+import org.licket.core.view.container.ExternalizedComponentView;
 
 import static org.licket.core.model.LicketModel.emptyModel;
 
 /**
  * @author activey
  */
-public class DefaultApplicationRoot extends AbstractLicketContainer<Object> {
+public class DefaultApplicationRoot extends AbstractLicketContainer<Void> {
 
-    public DefaultApplicationRoot(String id, ExternalizedComponentContainerView componentView) {
-        super(id, componentView, emptyModel());
+    public DefaultApplicationRoot(String id, ExternalizedComponentView componentView) {
+        super(id, Void.class, emptyModel(), componentView);
     }
 }

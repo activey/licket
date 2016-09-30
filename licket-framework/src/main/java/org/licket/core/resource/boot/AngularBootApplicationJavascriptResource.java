@@ -5,7 +5,7 @@ import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionSt
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
 import static org.licket.framework.hippo.NameBuilder.name;
-import static org.licket.framework.hippo.PropertyGetBuilder.property;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.HeadParticipatingResource;

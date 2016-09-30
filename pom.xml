@@ -23,6 +23,7 @@
         <log4j.log4j.version>1.2.12</log4j.log4j.version>
 
         <!-- Spring related -->
+        <org.springframework.version>4.3.2.RELEASE</org.springframework.version>
         <org.springframework.boot.spring-boot-starter-web.version>1.4.0.RELEASE</org.springframework.boot.spring-boot-starter-web.version>
         <org.springframework.boot.spring-boot-starter-jetty.version>1.4.0.RELEASE</org.springframework.boot.spring-boot-starter-jetty.version>
         <com.fasterxml.jackson.core.jackson-databind.version>2.5.0</com.fasterxml.jackson.core.jackson-databind.version>
@@ -62,6 +63,16 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-jetty</artifactId>
                 <version>${org.springframework.boot.spring-boot-starter-jetty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${org.springframework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -153,6 +164,11 @@
             <dependency>
                 <groupId>org.licket</groupId>
                 <artifactId>licket-npm-libraries</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.licket</groupId>
+                <artifactId>licket-framework-angular-modules</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -41,7 +41,7 @@ public class SurfaceElement extends Element {
 
     protected void onStart() {}
 
-    public final void addChildElement(SurfaceElement surfaceElement) {
+    public final void addChildElement(Element surfaceElement) {
         super.appendChildElement(surfaceElement);
     }
 
@@ -80,19 +80,16 @@ public class SurfaceElement extends Element {
             componentId);
     }
 
-    public final void replaceWith(SurfaceElement replacement) {
-        SurfaceElement parentElement = getParentElement();
-        if (parentElement == null) {
-            return;
-        }
-        parentElement.replaceChild(this, replacement);
-    }
-
     protected SurfaceElement getParentElement() {
         Node parentNode = getParent();
         if (parentNode instanceof SurfaceElement) {
             return (SurfaceElement) parentNode;
         }
         return null;
+    }
+
+    @Override
+    protected boolean writeEmpty() {
+        return true;
     }
 }

@@ -24,7 +24,7 @@ public class LicketLabel extends AbstractLicketComponent<String> {
      *
      * @param id Label component id, unique on given tree level (or at least should be ;P)
      * @param labelModel Label placeholder model. Keep that in very mind: this model, typed on String, is intended to be
-     * used as a placeholder generator for angular one-way binding as placeholder is generated upon this schema:
+     * used as a placeholder generator for hippo one-way binding as placeholder is generated upon this schema:
      *
      * <code>
      *  {{%s}}.format(componentModel.get())
@@ -33,7 +33,7 @@ public class LicketLabel extends AbstractLicketComponent<String> {
      * Thats it no other logic behind.
      */
     public LicketLabel(String id, LicketModel<String> labelModel) {
-        super(id, labelModel);
+        super(id, String.class, labelModel);
     }
 
     @Override

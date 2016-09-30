@@ -1,5 +1,7 @@
 package org.licket.spring.web.component;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +10,7 @@ import java.io.Serializable;
 public class ComponentActionRequest implements Serializable {
 
     private String compositeId;
-    private String childCompositeId;
+    private JsonNode data;
 
     public String getCompositeId() {
         return compositeId;
@@ -18,11 +20,11 @@ public class ComponentActionRequest implements Serializable {
         this.compositeId = compositeId;
     }
 
-    public String getChildCompositeId() {
-        return childCompositeId;
+    public JsonNode getData() {
+        return data;
     }
 
-    public void setChildCompositeId(String childCompositeId) {
-        this.childCompositeId = childCompositeId;
+    public void setData(JsonNode data) {
+        this.data = data;
     }
 }

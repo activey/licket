@@ -3,13 +3,10 @@ package org.licket.spring.surface.element.html;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.licket.spring.surface.element.html.HtmlElementFactory.HTML_NAMESPACE;
 import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
-import java.io.StringWriter;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.ByteArrayResource;
-import org.licket.spring.resource.ResourcesStorage;
+import org.licket.core.resource.ResourceStorage;
 import org.licket.surface.element.SurfaceElement;
 import org.licket.xml.dom.Nodes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +20,7 @@ public class BodyElement extends SurfaceElement {
     private LicketApplication application;
 
     @Autowired
-    private ResourcesStorage resourcesStorage;
+    private ResourceStorage resourcesStorage;
 
     public BodyElement(String name) {
         super(name, HTML_NAMESPACE);
@@ -31,7 +28,7 @@ public class BodyElement extends SurfaceElement {
 
     @Override
     protected void onStart() {
-        setComponentId(application.getRootComponentContainer().getId());
+        setComponentId(application.rootComponentContainer().getId());
     }
 
     @Override
@@ -39,17 +36,13 @@ public class BodyElement extends SurfaceElement {
         Nodes bodyNodes = new Nodes();
         newArrayList(children()).forEach(child -> bodyNodes.add(child.detach()));
 
-        // TODO to some util method for writing out anyting to XMLStreamWriter
-        StringWriter writer = new StringWriter();
         try {
-            XMLStreamWriter outputFactory = XMLOutputFactory.newInstance().createXMLStreamWriter(writer);
-            bodyNodes.toXML(outputFactory);
+            resourcesStorage
+                    .putResource(new ByteArrayResource(getComponentId(), TEXT_HTML_VALUE, bodyNodes.toBytes()));
+            appendChildElement(new SurfaceElement(getComponentId(), getNamespace()));
         } catch (XMLStreamException e) {
             return;
         }
-        resourcesStorage
-            .putResource(new ByteArrayResource(getComponentId(), TEXT_HTML_VALUE, writer.toString().getBytes()));
 
-        appendChildElement(new SurfaceElement(getComponentId(), getNamespace()));
     }
 }
