@@ -1,10 +1,12 @@
 package org.licket.core.module.application;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 
+import com.google.common.base.Preconditions;
 import org.licket.core.module.http.HttpCommunicationService;
 import org.licket.core.view.hippo.annotation.AngularClassFunction;
 import org.licket.core.view.hippo.annotation.Name;
@@ -21,9 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class LicketRemoteCommunication implements AngularClass, AngularInjectable {
 
-    @Autowired
     @Name("http")
     private HttpCommunicationService httpCommunicationService;
+
+    public LicketRemoteCommunication(HttpCommunicationService httpCommunicationService) {
+        this.httpCommunicationService = checkNotNull(httpCommunicationService, "Http communication service reference must not be null!");
+    }
 
     @AngularClassFunction
     public void invokeComponentAction(@Name("method") NameBuilder method,

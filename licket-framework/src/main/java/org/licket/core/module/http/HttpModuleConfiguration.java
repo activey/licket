@@ -19,7 +19,7 @@ public class HttpModuleConfiguration {
     }
 
     @Bean(name = "httpCommunicationService")
-    public AngularInjectable httpCommunicationService() {
+    public HttpCommunicationService httpCommunicationService() {
         return new HttpCommunicationService();
     }
 }

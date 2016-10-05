@@ -1,6 +1,6 @@
 package org.licket.core.module.application;
 
-import org.licket.core.view.hippo.ngclass.AngularClass;
+import org.licket.core.module.http.HttpCommunicationService;
 import org.licket.core.view.hippo.ngmodule.AngularModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,12 +14,12 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationModuleConfiguration {
 
     @Bean(name = "applicationModule")
-    public AngularModule applicationModule(@Autowired @Qualifier("communicationService") AngularClass communicationService) {
-        return new ApplicationModule(communicationService);
+    public AngularModule applicationModule(@Autowired @Qualifier("httpCommunicationService") HttpCommunicationService httpService) {
+        return new ApplicationModule(communicationService(httpService));
     }
 
-    @Bean(name = "communicationService")
-    public AngularClass communicationService() {
-        return new LicketRemoteCommunication();
+    @Bean
+    public LicketRemoteCommunication communicationService(HttpCommunicationService httpService) {
+        return new LicketRemoteCommunication(httpService);
     }
 }

@@ -1,5 +1,6 @@
 package org.licket.core.view.link;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.model.LicketModel.emptyModel;
 import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
@@ -11,6 +12,7 @@ import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
+import com.google.common.base.Preconditions;
 import org.licket.core.module.application.LicketRemoteCommunication;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.hippo.annotation.AngularClassFunction;
@@ -19,25 +21,23 @@ import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author activey
  */
-public class LicketActionLink extends AbstractLicketComponent<Void> {
+public abstract class AbstractLicketActionLink extends AbstractLicketComponent<Void> {
 
-    @Autowired
     @Name("licketRemote")
     private LicketRemoteCommunication communicationService;
 
-    private LicketActionListener actionListener;
-
-    public LicketActionLink(String id) {
-        super(id, Void.class, emptyModel(), fromComponentContainerClass(LicketActionLink.class));
+    public AbstractLicketActionLink(String id, LicketRemoteCommunication communicationService) {
+        super(id, Void.class, emptyModel(), fromComponentContainerClass(AbstractLicketActionLink.class));
+        this.communicationService = checkNotNull(communicationService, "Communication service reference must not be null!");
     }
 
     @AngularClassFunction
     public void doNothing(@Name("response") NameBuilder response, BlockBuilder functionBody) {
+        // as it says, does nothing ;)
     }
 
     @AngularClassFunction
@@ -61,11 +61,6 @@ public class LicketActionLink extends AbstractLicketComponent<Void> {
                                 .value(stringLiteral(getCompositeId().getValue())));
     }
 
-    public LicketActionLink actionListener(LicketActionListener actionListener) {
-        this.actionListener = actionListener;
-        return this;
-    }
-
     @Override
     protected void onRender(ComponentRenderingContext renderingContext) {
         // basically invokeAction() should handle all the stuff, the rest is done on javascript level
@@ -74,8 +69,12 @@ public class LicketActionLink extends AbstractLicketComponent<Void> {
     }
 
     public final void invokeAction() {
-        if (actionListener != null) {
-            actionListener.onInvokeAction();
-        }
+        // testing testing testing
+        Something something = new Something();
+
+        onInvokeAction(something);
     }
+
+    protected abstract void onInvokeAction(Something something);
+
 }

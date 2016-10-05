@@ -26,7 +26,7 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
 
         add(new LicketInput("name"));
         add(new LicketInput("description"));
-//        add(new LicketActionLink("add") {
+//        add(new AbstractLicketActionLink("add") {
 //
 //            @Override
 //            protected void onInvokeAction() {
