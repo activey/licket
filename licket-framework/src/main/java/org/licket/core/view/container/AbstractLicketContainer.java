@@ -2,7 +2,6 @@ package org.licket.core.view.container;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
-import static org.licket.core.model.LicketModel.emptyModel;
 import static org.licket.core.view.hippo.ComponentModelSerializer.serializeComponentModel;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;

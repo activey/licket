@@ -4,8 +4,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.model.LicketModel.ofModelObject;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
+import static org.licket.framework.hippo.BlockBuilder.block;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
+import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
@@ -14,15 +16,14 @@ import org.licket.core.model.LicketModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemoteCommunication;
 import org.licket.core.view.ComponentView;
+import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.core.view.hippo.annotation.AngularClassFunction;
 import org.licket.core.view.hippo.annotation.AngularComponent;
 import org.licket.core.view.hippo.annotation.Name;
 import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.render.ComponentRenderingContext;
-import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.NameBuilder;
-import org.licket.framework.hippo.ReturnStatementBuilder;
+import org.licket.framework.hippo.*;
 
 /**
  * @author activey
@@ -75,14 +76,17 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
 
         // sending reload request for gathered components
         componentActionCallback.forEachToBeReloaded(component -> {
-            functionBody
-                .appendStatement(functionCall().target(property(name("modelReloader"), name("notifyModelChanged")))
-                    .argument(stringLiteral(component.getCompositeId().getValue()))
-                    .argument(arrayElementGet()
-                        .target(
-                            property(functionCall().target(property(name("response"), name("json"))), name("model")))
-                        .element(stringLiteral(component.getCompositeId().getValue()))));
+            functionBody.appendStatement(reloadComponent(component));
         });
+    }
+
+    private ExpressionStatementBuilder reloadComponent(LicketComponent<?> component) {
+        return expressionStatement(functionCall().target(property(name("modelReloader"), name("notifyModelChanged")))
+                .argument(stringLiteral(component.getCompositeId().getValue()))
+                .argument(arrayElementGet()
+                        .target(
+                                property(functionCall().target(property(name("response"), name("json"))), name("model")))
+                        .element(stringLiteral(component.getCompositeId().getValue()))));
     }
 
     protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {}
@@ -93,7 +97,13 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
             .appendStatement(expressionStatement(functionCall()
                 .target(property(name("licketRemote"), name("submitForm")))
                 .argument(stringLiteral(getCompositeId().getValue())).argument(property(thisLiteral(), name("model")))
-                .argument(property(thisLiteral(), name("afterSubmit")))))
+                .argument(functionNode().param(name("response")).body(block().appendStatement(
+                        expressionStatement(
+                                functionCall()
+                                        .target(property(name("vm"), name("afterSubmit")))
+                                        .argument(name("response"))
+                        )
+                )))))
             .appendStatement(ReturnStatementBuilder.returnStatement().returnValue(name("false")));
     }
 }

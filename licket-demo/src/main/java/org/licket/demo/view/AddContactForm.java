@@ -32,5 +32,11 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
     @Override
     protected void onSubmit() {
         contactsService.addContact(getComponentModel().get());
+
+        clearInput();
+    }
+
+    private void clearInput() {
+        setComponentModelObject(new Contact());
     }
 }
