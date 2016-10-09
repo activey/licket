@@ -119,7 +119,7 @@ Next,coin your own Spring Boot configuration class and glue all together:
 @Configuration
 public class LicketConfiguration {
 
-    @LicketComponent("root") // there need to be one container component called "root"
+    @LicketRootComponent
     public LicketComponentContainer root() {
         return new ContactsAppRoot("contacts-page", contactsPanel());
     }
