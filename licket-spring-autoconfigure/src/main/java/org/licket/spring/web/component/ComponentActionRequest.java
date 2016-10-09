@@ -1,8 +1,10 @@
 package org.licket.spring.web.component;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
 /**
  * @author activey

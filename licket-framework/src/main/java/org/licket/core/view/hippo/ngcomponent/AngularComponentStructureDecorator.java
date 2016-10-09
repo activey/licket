@@ -57,12 +57,10 @@ public class AngularComponentStructureDecorator implements AngularStructuralDeco
         ObjectLiteralBuilder structureBody = objectLiteral()
                 .objectProperty(propertyBuilder().name("selector").value(stringLiteral(licketComponent.getId())))
                 .objectProperty(propertyBuilder().name("templateUrl").value(stringLiteral(componentViewUrl(licketComponent))));
-        ArrayLiteralBuilder componentServicesDependencies = componentServicesDependencies();
-        if (componentServicesDependencies.elementsSize() > 0) {
-            structureBody.objectProperty(propertyBuilder()
-                    .name("providers")
-                    .arrayValue(componentServicesDependencies));
-        }
+
+        // TODO think about it in general, for now all application injectables modules are handled on global level
+        // appendProviders(structureBody);
+
         ArrayLiteralBuilder directives = componentChildren();
         if (directives.elementsSize() > 0) {
             structureBody.objectProperty(propertyBuilder()
@@ -70,6 +68,15 @@ public class AngularComponentStructureDecorator implements AngularStructuralDeco
                     .arrayValue(componentChildren()));
         }
         return structureBody;
+    }
+
+    private void appendProviders(ObjectLiteralBuilder structureBody) {
+        ArrayLiteralBuilder componentServicesDependencies = componentServicesDependencies();
+        if (componentServicesDependencies.elementsSize() > 0) {
+            structureBody.objectProperty(propertyBuilder()
+                    .name("providers")
+                    .arrayValue(componentServicesDependencies));
+        }
     }
 
     private ArrayLiteralBuilder componentServicesDependencies() {

@@ -5,8 +5,6 @@ import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionSt
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
-
-import com.google.common.base.Preconditions;
 import org.licket.core.module.http.HttpCommunicationService;
 import org.licket.core.view.hippo.annotation.AngularClassFunction;
 import org.licket.core.view.hippo.annotation.Name;
@@ -16,7 +14,6 @@ import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.FunctionCallBuilder;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author grabslu
@@ -24,29 +21,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class LicketRemoteCommunication implements AngularClass, AngularInjectable {
 
     @Name("http")
-    private HttpCommunicationService httpCommunicationService;
+    private final HttpCommunicationService httpCommunicationService;
+
 
     public LicketRemoteCommunication(HttpCommunicationService httpCommunicationService) {
-        this.httpCommunicationService = checkNotNull(httpCommunicationService, "Http communication service reference must not be null!");
+        this.httpCommunicationService = checkNotNull(httpCommunicationService,
+            "Http communication service reference must not be null!");
     }
 
     @AngularClassFunction
-    public void invokeComponentAction(@Name("method") NameBuilder method,
-                                      @Name("actionData") NameBuilder actionData,
-                                      @Name("responseListener") NameBuilder responseListener,
-                                      BlockBuilder body) {
-        body.appendStatement(expressionStatement(executeHttpPost(actionData, responseListener)));
+    public void submitForm(@Name("formComponentCompositeId") NameBuilder formComponentCompositeId,
+                           @Name("formData") NameBuilder formData,
+                           @Name("responseListener") NameBuilder responseListener, BlockBuilder body) {
+        body.appendStatement(expressionStatement(
+            executeHttpPostWithData("`/licket/form/submit/${formComponentCompositeId}`", formData, responseListener)));
     }
 
-    private FunctionCallBuilder executeHttpPost(NameBuilder actionData, NameBuilder responseListener) {
+    @AngularClassFunction
+    public void handleActionLinkClick(@Name("linkComponentCompositeId") NameBuilder formComponentCompositeId,
+                                      @Name("responseListener") NameBuilder responseListener, BlockBuilder body) {
+        body.appendStatement(expressionStatement(
+            executeHttpPost("`/licket/link/click/${linkComponentCompositeId}`", responseListener)));
+    }
+
+    private FunctionCallBuilder executeHttpPost(String url, NameBuilder responseListener) {
         return functionCall()
-                .target(property(
-                        functionCall()
+                .target(property(functionCall()
                                 .target(httpPostFunction())
-                                .argument(name("`/licket/component/action/${method}`"))
-                                .argument(actionData),
+                                .argument(name(url)),
                         subscribeHandlerFunction()))
                 .argument(responseListener);
+    }
+
+    private FunctionCallBuilder executeHttpPostWithData(String url, NameBuilder data, NameBuilder responseListener) {
+        return functionCall()
+            .target(property(functionCall()
+                            .target(httpPostFunction())
+                            .argument(name(url))
+                            .argument(data),
+                subscribeHandlerFunction()))
+            .argument(responseListener);
     }
 
     private PropertyNameBuilder httpPostFunction() {

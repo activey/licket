@@ -25,6 +25,10 @@ public class ExpressionStatementBuilder extends AbstractAstNodeBuilder<Expressio
         return new ExpressionStatementBuilder(assignmentBuilder);
     }
 
+    public static ExpressionStatementBuilder expressionStatement(IfStatementBuilder ifStatementBuilder) {
+        return new ExpressionStatementBuilder(ifStatementBuilder);
+    }
+
     @Override
     public ExpressionStatement build() {
         ExpressionStatement expressionStatement = new ExpressionStatement();

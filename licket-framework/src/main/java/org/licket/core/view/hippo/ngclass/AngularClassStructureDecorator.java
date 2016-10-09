@@ -6,6 +6,7 @@ import static java.util.Arrays.stream;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang.StringUtils.trimToNull;
+import static org.joor.Reflect.on;
 import static org.licket.core.view.hippo.ngclass.AngularClassPropertiesDecorator.fromAngularClassProperties;
 import static org.licket.core.view.hippo.ngclass.AngularInjectablesDecorator.forAngularClassDependencies;
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
@@ -22,6 +23,7 @@ import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import org.licket.core.view.hippo.AngularStructuralDecorator;
+import org.licket.core.view.hippo.annotation.AngularClassConstructor;
 import org.licket.core.view.hippo.annotation.AngularClassFunction;
 import org.licket.framework.hippo.AssignmentBuilder;
 import org.licket.framework.hippo.BlockBuilder;
@@ -73,6 +75,10 @@ public class AngularClassStructureDecorator implements AngularStructuralDecorato
         stream(angularClass.getClass().getMethods())
             .forEach(method -> writeMemberFunctionBody(constructorFunctionBody, method));
 
+        // analyzing @AngularClassConstructor annotation
+        stream(angularClass.getClass().getMethods())
+                .forEach(method -> writeClassConstructorBody(constructorFunctionBody, method));
+
         // declaring constructor
         AngularInjectablesDecorator injectablesDecorator = forAngularClassDependencies(angularClass);
         return objectLiteral().objectProperty(
@@ -107,5 +113,24 @@ public class AngularClassStructureDecorator implements AngularStructuralDecorato
             return empty();
         }
         return ofNullable(angularClassFunction);
+    }
+
+    private void writeClassConstructorBody(BlockBuilder constructorFunctionBody, Method method) {
+        Optional<AngularClassConstructor> classConstructorFunction = getClassConstructorFunction(method);
+        if (!classConstructorFunction.isPresent()) {
+            LOGGER.trace("Skipping processing {} method.", method.getName());
+            return;
+        }
+        // TODO rewrite this method...
+        on(angularClass).call(method.getName(), constructorFunctionBody);
+    }
+
+    private Optional<AngularClassConstructor> getClassConstructorFunction(Method method) {
+        AngularClassConstructor angularClassConstructorFunction = method.getAnnotation(AngularClassConstructor.class);
+        if (isPrivate(method.getModifiers())) {
+            LOGGER.warn("Private methods, like {}, are not supported for now.", method.getName());
+            return empty();
+        }
+        return ofNullable(angularClassConstructorFunction);
     }
 }

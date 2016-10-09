@@ -18,8 +18,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 import org.licket.core.view.hippo.annotation.Name;
+import org.licket.framework.hippo.AbstractAstNodeBuilder;
 import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
 import org.springframework.util.ReflectionUtils;
 
@@ -40,7 +40,7 @@ public class AngularClassPropertiesDecorator {
 
     public BlockBuilder decorate(BlockBuilder block) {
         doWithFields(angularClass.getClass(), field -> doOnAccessible(field, accessibleField -> {
-            ObjectLiteralBuilder objectProperty = getObjectLiteral(field.getName());
+            AbstractAstNodeBuilder<?> objectProperty = getPropertyAstBuilder(field.getName());
             if (objectProperty == null) {
                 objectProperty = objectLiteral();
             }
@@ -48,15 +48,29 @@ public class AngularClassPropertiesDecorator {
             PropertyNameBuilder assignmentProperty = property(thisLiteral(),
                 name(firstNonNull(trimToNull(customName.value()), accessibleField.getName())));
 
-            block.appendStatement(expressionStatement(assignment().left(assignmentProperty).right(objectProperty)));
-        }), field -> notNull().apply(on(field).get())
-                && assignableFrom(ObjectLiteralBuilder.class).apply(field.getType()));
+            block.appendStatement(
+                    expressionStatement(
+                            assignment()
+                                    .left(assignmentProperty)
+                                    .right(objectProperty)
+                    )
+            );
+        }), field -> notNull().apply(on(field).get()) && isNodeBuilderField(field));
         return block;
     }
 
-    private ObjectLiteralBuilder getObjectLiteral(String propertyName) throws IllegalAccessException {
+    private boolean isNodeBuilderField(Field field) {
+        return assignableFrom(AbstractAstNodeBuilder.class).apply(field.getType());
+    }
+
+    private AbstractAstNodeBuilder<?> getPropertyAstBuilder(String propertyName) throws IllegalAccessException {
         try {
-            return (ObjectLiteralBuilder) getProperty(angularClass, propertyName);
+            // TODO do it some better way ...
+            AbstractAstNodeBuilder<?> fieldValue = on(angularClass).field(propertyName).get();
+            if (fieldValue != null) {
+                return fieldValue;
+            }
+            return (AbstractAstNodeBuilder<?>) getProperty(angularClass, propertyName);
         } catch (InvocationTargetException | NoSuchMethodException e) {
             throw new IllegalArgumentException(e);
         }

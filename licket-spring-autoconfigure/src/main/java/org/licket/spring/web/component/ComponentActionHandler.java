@@ -3,9 +3,11 @@ package org.licket.spring.web.component;
 import static org.joor.Reflect.on;
 import org.joor.ReflectException;
 import org.licket.core.view.LicketComponent;
+import org.licket.core.view.link.ComponentActionCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -15,26 +17,40 @@ public class ComponentActionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComponentActionHandler.class);
 
-    private LicketComponent<?> actionComponent;
+    private LicketComponent<?> component;
 
-    public ComponentActionHandler(LicketComponent<?> actionComponent) {
-        this.actionComponent = actionComponent;
+    private ComponentActionHandler(LicketComponent<?> component) {
+        this.component = component;
     }
 
-    public void callAction(String method, ComponentActionRequest actionRequest) {
-        if (actionRequest.getData() == null) {
-            on(actionComponent).call(method);
-            return;
-        }
-        ObjectMapper mapper = new ObjectMapper();
+    public static ComponentActionHandler onComponent(LicketComponent<?> component) {
+        return new ComponentActionHandler(component);
+    }
+
+    public final void trySubmitForm(JsonNode formData, ComponentActionCallback componentActionCallback) {
         try {
-            Object value = mapper.treeToValue(actionRequest.getData(), actionComponent.getComponentModelClass());
-            on(actionComponent).call(method, value);
+            LOGGER.trace("Trying to submit form [{}].", component.getId());
+
+            on(component).call("submitForm", componentModelFromActionRequest(formData), componentActionCallback);
         } catch (JsonProcessingException e) {
-            LOGGER.error("An error occurred while deserializing component model for: [%s]", actionComponent.getId(), e);
+            LOGGER.error("An error occurred while deserializing component model for: [%s]", component.getId(), e);
         } catch (ReflectException reflectException) {
-            LOGGER.error("An error occurred while setting component model for: [%s]", actionComponent.getId(),
+            LOGGER.error("An error occurred while setting component model for: [%s]", component.getId(),
                 reflectException);
         }
+    }
+
+    public final void tryHandleLinkClick(ComponentActionCallback componentActionCallback) {
+        try {
+            LOGGER.trace("Trying to handle link click [{}].", component.getId());
+            on(component).call("invokeAction", componentActionCallback);
+        } catch (ReflectException reflectException) {
+            LOGGER.error("An error occurred while setting component model for: [%s]", component.getId(),
+                reflectException);
+        }
+    }
+
+    private Object componentModelFromActionRequest(JsonNode formData) throws JsonProcessingException {
+        return new ObjectMapper().treeToValue(formData, component.getComponentModelClass());
     }
 }

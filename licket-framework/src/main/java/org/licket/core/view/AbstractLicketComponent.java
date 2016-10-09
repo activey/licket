@@ -98,6 +98,10 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         return fromStringValueWithAdditionalParts(parentOptional.get().getCompositeId().getValue(), id);
     }
 
+    public final LicketComponent<?> getParent() {
+        return parent;
+    }
+
     public final Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser) {
         if (parent == null) {
             return empty();

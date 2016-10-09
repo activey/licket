@@ -15,11 +15,16 @@ public class ApplicationModuleConfiguration {
 
     @Bean(name = "applicationModule")
     public AngularModule applicationModule(@Autowired @Qualifier("httpCommunicationService") HttpCommunicationService httpService) {
-        return new ApplicationModule(communicationService(httpService));
+        return new ApplicationModule(communicationService(httpService), modelReloader());
     }
 
     @Bean
     public LicketRemoteCommunication communicationService(HttpCommunicationService httpService) {
         return new LicketRemoteCommunication(httpService);
+    }
+
+    @Bean
+    public LicketComponentModelReloader modelReloader() {
+        return new LicketComponentModelReloader();
     }
 }

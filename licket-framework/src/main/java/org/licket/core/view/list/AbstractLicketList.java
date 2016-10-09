@@ -2,19 +2,20 @@ package org.licket.core.view.list;
 
 import static java.lang.String.format;
 import static org.licket.core.view.ComponentView.internal;
+import java.util.Optional;
 import org.licket.core.model.LicketModel;
+import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.core.view.render.ComponentRenderingContext;
-
-import java.util.Optional;
 
 public abstract class AbstractLicketList<T> extends AbstractLicketContainer<String> {
 
     private Class<T> elementClass;
 
-    public AbstractLicketList(String id, LicketModel<String> enclosingComponentPropertyModel, Class<T> elementClass) {
-        super(id, String.class, enclosingComponentPropertyModel, internal());
+    public AbstractLicketList(String id, LicketModel<String> enclosingComponentPropertyModel, Class<T> elementClass,
+                              LicketComponentModelReloader modelReloader) {
+        super(id, String.class, enclosingComponentPropertyModel, internal(), modelReloader);
         this.elementClass = elementClass;
         // TODO analyze element class provided and check its properties against passed enclosingComponentPropertyModel
     }
@@ -32,8 +33,7 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
             if (!parentContainer.getView().isExternalized()) {
                 firstPart = parentContainer.getId();
             }
-            element.addAttribute("*ngFor",
-                    format("let %s of %s.%s", getId(), firstPart, getComponentModel().get()));
+            element.addAttribute("*ngFor", format("let %s of %s.%s", getId(), firstPart, getComponentModel().get()));
         });
     }
 }

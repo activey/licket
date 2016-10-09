@@ -62,6 +62,8 @@ public class AngularModuleStructureDecorator implements AngularStructuralDecorat
         return objectLiteral()
                 .objectProperty(propertyBuilder().name("imports").arrayValue(moduleImports()))
                 .objectProperty(propertyBuilder().name("declarations").arrayValue(declarations()))
+                // TODO for now we inject all application services on global scope
+                .objectProperty(propertyBuilder().name("providers").arrayValue(providers()))
                 .objectProperty(propertyBuilder().name("bootstrap").arrayValue(bootstrapComponents()));
     }
 
@@ -83,6 +85,12 @@ public class AngularModuleStructureDecorator implements AngularStructuralDecorat
             return false;
         });
         return arrayLiteralBuilder;
+    }
+
+    private ArrayLiteralBuilder providers() {
+        ArrayLiteralBuilder providers = arrayLiteral();
+        angularModule.injectables().forEach(injectable -> providers.element(injectable.angularName()));
+        return providers;
     }
 
     private ArrayLiteralBuilder bootstrapComponents() {

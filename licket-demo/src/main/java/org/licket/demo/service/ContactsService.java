@@ -29,7 +29,7 @@ public class ContactsService {
     }
 
     public void addContact(Contact contact) {
-        contacts.add(contact);
+        contacts.add(0, contact);
     }
 
     private Contact contact(Internet internet, String name, String description) {

@@ -1,27 +1,40 @@
 package org.licket.core.view.container;
 
-import static com.fasterxml.jackson.core.JsonGenerator.Feature.QUOTE_FIELD_NAMES;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.String.format;
 import static org.licket.core.model.LicketModel.emptyModel;
+import static org.licket.core.view.hippo.ComponentModelSerializer.serializeComponentModel;
+import static org.licket.framework.hippo.AssignmentBuilder.assignment;
+import static org.licket.framework.hippo.BlockBuilder.block;
+import static org.licket.framework.hippo.EqualCheckExpressionBuilder.equalCheckExpression;
+import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
+import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
+import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
+import static org.licket.framework.hippo.IfStatementBuilder.ifStatement;
+import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
+import static org.licket.framework.hippo.NameBuilder.name;
+import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
+import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
+import static org.licket.framework.hippo.VariableDeclarationBuilder.variableDeclaration;
+import static org.licket.framework.hippo.VariableInitializerBuilder.variableInitializer;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
+import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.ComponentView;
 import org.licket.core.view.LicketComponent;
+import org.licket.core.view.hippo.annotation.AngularClassConstructor;
+import org.licket.core.view.hippo.annotation.AngularClassFunction;
 import org.licket.core.view.hippo.annotation.Name;
+import org.licket.framework.hippo.BlockBuilder;
+import org.licket.framework.hippo.NameBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
-import org.mozilla.javascript.Parser;
-import org.mozilla.javascript.ast.AstRoot;
-import org.mozilla.javascript.ast.ObjectLiteral;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,13 +50,58 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
     @Name("model")
     private ObjectLiteralBuilder modelProperty;
 
-    public AbstractLicketContainer(String id, Class<T> modelClass, ComponentView view) {
-        this(id, modelClass, emptyModel(), view);
+    @Name("modelReloader")
+    protected LicketComponentModelReloader modelReloader;
+
+    public AbstractLicketContainer(String id, Class<T> modelClass, LicketComponentModelReloader modelReloader) {
+        super(id, modelClass);
+        this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
     }
 
-    public AbstractLicketContainer(String id, Class<T> modelClass,
-                                   LicketModel<T> componentModel, ComponentView view) {
+    public AbstractLicketContainer(String id, Class<T> modelClass, LicketModel<T> componentModel,
+                                   LicketComponentModelReloader modelReloader) {
+        super(id, modelClass, componentModel);
+        this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
+    }
+
+    public AbstractLicketContainer(String id, Class<T> modelClass, LicketModel<T> componentModel, ComponentView view,
+                                   LicketComponentModelReloader modelReloader) {
         super(id, modelClass, componentModel, view);
+        this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
+    }
+
+    @AngularClassFunction
+    public void handleModelChanged(@Name("changedModelData") NameBuilder changedModelData, BlockBuilder functionBody) {
+        functionBody.appendStatement(
+          expressionStatement(
+              ifStatement()
+                  .condition(equalCheckExpression()
+                          .left(property(changedModelData, name("compositeId")))
+                          .right(stringLiteral(getCompositeId().getValue())))
+                  .then(
+                          assignment()
+                            .left(property(name("this"), name("model")))
+                            .right(property(changedModelData, name("model")))
+                  ))
+          );
+    }
+
+    @AngularClassConstructor
+    public void constructor(BlockBuilder body) {
+        body.appendStatement(expressionStatement(
+                variableDeclaration().variable(variableInitializer().target(name("vm")).initializer(thisLiteral()))
+        ));
+        body.appendStatement(expressionStatement(
+                functionCall()
+                        .target(property(name("modelReloader"), name("listenForModelChange")))
+                        .argument(functionNode()
+                                    .param(name("changedModelData"))
+                                    .body(block().appendStatement(expressionStatement(
+                                            functionCall()
+                                                    .target(property(name("vm"), name("handleModelChanged")))
+                                                    .argument(name("changedModelData"))
+                                    ))))
+        ));
     }
 
     protected final void add(LicketComponent<?> licketComponent) {
@@ -69,32 +127,12 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
     }
 
     public ObjectLiteralBuilder getModelProperty() {
-        ObjectLiteralBuilder modelProperty = ObjectLiteralBuilder.objectLiteral();
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(QUOTE_FIELD_NAMES, false);
-
-            // serialize component model to string json
-            String modelStringValue = mapper.writeValueAsString(getComponentModel().get());
-
-            // parse model declaration object literal
-            AstRoot astRoot = new Parser().parse(modelObjectLiteralReader(modelStringValue), "test.js", 0);
-            astRoot.visitAll(node -> {
-                if (node instanceof ObjectLiteral) {
-                    modelProperty.fromObjectLiteral((ObjectLiteral) node);
-                    return false;
-                }
-                return true;
-            });
+            return serializeComponentModel(getComponentModel());
         } catch (IOException e) {
-            LOGGER.error("An error occurred while creating Angular class constructor.", e);
-            return modelProperty;
+            LOGGER.error("An error occurred while serializing component model.", e);
+            return objectLiteral();
         }
-        return modelProperty;
-    }
-
-    private Reader modelObjectLiteralReader(String modelStringValue) {
-        return new StringReader(format("model = %s", modelStringValue));
     }
 
     protected void onInitializeContainer() {}
