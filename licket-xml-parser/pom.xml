@@ -9,14 +9,23 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <org.glassfish.jaxb.txw2.version>2.2.11</org.glassfish.jaxb.txw2.version>
+    </properties>
+
     <artifactId>licket-xml-parser</artifactId>
     <dependencies>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>txw2</artifactId>
+            <version>${org.glassfish.jaxb.txw2.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 
 </project>

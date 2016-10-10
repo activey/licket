@@ -16,7 +16,7 @@ import org.licket.demo.service.ContactsService;
  */
 public class AddContactForm extends AbstractLicketForm<Contact> {
 
-    private ContactsService contactsService;
+    private final ContactsService contactsService;
 
     public AddContactForm(String id, ContactsService contactsService, LicketRemoteCommunication remoteCommunication,
                           LicketComponentModelReloader modelReloader) {

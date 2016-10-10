@@ -1,12 +1,15 @@
 package org.licket.xml.dom;
 
+import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter;
 import org.licket.xml.ParsingException;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 /**
  * @author grabslu
@@ -15,24 +18,23 @@ public class Document {
 
     private Element rootElement;
 
-    public String toXML() throws ParsingException {
-        StringWriter writer = new StringWriter();
+    public void toXML(OutputStream outputStream) throws ParsingException, IOException {
+        OutputStreamWriter writer = null;
         try {
-            XMLStreamWriter outputFactory = XMLOutputFactory.newInstance().createXMLStreamWriter(writer);
-            rootElement.toXML(outputFactory);
-            return writer.toString();
+            XMLStreamWriter streamWriter = streamWriter(writer = new OutputStreamWriter(outputStream));
+            rootElement.toXML(streamWriter);
         } catch (XMLStreamException e) {
             throw new ParsingException(e);
+        } finally {
+            if (writer != null) {
+                writer.flush();
+                writer.close();
+            }
         }
     }
 
-    public void toXML(OutputStream outputStream) throws ParsingException {
-        try {
-            XMLStreamWriter outputFactory = XMLOutputFactory.newInstance().createXMLStreamWriter(outputStream);
-            rootElement.toXML(outputFactory);
-        } catch (XMLStreamException e) {
-            throw new ParsingException(e);
-        }
+    private XMLStreamWriter streamWriter(Writer writer) throws XMLStreamException {
+        return new IndentingXMLStreamWriter(XMLOutputFactory.newInstance().createXMLStreamWriter(writer));
     }
 
     public void setRootElement(Element rootElement) {

@@ -1,5 +1,6 @@
 package org.licket.surface;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -7,10 +8,9 @@ import org.licket.surface.tag.ElementFactories;
 import org.licket.xml.Builder;
 import org.licket.xml.ParsingException;
 import org.licket.xml.dom.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.licket.surface.SurfaceProcessingException.contentParsingException;
+import static org.licket.surface.SurfaceProcessingException.ioException;
 import static org.licket.surface.tag.ElementFactories.serviceLoaderFactories;
 
 /**
@@ -18,8 +18,6 @@ import static org.licket.surface.tag.ElementFactories.serviceLoaderFactories;
  * @author activey
  */
 public class SurfaceContext {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SurfaceContext.class);
 
     private final ElementFactories elementFactories;
     private boolean skipComments;
@@ -38,9 +36,9 @@ public class SurfaceContext {
             Document document = builder.build(templateContent);
             document.toXML(output);
         } catch (ParsingException e) {
-            SurfaceProcessingException se = contentParsingException(e);
-            LOGGER.error("Parsing error occurred.", se);
-            throw se;
+            throw contentParsingException(e);
+        } catch (IOException ie) {
+            throw ioException(ie);
         }
     }
 
