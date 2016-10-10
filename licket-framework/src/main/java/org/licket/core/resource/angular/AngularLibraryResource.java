@@ -1,8 +1,6 @@
 package org.licket.core.resource.angular;
 
-import com.sun.scenario.effect.Merge;
 import org.licket.core.resource.HeadParticipatingResource;
-import org.licket.core.resource.javascript.JavascriptStaticResource;
 import org.licket.core.resource.javascript.MergedJavascriptStaticResource;
 
 import static org.licket.core.resource.javascript.JavascriptStaticResource.javascriptResource;
