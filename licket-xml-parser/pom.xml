@@ -10,15 +10,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <org.glassfish.jaxb.txw2.version>2.2.11</org.glassfish.jaxb.txw2.version>
+        <net.sf.saxon.Saxon-HE.version>9.6.0-5</net.sf.saxon.Saxon-HE.version>
     </properties>
 
     <artifactId>licket-xml-parser</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>txw2</artifactId>
-            <version>${org.glassfish.jaxb.txw2.version}</version>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>${net.sf.saxon.Saxon-HE.version}</version>
         </dependency>
 
         <dependency>
@@ -27,5 +27,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 
 </project>
