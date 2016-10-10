@@ -9,24 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <properties>
-        <net.sf.saxon.Saxon-HE.version>9.6.0-5</net.sf.saxon.Saxon-HE.version>
-    </properties>
-
     <artifactId>licket-xml-parser</artifactId>
     <dependencies>
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <version>${net.sf.saxon.Saxon-HE.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 
 </project>

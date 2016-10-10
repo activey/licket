@@ -2,6 +2,7 @@ package org.licket.spring.surface.element.html;
 
 import org.licket.surface.element.SurfaceElement;
 import org.licket.xml.dom.Element;
+import org.licket.xml.dom.Text;
 
 import static org.licket.spring.surface.element.html.HtmlElementFactory.HTML_NAMESPACE;
 
