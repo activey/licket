@@ -50,7 +50,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
     protected void onSubmit() {}
 
     @Override
-    protected void onRender(ComponentRenderingContext renderingContext) {
+    protected void onRenderContainer(ComponentRenderingContext renderingContext) {
         renderingContext.onSurfaceElement(element -> {
             // TODO check if element is in fact a <form>
             element.setAttribute("(submit)", "submitForm()");

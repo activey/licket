@@ -26,7 +26,6 @@ public class Attribute extends Node {
 
     public Attribute(String prefix, String localName, String namespace, String value, Type type) {
         super(prefix, localName, namespace);
-
         this.value = value;
     }
 

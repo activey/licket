@@ -2,6 +2,7 @@ package org.licket.core.view.container;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.String.format;
 import static org.licket.core.view.hippo.ComponentModelSerializer.serializeComponentModel;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;
@@ -31,6 +32,7 @@ import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.annotation.AngularClassConstructor;
 import org.licket.core.view.hippo.annotation.AngularClassFunction;
 import org.licket.core.view.hippo.annotation.Name;
+import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
@@ -101,6 +103,20 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
                                                     .argument(name("changedModelData"))
                                     ))))
         ));
+    }
+
+    @Override
+    protected final void onRender(ComponentRenderingContext renderingContext) {
+        // addind # attribute
+        renderingContext.onSurfaceElement(surfaceElement -> {
+            surfaceElement.setEmptyAttribute(format("#%s", getCompositeId().getNormalizedValue()));
+        });
+
+        onRenderContainer(renderingContext);
+    }
+
+    protected void onRenderContainer(ComponentRenderingContext renderingContext) {
+
     }
 
     protected final void add(LicketComponent<?> licketComponent) {

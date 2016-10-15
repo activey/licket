@@ -1,13 +1,7 @@
 package org.licket.xml.dom;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.WeakHashMap;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -35,6 +29,10 @@ public class Element extends Node {
         Attribute newAttribute = new Attribute(name, getNamespace());
         newAttribute.setValue(value);
         addAttribute(newAttribute);
+    }
+
+    public void setEmptyAttribute(String name) {
+        addAttribute(new Attribute(name, getNamespace()));
     }
 
     public Iterable<Element> children() {

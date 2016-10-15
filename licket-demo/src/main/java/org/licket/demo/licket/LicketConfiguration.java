@@ -7,14 +7,17 @@ import org.licket.demo.view.ContactsPanel;
 import org.licket.demo.view.semantic.JqueryLibraryResource;
 import org.licket.demo.view.semantic.SemanticLibraryResource;
 import org.licket.demo.view.semantic.SemanticStylesheetResource;
+import org.licket.semantic.SemanticUIModuleConfiguration;
 import org.licket.spring.annotation.LicketComponent;
 import org.licket.spring.annotation.LicketRootContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 
 @Configuration
+@Import(SemanticUIModuleConfiguration.class)
 public class LicketConfiguration {
 
     @LicketRootContainer

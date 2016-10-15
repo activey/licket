@@ -53,10 +53,6 @@
             <groupId>org.licket</groupId>
             <artifactId>licket-framework-surface</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.licket</groupId>
-            <artifactId>licket-framework-angular-modules</artifactId>
-        </dependency>
 
         <!-- Logging -->
         <dependency>

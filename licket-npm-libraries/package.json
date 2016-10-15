@@ -2,7 +2,7 @@
   "name": "licket-angular2-libraries",
   "version": "0.0.1-SNAPSHOT",
   "repository": "https://github.com/activey/licket.git",
-  "license": "Apache2",
+  "license": "Apache-2.0",
   "dependencies": {
     "@angular/core": "~2.0.0",
     "@angular/forms": "~2.0.0",

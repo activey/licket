@@ -166,11 +166,6 @@
                 <artifactId>licket-npm-libraries</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.licket</groupId>
-                <artifactId>licket-framework-angular-modules</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -183,5 +178,6 @@
         <module>licket-demo</module>
         <module>licket-framework-hippo</module>
         <module>licket-npm-libraries</module>
+        <module>licket-module-semanticui</module>
     </modules>
 </project>

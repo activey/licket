@@ -21,7 +21,7 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
     }
 
     @Override
-    protected final void onRender(ComponentRenderingContext renderingContext) {
+    protected final void onRenderContainer(ComponentRenderingContext renderingContext) {
         Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketContainer);
         if (!parent.isPresent()) {
             return;
