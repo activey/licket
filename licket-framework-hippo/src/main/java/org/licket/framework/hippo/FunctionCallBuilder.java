@@ -30,6 +30,11 @@ public class FunctionCallBuilder extends AbstractAstNodeBuilder<FunctionCall> {
         return this;
     }
 
+    public FunctionCallBuilder target(NameBuilder nameBuilder) {
+        this.target = nameBuilder;
+        return this;
+    }
+
     public FunctionCallBuilder argument(AbstractAstNodeBuilder<ObjectLiteral> objectLiteral) {
         arguments.add(objectLiteral);
         return this;

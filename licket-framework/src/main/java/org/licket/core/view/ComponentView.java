@@ -12,16 +12,12 @@ import java.io.InputStream;
  */
 public interface ComponentView {
 
-    static ComponentView fromResource(Resource resource) {
-        return new ExternalizedComponentView(resource);
-    }
-
     static ComponentView fromComponentContainerClass(Class<? extends LicketComponent<?>> componentClass) {
         return fromClassPathResource(componentClass.getSimpleName(), componentClass.getName().replaceAll("\\.", "/").concat(".html"));
     }
 
     static ComponentView fromClassPathResource(String name, String resourcePath) {
-        return new ExternalizedComponentView(new HtmlResource("", resourcePath));
+        return new ExternalizedComponentView(new HtmlResource(name, resourcePath));
     }
 
     static ComponentView internal() {

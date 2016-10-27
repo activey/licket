@@ -26,8 +26,18 @@ public class NewExpressionBuilder extends AbstractAstNodeBuilder<NewExpression> 
         return this;
     }
 
+    public NewExpressionBuilder target(NameBuilder name) {
+        this.target = name;
+        return this;
+    }
+
     public NewExpressionBuilder argument(NameBuilder name) {
         arguments.add(name);
+        return this;
+    }
+
+    public NewExpressionBuilder argument(ObjectLiteralBuilder objectLiteral) {
+        arguments.add(objectLiteral);
         return this;
     }
 

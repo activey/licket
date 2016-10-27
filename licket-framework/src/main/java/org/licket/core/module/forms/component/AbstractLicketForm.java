@@ -18,9 +18,9 @@ import org.licket.core.module.application.LicketRemoteCommunication;
 import org.licket.core.view.ComponentView;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketContainer;
-import org.licket.core.view.hippo.annotation.AngularClassFunction;
-import org.licket.core.view.hippo.annotation.AngularComponent;
-import org.licket.core.view.hippo.annotation.Name;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.hippo.vue.annotation.VueComponent;
+import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.*;
@@ -28,17 +28,13 @@ import org.licket.framework.hippo.*;
 /**
  * @author activey
  */
-@AngularComponent
+@VueComponent
 public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
-
-    @Name("licketRemote")
-    private LicketRemoteCommunication communicationService;
 
     public AbstractLicketForm(String id, Class<T> modelClass, LicketModel<T> model, ComponentView componentView,
                               LicketRemoteCommunication communicationService,
                               LicketComponentModelReloader modelReloader) {
         super(id, modelClass, model, componentView, modelReloader);
-        this.communicationService = checkNotNull(communicationService, "Communication service has to be not null!");
     }
 
     public final void submitForm(T formModelObject, ComponentActionCallback actionCallback) {
@@ -53,11 +49,11 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
     protected void onRenderContainer(ComponentRenderingContext renderingContext) {
         renderingContext.onSurfaceElement(element -> {
             // TODO check if element is in fact a <form>
-            element.setAttribute("(submit)", "submitForm()");
+            element.setAttribute("v-on:submit", "submitForm");
         });
     }
 
-    @AngularClassFunction
+    @VueComponentFunction
     public void afterSubmit(@Name("response") NameBuilder response, BlockBuilder functionBody) {
         // setting current form model directly without event emitter
         functionBody
@@ -91,11 +87,11 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
 
     protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {}
 
-    @AngularClassFunction
+    @VueComponentFunction
     public void submitForm(BlockBuilder functionBlock) {
         functionBlock
             .appendStatement(expressionStatement(functionCall()
-                .target(property(name("licketRemote"), name("submitForm")))
+                .target(property(name("$licketRemote"), name("submitForm")))
                 .argument(stringLiteral(getCompositeId().getValue())).argument(property(thisLiteral(), name("model")))
                 .argument(functionNode().param(name("response")).body(block().appendStatement(
                         expressionStatement(

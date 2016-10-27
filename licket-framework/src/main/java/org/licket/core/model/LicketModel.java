@@ -2,7 +2,7 @@ package org.licket.core.model;
 
 import java.util.function.Supplier;
 
-import static org.licket.core.common.Suppliers.of;
+import static org.licket.core.supplier.Suppliers.of;
 
 /**
  * @author activey

@@ -8,10 +8,9 @@ import static org.licket.framework.hippo.NewExpressionBuilder.newExpression;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
-import org.licket.core.view.hippo.annotation.AngularClassFunction;
-import org.licket.core.view.hippo.annotation.Name;
-import org.licket.core.view.hippo.ngclass.AngularClass;
-import org.licket.core.view.hippo.ngclass.AngularInjectable;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.hippo.vue.annotation.Name;
+import org.licket.core.view.hippo.vue.extend.VueClass;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.framework.hippo.NewExpressionBuilder;
@@ -21,20 +20,20 @@ import org.licket.framework.hippo.PropertyNameBuilder;
 /**
  * @author grabslu
  */
-public class LicketComponentModelReloader implements AngularClass, AngularInjectable {
+public class LicketComponentModelReloader implements VueClass {
 
     @Name("modelChangedEventEmitter")
     private NewExpressionBuilder modelChangedEventEmitter = newExpression()
         .target(property(property(name("ng"), name("core")), name("EventEmitter"))).argument(name("true"));
 
-    @AngularClassFunction
+    @VueComponentFunction
     public void listenForModelChange(@Name("changeListener") NameBuilder changeListener, BlockBuilder body) {
         body.appendStatement(expressionStatement(functionCall()
             .target(property(property(thisLiteral(), name("modelChangedEventEmitter")), name("subscribe")))
             .argument(changeListener)));
     }
 
-    @AngularClassFunction
+    @VueComponentFunction
     public void notifyModelChanged(@Name("compositeId") NameBuilder compositeId,
                                    @Name("changedModelData") NameBuilder changedModelData, BlockBuilder body) {
         body.appendStatement(expressionStatement(
@@ -49,7 +48,7 @@ public class LicketComponentModelReloader implements AngularClass, AngularInject
     }
 
     @Override
-    public PropertyNameBuilder angularName() {
+    public PropertyNameBuilder vueName() {
         return property(name("app"), name("ComponentModelReloader"));
     }
 }

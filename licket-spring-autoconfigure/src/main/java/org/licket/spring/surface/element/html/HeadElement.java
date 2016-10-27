@@ -25,7 +25,7 @@ public class HeadElement extends SurfaceElement {
 
     @Override
     protected void onFinish() {
-        resourcesStorage.getJavascriptResources().forEach(resource -> {
+        resourcesStorage.getHeadJavascriptResources().forEach(resource -> {
             LOGGER.debug("Using head JS resource: {}", resource.getName());
 
             ScriptElement scriptElement = new ScriptElement();

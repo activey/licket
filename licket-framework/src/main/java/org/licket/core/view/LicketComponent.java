@@ -2,7 +2,7 @@ package org.licket.core.view;
 
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
-import org.licket.core.view.hippo.ngclass.AngularClass;
+import org.licket.core.view.hippo.vue.extend.VueClass;
 import org.licket.core.view.render.ComponentRenderingContext;
 
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 /**
  * @author activey
  */
-public interface LicketComponent<T> extends AngularClass {
+public interface LicketComponent<T> extends VueClass {
 
     ComponentView getView();
 

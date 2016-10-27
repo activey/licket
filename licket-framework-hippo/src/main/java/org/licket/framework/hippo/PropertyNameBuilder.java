@@ -2,6 +2,8 @@ package org.licket.framework.hippo;
 
 import org.mozilla.javascript.ast.PropertyGet;
 
+import static org.licket.framework.hippo.NameBuilder.name;
+
 /**
  * @author activey
  */
@@ -27,8 +29,16 @@ public class PropertyNameBuilder extends AbstractAstNodeBuilder<PropertyGet> {
         return new PropertyNameBuilder(left, right);
     }
 
+    public static PropertyNameBuilder property(PropertyNameBuilder left, String right) {
+        return new PropertyNameBuilder(left, name(right));
+    }
+
     public static PropertyNameBuilder property(NameBuilder left, NameBuilder right) {
         return new PropertyNameBuilder(left, right);
+    }
+
+    public static PropertyNameBuilder property(String left, String right) {
+        return new PropertyNameBuilder(name(left), name(right));
     }
 
     public PropertyGet build() {

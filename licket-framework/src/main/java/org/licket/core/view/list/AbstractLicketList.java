@@ -28,12 +28,11 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
         }
         AbstractLicketContainer parentContainer = (AbstractLicketContainer) parent.get();
         renderingContext.onSurfaceElement(element -> {
-            // TODO refactor
             String firstPart = "model";
             if (!parentContainer.getView().isExternalized()) {
                 firstPart = parentContainer.getId();
             }
-            element.addAttribute("*ngFor", format("let %s of %s.%s", getId(), firstPart, getComponentModel().get()));
+            element.addAttribute("v-for", format("%s in %s.%s", getId(), firstPart, getComponentModel().get()));
         });
     }
 }

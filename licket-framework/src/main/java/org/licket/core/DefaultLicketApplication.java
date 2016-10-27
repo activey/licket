@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 import org.licket.core.id.CompositeId;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.LicketComponentContainer;
-import org.licket.core.view.hippo.ngmodule.AngularModule;
+import org.licket.core.view.hippo.angular.ngmodule.VuePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -25,7 +25,7 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
     private LicketComponentContainer<?> rootContainer;
 
     @Autowired
-    private List<AngularModule> modules = newArrayList();
+    private List<VuePlugin> modules = newArrayList();
 
     public DefaultLicketApplication(String name) {
         this.name = name;
@@ -59,12 +59,13 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
 
     @Override
     public void traverseDownContainers(Predicate<LicketComponentContainer<?>> containerVisitor) {
-        containerVisitor.test(rootContainer);
-        rootContainer.traverseDownContainers(containerVisitor);
+        if (containerVisitor.test(rootContainer)) {
+            rootContainer.traverseDownContainers(containerVisitor);
+        }
     }
 
     @Override
-    public final Iterable<AngularModule> modules() {
+    public final Iterable<VuePlugin> modules() {
         return modules;
     }
 }

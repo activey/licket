@@ -2,8 +2,6 @@ package org.licket.core.view.container;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.String.format;
-import static org.licket.core.view.hippo.ComponentModelSerializer.serializeComponentModel;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;
 import static org.licket.framework.hippo.EqualCheckExpressionBuilder.equalCheckExpression;
@@ -13,13 +11,11 @@ import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
 import static org.licket.framework.hippo.IfStatementBuilder.ifStatement;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
-import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 import static org.licket.framework.hippo.VariableDeclarationBuilder.variableDeclaration;
 import static org.licket.framework.hippo.VariableInitializerBuilder.variableInitializer;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -29,9 +25,9 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.ComponentView;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.hippo.annotation.AngularClassConstructor;
-import org.licket.core.view.hippo.annotation.AngularClassFunction;
-import org.licket.core.view.hippo.annotation.Name;
+import org.licket.core.view.hippo.angular.annotation.AngularClassConstructor;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.NameBuilder;
@@ -51,7 +47,7 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
     @Name("model")
     private ObjectLiteralBuilder modelProperty;
 
-    @Name("modelReloader")
+    @Name("$licketModelReloader")
     protected LicketComponentModelReloader modelReloader;
 
     public AbstractLicketContainer(String id, Class<T> modelClass, LicketComponentModelReloader modelReloader) {
@@ -71,7 +67,7 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
         this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
     }
 
-    @AngularClassFunction
+    @VueComponentFunction
     public void handleModelChanged(@Name("changedModelData") NameBuilder changedModelData, BlockBuilder functionBody) {
         functionBody.appendStatement(
           expressionStatement(
@@ -107,11 +103,6 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
 
     @Override
     protected final void onRender(ComponentRenderingContext renderingContext) {
-        // addind # attribute
-        renderingContext.onSurfaceElement(surfaceElement -> {
-            surfaceElement.setEmptyAttribute(format("#%s", getCompositeId().getNormalizedValue()));
-        });
-
         onRenderContainer(renderingContext);
     }
 
@@ -139,15 +130,6 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
         leaves.forEach(LicketComponent::initialize);
 
         onInitializeContainer();
-    }
-
-    public ObjectLiteralBuilder getModelProperty() {
-        try {
-            return serializeComponentModel(getComponentModel());
-        } catch (IOException e) {
-            LOGGER.error("An error occurred while serializing component model.", e);
-            return objectLiteral();
-        }
     }
 
     protected void onInitializeContainer() {}

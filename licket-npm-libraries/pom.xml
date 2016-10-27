@@ -43,27 +43,13 @@
         </plugins>
 
         <resources>
-            <!-- Angular main libraries -->
+            <!-- Vue main files -->
             <resource>
                 <directory>node_modules</directory>
                 <filtering>false</filtering>
                 <includes>
-                    <include>@angular/*/bundles/*.umd.js</include>
-                </includes>
-                <excludes>
-                    <exclude>@angular/*/bundles/*testing.umd.js</exclude>
-                    <exclude>@angular/*/bundles/*.min.js</exclude>
-                </excludes>
-            </resource>
-
-            <!-- Others -->
-            <resource>
-                <directory>node_modules</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>rxjs/bundles/Rx.js</include>
-                    <include>reflect-metadata/Reflect.js</include>
-                    <include>zone.js/dist/zone.js</include>
+                    <include>vue/dist/vue.js</include>
+                    <include>vue-resource/dist/vue-resource.js</include>
                 </includes>
             </resource>
         </resources>

@@ -26,8 +26,8 @@ public final class LicketFormSubmitButton extends AbstractLicketComponent<Void> 
                 .replaceWith(new Comment("Unable to find parent form matching submit button: %s.", getId())));
             return;
         }
-        renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.setAttribute("(click)",
-            format("submitForm()", getCompositeId().getValue())));
+        renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.setAttribute("v-on:click",
+            format("submitForm", getCompositeId().getValue())));
     }
 
     private Optional<LicketComponent<?>> getEnclosingForm() {

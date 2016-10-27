@@ -9,7 +9,7 @@ import org.mozilla.javascript.ast.ObjectProperty;
  */
 public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty> {
 
-    private NameBuilder name;
+    private AbstractAstNodeBuilder name;
 
     private AbstractAstNodeBuilder<?> value;
 
@@ -26,6 +26,11 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
 
     public ObjectPropertyBuilder name(String name) {
         this.name = NameBuilder.name(name);
+        return this;
+    }
+
+    public ObjectPropertyBuilder name(StringLiteralBuilder stringLiteral) {
+        this.name = stringLiteral;
         return this;
     }
 

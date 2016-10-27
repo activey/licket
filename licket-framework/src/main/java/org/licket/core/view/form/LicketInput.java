@@ -41,7 +41,7 @@ public class LicketInput extends AbstractLicketComponent<String> {
             if (!parentContainer.getView().isExternalized()) {
                 firstPart = parentContainer.getId();
             }
-            element.addAttribute("[(ngModel)]", format("%s.%s", firstPart, getComponentModel().get()));
+            element.addAttribute("v-model", format("%s.%s", firstPart, getComponentModel().get()));
             element.setAttribute("name", getComponentModel().get());
         });
     }

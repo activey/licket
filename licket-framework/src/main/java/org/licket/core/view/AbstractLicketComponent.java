@@ -113,7 +113,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     @Override
-    public PropertyNameBuilder angularName() {
+    public PropertyNameBuilder vueName() {
         return property(name("app"), name(getCompositeId().getNormalizedValue()));
     }
 

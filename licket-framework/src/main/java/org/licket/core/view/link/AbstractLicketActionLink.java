@@ -1,6 +1,5 @@
 package org.licket.core.view.link;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.model.LicketModel.emptyModel;
 import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
@@ -14,8 +13,8 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemoteCommunication;
 import org.licket.core.view.AbstractLicketComponent;
-import org.licket.core.view.hippo.annotation.AngularClassFunction;
-import org.licket.core.view.hippo.annotation.Name;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.NameBuilder;
@@ -25,19 +24,11 @@ import org.licket.framework.hippo.NameBuilder;
  */
 public abstract class AbstractLicketActionLink extends AbstractLicketComponent<Void> {
 
-    @Name("licketRemote")
-    private LicketRemoteCommunication communicationService;
-
-    @Name("modelReloader")
-    private final LicketComponentModelReloader modelReloader;
-
     public AbstractLicketActionLink(String id, LicketRemoteCommunication communicationService, LicketComponentModelReloader modelReloader) {
         super(id, Void.class, emptyModel(), fromComponentContainerClass(AbstractLicketActionLink.class));
-        this.communicationService = checkNotNull(communicationService, "Communication service reference must not be null!");
-        this.modelReloader = checkNotNull(modelReloader, "Model reloader service reference must not be null!");
     }
 
-    @AngularClassFunction
+    @VueComponentFunction
     public void afterClick(@Name("response") NameBuilder response, BlockBuilder functionBody) {
         ComponentActionCallback componentActionCallback = new ComponentActionCallback();
 
@@ -57,12 +48,12 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
         });
     }
 
-    @AngularClassFunction
+    @VueComponentFunction
     public void handleClick(BlockBuilder functionBlock) {
         functionBlock.appendStatement(
                 expressionStatement(
                         functionCall()
-                                .target(property(name("licketRemote"), name("handleActionLinkClick")))
+                                .target(property(name("$licketRemote"), name("handleActionLinkClick")))
                                 .argument(stringLiteral(getCompositeId().getValue()))
                                 .argument(property(thisLiteral(), name("afterClick")))
                 )
@@ -75,7 +66,7 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
     protected void onRender(ComponentRenderingContext renderingContext) {
         // basically invokeAction() should handle all the stuff, the rest is done on javascript level
         renderingContext
-            .onSurfaceElement(surfaceElement -> surfaceElement.setAttribute("(click)", "handleClick()"));
+            .onSurfaceElement(surfaceElement -> surfaceElement.setAttribute("v-on:click", "handleClick"));
     }
 
     public final void invokeAction(ComponentActionCallback componentActionCallback) {
@@ -84,5 +75,4 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
     }
 
     protected abstract void onInvokeAction();
-
 }

@@ -1,9 +1,10 @@
 package org.licket.core.module.application;
 
-import org.licket.core.module.http.HttpCommunicationService;
-import org.licket.core.view.hippo.ngmodule.AngularModule;
+import org.licket.core.module.application.resource.ApplicationModulePluginResource;
+import org.licket.core.module.resource.HttpCommunicationService;
+import org.licket.core.resource.HeadParticipatingResource;
+import org.licket.core.view.hippo.angular.ngmodule.VuePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,18 +14,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ApplicationModuleConfiguration {
 
-    @Bean(name = "applicationModule")
-    public AngularModule applicationModule(@Autowired @Qualifier("httpCommunicationService") HttpCommunicationService httpService) {
-        return new ApplicationModule(communicationService(httpService), modelReloader());
+    @Bean
+    public VuePlugin applicationModulePlugin(@Autowired HttpCommunicationService httpCommunicationService) {
+        return new ApplicationModulePlugin(communicationService(httpCommunicationService), modelReloader());
     }
 
     @Bean
-    public LicketRemoteCommunication communicationService(HttpCommunicationService httpService) {
+    public LicketRemoteCommunication communicationService(@Autowired HttpCommunicationService httpService) {
         return new LicketRemoteCommunication(httpService);
     }
 
     @Bean
     public LicketComponentModelReloader modelReloader() {
         return new LicketComponentModelReloader();
+    }
+
+    @Bean
+    public HeadParticipatingResource applicationModulePluginResource() {
+        return new ApplicationModulePluginResource();
     }
 }

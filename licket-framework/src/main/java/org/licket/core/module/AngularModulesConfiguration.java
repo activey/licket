@@ -1,9 +1,7 @@
 package org.licket.core.module;
 
 import org.licket.core.module.application.ApplicationModuleConfiguration;
-import org.licket.core.module.forms.FormsModuleConfiguration;
-import org.licket.core.module.http.HttpModuleConfiguration;
-import org.licket.core.module.platform.BrowserModuleConfiguration;
+import org.licket.core.module.resource.ResourcePluginConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -12,9 +10,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import({
-        BrowserModuleConfiguration.class,
-        FormsModuleConfiguration.class,
-        HttpModuleConfiguration.class,
+        ResourcePluginConfiguration.class,
         ApplicationModuleConfiguration.class
 })
 public class AngularModulesConfiguration {}
