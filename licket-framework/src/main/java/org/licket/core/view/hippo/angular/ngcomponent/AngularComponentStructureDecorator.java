@@ -33,7 +33,7 @@ public class AngularComponentStructureDecorator implements AngularStructuralDeco
 
     public final AssignmentBuilder decorate(AngularStructuralDecorator decorable) {
         return assignment()
-                .left(licketComponent.vueName())
+//                .left(licketComponent.vueName())
                 .right(functionCall()
                         .target(createModuleFunctionCall(decorable))
                         .argument(decorable.body()));
@@ -80,7 +80,8 @@ public class AngularComponentStructureDecorator implements AngularStructuralDeco
     }
 
     private ArrayLiteralBuilder componentServicesDependencies() {
-        return forAngularClassDependencies(licketComponent).decorate(arrayLiteral());
+//        return forAngularClassDependencies(licketComponent).decorate(arrayLiteral());
+        return arrayLiteral();
     }
 
     private ArrayLiteralBuilder componentChildren() {

@@ -7,7 +7,6 @@ import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.core.model.LicketModel.emptyModel;
 import static org.licket.core.view.ComponentView.internal;
 import static org.licket.framework.hippo.NameBuilder.name;
-import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import java.util.Optional;
 import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
@@ -16,7 +15,7 @@ import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.view.render.ComponentRenderingContext;
-import org.licket.framework.hippo.PropertyNameBuilder;
+import org.licket.framework.hippo.NameBuilder;
 import org.licket.surface.element.SurfaceElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,8 +112,8 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     @Override
-    public PropertyNameBuilder vueName() {
-        return property(name("app"), name(getCompositeId().getNormalizedValue()));
+    public NameBuilder vueName() {
+        return name(getCompositeId().getNormalizedValue());
     }
 
     @Override

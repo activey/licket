@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.model.LicketModel.ofModelObject;
 import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemoteCommunication;
+import org.licket.core.module.application.LicketRemote;
 import org.licket.core.module.forms.component.AbstractLicketForm;
 import org.licket.core.view.form.LicketInput;
 import org.licket.core.view.link.LicketFormSubmitButton;
@@ -18,7 +18,7 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
 
     private final ContactsService contactsService;
 
-    public AddContactForm(String id, ContactsService contactsService, LicketRemoteCommunication remoteCommunication,
+    public AddContactForm(String id, ContactsService contactsService, LicketRemote remoteCommunication,
                           LicketComponentModelReloader modelReloader) {
         super(id, Contact.class, ofModelObject(new Contact()), fromComponentContainerClass(AddContactForm.class),
             remoteCommunication, modelReloader);

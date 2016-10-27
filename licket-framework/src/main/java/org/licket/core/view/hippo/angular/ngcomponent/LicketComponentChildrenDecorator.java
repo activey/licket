@@ -23,7 +23,7 @@ public class LicketComponentChildrenDecorator {
             if (!child.getView().isExternalized()) {
                 return false;
             }
-            arrayLiteralBuilder.element(child.vueName());
+//            arrayLiteralBuilder.element(child.vueName());
             return false;
         });
         return arrayLiteralBuilder;

@@ -6,7 +6,7 @@ import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 import static org.licket.demo.model.Contacts.fromIterable;
 import org.licket.core.model.LicketModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemoteCommunication;
+import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.link.ComponentActionCallback;
@@ -23,7 +23,7 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
     private ContactsService contactsService;
 
     @Autowired
-    private LicketRemoteCommunication remoteCommunication;
+    private LicketRemote remoteCommunication;
 
     public ContactsPanel(String id, LicketComponentModelReloader modelReloader) {
         super(id, Contacts.class, emptyModel(), fromComponentContainerClass(ContactsPanel.class), modelReloader);

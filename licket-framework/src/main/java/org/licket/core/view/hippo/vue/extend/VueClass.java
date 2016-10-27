@@ -1,11 +1,11 @@
 package org.licket.core.view.hippo.vue.extend;
 
-import org.licket.framework.hippo.PropertyNameBuilder;
+import org.licket.framework.hippo.NameBuilder;
 
 /**
  * @author activey
  */
 public interface VueClass {
 
-    PropertyNameBuilder vueName();
+    NameBuilder vueName();
 }

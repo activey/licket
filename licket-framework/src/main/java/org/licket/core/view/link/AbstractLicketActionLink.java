@@ -11,7 +11,7 @@ import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemoteCommunication;
+import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.hippo.vue.annotation.Name;
@@ -24,7 +24,7 @@ import org.licket.framework.hippo.NameBuilder;
  */
 public abstract class AbstractLicketActionLink extends AbstractLicketComponent<Void> {
 
-    public AbstractLicketActionLink(String id, LicketRemoteCommunication communicationService, LicketComponentModelReloader modelReloader) {
+    public AbstractLicketActionLink(String id, LicketRemote communicationService, LicketComponentModelReloader modelReloader) {
         super(id, Void.class, emptyModel(), fromComponentContainerClass(AbstractLicketActionLink.class));
     }
 

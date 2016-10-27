@@ -48,7 +48,7 @@ public class LicketComponentModelReloader implements VueClass {
     }
 
     @Override
-    public PropertyNameBuilder vueName() {
-        return property(name("app"), name("ComponentModelReloader"));
+    public NameBuilder vueName() {
+        return name("$licketModelReloader");
     }
 }

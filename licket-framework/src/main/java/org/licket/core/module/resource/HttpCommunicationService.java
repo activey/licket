@@ -17,11 +17,11 @@ import static org.licket.framework.hippo.PropertyNameBuilder.property;
 public class HttpCommunicationService implements VueClass {
 
     @Override
-    public PropertyNameBuilder vueName() {
-        return property(thisLiteral(), name("$http"));
+    public NameBuilder vueName() {
+        return name("$http");
     }
 
-    public FunctionCallBuilder executeHttpPost(String url, NameBuilder responseListener) {
+    public FunctionCallBuilder callHttpPost(String url, NameBuilder responseListener) {
         return functionCall()
                 .target(property(functionCall()
                                 .target(httpPostFunction())
@@ -30,7 +30,7 @@ public class HttpCommunicationService implements VueClass {
                 .argument(responseListener);
     }
 
-    public FunctionCallBuilder executeHttpPostWithData(String url, NameBuilder data, NameBuilder responseListener) {
+    public FunctionCallBuilder callHttpPostWithData(String url, NameBuilder data, NameBuilder responseListener) {
         return functionCall()
                 .target(property(functionCall()
                                 .target(httpPostFunction())

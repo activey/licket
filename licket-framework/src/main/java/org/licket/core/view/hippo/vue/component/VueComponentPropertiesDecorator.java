@@ -50,7 +50,7 @@ public class VueComponentPropertiesDecorator {
     }
 
     private ObjectLiteralBuilder methods() {
-        return VueExtendMethodsDecorator.fromExtend(component).decorate(objectLiteral());
+        return VueExtendMethodsDecorator.fromClass(component).decorate(objectLiteral());
     }
 
     private FunctionNodeBuilder data() {

@@ -26,7 +26,7 @@ public class VueExtendMethodsDecorator {
 
     private VueClass vueClass;
 
-    public static VueExtendMethodsDecorator fromExtend(VueClass vueClass) {
+    public static VueExtendMethodsDecorator fromClass(VueClass vueClass) {
         return new VueExtendMethodsDecorator(vueClass);
     }
 

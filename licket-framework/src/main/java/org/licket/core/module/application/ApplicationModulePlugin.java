@@ -1,10 +1,14 @@
 package org.licket.core.module.application;
 
+import static java.util.Arrays.stream;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import org.licket.core.view.hippo.angular.ngmodule.VuePlugin;
 import org.licket.core.view.hippo.vue.extend.VueClass;
 import org.licket.framework.hippo.PropertyNameBuilder;
+
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 /**
  * @author activey
@@ -22,4 +26,7 @@ public class ApplicationModulePlugin implements VuePlugin {
         return property(name("app"), name("AppModule"));
     }
 
+    public void forEachService(Consumer<VueClass> serviceConsumer) {
+        stream(moduleServices).forEach(serviceConsumer);
+    }
 }

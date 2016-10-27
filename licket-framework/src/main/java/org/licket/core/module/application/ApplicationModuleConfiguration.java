@@ -20,8 +20,8 @@ public class ApplicationModuleConfiguration {
     }
 
     @Bean
-    public LicketRemoteCommunication communicationService(@Autowired HttpCommunicationService httpService) {
-        return new LicketRemoteCommunication(httpService);
+    public LicketRemote communicationService(@Autowired HttpCommunicationService httpService) {
+        return new LicketRemote(httpService);
     }
 
     @Bean
