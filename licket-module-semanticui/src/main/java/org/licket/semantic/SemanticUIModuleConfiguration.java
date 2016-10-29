@@ -3,7 +3,7 @@ package org.licket.semantic;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.vue.VueLibraryResource;
-import org.licket.core.view.hippo.angular.ngmodule.VuePlugin;
+import org.licket.core.view.hippo.vue.VuePlugin;
 import org.licket.semantic.resource.JqueryLibraryResource;
 import org.licket.semantic.resource.SemanticLibraryResource;
 import org.licket.semantic.resource.SemanticStylesheetResource;

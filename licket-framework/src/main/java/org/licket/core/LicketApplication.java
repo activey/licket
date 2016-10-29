@@ -3,7 +3,7 @@ package org.licket.core;
 import org.licket.core.id.CompositeId;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.LicketComponentContainer;
-import org.licket.core.view.hippo.angular.ngmodule.VuePlugin;
+import org.licket.core.view.hippo.vue.VuePlugin;
 
 import java.util.Optional;
 import java.util.function.Predicate;

@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 import org.licket.core.id.CompositeId;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.LicketComponentContainer;
-import org.licket.core.view.hippo.angular.ngmodule.VuePlugin;
+import org.licket.core.view.hippo.vue.VuePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

@@ -1,5 +1,6 @@
 package org.licket.core.view.link;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.model.LicketModel.emptyModel;
 import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
@@ -24,8 +25,13 @@ import org.licket.framework.hippo.NameBuilder;
  */
 public abstract class AbstractLicketActionLink extends AbstractLicketComponent<Void> {
 
-    public AbstractLicketActionLink(String id, LicketRemote communicationService, LicketComponentModelReloader modelReloader) {
+    private LicketRemote licketRemote;
+    private LicketComponentModelReloader modelReloader;
+
+    public AbstractLicketActionLink(String id, LicketRemote licketRemote, LicketComponentModelReloader modelReloader) {
         super(id, Void.class, emptyModel(), fromComponentContainerClass(AbstractLicketActionLink.class));
+        this.licketRemote = checkNotNull(licketRemote, "Licket remote must not be null!");
+        this.modelReloader = checkNotNull(modelReloader, "Licket model reloader nust not be null!");
     }
 
     @VueComponentFunction
@@ -39,10 +45,10 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
         componentActionCallback.forEachToBeReloaded(component ->  {
             functionBody.appendStatement(
                     functionCall()
-                            .target(property(name("modelReloader"), name("notifyModelChanged")))
+                            .target(property(property(thisLiteral(), modelReloader.vueName()), name("notifyModelChanged")))
                             .argument(stringLiteral(component.getCompositeId().getValue()))
                             .argument(arrayElementGet()
-                                    .target(property(functionCall().target(property(name("response"), name("json"))), name("model")))
+                                    .target(property(property("response", "body"), name("model")))
                                     .element(stringLiteral(component.getCompositeId().getValue())))
             );
         });
@@ -53,7 +59,7 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
         functionBlock.appendStatement(
                 expressionStatement(
                         functionCall()
-                                .target(property(name("$licketRemote"), name("handleActionLinkClick")))
+                                .target(property(property(thisLiteral(), licketRemote.vueName()), name("handleActionLinkClick")))
                                 .argument(stringLiteral(getCompositeId().getValue()))
                                 .argument(property(thisLiteral(), name("afterClick")))
                 )

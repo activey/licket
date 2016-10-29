@@ -21,13 +21,8 @@ public class VariableInitializerBuilder extends AbstractAstNodeBuilder<VariableI
         return this;
     }
 
-    public VariableInitializerBuilder initializer(FunctionCallBuilder functionCall) {
-        this.initializer = functionCall;
-        return this;
-    }
-
-    public VariableInitializerBuilder initializer(KeywordLiteralBuilder keywordLiteral) {
-        this.initializer = keywordLiteral;
+    public VariableInitializerBuilder initializer(AbstractAstNodeBuilder<?> initializer) {
+        this.initializer = initializer;
         return this;
     }
 

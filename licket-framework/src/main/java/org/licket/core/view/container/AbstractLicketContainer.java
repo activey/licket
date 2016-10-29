@@ -3,18 +3,14 @@ package org.licket.core.view.container;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
-import static org.licket.framework.hippo.BlockBuilder.block;
 import static org.licket.framework.hippo.EqualCheckExpressionBuilder.equalCheckExpression;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
-import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
 import static org.licket.framework.hippo.IfStatementBuilder.ifStatement;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
-import static org.licket.framework.hippo.VariableDeclarationBuilder.variableDeclaration;
-import static org.licket.framework.hippo.VariableInitializerBuilder.variableInitializer;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -25,7 +21,7 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.ComponentView;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.hippo.angular.annotation.AngularClassConstructor;
+import org.licket.core.view.hippo.vue.annotation.OnVueCreated;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.render.ComponentRenderingContext;
@@ -83,21 +79,12 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
           );
     }
 
-    @AngularClassConstructor
-    public void constructor(BlockBuilder body) {
-        body.appendStatement(expressionStatement(
-                variableDeclaration().variable(variableInitializer().target(name("vm")).initializer(thisLiteral()))
-        ));
+    @OnVueCreated
+    public void onVueCreated(BlockBuilder body) {
         body.appendStatement(expressionStatement(
                 functionCall()
-                        .target(property(name("modelReloader"), name("listenForModelChange")))
-                        .argument(functionNode()
-                                    .param(name("changedModelData"))
-                                    .body(block().appendStatement(expressionStatement(
-                                            functionCall()
-                                                    .target(property(name("vm"), name("handleModelChanged")))
-                                                    .argument(name("changedModelData"))
-                                    ))))
+                        .target(property(property(thisLiteral(), modelReloader.vueName()), name("listenForModelChange")))
+                        .argument(property(thisLiteral(), name("handleModelChanged")))
         ));
     }
 

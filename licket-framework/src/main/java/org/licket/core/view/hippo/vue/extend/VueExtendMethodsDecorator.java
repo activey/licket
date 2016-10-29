@@ -35,9 +35,8 @@ public class VueExtendMethodsDecorator {
     }
 
     public ObjectLiteralBuilder decorate(ObjectLiteralBuilder objectLiteral) {
-        ObjectLiteralBuilder methodsObject = objectLiteral();
-        stream(vueClass.getClass().getMethods()).forEach(method -> writeMemberFunctionBody(methodsObject, method));
-        return methodsObject;
+        stream(vueClass.getClass().getMethods()).forEach(method -> writeMemberFunctionBody(objectLiteral, method));
+        return objectLiteral;
     }
 
     private void writeMemberFunctionBody(ObjectLiteralBuilder methodsObject, Method method) {
@@ -57,11 +56,11 @@ public class VueExtendMethodsDecorator {
     }
 
     private Optional<VueComponentFunction> getClassFunction(Method method) {
-        VueComponentFunction angularClassFunction = method.getAnnotation(VueComponentFunction.class);
+        VueComponentFunction classFunction = method.getAnnotation(VueComponentFunction.class);
         if (isPrivate(method.getModifiers())) {
             LOGGER.warn("Private methods, like {}, are not supported for now.", method.getName());
             return empty();
         }
-        return ofNullable(angularClassFunction);
+        return ofNullable(classFunction);
     }
 }

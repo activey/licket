@@ -4,13 +4,13 @@ import org.licket.core.module.application.ApplicationModulePlugin;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.hippo.vue.extend.VueClass;
-import org.licket.core.view.hippo.vue.extend.VueExtendMethodsDecorator;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.FunctionNodeBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.licket.core.view.hippo.vue.extend.VueExtendMethodsDecorator.fromClass;
+import static org.licket.core.view.hippo.vue.extend.VuePropertiesDecorator.fromVueClassProperties;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
@@ -44,6 +44,13 @@ public class ApplicationModulePluginResource extends AbstractJavascriptDynamicRe
                                 .right(pluginInitializer())
                 )
         );
+        scriptBlockBuilder.appendStatement(
+                expressionStatement(
+                        functionCall()
+                                .target(property("Vue", "use"))
+                                .argument(applicationModulePlugin.vueName())
+                )
+        );
     }
 
     private FunctionNodeBuilder pluginInitializer() {
@@ -62,20 +69,19 @@ public class ApplicationModulePluginResource extends AbstractJavascriptDynamicRe
 
     private ObjectLiteralBuilder services() {
         ObjectLiteralBuilder services = ObjectLiteralBuilder.objectLiteral();
-        applicationModulePlugin.forEachService(service -> {
-            services.objectProperty(
-                    propertyBuilder()
-                            .name(service.vueName())
-                            .value(objectLiteral().objectProperty(
-                                    propertyBuilder()
-                                            .name("get")
-                                            .value(functionNode().body(
-                                                    block()
-                                                            .appendStatement(
-                                                                    returnStatement()
-                                                                            .returnValue(serviceMethods(service)))))))
-            );
-        });
+        applicationModulePlugin.forEachService(service -> services.objectProperty(
+                propertyBuilder()
+                        .name(service.vueName())
+                        .value(objectLiteral().objectProperty(
+                                propertyBuilder()
+                                        .name("get")
+                                        .value(functionNode()
+                                                .body(
+                                                fromVueClassProperties(service).decorate(block())
+                                                        .appendStatement(
+                                                                returnStatement()
+                                                                        .returnValue(serviceMethods(service)))))))
+        ));
         return services;
     }
 

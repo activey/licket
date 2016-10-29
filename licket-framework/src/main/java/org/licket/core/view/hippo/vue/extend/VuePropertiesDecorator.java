@@ -1,4 +1,4 @@
-package org.licket.core.view.hippo.angular.ngclass;
+package org.licket.core.view.hippo.vue.extend;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Predicates.assignableFrom;
@@ -12,31 +12,30 @@ import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
+import static org.licket.framework.hippo.VariableDeclarationBuilder.variableDeclaration;
+import static org.licket.framework.hippo.VariableInitializerBuilder.variableInitializer;
 import static org.springframework.util.ReflectionUtils.doWithFields;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 import org.licket.core.view.hippo.vue.annotation.Name;
-import org.licket.core.view.hippo.vue.extend.VueClass;
-import org.licket.framework.hippo.AbstractAstNodeBuilder;
-import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.PropertyNameBuilder;
+import org.licket.framework.hippo.*;
 import org.springframework.util.ReflectionUtils;
 
 /**
  * @author activey
  */
-public class AngularClassPropertiesDecorator {
+public class VuePropertiesDecorator {
 
     private VueClass vueClass;
 
-    private AngularClassPropertiesDecorator(VueClass vueClass) {
+    private VuePropertiesDecorator(VueClass vueClass) {
         this.vueClass = vueClass;
     }
 
-    public static AngularClassPropertiesDecorator fromAngularClassProperties(VueClass vueClass) {
-        return new AngularClassPropertiesDecorator(vueClass);
+    public static VuePropertiesDecorator fromVueClassProperties(VueClass vueClass) {
+        return new VuePropertiesDecorator(vueClass);
     }
 
     public BlockBuilder decorate(BlockBuilder block) {
@@ -46,15 +45,13 @@ public class AngularClassPropertiesDecorator {
                 objectProperty = objectLiteral();
             }
             Name customName = accessibleField.getAnnotation(Name.class);
-            PropertyNameBuilder assignmentProperty = property(thisLiteral(),
-                name(firstNonNull(trimToNull(customName.value()), accessibleField.getName())));
-
-            block.appendStatement(
-                    expressionStatement(
-                            assignment()
-                                    .left(assignmentProperty)
-                                    .right(objectProperty)
+            block.appendStatement(expressionStatement(
+                    variableDeclaration().variable(
+                            variableInitializer()
+                                    .target(name(firstNonNull(trimToNull(customName.value()), accessibleField.getName())))
+                                    .initializer(objectProperty)
                     )
+                )
             );
         }), field -> notNull().apply(on(field).get()) && isNodeBuilderField(field));
         return block;

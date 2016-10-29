@@ -1,4 +1,4 @@
-package org.licket.core.view.hippo.angular.annotation;
+package org.licket.core.view.hippo.vue.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -11,5 +11,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target(METHOD)
 @Retention(RUNTIME)
-public @interface AngularClassConstructor {
+public @interface OnVueCreated {
 }

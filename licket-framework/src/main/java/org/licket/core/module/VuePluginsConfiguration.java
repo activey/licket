@@ -1,6 +1,6 @@
 package org.licket.core.module;
 
-import org.licket.core.module.application.ApplicationModuleConfiguration;
+import org.licket.core.module.application.ApplicationModulePluginConfiguration;
 import org.licket.core.module.resource.ResourcePluginConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -11,6 +11,6 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({
         ResourcePluginConfiguration.class,
-        ApplicationModuleConfiguration.class
+        ApplicationModulePluginConfiguration.class
 })
-public class AngularModulesConfiguration {}
+public class VuePluginsConfiguration {}

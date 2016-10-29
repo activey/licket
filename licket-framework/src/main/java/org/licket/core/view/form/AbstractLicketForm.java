@@ -1,4 +1,4 @@
-package org.licket.core.module.forms.component;
+package org.licket.core.view.form;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.model.LicketModel.ofModelObject;
@@ -33,12 +33,14 @@ import org.licket.framework.hippo.NameBuilder;
 public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
 
     private LicketRemote licketRemote;
+    private LicketComponentModelReloader modelReloader;
 
     public AbstractLicketForm(String id, Class<T> modelClass, LicketModel<T> model, ComponentView componentView,
                               LicketRemote licketRemote,
                               LicketComponentModelReloader modelReloader) {
         super(id, modelClass, model, componentView, modelReloader);
         this.licketRemote = checkNotNull(licketRemote, "Liket remote instance must not be null!");
+        this.modelReloader = checkNotNull(modelReloader, "Model reloader instance must not be null!");
     }
 
     public final void submitForm(T formModelObject, ComponentActionCallback actionCallback) {
@@ -65,7 +67,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
                 expressionStatement(assignment().left(property(thisLiteral(), name("model")))
                     .right(arrayElementGet()
                         .target(
-                            property(functionCall().target(property(name("response"), name("json"))), name("model")))
+                            property(property("response", "body"), "model"))
                         .element(stringLiteral(getCompositeId().getValue())))));
 
         // gathering all others
@@ -81,11 +83,10 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
     }
 
     private ExpressionStatementBuilder reloadComponent(LicketComponent<?> component) {
-        return expressionStatement(functionCall().target(property(name("modelReloader"), name("notifyModelChanged")))
+        return expressionStatement(functionCall().target(property(property(thisLiteral(), modelReloader.vueName()), name("notifyModelChanged")))
                 .argument(stringLiteral(component.getCompositeId().getValue()))
                 .argument(arrayElementGet()
-                        .target(
-                                property(functionCall().target(property(name("response"), name("json"))), name("model")))
+                        .target(property(property("response", "body"), name("model")))
                         .element(stringLiteral(component.getCompositeId().getValue()))));
     }
 
@@ -94,7 +95,11 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
     @VueComponentFunction
     public void submitForm(BlockBuilder functionBlock) {
         functionBlock
-            .appendStatement(expressionStatement(licketRemote.callSubmitForm(getCompositeId().getValue())))
+            .appendStatement(expressionStatement(
+                    licketRemote.callSubmitForm(
+                            getCompositeId().getValue(), property(thisLiteral(), name("afterSubmit"))
+                    )
+            ))
             .appendStatement(returnStatement().returnValue(name("false")));
     }
 }

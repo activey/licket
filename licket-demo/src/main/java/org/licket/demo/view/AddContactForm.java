@@ -5,7 +5,7 @@ import static org.licket.core.model.LicketModel.ofModelObject;
 import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
-import org.licket.core.module.forms.component.AbstractLicketForm;
+import org.licket.core.view.form.AbstractLicketForm;
 import org.licket.core.view.form.LicketInput;
 import org.licket.core.view.link.LicketFormSubmitButton;
 import org.licket.demo.model.Contact;

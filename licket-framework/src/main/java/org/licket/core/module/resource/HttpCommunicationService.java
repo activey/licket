@@ -1,13 +1,11 @@
 package org.licket.core.module.resource;
 
-import org.licket.core.view.hippo.angular.ngclass.AngularInjectable;
 import org.licket.core.view.hippo.vue.extend.VueClass;
 import org.licket.framework.hippo.FunctionCallBuilder;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
 
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
-import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 
@@ -26,7 +24,7 @@ public class HttpCommunicationService implements VueClass {
                 .target(property(functionCall()
                                 .target(httpPostFunction())
                                 .argument(name(url)),
-                        subscribeHandlerFunction()))
+                        responseCallbackFunction()))
                 .argument(responseListener);
     }
 
@@ -36,16 +34,17 @@ public class HttpCommunicationService implements VueClass {
                                 .target(httpPostFunction())
                                 .argument(name(url))
                                 .argument(data),
-                        subscribeHandlerFunction()))
+                        responseCallbackFunction()))
                 .argument(responseListener);
     }
 
     private PropertyNameBuilder httpPostFunction() {
-        return property(name("http"), name("post"));
+        // cant use vueName() here ;/
+        return property(property("Vue", "http"), name("post"));
     }
 
-    private NameBuilder subscribeHandlerFunction() {
-        return name("subscribe");
+    private NameBuilder responseCallbackFunction() {
+        return name("then");
     }
 
 }

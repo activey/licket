@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 
 import com.google.common.base.Predicate;
 import org.licket.core.consumer.IndexedConsumer;
-import org.licket.core.view.hippo.angular.ngclass.AngularClassConstructionException;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
 import org.licket.framework.hippo.BlockBuilder;
@@ -61,7 +60,7 @@ public class VueExtendMemberFunction {
                     arguments[index] = body;
                     return;
                 }
-                throw new AngularClassConstructionException("Parameter type not supported! %s", parameter.getName());
+                throw new VueExtendConstructionException("Parameter type not supported! %s", parameter.getName());
             }
         };
     }

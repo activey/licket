@@ -14,9 +14,7 @@ import org.licket.core.module.resource.HttpCommunicationService;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.hippo.vue.extend.VueClass;
-import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.FunctionCallBuilder;
-import org.licket.framework.hippo.NameBuilder;
+import org.licket.framework.hippo.*;
 
 /**
  * @author grabslu
@@ -51,16 +49,10 @@ public class LicketRemote implements VueClass {
         return name("$licketRemoteService");
     }
 
-    public FunctionCallBuilder callSubmitForm(String formId) {
+    public FunctionCallBuilder callSubmitForm(String formId, PropertyNameBuilder callbackFunction) {
         return functionCall()
-                .target(property(vueName(), name("submitForm")))
+                .target(property(property(thisLiteral(), vueName()), name("submitForm")))
                 .argument(stringLiteral(formId)).argument(property(thisLiteral(), name("model")))
-                .argument(functionNode().param(name("response")).body(block().appendStatement(
-                        expressionStatement(
-                                functionCall()
-                                        .target(property(name("vm"), name("afterSubmit")))
-                                        .argument(name("response"))
-                        )
-                )));
+                .argument(callbackFunction);
     }
 }

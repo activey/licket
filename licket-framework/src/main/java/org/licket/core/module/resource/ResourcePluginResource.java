@@ -1,4 +1,4 @@
-package org.licket.core.module.resource.resource;
+package org.licket.core.module.resource;
 
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.JavascriptStaticResource;

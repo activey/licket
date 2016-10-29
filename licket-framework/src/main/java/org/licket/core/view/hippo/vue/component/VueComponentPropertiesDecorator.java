@@ -2,9 +2,11 @@ package org.licket.core.view.hippo.vue.component;
 
 import static org.licket.core.view.hippo.ComponentModelDecorator.fromComponentModel;
 import static org.licket.framework.hippo.BlockBuilder.block;
+import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.ReturnStatementBuilder.returnStatement;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 import java.io.IOException;
@@ -13,10 +15,9 @@ import java.util.Optional;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.LicketComponent;
+import org.licket.core.view.hippo.vue.extend.OnVueCreatedDecorator;
 import org.licket.core.view.hippo.vue.extend.VueExtendMethodsDecorator;
-import org.licket.framework.hippo.FunctionNodeBuilder;
-import org.licket.framework.hippo.ObjectLiteralBuilder;
-import org.licket.framework.hippo.StringLiteralBuilder;
+import org.licket.framework.hippo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.io.CharStreams;
@@ -46,7 +47,8 @@ public class VueComponentPropertiesDecorator {
                 .objectProperty(propertyBuilder().name("template").value(template()))
                 .objectProperty(propertyBuilder().name("data").value(data()))
                 .objectProperty(propertyBuilder().name("methods").value(methods()))
-                .objectProperty(propertyBuilder().name("components").value(nestedComponents()));
+                .objectProperty(propertyBuilder().name("components").value(nestedComponents()))
+                .objectProperty(propertyBuilder().name("created").value(created()));
     }
 
     private ObjectLiteralBuilder methods() {
@@ -94,5 +96,9 @@ public class VueComponentPropertiesDecorator {
         }
         // TODO use xml parser stuff
         return stringLiteral("<!-- Unable to render template, check logs for details. -->");
+    }
+
+    private FunctionNodeBuilder created() {
+        return functionNode().body(OnVueCreatedDecorator.fromVueClass(component).decorate(block()));
     }
 }
