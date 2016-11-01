@@ -16,10 +16,10 @@ import org.springframework.context.annotation.Configuration;
  * @author activey
  */
 @Configuration
-public class SemanticUIModuleConfiguration {
+public class SemanticUIPluginConfiguration {
 
     @Bean
-    public VuePlugin semanticModule() {
+    public VuePlugin semanticPlugin() {
         return new SemanticUIPlugin();
     }
 

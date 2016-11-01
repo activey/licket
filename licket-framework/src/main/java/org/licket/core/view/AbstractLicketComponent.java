@@ -150,6 +150,6 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
     @Override
     public void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {
-        // do nothing by default
+        // do nothing by default but some components could expose some additional internals
     }
 }

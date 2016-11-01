@@ -4,6 +4,8 @@ import static org.licket.core.model.LicketModel.emptyModel;
 import static org.licket.core.model.LicketModel.ofModelObject;
 import static org.licket.core.view.ComponentView.fromComponentContainerClass;
 import static org.licket.demo.model.Contacts.fromIterable;
+import static org.licket.semantic.component.modal.ModalSettingsBuilder.builder;
+
 import org.licket.core.model.LicketModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
@@ -12,6 +14,8 @@ import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.demo.model.Contacts;
 import org.licket.demo.service.ContactsService;
+import org.licket.semantic.component.modal.AbstractSemanticUIModal;
+import org.licket.semantic.component.modal.ModalSettingsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -25,19 +29,29 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
     @Autowired
     private LicketRemote remoteCommunication;
 
+    private LicketComponentModelReloader modelReloader;
+    private AbstractSemanticUIModal modal;
+
     public ContactsPanel(String id, LicketComponentModelReloader modelReloader) {
         super(id, Contacts.class, emptyModel(), fromComponentContainerClass(ContactsPanel.class), modelReloader);
+        this.modelReloader = modelReloader;
     }
 
     @Override
     protected void onInitializeContainer() {
-        add(new AddContactForm("add-contact-form", contactsService, remoteCommunication, modelReloader) {
+        add(modal = new AbstractSemanticUIModal("form-modal", builder().build(), modelReloader) {
             @Override
-            protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
-                reloadList();
-                componentActionCallback.reload(ContactsPanel.this);
+            protected void onInitializeContainer() {
+                add(new AddContactForm("add-contact-form", contactsService, remoteCommunication, modelReloader) {
+                    @Override
+                    protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
+                        reloadList();
+                        componentActionCallback.reload(ContactsPanel.this);
+                    }
+                });
             }
         });
+
         add(new ContactsList("contact", new LicketModel("contacts"), modelReloader));
         add(new AbstractLicketActionLink("reload", remoteCommunication, modelReloader) {
 

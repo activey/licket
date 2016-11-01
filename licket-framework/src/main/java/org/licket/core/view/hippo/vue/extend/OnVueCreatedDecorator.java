@@ -5,8 +5,6 @@ import static java.util.Arrays.stream;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static org.joor.Reflect.on;
-import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
-import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import java.lang.reflect.Method;
 import java.util.Optional;
 

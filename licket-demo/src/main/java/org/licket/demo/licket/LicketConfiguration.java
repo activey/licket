@@ -3,7 +3,7 @@ package org.licket.demo.licket;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.demo.view.ContactsAppRoot;
 import org.licket.demo.view.ContactsPanel;
-import org.licket.semantic.SemanticUIModuleConfiguration;
+import org.licket.semantic.SemanticUIPluginConfiguration;
 import org.licket.spring.annotation.LicketComponent;
 import org.licket.spring.annotation.LicketRootContainer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(SemanticUIModuleConfiguration.class)
+@Import(SemanticUIPluginConfiguration.class)
 public class LicketConfiguration {
 
     @LicketRootContainer

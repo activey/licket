@@ -4,12 +4,12 @@ import org.licket.core.module.application.ApplicationModulePlugin;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.hippo.vue.extend.VueClass;
+import org.licket.core.view.hippo.vue.extend.VueExtendMethodsDecorator;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.FunctionNodeBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.licket.core.view.hippo.vue.extend.VueExtendMethodsDecorator.fromClass;
 import static org.licket.core.view.hippo.vue.extend.VuePropertiesDecorator.fromVueClassProperties;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.BlockBuilder.block;
@@ -86,6 +86,6 @@ public class ApplicationModulePluginResource extends AbstractJavascriptDynamicRe
     }
 
     private ObjectLiteralBuilder serviceMethods(VueClass service) {
-        return fromClass(service).decorate(objectLiteral());
+        return VueExtendMethodsDecorator.fromClass(service).decorate(objectLiteral());
     }
 }

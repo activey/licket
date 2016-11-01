@@ -8,23 +8,25 @@
             <h1 class="ui center aligned header">Contacts list</h1>
 
             <div class="ui container" lick:id="contacts-panel">
-                <div class="ui form" lick:id="add-contact-form">
-                    <div class="two fields">
-                        <div class="field">
-                            <label>Name</label>
-                            <input type="text" placeholder="Full Name" lick:id="name"/>
+                <ui-modal lick:id="form-modal">
+                    <div class="ui form" lick:id="add-contact-form">
+                        <div class="two fields">
+                            <div class="field">
+                                <label>Name</label>
+                                <input type="text" placeholder="Full Name" lick:id="name"/>
+                            </div>
+
+                            <div class="field">
+                                <label>Description</label>
+                                <input type="text" placeholder="Some description" lick:id="description"/>
+                            </div>
                         </div>
 
-                        <div class="field">
-                            <label>Description</label>
-                            <input type="text" placeholder="Some description" lick:id="description"/>
+                        <div class="ui submit button" lick:id="add">
+                            Add one
                         </div>
                     </div>
-
-                    <div class="ui submit button" lick:id="add">
-                        Add one
-                    </div>
-                </div>
+                </ui-modal>
 
                 <div class="ui relaxed divided items">
                     <div class="item" lick:id="contact">

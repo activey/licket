@@ -1,0 +1,13 @@
+<div class="ui modal">
+    <div class="header">
+        <slot name="header">
+            Modal header
+        </slot>
+    </div>
+    <div class="content">
+        <slot>placeholder</slot>
+    </div>
+    <div class="actions" v-if="showActions">
+        <slot name="actions"></slot>
+    </div>
+</div>
