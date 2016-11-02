@@ -23,7 +23,5 @@ public interface LicketApplication {
 
     void traverseDown(Predicate<LicketComponent<?>> componentVisitor);
 
-    void traverseDownContainers(Predicate<LicketComponentContainer<?>> containerVisitor);
-
     Iterable<VuePlugin> modules();
 }

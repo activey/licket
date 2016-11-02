@@ -15,7 +15,6 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.AbstractLicketComponent;
@@ -37,7 +36,6 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent<T> implements LicketComponentContainer<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLicketContainer.class);
-    private List<LicketComponentContainer<?>> branches = newArrayList();
     private List<LicketComponent<?>> leaves = newArrayList();
 
     @Name("model")
@@ -93,27 +91,19 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
         onRenderContainer(renderingContext);
     }
 
-    protected void onRenderContainer(ComponentRenderingContext renderingContext) {
+    protected void onRenderContainer(ComponentRenderingContext renderingContext) {}
 
-    }
-
-    protected final void add(LicketComponent<?> licketComponent) {
-        if (branches.contains(licketComponent)) {
-            LOGGER.trace("Licket component [{}] already used as a branch!", licketComponent.getId());
+    public final void add(LicketComponent<?> licketComponent) {
+        if (leaves.contains(licketComponent)) {
+            LOGGER.trace("Licket component [{}] already used as a leaf!", licketComponent.getId());
             return;
         }
         licketComponent.setParent(this);
         leaves.add(licketComponent);
     }
 
-    protected final void add(LicketComponentContainer<?> licketComponentContainer) {
-        licketComponentContainer.setParent(this);
-        branches.add(licketComponentContainer);
-    }
-
     @Override
     protected final void onInitialize() {
-        branches.forEach(LicketComponent::initialize);
         leaves.forEach(LicketComponent::initialize);
 
         onInitializeContainer();
@@ -122,62 +112,10 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
     protected void onInitializeContainer() {}
 
     public final void traverseDown(Predicate<LicketComponent<?>> componentVisitor) {
-        leaves.forEach(componentVisitor::test);
-        branches.forEach(branch -> {
-            if (componentVisitor.test(branch)) {
-                branch.traverseDown(componentVisitor);
+        leaves.forEach(leaf -> {
+            if (componentVisitor.test(leaf)) {
+                leaf.traverseDown(componentVisitor);
             }
         });
-    }
-
-    @Override
-    public final void traverseDownContainers(Predicate<LicketComponentContainer<?>> containerVisitor) {
-        branches.forEach(branch -> {
-            if (containerVisitor.test(branch)) {
-                branch.traverseDownContainers(containerVisitor);
-            }
-        });
-    }
-
-    @Override
-    public final LicketComponent<?> findChild(CompositeId compositeId) {
-        if (!compositeId.hasMore()) {
-            if (compositeId.current().equals(getId())) {
-                return this;
-            }
-            for (LicketComponent<?> leaf : leaves) {
-                if (leaf.getId().equals(compositeId.current())) {
-                    return leaf;
-                }
-            }
-            for (LicketComponentContainer<?> branch : branches) {
-                if (!branch.getId().equals(compositeId.current())) {
-                    continue;
-                }
-                LicketComponent<?> childComponent = branch.findChild(compositeId);
-                if (childComponent != null) {
-                    return childComponent;
-                }
-            }
-            return null;
-        }
-
-        compositeId.forward();
-
-        for (LicketComponent<?> leaf : leaves) {
-            if (leaf.getId().equals(compositeId.current())) {
-                return leaf;
-            }
-        }
-        for (LicketComponentContainer<?> branch : branches) {
-            if (!branch.getId().equals(compositeId.current())) {
-                continue;
-            }
-            LicketComponent<?> childComponent = branch.findChild(compositeId);
-            if (childComponent != null) {
-                return childComponent;
-            }
-        }
-        return null;
     }
 }

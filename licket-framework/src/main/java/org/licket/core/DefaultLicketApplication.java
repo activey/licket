@@ -1,7 +1,6 @@
 package org.licket.core;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static java.util.Optional.ofNullable;
 import static org.licket.core.id.CompositeId.fromStringValue;
 
 import java.io.Serializable;
@@ -10,6 +9,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.licket.core.id.CompositeId;
+import org.licket.core.view.ComponentChildLocator;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.core.view.hippo.vue.VuePlugin;
@@ -43,7 +43,12 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
 
     @Override
     public Optional<LicketComponent<?>> findComponent(CompositeId compositeId) {
-        return ofNullable(rootContainer.findChild(compositeId));
+        if (compositeId.current().equals(rootContainer.getId())) {
+            compositeId.forward();
+            ComponentChildLocator locator = new ComponentChildLocator(rootContainer);
+            return locator.findByCompositeId(compositeId);
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -55,13 +60,6 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
     public void traverseDown(Predicate<LicketComponent<?>> componentVisitor) {
         componentVisitor.test(rootContainer);
         rootContainer.traverseDown(componentVisitor);
-    }
-
-    @Override
-    public void traverseDownContainers(Predicate<LicketComponentContainer<?>> containerVisitor) {
-        if (containerVisitor.test(rootContainer)) {
-            rootContainer.traverseDownContainers(containerVisitor);
-        }
     }
 
     @Override

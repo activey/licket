@@ -132,6 +132,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
             LOGGER.trace("Using non-externalized view for component: [{}]", getId());
             return;
         }
+
         renderingContext.onSurfaceElement(element -> {
             try {
                 renderingContext

@@ -50,9 +50,8 @@ public class CompositeId {
         return index + 1 < idParts.length;
     }
 
-    public CompositeId forward() {
+    public void forward() {
         index = index + 1;
-        return this;
     }
 
     public String current() {
