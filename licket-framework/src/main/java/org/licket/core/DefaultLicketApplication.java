@@ -58,8 +58,9 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
 
     @Override
     public void traverseDown(Predicate<LicketComponent<?>> componentVisitor) {
-        componentVisitor.test(rootContainer);
-        rootContainer.traverseDown(componentVisitor);
+        if (componentVisitor.test(rootContainer)) {
+            rootContainer.traverseDown(componentVisitor);
+        }
     }
 
     @Override

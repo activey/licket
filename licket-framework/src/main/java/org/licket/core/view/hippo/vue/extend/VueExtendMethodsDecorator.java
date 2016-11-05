@@ -42,7 +42,6 @@ public class VueExtendMethodsDecorator {
     private void writeMemberFunctionBody(ObjectLiteralBuilder methodsObject, Method method) {
         Optional<VueComponentFunction> classFunction = getClassFunction(method);
         if (!classFunction.isPresent()) {
-            LOGGER.trace("Skipping processing {} method.", method.getName());
             return;
         }
         // declaring member function

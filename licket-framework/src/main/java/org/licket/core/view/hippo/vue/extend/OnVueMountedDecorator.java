@@ -41,7 +41,6 @@ public class OnVueMountedDecorator {
     private void writeClassConstructorBody(BlockBuilder constructorFunctionBody, Method method) {
         Optional<OnVueMounted> onVueMounted = onVueMountedFunction(method);
         if (!onVueMounted.isPresent()) {
-            LOGGER.trace("Skipping processing {} method.", method.getName());
             return;
         }
         // TODO rewrite this method...

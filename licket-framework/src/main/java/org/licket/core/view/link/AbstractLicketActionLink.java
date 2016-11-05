@@ -1,8 +1,8 @@
 package org.licket.core.view.link;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.licket.core.model.LicketModel.emptyModel;
-import static org.licket.core.view.ComponentView.fromComponentContainerClass;
+import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
+import static org.licket.core.view.LicketComponentView.internalTemplateView;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
@@ -29,7 +29,7 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
     private LicketComponentModelReloader modelReloader;
 
     public AbstractLicketActionLink(String id, LicketRemote licketRemote, LicketComponentModelReloader modelReloader) {
-        super(id, Void.class, emptyModel(), fromComponentContainerClass(AbstractLicketActionLink.class));
+        super(id, Void.class, emptyComponentModel(), internalTemplateView());
         this.licketRemote = checkNotNull(licketRemote, "Licket remote must not be null!");
         this.modelReloader = checkNotNull(modelReloader, "Licket model reloader nust not be null!");
     }

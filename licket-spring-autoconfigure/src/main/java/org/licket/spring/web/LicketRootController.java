@@ -4,7 +4,7 @@ import org.licket.core.LicketApplication;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
-import org.licket.core.view.ComponentView;
+import org.licket.core.view.LicketComponentView;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.surface.SurfaceContext;
 import org.licket.surface.tag.ElementFactories;
@@ -52,7 +52,7 @@ public class LicketRootController {
         LOGGER.debug("Initializing licket application: {}.", licketApplication.getName());
 
         LicketComponentContainer<?> rootContainer = licketApplication.rootComponentContainer();
-        ComponentView containerView = rootContainer.getView();
+        LicketComponentView containerView = rootContainer.getView();
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
         new SurfaceContext(surfaceElementFactories).processTemplateContent(containerView.readViewContent(), byteArrayStream);
         resourcesStorage

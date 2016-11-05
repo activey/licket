@@ -1,7 +1,7 @@
 package org.licket.core.view.form;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.licket.core.model.LicketModel.ofModelObject;
+import static org.licket.core.model.LicketComponentModel.ofModelObject;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
@@ -11,10 +11,10 @@ import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.ReturnStatementBuilder.returnStatement;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
-import org.licket.core.model.LicketModel;
+import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
-import org.licket.core.view.ComponentView;
+import org.licket.core.view.LicketComponentView;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
@@ -35,7 +35,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
     private LicketRemote licketRemote;
     private LicketComponentModelReloader modelReloader;
 
-    public AbstractLicketForm(String id, Class<T> modelClass, LicketModel<T> model, ComponentView componentView,
+    public AbstractLicketForm(String id, Class<T> modelClass, LicketComponentModel<T> model, LicketComponentView componentView,
                               LicketRemote licketRemote,
                               LicketComponentModelReloader modelReloader) {
         super(id, modelClass, model, componentView, modelReloader);
@@ -54,7 +54,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
     @Override
     protected void onRenderContainer(ComponentRenderingContext renderingContext) {
         renderingContext.onSurfaceElement(element -> {
-            // TODO check if element is in fact a <form>
+            // TODO check if element is in fact a <form>, or not necessary?
             element.setAttribute("v-on:submit", "submitForm");
         });
     }

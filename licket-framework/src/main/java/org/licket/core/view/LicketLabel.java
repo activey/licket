@@ -3,7 +3,7 @@ package org.licket.core.view;
 import static java.lang.String.format;
 
 import org.licket.core.model.ComponentIdModel;
-import org.licket.core.model.LicketModel;
+import org.licket.core.model.LicketComponentModel;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.xml.dom.Text;
@@ -32,7 +32,7 @@ public class LicketLabel extends AbstractLicketComponent<String> {
      *
      * Thats it no other logic behind.
      */
-    public LicketLabel(String id, LicketModel<String> labelModel) {
+    public LicketLabel(String id, LicketComponentModel<String> labelModel) {
         super(id, String.class, labelModel);
     }
 

@@ -5,7 +5,7 @@ import static java.lang.String.format;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import org.licket.core.model.LicketModel;
+import org.licket.core.model.LicketComponentModel;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
@@ -17,13 +17,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ComponentModelDecorator {
 
-    private LicketModel<?> componentModel;
+    private LicketComponentModel<?> componentModel;
 
-    private ComponentModelDecorator(LicketModel<?> componentModel) {
+    private ComponentModelDecorator(LicketComponentModel<?> componentModel) {
         this.componentModel = componentModel;
     }
 
-    public static ComponentModelDecorator fromComponentModel(LicketModel<?> componentModel) {
+    public static ComponentModelDecorator fromComponentModel(LicketComponentModel<?> componentModel) {
         return new ComponentModelDecorator(componentModel);
     }
 

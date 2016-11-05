@@ -1,9 +1,9 @@
 package org.licket.core.view.list;
 
 import static java.lang.String.format;
-import static org.licket.core.view.ComponentView.internal;
+import static org.licket.core.view.LicketComponentView.noView;
 import java.util.Optional;
-import org.licket.core.model.LicketModel;
+import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketContainer;
@@ -13,9 +13,9 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
 
     private Class<T> elementClass;
 
-    public AbstractLicketList(String id, LicketModel<String> enclosingComponentPropertyModel, Class<T> elementClass,
-                              LicketComponentModelReloader modelReloader) {
-        super(id, String.class, enclosingComponentPropertyModel, internal(), modelReloader);
+    public AbstractLicketList(String id, LicketComponentModel<String> enclosingComponentPropertyModel,
+                              Class<T> elementClass, LicketComponentModelReloader modelReloader) {
+        super(id, String.class, enclosingComponentPropertyModel, noView(), modelReloader);
         this.elementClass = elementClass;
         // TODO analyze element class provided and check its properties against passed enclosingComponentPropertyModel
     }
@@ -29,7 +29,7 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
         AbstractLicketContainer parentContainer = (AbstractLicketContainer) parent.get();
         renderingContext.onSurfaceElement(element -> {
             String firstPart = "model";
-            if (!parentContainer.getView().isExternalized()) {
+            if (!parentContainer.getView().hasTemplate()) {
                 firstPart = parentContainer.getId();
             }
             element.addAttribute("v-for", format("%s in %s.%s", getId(), firstPart, getComponentModel().get()));

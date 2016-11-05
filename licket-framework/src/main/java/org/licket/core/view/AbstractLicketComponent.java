@@ -4,16 +4,18 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.licket.core.id.CompositeId.fromStringValue;
 import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
-import static org.licket.core.model.LicketModel.emptyModel;
-import static org.licket.core.view.ComponentView.internal;
+import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
+import static org.licket.core.view.LicketComponentView.internalTemplateView;
+import static org.licket.core.view.LicketComponentView.noView;
 import static org.licket.framework.hippo.NameBuilder.name;
 import java.util.Optional;
 import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
 import javax.xml.stream.XMLStreamException;
 import org.licket.core.id.CompositeId;
-import org.licket.core.model.LicketModel;
+import org.licket.core.model.LicketComponentModel;
 import org.licket.core.resource.ByteArrayResource;
+import org.licket.core.resource.InputStreamResource;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.surface.element.SurfaceElement;
@@ -26,20 +28,20 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
     private String id;
     private Class<T> modelClass;
-    private LicketModel<T> componentModel;
-    private ComponentView view;
+    private LicketComponentModel<T> componentModel;
+    private LicketComponentView view;
     private LicketComponent<?> parent;
     private boolean initialized;
 
     public AbstractLicketComponent(String id, Class<T> modelClass) {
-        this(id, modelClass, emptyModel(), internal());
+        this(id, modelClass, emptyComponentModel(), noView());
     }
 
-    public AbstractLicketComponent(String id, Class<T> modelClass, LicketModel<T> componentModel) {
-        this(id, modelClass, componentModel, internal());
+    public AbstractLicketComponent(String id, Class<T> modelClass, LicketComponentModel<T> componentModel) {
+        this(id, modelClass, componentModel, noView());
     }
 
-    public AbstractLicketComponent(String id, Class<T> modelClass, LicketModel<T> componentModel, ComponentView view) {
+    public AbstractLicketComponent(String id, Class<T> modelClass, LicketComponentModel<T> componentModel, LicketComponentView view) {
         this.id = id;
         this.modelClass = modelClass;
         this.componentModel = componentModel;
@@ -60,12 +62,12 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     protected void onInitialize() {}
 
     @Override
-    public final LicketModel<T> getComponentModel() {
+    public final LicketComponentModel<T> getComponentModel() {
         return componentModel;
     }
 
     @Override
-    public final void setComponentModel(LicketModel<T> componentModel) {
+    public final void setComponentModel(LicketComponentModel<T> componentModel) {
         this.componentModel = componentModel;
     }
 
@@ -77,11 +79,6 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     @Override
     public final void setComponentModelObject(T componentModelObject) {
         componentModel.set(componentModelObject);
-    }
-
-    @Override
-    public final void setParent(LicketComponent<?> parent) {
-        this.parent = parent;
     }
 
     @Override
@@ -101,6 +98,11 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         return parent;
     }
 
+    @Override
+    public final void setParent(LicketComponent<?> parent) {
+        this.parent = parent;
+    }
+
     public final Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser) {
         if (parent == null) {
             return empty();
@@ -117,7 +119,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     @Override
-    public final ComponentView getView() {
+    public final LicketComponentView getView() {
         return view;
     }
 
@@ -128,23 +130,30 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     private void doRender(ComponentRenderingContext renderingContext) {
-        if (!getView().isExternalized()) {
-            LOGGER.trace("Using non-externalized view for component: [{}]", getId());
+        if (!getView().hasTemplate()) {
+            LOGGER.trace("No separate view for component component: [{}], using original element content.", getId());
             return;
         }
-
         renderingContext.onSurfaceElement(element -> {
             try {
-                renderingContext
-                        .renderResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
-
-                element.replaceWith(new SurfaceElement(getId(), element.getNamespace()));
-                element.detach();
+                if (getView().isTemplateExternal()) {
+                    renderingContext.renderResource(
+                        new InputStreamResource(getCompositeId().getValue(), "text/html", getView().readViewContent()));
+                } else {
+                    renderingContext.renderResource(
+                        new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
+                }
+                replaceElement(element);
             } catch (XMLStreamException e) {
                 LOGGER.error("An error occured while rendering component.", e);
                 return;
             }
         });
+    }
+
+    private void replaceElement(SurfaceElement element) {
+        element.replaceWith(new SurfaceElement(getId(), element.getNamespace()));
+        element.detach();
     }
 
     protected void onRender(ComponentRenderingContext renderingContext) {}

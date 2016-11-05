@@ -39,7 +39,6 @@ public class OnVueCreatedDecorator {
     private void writeClassConstructorBody(BlockBuilder constructorFunctionBody, Method method) {
         Optional<OnVueCreated> onVueCreated = onVueCreatedFunction(method);
         if (!onVueCreated.isPresent()) {
-            LOGGER.trace("Skipping processing {} method.", method.getName());
             return;
         }
         // TODO rewrite this method...

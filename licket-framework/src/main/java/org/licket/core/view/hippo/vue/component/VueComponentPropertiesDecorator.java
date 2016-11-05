@@ -74,7 +74,7 @@ public class VueComponentPropertiesDecorator {
     private ObjectLiteralBuilder nestedComponents() {
         ObjectLiteralBuilder nestedComponents = objectLiteral();
         component.traverseDown(nestedComponent -> {
-            if (!nestedComponent.getView().isExternalized()) {
+            if (!nestedComponent.getView().hasTemplate()) {
                 return false;
             }
             new VueComponentPropertiesDecorator(nestedComponent, resourceStorage).decorate(nestedComponents);

@@ -3,7 +3,7 @@ package org.licket.core.view.form;
 import static java.lang.String.format;
 import java.util.Optional;
 import org.licket.core.model.ComponentIdModel;
-import org.licket.core.model.LicketModel;
+import org.licket.core.model.LicketComponentModel;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketContainer;
@@ -18,7 +18,7 @@ public class LicketInput extends AbstractLicketComponent<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LicketInput.class);
 
-    public LicketInput(String id, LicketModel<String> enclosingComponentPropertyModel) {
+    public LicketInput(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
         super(id, String.class, enclosingComponentPropertyModel);
     }
 
@@ -38,7 +38,7 @@ public class LicketInput extends AbstractLicketComponent<String> {
         renderingContext.onSurfaceElement(element -> {
             // TODO refactor
             String firstPart = "model";
-            if (!parentContainer.getView().isExternalized()) {
+            if (!parentContainer.getView().hasTemplate()) {
                 firstPart = parentContainer.getId();
             }
             element.addAttribute("v-model", format("%s.%s", firstPart, getComponentModel().get()));

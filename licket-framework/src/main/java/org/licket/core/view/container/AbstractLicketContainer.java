@@ -15,10 +15,10 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.licket.core.model.LicketModel;
+import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.AbstractLicketComponent;
-import org.licket.core.view.ComponentView;
+import org.licket.core.view.LicketComponentView;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.vue.annotation.OnVueCreated;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
@@ -49,13 +49,13 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
         this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
     }
 
-    public AbstractLicketContainer(String id, Class<T> modelClass, LicketModel<T> componentModel,
+    public AbstractLicketContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
                                    LicketComponentModelReloader modelReloader) {
         super(id, modelClass, componentModel);
         this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
     }
 
-    public AbstractLicketContainer(String id, Class<T> modelClass, LicketModel<T> componentModel, ComponentView view,
+    public AbstractLicketContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel, LicketComponentView view,
                                    LicketComponentModelReloader modelReloader) {
         super(id, modelClass, componentModel, view);
         this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
