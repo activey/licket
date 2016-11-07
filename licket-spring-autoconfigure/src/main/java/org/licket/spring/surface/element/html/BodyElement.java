@@ -59,7 +59,7 @@ public class BodyElement extends SurfaceElement {
 
     private SurfaceElement newBody() {
         SurfaceElement surfaceElement = new SurfaceElement(getComponentId(), getNamespace());
-        surfaceElement.setAttribute("id", getComponentId());
+        surfaceElement.addAttribute("id", getComponentId());
         return surfaceElement;
     }
 }

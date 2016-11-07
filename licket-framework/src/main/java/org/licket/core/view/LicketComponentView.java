@@ -24,7 +24,7 @@ public interface LicketComponentView {
 
     static LicketComponentView noView() { return new NoTemplateComponentView(); }
 
-    InputStream readViewContent();
+    Resource viewResource();
 
     boolean hasTemplate();
 
@@ -33,7 +33,7 @@ public interface LicketComponentView {
     class NoTemplateComponentView implements LicketComponentView {
 
         @Override
-        public InputStream readViewContent() {
+        public Resource viewResource() {
             return null;
         }
 
@@ -51,7 +51,7 @@ public interface LicketComponentView {
     class InternalComponentView implements LicketComponentView {
 
         @Override
-        public InputStream readViewContent() {
+        public Resource viewResource() {
             return null;
         }
 
@@ -74,8 +74,8 @@ public interface LicketComponentView {
             this.componentViewResource = componentViewResource;
         }
 
-        public final InputStream readViewContent() {
-            return componentViewResource.getStream();
+        public final Resource viewResource() {
+            return componentViewResource;
         }
 
         public boolean hasTemplate() {

@@ -35,6 +35,6 @@ public interface LicketComponent<T> extends VueClass {
 
     Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser);
 
-    // maybe it would make sense to have some components more complicated inner hidden structure?
-    void traverseDown(Predicate<LicketComponent<?>> componentConsumer);
+    // maybe it would make sense to have some components more complicated inner structure?
+    default void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {};
 }

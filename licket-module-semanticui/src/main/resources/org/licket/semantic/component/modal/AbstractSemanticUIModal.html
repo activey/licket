@@ -1,13 +1,10 @@
-<div class="ui modal">
-    <div class="header">
-        <slot name="header">
-            Modal header
-        </slot>
+<div class="ui modal" xmlns:lick="http://www.w3.org/1999/xhtml">
+    <div class="header" lick:id="header">
+        Header placeholder
     </div>
-    <div class="content">
-        <slot>placeholder</slot>
+    <div class="content" lick:id="content">
+        Content placeholder
     </div>
-    <div class="actions" v-if="model.showActions">
-        <slot name="actions"></slot>
+    <div class="actions" lick:id="actions" v-if="model.showActions">
     </div>
 </div>

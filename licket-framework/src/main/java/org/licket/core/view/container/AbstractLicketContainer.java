@@ -87,7 +87,7 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
     }
 
     @Override
-    protected final void onRender(ComponentRenderingContext renderingContext) {
+    protected final void onBeforeRender(ComponentRenderingContext renderingContext) {
         onRenderContainer(renderingContext);
     }
 
@@ -104,9 +104,8 @@ public abstract class AbstractLicketContainer<T> extends AbstractLicketComponent
 
     @Override
     protected final void onInitialize() {
-        leaves.forEach(LicketComponent::initialize);
-
         onInitializeContainer();
+        leaves.forEach(LicketComponent::initialize);
     }
 
     protected void onInitializeContainer() {}

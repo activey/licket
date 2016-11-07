@@ -1,5 +1,13 @@
 package org.licket.spring.web;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
+import static org.springframework.http.MediaType.parseMediaType;
+import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
+import java.io.ByteArrayOutputStream;
+import java.util.Optional;
+import javax.annotation.PostConstruct;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.Resource;
@@ -17,16 +25,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.annotation.PostConstruct;
-import java.io.ByteArrayOutputStream;
-import java.util.Optional;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
-import static org.springframework.http.MediaType.parseMediaType;
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
 
 /**
  * @author activey
@@ -54,22 +52,20 @@ public class LicketRootController {
         LicketComponentContainer<?> rootContainer = licketApplication.rootComponentContainer();
         LicketComponentView containerView = rootContainer.getView();
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-        new SurfaceContext(surfaceElementFactories).processTemplateContent(containerView.readViewContent(), byteArrayStream);
+        new SurfaceContext(surfaceElementFactories).processTemplateContent(containerView.viewResource().getStream(),
+            byteArrayStream);
         resourcesStorage
-                .putResource(new ByteArrayResource("index.html", TEXT_HTML_VALUE, byteArrayStream.toByteArray()));
+            .putResource(new ByteArrayResource("index.html", TEXT_HTML_VALUE, byteArrayStream.toByteArray()));
     }
 
-
     @GetMapping(value = "/index", produces = TEXT_HTML_VALUE)
-    public @ResponseBody
-    ResponseEntity<InputStreamResource> generateRootHtml() {
+    public @ResponseBody ResponseEntity<InputStreamResource> generateRootHtml() {
         Optional<Resource> resourceOptional = resourcesStorage.getResource("index.html");
         if (!resourceOptional.isPresent()) {
             return status(NOT_FOUND).contentLength(0).body(null);
         }
         Resource resource = resourceOptional.get();
-        return ok()
-                .contentType(parseMediaType(resource.getMimeType()))
-                .body(new InputStreamResource(resource.getStream()));
+        return ok().contentType(parseMediaType(resource.getMimeType()))
+            .body(new InputStreamResource(resource.getStream()));
     }
 }

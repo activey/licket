@@ -1,1 +1,1 @@
-var a = test.model['dupa']
+$(this.$el).modal('show');

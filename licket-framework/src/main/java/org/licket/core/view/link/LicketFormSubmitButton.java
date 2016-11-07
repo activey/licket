@@ -19,14 +19,14 @@ public final class LicketFormSubmitButton extends AbstractLicketComponent<Void> 
     }
 
     @Override
-    protected void onRender(ComponentRenderingContext renderingContext) {
+    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
         Optional<LicketComponent<?>> parentForm = getEnclosingForm();
         if (!parentForm.isPresent()) {
             renderingContext.onSurfaceElement(element -> element
                 .replaceWith(new Comment("Unable to find parent form matching submit button: %s.", getId())));
             return;
         }
-        renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.setAttribute("v-on:click",
+        renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("v-on:click",
             format("submitForm", getCompositeId().getValue())));
     }
 

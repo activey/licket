@@ -37,6 +37,10 @@ public class PropertyNameBuilder extends AbstractAstNodeBuilder<PropertyGet> {
         return new PropertyNameBuilder(left, right);
     }
 
+    public static PropertyNameBuilder property(ArrayElementGetBuilder left, NameBuilder right) {
+        return new PropertyNameBuilder(left, right);
+    }
+
     public static PropertyNameBuilder property(String left, String right) {
         return new PropertyNameBuilder(name(left), name(right));
     }

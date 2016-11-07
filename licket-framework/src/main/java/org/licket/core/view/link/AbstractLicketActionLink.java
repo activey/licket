@@ -69,10 +69,10 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
     protected void onAfterClick(ComponentActionCallback componentActionCallback) {}
 
     @Override
-    protected void onRender(ComponentRenderingContext renderingContext) {
+    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
         // basically invokeAction() should handle all the stuff, the rest is done on javascript level
         renderingContext
-            .onSurfaceElement(surfaceElement -> surfaceElement.setAttribute("v-on:click", "handleClick"));
+            .onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("v-on:click", "handleClick"));
     }
 
     public final void invokeAction(ComponentActionCallback componentActionCallback) {

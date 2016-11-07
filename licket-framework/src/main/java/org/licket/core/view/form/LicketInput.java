@@ -27,7 +27,7 @@ public class LicketInput extends AbstractLicketComponent<String> {
     }
 
     @Override
-    protected void onRender(ComponentRenderingContext renderingContext) {
+    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
         LOGGER.trace("Rendering LicketInput: [{}]", getId());
 
         Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketContainer);
@@ -42,7 +42,7 @@ public class LicketInput extends AbstractLicketComponent<String> {
                 firstPart = parentContainer.getId();
             }
             element.addAttribute("v-model", format("%s.%s", firstPart, getComponentModel().get()));
-            element.setAttribute("name", getComponentModel().get());
+            element.addAttribute("name", getComponentModel().get());
         });
     }
 }

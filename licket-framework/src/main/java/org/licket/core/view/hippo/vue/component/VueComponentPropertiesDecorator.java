@@ -64,11 +64,8 @@ public class VueComponentPropertiesDecorator {
         } catch (IOException e) {
             LOGGER.error("An error occurred while generating component model data. Returning empty model.", e);
         }
-        return functionNode()
-                .body(block().appendStatement(
-                        returnStatement().returnValue(
-                                objectLiteral().objectProperty(propertyBuilder().name("model").value(modelData)))
-                    ));
+        return functionNode().body(block().appendStatement(returnStatement()
+            .returnValue(objectLiteral().objectProperty(propertyBuilder().name("model").value(modelData)))));
     }
 
     private ObjectLiteralBuilder nestedComponents() {
@@ -94,8 +91,7 @@ public class VueComponentPropertiesDecorator {
                 LOGGER.error("An error occurred while serializing component view.", e);
             }
         }
-        // TODO use xml parser stuff
-        return stringLiteral("<!-- Unable to render template, check logs for details. -->");
+        return stringLiteral("<!-- Unable to find template resource -->");
     }
 
     private FunctionNodeBuilder created() {

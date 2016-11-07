@@ -2,6 +2,8 @@ package org.licket.framework.hippo;
 
 import org.mozilla.javascript.ast.ElementGet;
 
+import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
+
 /**
  * @author activey
  */
@@ -18,6 +20,11 @@ public class ArrayElementGetBuilder extends AbstractAstNodeBuilder<ElementGet> {
 
     public ArrayElementGetBuilder element(StringLiteralBuilder stringLiteral) {
         this.element = stringLiteral;
+        return this;
+    }
+
+    public ArrayElementGetBuilder element(String element) {
+        this.element = stringLiteral(element);
         return this;
     }
 

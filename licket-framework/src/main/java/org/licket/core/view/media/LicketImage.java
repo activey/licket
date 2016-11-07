@@ -17,6 +17,6 @@ public class LicketImage extends AbstractLicketComponent<ImageResource> {
     }
 
     @Override
-    protected void onRender(ComponentRenderingContext renderingContext) {
+    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
     }
 }

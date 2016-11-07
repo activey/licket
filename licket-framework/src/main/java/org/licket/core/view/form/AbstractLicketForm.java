@@ -55,7 +55,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
     protected void onRenderContainer(ComponentRenderingContext renderingContext) {
         renderingContext.onSurfaceElement(element -> {
             // TODO check if element is in fact a <form>, or not necessary?
-            element.setAttribute("v-on:submit", "submitForm");
+            element.addAttribute("v-on:submit", "submitForm");
         });
     }
 

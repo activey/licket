@@ -5,7 +5,6 @@ import static java.util.Optional.of;
 import static org.licket.core.id.CompositeId.fromStringValue;
 import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
-import static org.licket.core.view.LicketComponentView.internalTemplateView;
 import static org.licket.core.view.LicketComponentView.noView;
 import static org.licket.framework.hippo.NameBuilder.name;
 import java.util.Optional;
@@ -15,7 +14,7 @@ import javax.xml.stream.XMLStreamException;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketComponentModel;
 import org.licket.core.resource.ByteArrayResource;
-import org.licket.core.resource.InputStreamResource;
+import org.licket.core.resource.ProxyResource;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.surface.element.SurfaceElement;
@@ -41,7 +40,8 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         this(id, modelClass, componentModel, noView());
     }
 
-    public AbstractLicketComponent(String id, Class<T> modelClass, LicketComponentModel<T> componentModel, LicketComponentView view) {
+    public AbstractLicketComponent(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
+                                   LicketComponentView view) {
         this.id = id;
         this.modelClass = modelClass;
         this.componentModel = componentModel;
@@ -55,7 +55,6 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         }
         LOGGER.debug("Initializing component: {}", id);
         onInitialize();
-
         this.initialized = true;
     }
 
@@ -125,9 +124,11 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
     public final void render(ComponentRenderingContext renderingContext) {
         LOGGER.debug("Rendering component: {}", id);
-        onRender(renderingContext);
+        onBeforeRender(renderingContext);
         doRender(renderingContext);
     }
+
+    protected void onBeforeRender(ComponentRenderingContext renderingContext) {}
 
     private void doRender(ComponentRenderingContext renderingContext) {
         if (!getView().hasTemplate()) {
@@ -135,31 +136,38 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
             return;
         }
         renderingContext.onSurfaceElement(element -> {
-            try {
-                if (getView().isTemplateExternal()) {
-                    renderingContext.renderResource(
-                        new InputStreamResource(getCompositeId().getValue(), "text/html", getView().readViewContent()));
-                } else {
-                    renderingContext.renderResource(
-                        new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
-                }
-                replaceElement(element);
-            } catch (XMLStreamException e) {
-                LOGGER.error("An error occured while rendering component.", e);
-                return;
-            }
+            setTemplate(renderingContext, element);
         });
     }
 
-    private void replaceElement(SurfaceElement element) {
-        element.replaceWith(new SurfaceElement(getId(), element.getNamespace()));
-        element.detach();
+    private void setTemplate(ComponentRenderingContext renderingContext, SurfaceElement element) {
+        try {
+            if (getView().isTemplateExternal()) {
+                renderingContext
+                    .renderResource(new ProxyResource(getView().viewResource(), getCompositeId().getValue()));
+            } else {
+                renderingContext.renderResource(
+                    new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
+            }
+            onElementReplaced(replaceElement(element));
+        } catch (XMLStreamException e) {
+            LOGGER.error("An error occured while rendering component.", e);
+            return;
+        }
     }
 
-    protected void onRender(ComponentRenderingContext renderingContext) {}
+    protected void onElementReplaced(SurfaceElement surfaceElement) {}
 
-    @Override
-    public void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {
-        // do nothing by default but some components could expose some additional internals
+    private SurfaceElement replaceElement(SurfaceElement element) {
+        SurfaceElement componentElement = new SurfaceElement(getId(), element.getNamespace());
+        setRefAttribute(componentElement);
+        element.replaceWith(componentElement);
+        element.detach();
+
+        return componentElement;
+    }
+
+    private void setRefAttribute(SurfaceElement element) {
+        element.addAttribute("ref", getId());
     }
 }

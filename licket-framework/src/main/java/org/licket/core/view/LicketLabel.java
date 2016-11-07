@@ -37,7 +37,7 @@ public class LicketLabel extends AbstractLicketComponent<String> {
     }
 
     @Override
-    protected void onRender(ComponentRenderingContext renderingContext) {
+    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
         LOGGER.trace("Rendering LicketLabel: [{}]", getId());
         renderingContext.onSurfaceElement(element -> {
             // clearing out whole label content

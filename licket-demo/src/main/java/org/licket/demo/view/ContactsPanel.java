@@ -10,7 +10,9 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.container.AbstractLicketContainer;
 import org.licket.core.view.link.AbstractLicketActionLink;
+import org.licket.core.view.link.AbstractLicketLink;
 import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.demo.model.Contacts;
 import org.licket.demo.service.ContactsService;
 import org.licket.semantic.component.modal.AbstractSemanticUIModal;
@@ -29,6 +31,7 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
     private LicketRemote remoteCommunication;
 
     private LicketComponentModelReloader modelReloader;
+    private AbstractSemanticUIModal modal;
 
     public ContactsPanel(String id, LicketComponentModelReloader modelReloader) {
         super(id, Contacts.class, emptyComponentModel(), internalTemplateView(), modelReloader);
@@ -37,7 +40,7 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
 
     @Override
     protected void onInitializeContainer() {
-        add(new AbstractSemanticUIModal("form-modal", modalSettings()) {
+        add(modal = new AbstractSemanticUIModal("form-modal", modalSettings()) {
 
             @Override
             protected void onInitialize() {
@@ -46,9 +49,17 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
                     @Override
                     protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
                         reloadList();
+
                         componentActionCallback.reload(ContactsPanel.this);
                     }
                 });
+            }
+        });
+
+        add(new AbstractLicketLink("add-contact") {
+            @Override
+            protected void onClick(ComponentFunctionCallback callback) {
+                callback.call(modal.callShow(this));
             }
         });
 
