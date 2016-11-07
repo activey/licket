@@ -4,7 +4,7 @@ import static java.lang.String.format;
 
 import org.licket.core.model.ComponentIdModel;
 import org.licket.core.model.LicketComponentModel;
-import org.licket.core.view.container.AbstractLicketContainer;
+import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.xml.dom.Text;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class LicketLabel extends AbstractLicketComponent<String> {
     }
 
     private String placeholder() {
-        Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketContainer);
+        Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketMultiContainer);
         if (parent != null) {
             return format("{{%s.%s}}", parent.get().getId(), getComponentModel().get());
         }

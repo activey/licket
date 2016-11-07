@@ -11,7 +11,8 @@ import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
-import org.licket.core.view.AbstractLicketComponent;
+import org.licket.core.module.application.LicketComponentModelReloader;
+import org.licket.core.view.AbstractReloadableLicketComponent;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.vue.annotation.OnVueMounted;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
@@ -20,14 +21,38 @@ import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.FunctionCallBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
 
+import java.util.function.Predicate;
+
 /**
  * @author grabslu
  */
-public abstract class AbstractSemanticUIModal extends AbstractLicketComponent<ModalSettings> {
+public abstract class AbstractSemanticUIModal extends AbstractReloadableLicketComponent<ModalSettings> {
 
-    public AbstractSemanticUIModal(String id, ModalSettings modalSettings) {
-        super(id, ModalSettings.class, ofModelObject(modalSettings),
-            fromComponentClass(AbstractSemanticUIModal.class));
+    private ModalSection headerContainer;
+    private ModalSection bodyContainer;
+    private ModalSection actionsContainer;
+
+    public AbstractSemanticUIModal(String id, ModalSettings modalSettings, LicketComponentModelReloader modelReloader) {
+        super(id, ModalSettings.class, ofModelObject(modalSettings), fromComponentClass(AbstractSemanticUIModal.class), modelReloader);
+    }
+
+    @Override
+    protected final void onInitialize() {
+        this.bodyContainer = new ModalSection("body", modelReloader());
+        bodyContainer.setParent(this);
+        onInitializeBody(bodyContainer, "content");
+        bodyContainer.initialize();
+    }
+
+    protected void onInitializeHeader(ModalSection modalSection, String contentId) {}
+
+    protected void onInitializeBody(ModalSection content, String contentId) {}
+
+    protected void onInitializeActions(ModalSection content, String contentId) {}
+
+    @Override
+    public void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {
+        bodyContainer.traverseDown(componentConsumer);
     }
 
     protected void onBeforeRender(ComponentRenderingContext renderingContext) {

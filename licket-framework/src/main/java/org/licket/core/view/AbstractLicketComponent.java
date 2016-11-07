@@ -53,7 +53,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         if (initialized) {
             return;
         }
-        LOGGER.debug("Initializing component: {}", id);
+        LOGGER.debug("Initializing component: {}", getCompositeId().getValue());
         onInitialize();
         this.initialized = true;
     }
@@ -123,7 +123,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     public final void render(ComponentRenderingContext renderingContext) {
-        LOGGER.debug("Rendering component: {}", id);
+        LOGGER.debug("Rendering component: {}", getCompositeId().getValue());
         onBeforeRender(renderingContext);
         doRender(renderingContext);
     }

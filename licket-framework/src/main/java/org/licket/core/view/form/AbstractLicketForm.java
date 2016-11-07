@@ -16,7 +16,7 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.LicketComponentView;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.container.AbstractLicketContainer;
+import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.hippo.vue.annotation.VueComponent;
 import org.licket.core.view.hippo.vue.annotation.Name;
@@ -30,7 +30,7 @@ import org.licket.framework.hippo.NameBuilder;
  * @author activey
  */
 @VueComponent
-public abstract class AbstractLicketForm<T> extends AbstractLicketContainer<T> {
+public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer<T> {
 
     private LicketRemote licketRemote;
     private LicketComponentModelReloader modelReloader;

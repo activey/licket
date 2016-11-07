@@ -1,10 +1,11 @@
-<div class="ui modal" xmlns:lick="http://www.w3.org/1999/xhtml">
+<div class="ui modal" xmlns:lick="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
     <div class="header" lick:id="header">
-        Header placeholder
+        <div lick:id="content">Header placeholder</div>
     </div>
-    <div class="content" lick:id="content">
-        Content placeholder
+    <div class="body" lick:id="body">
+        <div lick:id="content">Body placeholder</div>
     </div>
-    <div class="actions" lick:id="actions" v-if="model.showActions">
+    <div lick:id="actions" class="actions" v-if="model.showActions">
+        <div lick:id="content">Actions placeholder</div>
     </div>
 </div>

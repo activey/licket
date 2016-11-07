@@ -7,6 +7,7 @@ import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.surface.element.ElementTraverser.withComponentIdSet;
 import java.util.Optional;
 import org.licket.core.id.CompositeId;
+import org.licket.surface.SurfaceContext;
 import org.licket.surface.attribute.BaseAttribute;
 import org.licket.xml.dom.Element;
 import org.licket.xml.dom.Node;
@@ -22,11 +23,11 @@ public class SurfaceElement extends Element {
         super(name, namespace);
     }
 
-    public final void finish() {
-        onFinish();
+    public final void finish(SurfaceContext surfaceContext) {
+        onFinish(surfaceContext);
     }
 
-    protected void onFinish() {}
+    protected void onFinish(SurfaceContext surfaceContext) {}
 
     public final BaseAttribute addAttribute(String attributeName, String attributeValue) {
         BaseAttribute newAttribute = new BaseAttribute(attributeName, getNamespace());

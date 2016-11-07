@@ -6,10 +6,10 @@ import java.util.Optional;
 import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.container.AbstractLicketContainer;
+import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.render.ComponentRenderingContext;
 
-public abstract class AbstractLicketList<T> extends AbstractLicketContainer<String> {
+public abstract class AbstractLicketList<T> extends AbstractLicketMultiContainer<String> {
 
     private Class<T> elementClass;
 
@@ -22,11 +22,11 @@ public abstract class AbstractLicketList<T> extends AbstractLicketContainer<Stri
 
     @Override
     protected final void onRenderContainer(ComponentRenderingContext renderingContext) {
-        Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketContainer);
+        Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketMultiContainer);
         if (!parent.isPresent()) {
             return;
         }
-        AbstractLicketContainer parentContainer = (AbstractLicketContainer) parent.get();
+        AbstractLicketMultiContainer parentContainer = (AbstractLicketMultiContainer) parent.get();
         renderingContext.onSurfaceElement(element -> {
             String firstPart = "model";
             if (!parentContainer.getView().hasTemplate()) {

@@ -7,6 +7,7 @@ import javax.xml.stream.XMLStreamException;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.ResourceStorage;
+import org.licket.surface.SurfaceContext;
 import org.licket.surface.element.SurfaceElement;
 import org.licket.xml.dom.Nodes;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class BodyElement extends SurfaceElement {
     }
 
     @Override
-    protected void onFinish() {
+    protected void onFinish(SurfaceContext surfaceContext) {
         Nodes bodyNodes = new Nodes();
         newArrayList(children()).forEach(child -> bodyNodes.add(child.detach()));
         try {

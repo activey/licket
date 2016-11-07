@@ -8,7 +8,7 @@ import static org.licket.semantic.component.modal.ModalSettingsBuilder.builder;
 import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
-import org.licket.core.view.container.AbstractLicketContainer;
+import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.link.AbstractLicketLink;
 import org.licket.core.view.link.ComponentActionCallback;
@@ -16,13 +16,14 @@ import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.demo.model.Contacts;
 import org.licket.demo.service.ContactsService;
 import org.licket.semantic.component.modal.AbstractSemanticUIModal;
+import org.licket.semantic.component.modal.ModalSection;
 import org.licket.semantic.component.modal.ModalSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author activey
  */
-public class ContactsPanel extends AbstractLicketContainer<Contacts> {
+public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
 
     @Autowired
     private ContactsService contactsService;
@@ -40,19 +41,19 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
 
     @Override
     protected void onInitializeContainer() {
-        add(modal = new AbstractSemanticUIModal("form-modal", modalSettings()) {
+        add(modal = new AbstractSemanticUIModal("form-modal", modalSettings(), modelReloader) {
 
             @Override
-            protected void onInitialize() {
-                slot(new AddContactForm("add-contact-form", contactsService, remoteCommunication, modelReloader) {
+            protected void onInitializeBody(ModalSection bodySection, String contentId) {
+                 bodySection.add(new AddContactForm(contentId, contactsService, remoteCommunication, modelReloader) {
 
-                    @Override
-                    protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
-                        reloadList();
+                     @Override
+                     protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
+                         reloadList();
 
-                        componentActionCallback.reload(ContactsPanel.this);
-                    }
-                });
+                         componentActionCallback.reload(ContactsPanel.this);
+                     }
+                 });
             }
         });
 
