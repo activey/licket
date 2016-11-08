@@ -22,7 +22,7 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
 
     public AddContactForm(String id, ContactsService contactsService, LicketRemote remoteCommunication,
                           LicketComponentModelReloader modelReloader) {
-        super(id, Contact.class, ofModelObject(new Contact()), fromComponentClass(AddContactForm.class), remoteCommunication, modelReloader);
+        super(id, Contact.class, ofModelObject(new Contact()), internalTemplateView(), remoteCommunication, modelReloader);
         this.contactsService = checkNotNull(contactsService, "Contacts service has to be not null!");
 
         add(new LicketInput("name"));

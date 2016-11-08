@@ -30,7 +30,8 @@ public class LicketInput extends AbstractLicketComponent<String> {
     protected void onBeforeRender(ComponentRenderingContext renderingContext) {
         LOGGER.trace("Rendering LicketInput: [{}]", getId());
 
-        Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketMultiContainer);
+        Optional<LicketComponent<?>> parent = traverseUp(
+            component -> component instanceof AbstractLicketMultiContainer);
         if (!parent.isPresent()) {
             return;
         }

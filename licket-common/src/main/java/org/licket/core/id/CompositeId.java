@@ -9,6 +9,9 @@ import static java.util.Arrays.stream;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ObjectArrays;
+
+import java.util.Arrays;
 
 /**
  * @author activey
@@ -56,5 +59,12 @@ public class CompositeId {
 
     public String current() {
         return idParts[index];
+    }
+
+    public final CompositeId join(CompositeId compositeId) {
+        if (compositeId == null) {
+            return new CompositeId(idParts);
+        }
+        return new CompositeId(concat(idParts, compositeId.idParts, String.class));
     }
 }

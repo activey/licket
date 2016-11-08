@@ -28,67 +28,80 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SpringResourceStorage implements ResourceStorage {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpringResourceStorage.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SpringResourceStorage.class);
 
-    @Autowired
-    private ServletContext servletContext;
+  @Autowired
+  private ServletContext servletContext;
 
-    @Autowired
-    private Collection<Resource> allResources;
+  @Autowired
+  private Collection<Resource> allResources;
 
-    @Autowired
-    private HeadParticipatingResource[] headParticipatingResources;
+  @Autowired
+  private HeadParticipatingResource[] headParticipatingResources;
 
-    @Autowired
-    private FootParticipatingResource[] footParticipatingResources;
+  @Autowired
+  private FootParticipatingResource[] footParticipatingResources;
 
-    private List<Resource> dynamicResources = newArrayList();
+  private List<Resource> dynamicResources = newArrayList();
 
-    private Predicate<Resource> byName(String name) {
-        return resource -> resource.getName().equals(name);
+  private Predicate<Resource> byName(String name) {
+    return resource -> resource.getName().equals(name);
+  }
+
+  private Predicate<Resource> byMimetype(String mimetype) {
+    return resource -> resource.getMimeType().equals(mimetype);
+  }
+
+  @Override
+  public boolean hasResource(String name, String mimetype) {
+    return concat(allResources.stream(), dynamicResources.stream())
+        .anyMatch(byName(name).and(byMimetype(mimetype)));
+  }
+
+  @Override
+  public void putResource(Resource resource) {
+    if (hasResource(resource.getName(), resource.getMimeType())) {
+      LOGGER.debug("Resource with name = {} and mimetype = {} is already there, skipping...",
+          resource.getName(), resource.getMimeType());
+      return;
     }
+    dynamicResources.add(resource);
+  }
 
-    private Predicate<Resource> byMimetype(String mimetype) {
-        return resource -> resource.getMimeType().equals(mimetype);
+  @Override
+  public void replaceResourceContent(Resource resource, byte[] newResourceContent) {
+    if (!hasResource(resource.getName(), resource.getMimeType())) {
+      LOGGER.debug(
+          "Unable to find existing resource with name = {} and mimetype = {}, skipping content replacement ...",
+          resource.getName(), resource.getMimeType());
+        return;
     }
+  }
 
-    @Override
-    public boolean hasResource(String name, String mimetype) {
-        return concat(allResources.stream(), dynamicResources.stream()).anyMatch(byName(name).and(byMimetype(mimetype)));
-    }
+  @Override
+  public Optional<Resource> getResource(String name) {
+    return concat(allResources.stream(), dynamicResources.stream()).filter(byName(name))
+        .findFirst();
+  }
 
-    @Override
-    public void putResource(Resource resource) {
-        if (hasResource(resource.getName(), resource.getMimeType())) {
-            LOGGER.debug("Resource with vueName = {} and mimetype = {} is already there, skipping...", resource.getName(),
-                resource.getMimeType());
-            return;
-        }
-        dynamicResources.add(resource);
-    }
+  @Override
+  public Stream<HeadParticipatingResource> getHeadJavascriptResources() {
+    return stream(headParticipatingResources).filter(byMimetype(JAVASCRIPT_MIMETYPE));
+  }
 
-    @Override
-    public Optional<Resource> getResource(String name) {
-        return concat(allResources.stream(), dynamicResources.stream()).filter(byName(name)).findFirst();
-    }
+  @Override
+  public Stream<FootParticipatingResource> getFootJavascriptResources() {
+    return stream(footParticipatingResources).filter(byMimetype(JAVASCRIPT_MIMETYPE));
+  }
 
-    @Override
-    public Stream<HeadParticipatingResource> getHeadJavascriptResources() {
-        return stream(headParticipatingResources).filter(byMimetype(JAVASCRIPT_MIMETYPE));
-    }
+  @Override
+  public Stream<HeadParticipatingResource> getStylesheetResources() {
+    return stream(headParticipatingResources).filter(byMimetype(CSS_MIMETYPE));
+  }
 
-    @Override
-    public Stream<FootParticipatingResource> getFootJavascriptResources() {
-        return stream(footParticipatingResources).filter(byMimetype(JAVASCRIPT_MIMETYPE));
-    }
-
-    @Override
-    public Stream<HeadParticipatingResource> getStylesheetResources() {
-        return stream(headParticipatingResources).filter(byMimetype(CSS_MIMETYPE));
-    }
-
-    @Override
-    public String getResourceUrl(Resource resource) {
-        return format("%s%s/%s", servletContext.getContextPath(), CONTEXT_RESOURCES, resource.getName());
-    }
+  @Override
+  public String getResourceUrl(Resource resource) {
+    return format("%s%s/%s", servletContext.getContextPath(), CONTEXT_RESOURCES,
+        resource.getName());
+  }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.licket.core.id.CompositeId;
 import org.licket.surface.tag.ElementFactories;
 import org.licket.xml.Builder;
 import org.licket.xml.ParsingException;
@@ -11,7 +12,6 @@ import org.licket.xml.dom.Document;
 
 import static org.licket.surface.SurfaceProcessingException.contentParsingException;
 import static org.licket.surface.SurfaceProcessingException.ioException;
-import static org.licket.surface.tag.ElementFactories.serviceLoaderFactories;
 
 /**
  * 
@@ -20,17 +20,19 @@ import static org.licket.surface.tag.ElementFactories.serviceLoaderFactories;
 public class SurfaceContext {
 
     private final ElementFactories elementFactories;
+    private final CompositeId parentSurfaceContextRootId;
     private boolean skipComments;
 
-    public SurfaceContext() {
-        this(serviceLoaderFactories());
+    public SurfaceContext(ElementFactories elementFactories, CompositeId parentSurfaceContextRootId) {
+        this.elementFactories = elementFactories;
+        this.parentSurfaceContextRootId = parentSurfaceContextRootId;
     }
 
     public SurfaceContext(ElementFactories elementFactories) {
-        this.elementFactories = elementFactories;
+        this(elementFactories, null);
     }
 
-    public void processTemplateContent(InputStream templateContent, OutputStream output) {
+    public final void processTemplateContent(InputStream templateContent, OutputStream output) {
         Builder builder = new Builder(new SurfaceNodeFactory(this, elementFactories));
         try {
             Document document = builder.build(templateContent);
@@ -42,11 +44,19 @@ public class SurfaceContext {
         }
     }
 
-    public boolean isSkipComments() {
+    public final boolean isSubContext() {
+        return parentSurfaceContextRootId != null;
+    }
+
+    public final boolean isSkipComments() {
         return skipComments;
     }
 
-    public void setSkipComments(boolean skipComments) {
-        this.skipComments = skipComments;
+    public final CompositeId getParentSurfaceContextRootId() {
+        return parentSurfaceContextRootId;
+    }
+
+    public final SurfaceContext subContext(CompositeId parentContextId) {
+        return new SurfaceContext(elementFactories, parentContextId);
     }
 }

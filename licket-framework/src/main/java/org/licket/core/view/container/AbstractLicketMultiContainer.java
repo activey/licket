@@ -4,10 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
-
 import java.util.List;
 import java.util.function.Predicate;
-
 import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.AbstractReloadableLicketComponent;
@@ -34,8 +32,8 @@ public abstract class AbstractLicketMultiContainer<T> extends AbstractReloadable
         super(id, modelClass, componentModel, modelReloader);
     }
 
-    public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel, LicketComponentView view,
-                                        LicketComponentModelReloader modelReloader) {
+    public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
+                                        LicketComponentView view, LicketComponentModelReloader modelReloader) {
         super(id, modelClass, componentModel, view, modelReloader);
     }
 

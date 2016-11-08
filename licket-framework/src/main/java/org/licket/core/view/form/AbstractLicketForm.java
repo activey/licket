@@ -25,6 +25,7 @@ import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.ExpressionStatementBuilder;
 import org.licket.framework.hippo.NameBuilder;
+import org.licket.surface.element.SurfaceElement;
 
 /**
  * @author activey
@@ -59,6 +60,11 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
         });
     }
 
+    @Override
+    protected void onElementReplaced(SurfaceElement surfaceElement) {
+        super.onElementReplaced(surfaceElement);
+    }
+
     @VueComponentFunction
     public void afterSubmit(@Name("response") NameBuilder response, BlockBuilder functionBody) {
         // setting current form model directly without event emitter
@@ -80,6 +86,10 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
         componentActionCallback.forEachToBeReloaded(component -> {
             functionBody.appendStatement(reloadComponent(component));
         });
+        // invoking javascript calls
+        componentActionCallback.forEachCall(call -> functionBody.appendStatement(
+                expressionStatement(call)
+        ));
     }
 
     private ExpressionStatementBuilder reloadComponent(LicketComponent<?> component) {

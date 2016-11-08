@@ -9,12 +9,14 @@ import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
+import org.licket.core.view.container.LicketInlineContainer;
 import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.link.AbstractLicketLink;
 import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.demo.model.Contacts;
 import org.licket.demo.service.ContactsService;
+import org.licket.demo.view.modal.AddContactFormModalSection;
 import org.licket.semantic.component.modal.AbstractSemanticUIModal;
 import org.licket.semantic.component.modal.ModalSection;
 import org.licket.semantic.component.modal.ModalSettings;
@@ -32,7 +34,6 @@ public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
     private LicketRemote remoteCommunication;
 
     private LicketComponentModelReloader modelReloader;
-    private AbstractSemanticUIModal modal;
 
     public ContactsPanel(String id, LicketComponentModelReloader modelReloader) {
         super(id, Contacts.class, emptyComponentModel(), internalTemplateView(), modelReloader);
@@ -41,29 +42,6 @@ public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
 
     @Override
     protected void onInitializeContainer() {
-        add(modal = new AbstractSemanticUIModal("form-modal", modalSettings(), modelReloader) {
-
-            @Override
-            protected void onInitializeBody(ModalSection bodySection, String contentId) {
-                 bodySection.add(new AddContactForm(contentId, contactsService, remoteCommunication, modelReloader) {
-
-                     @Override
-                     protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
-                         reloadList();
-
-                         componentActionCallback.reload(ContactsPanel.this);
-                     }
-                 });
-            }
-        });
-
-        add(new AbstractLicketLink("add-contact") {
-            @Override
-            protected void onClick(ComponentFunctionCallback callback) {
-                callback.call(modal.callShow(this));
-            }
-        });
-
         add(new ContactsList("contact", new LicketComponentModel("contacts"), modelReloader));
         add(new AbstractLicketActionLink("reload", remoteCommunication, modelReloader) {
 

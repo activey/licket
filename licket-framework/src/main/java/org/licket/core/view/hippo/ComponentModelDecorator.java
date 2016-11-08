@@ -27,12 +27,20 @@ public class ComponentModelDecorator {
         return new ComponentModelDecorator(componentModel);
     }
 
+    private static Reader modelObjectLiteralReader(String modelStringValue) {
+        return new StringReader(format("model = %s", modelStringValue));
+    }
+
     public ObjectLiteralBuilder decorate(ObjectLiteralBuilder objectLiteral) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(QUOTE_FIELD_NAMES, false);
 
         // serialize component model to string json
-        String modelStringValue = mapper.writeValueAsString(componentModel.get());
+        Object modelValue = componentModel.get();
+        if (modelValue == null) {
+            return objectLiteral;
+        }
+        String modelStringValue = mapper.writeValueAsString(modelValue);
 
         // parse model declaration object literal
         AstRoot astRoot = new Parser().parse(modelObjectLiteralReader(modelStringValue), "test.js", 0);
@@ -44,9 +52,5 @@ public class ComponentModelDecorator {
             return true;
         });
         return objectLiteral;
-    }
-
-    private static Reader modelObjectLiteralReader(String modelStringValue) {
-        return new StringReader(format("model = %s", modelStringValue));
     }
 }

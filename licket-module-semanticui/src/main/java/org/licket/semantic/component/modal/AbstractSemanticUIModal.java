@@ -38,9 +38,9 @@ public abstract class AbstractSemanticUIModal extends AbstractReloadableLicketCo
 
     @Override
     protected final void onInitialize() {
-        this.bodyContainer = new ModalSection("body", modelReloader());
+        this.bodyContainer = new ModalSection("main-section", modelReloader());
         bodyContainer.setParent(this);
-        onInitializeBody(bodyContainer, "content");
+        onInitializeBody(bodyContainer, "content-block");
         bodyContainer.initialize();
     }
 
@@ -52,7 +52,9 @@ public abstract class AbstractSemanticUIModal extends AbstractReloadableLicketCo
 
     @Override
     public void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {
-        bodyContainer.traverseDown(componentConsumer);
+        if (componentConsumer.test(bodyContainer)) {
+            bodyContainer.traverseDown(componentConsumer);
+        }
     }
 
     protected void onBeforeRender(ComponentRenderingContext renderingContext) {
@@ -107,4 +109,18 @@ public abstract class AbstractSemanticUIModal extends AbstractReloadableLicketCo
                         name("show")
                 ));
     }
+
+    public final FunctionCallBuilder callHide(LicketComponent<?> caller) {
+        // TODO check if caller and modal has the same parent, if not - call is not possible.
+        return functionCall().target(
+                property(
+                        arrayElementGet()
+                                .target(property(property("this", "$parent"), "$refs"))
+                                .element(getId()),
+                        name("hide")
+                ));
+    }
+
+
+
 }

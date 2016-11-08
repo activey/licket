@@ -1,5 +1,6 @@
 package org.licket.core.resource;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -20,4 +21,6 @@ public interface ResourceStorage {
     Stream<HeadParticipatingResource> getStylesheetResources();
 
     String getResourceUrl(Resource resource);
+
+    void replaceResourceContent(Resource resource, byte[] newResourceContent);
 }
