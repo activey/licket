@@ -1,6 +1,6 @@
 :construction: **Still in very alpha stage!** :construction:
  
-<img width="50%" src="https://raw.githubusercontent.com/activey/licket/master/licket.png"></img>
+<img width="200" src="https://raw.githubusercontent.com/activey/licket/master/licket.png"></img>
 
 # Licket baby!
 Here it is, brand new sweets to make your life even sweeter than before. Yes you! my brave web developer ;)
