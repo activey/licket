@@ -1,11 +1,11 @@
 :construction: **Still in very alpha stage!** :construction:
  
- ![](https://rawgit.com/activey/licket/master/licket.svg)
+ ![](https://raw.githubusercontent.com/activey/licket/master/licket.png)
 # Licket baby!
 Here it is, brand new sweets to make your life even sweeter than before. Yes you! my brave web developer ;)
 
-What is Licket you ask? Licket is a Java based, Spring Boot driven a AngularJS 2 flavoured stack!
-While being influenced a lot by Apache Wicket (http://wicket.apache.org, I love you guys...) introduces a little more Angularish way of living :P
+What is Licket you ask? Licket is a Java based, Spring Boot driven and Vue.js flavoured stack!
+While being influenced a lot by Apache Wicket (http://wicket.apache.org, I love you guys...) it brings Java/Javascript web development to a completely new level :)
 
 ## Step by step HOW-TO or how to get running NOW!
 
@@ -74,12 +74,17 @@ As mentioned in preface, Licket derives many concepts from Apache Wicket like lo
 Then you can model out the components:
 
 ```java
-public class ContactsAppRoot extends AbstractLicketContainer<Void> {
+public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
+    
+  @Autowired
+  private ContactsPanel contactsPanel;
 
-  public ContactsAppRoot(String id,
-      @Autowired @Qualifier("contactsPanel") LicketComponentContainer contactsPanel) {
-    super(id, fromComponentContainerClass(ContactsAppRoot.class));
-
+  public ContactsAppRoot(String id, LicketComponentModelReloader modelReloader) {
+      super(id, Void.class, emptyComponentModel(), fromComponentClass(ContactsAppRoot.class), modelReloader);
+  }
+  
+  @Override
+  protected void onInitializeContainer() {
     add(contactsPanel);
   }
 }
@@ -91,25 +96,34 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
 
     public ContactsPanel(String id) {
         super(id, fromComponentContainerClass(ContactsPanel.class));
-
-        add(new ContactsList("contact", new LicketModel("contacts")));
     }
 
     @Override
     protected void onInitializeContainer() {
-        readContacts();
+        add(new ContactsList("contact", new LicketComponentModel("contacts"), modelReloader())); 
     }
 
     private void readContacts() {
-        setComponentModelObject(fromIterable(contactsService.getAllContacts()));
+        setComponentModel(ofModelObject(fromIterable(contactsService.getAllContacts())));
     }
 }
 
-public ContactsList(String id, LicketModel<String> enclosingComponentPropertyModel) {
-    super(id, enclosingComponentPropertyModel, Contact.class);
+public class ContactsList extends AbstractLicketList<Contact> {
 
-    add(new LicketLabel("name"));
-    add(new LicketLabel("description"));
+    public ContactsList(String id, LicketComponentModel<String> enclosingComponentPropertyModel,
+                        LicketComponentModelReloader modelReloader) {
+        super(id, enclosingComponentPropertyModel, Contact.class, modelReloader);
+
+        add(new LicketLabel("name"));
+        add(new LicketLabel("description"));
+        add(new AbstractLicketList<EmailAddress>("email", ofString("emails"), EmailAddress.class, modelReloader) {
+
+            @Override
+            protected void onInitializeContainer() {
+                add(new LicketLabel("email"));
+            }
+        });
+    }
 }
 ```
 
@@ -119,14 +133,14 @@ Next,coin your own Spring Boot configuration class and glue all together:
 @Configuration
 public class LicketConfiguration {
 
-    @LicketRootComponent
-    public LicketComponentContainer root() {
-        return new ContactsAppRoot("contacts-page", contactsPanel());
+    @LicketRootContainer
+    public ContactsAppRoot root(@Autowired LicketComponentModelReloader modelReloader) {
+        return new ContactsAppRoot("contacts-page", modelReloader);
     }
 
-    @LicketComponent("contactsPanel")
-    public LicketComponentContainer contactsPanel() {
-        return new ContactsPanel("contacts-panel");
+    @LicketComponent
+    public ContactsPanel contactsPanel(@Autowired LicketComponentModelReloader modelReloader) {
+        return new ContactsPanel("contacts-panel", modelReloader);
     }
     
     @Bean
