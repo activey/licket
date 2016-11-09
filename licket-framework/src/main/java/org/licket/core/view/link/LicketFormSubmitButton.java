@@ -3,7 +3,7 @@ package org.licket.core.view.link;
 import static java.lang.String.format;
 import java.util.Optional;
 
-import org.licket.core.module.forms.component.AbstractLicketForm;
+import org.licket.core.view.form.AbstractLicketForm;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.render.ComponentRenderingContext;
@@ -19,15 +19,15 @@ public final class LicketFormSubmitButton extends AbstractLicketComponent<Void> 
     }
 
     @Override
-    protected void onRender(ComponentRenderingContext renderingContext) {
+    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
         Optional<LicketComponent<?>> parentForm = getEnclosingForm();
         if (!parentForm.isPresent()) {
             renderingContext.onSurfaceElement(element -> element
                 .replaceWith(new Comment("Unable to find parent form matching submit button: %s.", getId())));
             return;
         }
-        renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.setAttribute("(click)",
-            format("submitForm()", getCompositeId().getValue())));
+        renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("v-on:click",
+            format("submitForm", getCompositeId().getValue())));
     }
 
     private Optional<LicketComponent<?>> getEnclosingForm() {

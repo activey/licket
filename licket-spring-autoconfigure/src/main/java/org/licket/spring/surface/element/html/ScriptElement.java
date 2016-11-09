@@ -1,5 +1,6 @@
 package org.licket.spring.surface.element.html;
 
+import org.licket.xml.dom.Attribute;
 import org.licket.xml.dom.Element;
 
 import static org.licket.spring.surface.element.html.HtmlElementFactory.HTML_NAMESPACE;
@@ -14,7 +15,7 @@ public class ScriptElement extends Element {
     }
 
     public void setSrc(String src) {
-        setAttribute("src", src);
+        addAttribute(new Attribute("src", getNamespace(), src));
     }
 
     @Override

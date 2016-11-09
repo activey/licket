@@ -27,6 +27,8 @@ public class SurfaceNodeFactory extends NodeFactory {
         Optional<ElementFactory> elementFactoryOptional = elementFactories.getElementFactoryByNamespace(namespace);
         if (!elementFactoryOptional.isPresent()) {
             currentElement = new SurfaceElement(localName, namespace);
+            currentElement.start();
+            return currentElement;
         }
         Optional<SurfaceElement> elementOptional = elementFactoryOptional.get().createElement(localName);
         if (elementOptional.isPresent()) {
@@ -76,7 +78,7 @@ public class SurfaceNodeFactory extends NodeFactory {
     @Override
     public Element finishMakingElement(Element element) {
         SurfaceElement finishingElement = (SurfaceElement) element;
-        finishingElement.finish();
+        finishingElement.finish(surfaceContext);
         return finishingElement;
     }
 }

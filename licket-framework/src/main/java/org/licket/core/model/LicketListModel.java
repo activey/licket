@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 /**
  * @author activey
  */
-public class LicketListModel<T> extends LicketModel<Iterable<T>> {
+public class LicketListModel<T> extends LicketComponentModel<Iterable<T>> {
 
     public LicketListModel(Iterable<T> modelObject) {
         super(modelObject);

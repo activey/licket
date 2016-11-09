@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(CONTEXT_COMPONENT)
+@CrossOrigin(origins = "http://localhost:8000")
 public class LicketComponentController {
 
     @Autowired

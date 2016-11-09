@@ -22,6 +22,12 @@
             <artifactId>javafaker</artifactId>
             <version>0.10</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.licket</groupId>
+            <artifactId>licket-module-semanticui</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

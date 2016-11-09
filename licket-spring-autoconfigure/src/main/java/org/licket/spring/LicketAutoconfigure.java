@@ -16,14 +16,14 @@ import org.springframework.web.context.annotation.SessionScope;
 @Configuration
 @ConditionalOnClass(LicketApplication.class)
 @Import({
-        LicketWebConfiguration.class,
         LicketResourcesConfiguration.class,
+        LicketWebConfiguration.class,
         LicketSurfaceConfiguration.class
 })
 @PropertySource("classpath:/licket.properties")
 public class LicketAutoconfigure {
 
-    @Value("${application.angularName:default}")
+    @Value("${application.vueName:default}")
     private String applicationName;
 
     @Bean

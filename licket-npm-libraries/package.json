@@ -1,24 +1,10 @@
 {
-  "name": "licket-angular2-libraries",
+  "name": "licket-npm-libraries",
   "version": "0.0.1-SNAPSHOT",
   "repository": "https://github.com/activey/licket.git",
-  "license": "Apache2",
+  "license": "Apache-2.0",
   "dependencies": {
-    "@angular/core": "~2.0.0",
-    "@angular/forms": "~2.0.0",
-    "@angular/common": "~2.0.0",
-    "@angular/compiler": "~2.0.0",
-    "@angular/platform-browser": "~2.0.0",
-    "@angular/platform-browser-dynamic": "~2.0.0",
-    "@angular/router": "~3.0.0",
-    "@angular/http": "~2.0.0",
-    "@angular/upgrade": "~2.0.0",
-    "rxjs": "~5.0.0-beta.12",
-    "zone.js": "~0.6.25",
-    "reflect-metadata": "~0.1.8"
-  },
-  "devDependencies": {
-    "eslint": "^3.5.0",
-    "eslint-config-eslint": "~3.0.0"
+    "vue": "2.0.3",
+    "vue-resource": "1.0.3"
   }
 }

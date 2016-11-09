@@ -14,15 +14,15 @@ public class LinkElement extends SurfaceElement {
     }
 
     public void setRelType(LinkRelType relType) {
-        setAttribute("rel", relType.getTypeValue());
+        addAttribute("rel", relType.getTypeValue());
     }
 
     public void setType(String mimetype) {
-        setAttribute("type", mimetype);
+        addAttribute("type", mimetype);
     }
 
     public void setHref(String href) {
-        setAttribute("href", href);
+        addAttribute("href", href);
     }
 
     public enum LinkRelType {

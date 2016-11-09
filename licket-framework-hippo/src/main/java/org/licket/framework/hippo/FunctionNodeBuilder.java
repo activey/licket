@@ -5,13 +5,15 @@ import org.mozilla.javascript.ast.FunctionNode;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.licket.framework.hippo.BlockBuilder.block;
+
 /**
  * @author activey
  */
 public class FunctionNodeBuilder extends AbstractAstNodeBuilder<FunctionNode> {
 
     private List<NameBuilder> paramBuilders = new ArrayList();
-    private BlockBuilder blockBuilder;
+    private BlockBuilder blockBuilder = block();
 
     private FunctionNodeBuilder() {}
 

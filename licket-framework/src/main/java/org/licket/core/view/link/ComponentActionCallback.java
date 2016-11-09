@@ -9,7 +9,7 @@ import static java.util.Arrays.stream;
 /**
  * @author activey
  */
-public class ComponentActionCallback {
+public class ComponentActionCallback extends ComponentFunctionCallback {
 
     private LicketComponent<?>[] components = {};
 

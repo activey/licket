@@ -1,6 +1,7 @@
 package org.licket.spring.surface.element.html;
 
 import org.licket.core.resource.ResourceStorage;
+import org.licket.surface.SurfaceContext;
 import org.licket.surface.element.SurfaceElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +25,8 @@ public class HeadElement extends SurfaceElement {
     }
 
     @Override
-    protected void onFinish() {
-        resourcesStorage.getJavascriptResources().forEach(resource -> {
+    protected void onFinish(SurfaceContext surfaceContext) {
+        resourcesStorage.getHeadJavascriptResources().forEach(resource -> {
             LOGGER.debug("Using head JS resource: {}", resource.getName());
 
             ScriptElement scriptElement = new ScriptElement();

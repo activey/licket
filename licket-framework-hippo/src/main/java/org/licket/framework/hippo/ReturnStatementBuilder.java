@@ -16,13 +16,18 @@ public class ReturnStatementBuilder extends AbstractAstNodeBuilder<ReturnStateme
         return new ReturnStatementBuilder();
     }
 
-    public ReturnStatementBuilder returnValue(FunctionCallBuilder returnValue) {
-        this.returnValue = returnValue;
+    public ReturnStatementBuilder returnValue(ObjectLiteralBuilder objectLiteral) {
+        this.returnValue = objectLiteral;
         return this;
     }
 
-    public ReturnStatementBuilder returnValue(NameBuilder nameBuilder) {
-        this.returnValue = nameBuilder;
+    public ReturnStatementBuilder returnValue(FunctionCallBuilder functionCall) {
+        this.returnValue = functionCall;
+        return this;
+    }
+
+    public ReturnStatementBuilder returnValue(NameBuilder name) {
+        this.returnValue = name;
         return this;
     }
 

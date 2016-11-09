@@ -1,8 +1,6 @@
 package org.licket.core.resource;
 
-import org.licket.core.resource.HeadParticipatingResource;
-import org.licket.core.resource.Resource;
-
+import java.io.ByteArrayOutputStream;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -16,13 +14,13 @@ public interface ResourceStorage {
 
     Optional<Resource> getResource(String name);
 
-    Optional<HeadParticipatingResource> getStylesheetResource(String name);
+    Stream<HeadParticipatingResource> getHeadJavascriptResources();
 
-    Optional<HeadParticipatingResource> getJavascriptResource(String name);
-
-    Stream<HeadParticipatingResource> getJavascriptResources();
+    Stream<FootParticipatingResource> getFootJavascriptResources();
 
     Stream<HeadParticipatingResource> getStylesheetResources();
 
     String getResourceUrl(Resource resource);
+
+    void replaceResourceContent(Resource resource, byte[] newResourceContent);
 }

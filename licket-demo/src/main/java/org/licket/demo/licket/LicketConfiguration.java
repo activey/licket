@@ -1,47 +1,40 @@
 package org.licket.demo.licket;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.resource.HeadParticipatingResource;
+import org.licket.demo.view.AddContactPanel;
 import org.licket.demo.view.ContactsAppRoot;
 import org.licket.demo.view.ContactsPanel;
-import org.licket.demo.view.semantic.JqueryLibraryResource;
-import org.licket.demo.view.semantic.SemanticLibraryResource;
-import org.licket.demo.view.semantic.SemanticStylesheetResource;
+import org.licket.semantic.SemanticUIPluginConfiguration;
+import org.licket.semantic.component.modal.ModalSettings;
+import org.licket.semantic.component.modal.ModalSettingsBuilder;
 import org.licket.spring.annotation.LicketComponent;
 import org.licket.spring.annotation.LicketRootContainer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.Import;
+
+import static org.licket.semantic.component.modal.ModalSettingsBuilder.builder;
 
 @Configuration
+@Import(SemanticUIPluginConfiguration.class)
 public class LicketConfiguration {
 
     @LicketRootContainer
     public ContactsAppRoot root(@Autowired LicketComponentModelReloader modelReloader) {
-        return new ContactsAppRoot("contacts-page", contactsPanel(modelReloader), modelReloader);
+        return new ContactsAppRoot("contacts-page", modelReloader);
     }
 
     @LicketComponent
-    public ContactsPanel contactsPanel(LicketComponentModelReloader modelReloader) {
+    public ContactsPanel contactsPanel(@Autowired LicketComponentModelReloader modelReloader) {
         return new ContactsPanel("contacts-panel", modelReloader);
     }
 
-    @Bean
-    @Order(10)
-    public HeadParticipatingResource jqueryResource() {
-        return new JqueryLibraryResource();
+    private ModalSettings modalDialogSettings() {
+        return builder().build();
     }
 
-    @Bean
-    @Order(11)
-    public HeadParticipatingResource semanticLibrary() {
-        return new SemanticLibraryResource();
-    }
-
-    @Bean
-    @Order(12)
-    public HeadParticipatingResource semanticStylesheet() {
-        return new SemanticStylesheetResource();
+    @LicketComponent
+    public AddContactPanel addContactPanel(@Autowired LicketComponentModelReloader modelReloader) {
+        return new AddContactPanel("add-contact-panel", modelReloader, modalDialogSettings());
     }
 }
