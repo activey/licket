@@ -6,7 +6,7 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.TestContainer;
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
 import org.mockito.Mock;
-
+import static org.fest.assertions.Assertions.assertThat;
 import static org.licket.core.view.tree.LicketComponentTreeWalkSequence.source;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -40,20 +40,18 @@ public class LicketComponentTreeWalkSequenceTest {
     @Test
     public void shouldGenerateProperSequenceWhenTargetIsChildOfSourceAtAnyLevel() {
         // when
-        AbstractAstNodeBuilder<?> sequence = source(levelA5).target(levelB6).traverseSequence();
+        AbstractAstNodeBuilder<?> sequence = source(levelA2).target(levelA5).traverseSequence();
 
         // then
-        System.out.println(sequence.build().toSource());
-    }
+        assertThat(sequence.build().toSource())
+            .isEqualTo("this.$parent.$refs[\"levelA3\"].$refs[\"levelA4\"].$refs[\"levelA5\"]");
 
-    @Test
-    public void shouldGenerateProperSequenceWhenTargetIsParentOfSourceAtAnyLevel() {
+        // when
+        sequence = source(levelA5).target(levelB6).traverseSequence();
 
-    }
-
-    @Test
-    public void shouldGenerateProperSequenceWhenTargetIsChildOfDifferentParent() {
-
+        // then
+        assertThat(sequence.build().toSource()).isEqualTo(
+            "this.$parent.$parent.$parent.$parent.$refs[\"levelB2\"].$refs[\"levelB3\"].$refs[\"levelB4\"].$refs[\"levelB5\"].$refs[\"levelB6\"]");
     }
 
     private void givenComponentTreeStructure() {
