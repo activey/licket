@@ -2,7 +2,7 @@ package org.licket.semantic.component.modal;
 
 import static org.licket.core.model.LicketComponentModel.ofModelObject;
 import static org.licket.core.view.LicketComponentView.fromComponentClass;
-import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
+import static org.licket.core.view.tree.LicketComponentTreeWalkSequence.source;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
@@ -100,27 +100,18 @@ public abstract class AbstractSemanticUIModal extends AbstractReloadableLicketCo
     }
 
     public final FunctionCallBuilder callShow(LicketComponent<?> caller) {
-        // TODO check if caller and modal has the same parent, if not - call is not possible.
         return functionCall().target(
                 property(
-                        arrayElementGet()
-                                .target(property(property("this", "$parent"), "$refs"))
-                                .element(getId()),
+                        source(caller).target(this).traverseSequence(),
                         name("show")
                 ));
     }
 
     public final FunctionCallBuilder callHide(LicketComponent<?> caller) {
-        // TODO check if caller and modal has the same parent, if not - call is not possible.
         return functionCall().target(
                 property(
-                        arrayElementGet()
-                                .target(property(property("this", "$parent"), "$refs"))
-                                .element(getId()),
+                        source(caller).target(this).traverseSequence(),
                         name("hide")
                 ));
     }
-
-
-
 }

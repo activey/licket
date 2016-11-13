@@ -16,6 +16,7 @@ import org.licket.semantic.component.modal.ModalSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
@@ -34,14 +35,14 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
 
     private final ModalSettings modalSettings;
     private AbstractSemanticUIModal modal;
-    private BiConsumer<Contact, ComponentActionCallback> callback;
+    private BiPredicate<Contact, ComponentActionCallback> callback;
 
     public AddContactPanel(String id, LicketComponentModelReloader modelReloader, ModalSettings modalSettings) {
         super(id, Void.class, emptyComponentModel(), internalTemplateView(), modelReloader);
         this.modalSettings = modalSettings;
     }
 
-    public final void onContactAdded(BiConsumer<Contact, ComponentActionCallback> callback) {
+    public final void onContactAdded(BiPredicate<Contact, ComponentActionCallback> callback) {
         this.callback = callback;
     }
 
@@ -66,9 +67,12 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                             @Override
                             protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
                                 if (callback != null) {
-                                    callback.accept(getComponentModel().get(), componentActionCallback);
+                                    if (callback.test(getComponentModel().get(), componentActionCallback)) {
+                                        componentActionCallback.call(modal.callHide(this));
+                                    }
+                                    return;
                                 }
-                                onAfterContactAdded(componentActionCallback);
+                                componentActionCallback.call(modal.callHide(this));
                             }
                         });
                     }
@@ -78,14 +82,10 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
             @Override
             protected void onInitializeActions(ModalSection content, String contentId) {
                 content.add(new LicketInlineContainer<Void>(contentId, Void.class, modelReloader()) {
-                    @Override
-                    protected void onInitializeContainer() {
-                    }
+                    // TODO not yet implemented
                 });
             }
         });
 
     }
-
-    protected void onAfterContactAdded(ComponentActionCallback componentActionCallback) {}
 }

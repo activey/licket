@@ -7,11 +7,8 @@ import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.ObjectArrays.concat;
 import static java.util.Arrays.stream;
 
-import com.google.common.base.CaseFormat;
+import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ObjectArrays;
-
-import java.util.Arrays;
 
 /**
  * @author activey
@@ -57,8 +54,12 @@ public class CompositeId {
         index = index + 1;
     }
 
-    public String current() {
+    public final String current() {
         return idParts[index];
+    }
+
+    public final int length() {
+        return idParts.length;
     }
 
     public final CompositeId join(CompositeId compositeId) {
@@ -66,5 +67,27 @@ public class CompositeId {
             return new CompositeId(idParts);
         }
         return new CompositeId(concat(idParts, compositeId.idParts, String.class));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idParts);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CompositeId)) {
+            return false;
+        }
+        CompositeId other = (CompositeId) obj;
+        if (length() != other.length()) {
+            return false;
+        }
+        for (int index = 0; index < idParts.length; index++) {
+            if (!idParts[index].equals(other.idParts[index])) {
+                return false;
+            }
+        }
+        return true;
     }
 }

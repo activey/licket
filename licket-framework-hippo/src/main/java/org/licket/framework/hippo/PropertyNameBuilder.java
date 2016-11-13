@@ -17,28 +17,12 @@ public class PropertyNameBuilder extends AbstractAstNodeBuilder<PropertyGet> {
         this.right = right;
     }
 
-    public static PropertyNameBuilder property(KeywordLiteralBuilder keywordLiteral, NameBuilder right) {
-        return new PropertyNameBuilder(keywordLiteral, right);
+    public static PropertyNameBuilder property(AbstractAstNodeBuilder<?> astNode, NameBuilder right) {
+        return new PropertyNameBuilder(astNode, right);
     }
 
-    public static PropertyNameBuilder property(FunctionCallBuilder functionCall, NameBuilder right) {
-        return new PropertyNameBuilder(functionCall, right);
-    }
-
-    public static PropertyNameBuilder property(PropertyNameBuilder left, NameBuilder right) {
-        return new PropertyNameBuilder(left, right);
-    }
-
-    public static PropertyNameBuilder property(PropertyNameBuilder left, String right) {
-        return new PropertyNameBuilder(left, name(right));
-    }
-
-    public static PropertyNameBuilder property(NameBuilder left, NameBuilder right) {
-        return new PropertyNameBuilder(left, right);
-    }
-
-    public static PropertyNameBuilder property(ArrayElementGetBuilder left, NameBuilder right) {
-        return new PropertyNameBuilder(left, right);
+    public static PropertyNameBuilder property(AbstractAstNodeBuilder<?> astNode, String right) {
+        return new PropertyNameBuilder(astNode, name(right));
     }
 
     public static PropertyNameBuilder property(String left, String right) {
