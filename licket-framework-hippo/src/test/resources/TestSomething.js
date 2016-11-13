@@ -1,1 +1,1 @@
-$(this.$el).modal('show');
+this.$parent.$parent.$parent.$parent.$refs['levelB2'].$refs['levelB3'].$refs['levelB4'].$refs['levelB5'].$refs['levelB6']

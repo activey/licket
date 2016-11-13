@@ -24,6 +24,8 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
         addContactPanel.onContactAdded((contact, componentActionCallback) -> {
             contactsPanel.reloadList();
             componentActionCallback.reload(contactsPanel);
+
+            return true;
         });
         add(contactsPanel);
         add(addContactPanel);

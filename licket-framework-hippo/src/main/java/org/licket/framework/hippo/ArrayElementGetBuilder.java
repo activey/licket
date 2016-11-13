@@ -33,6 +33,11 @@ public class ArrayElementGetBuilder extends AbstractAstNodeBuilder<ElementGet> {
         return this;
     }
 
+    public ArrayElementGetBuilder target(AbstractAstNodeBuilder<?> propertyName) {
+        this.target = propertyName;
+        return this;
+    }
+
     @Override
     public ElementGet build() {
         ElementGet elementGet = new ElementGet();
