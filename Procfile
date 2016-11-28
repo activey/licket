@@ -1,1 +1,1 @@
-web: java -jar licket-demo/target/*.jar
+web: java $JAVA_OPTS -Dserver.port=$PORT -jar licket-demo/target/*.jar
