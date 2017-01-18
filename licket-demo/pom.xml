@@ -2,15 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>licket-parent</artifactId>
-        <groupId>org.licket</groupId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
+    <groupId>org.licket</groupId>
+    <version>0.0.1-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <org.springframework.boot.spring-boot-maven-plugin.version>1.4.2.RELEASE</org.springframework.boot.spring-boot-maven-plugin.version>
+        <!-- Project -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+
+        <org.springframework.boot.spring-boot-maven-plugin.version>1.4.2.RELEASE
+        </org.springframework.boot.spring-boot-maven-plugin.version>
     </properties>
 
     <artifactId>licket-demo</artifactId>
@@ -19,12 +22,7 @@
         <dependency>
             <groupId>org.licket</groupId>
             <artifactId>licket-spring-autoconfigure</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <version>0.10</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -32,10 +30,25 @@
             <artifactId>licket-module-semanticui</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>0.10</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

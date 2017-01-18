@@ -31,7 +31,7 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
     public AbstractLicketActionLink(String id, LicketRemote licketRemote, LicketComponentModelReloader modelReloader) {
         super(id, Void.class, emptyComponentModel(), internalTemplateView());
         this.licketRemote = checkNotNull(licketRemote, "Licket remote must not be null!");
-        this.modelReloader = checkNotNull(modelReloader, "Licket model reloader nust not be null!");
+        this.modelReloader = checkNotNull(modelReloader, "Licket model reloader must not be null!");
     }
 
     @VueComponentFunction
@@ -45,11 +45,18 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
         componentActionCallback.forEachToBeReloaded(component ->  {
             functionBody.appendStatement(
                     functionCall()
-                            .target(property(property(thisLiteral(), modelReloader.vueName()), name("notifyModelChanged")))
+                            .target(
+                                    property(
+                                            property(thisLiteral(), modelReloader.vueName()),
+                                            name("notifyModelChanged")
+                                    )
+                            )
                             .argument(stringLiteral(component.getCompositeId().getValue()))
-                            .argument(arrayElementGet()
-                                    .target(property(property("response", "body"), name("model")))
-                                    .element(stringLiteral(component.getCompositeId().getValue())))
+                            .argument(
+                                    arrayElementGet()
+                                            .target(property(property("response", "body"), name("model")))
+                                            .element(stringLiteral(component.getCompositeId().getValue()))
+                            )
             );
         });
     }
@@ -76,9 +83,9 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
     }
 
     public final void invokeAction(ComponentActionCallback componentActionCallback) {
-        onInvokeAction();
+        onClick();
         onAfterClick(componentActionCallback);
     }
 
-    protected abstract void onInvokeAction();
+    protected abstract void onClick();
 }

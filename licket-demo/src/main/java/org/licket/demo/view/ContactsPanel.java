@@ -42,7 +42,7 @@ public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
         add(new ContactsList("contact", new LicketComponentModel("contacts"), modelReloader()));
         add(new AbstractLicketActionLink("reload", remoteCommunication, modelReloader()) {
 
-            protected void onInvokeAction() {
+            protected void onClick() {
                 reloadList();
             }
 
