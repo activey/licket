@@ -7,7 +7,7 @@ import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.view.LicketComponentView.fromComponentClass;
 
 /**
- * @author grabslu
+ * @author activey
  */
 public class AddContactFormModalSection extends AbstractLicketMonoContainer<Void> {
 

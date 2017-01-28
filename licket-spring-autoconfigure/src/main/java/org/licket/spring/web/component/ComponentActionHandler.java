@@ -33,9 +33,9 @@ public class ComponentActionHandler {
 
             on(component).call("submitForm", componentModelFromActionRequest(formData), componentActionCallback);
         } catch (JsonProcessingException e) {
-            LOGGER.error("An error occurred while deserializing component model for: [%s]", component.getId(), e);
+            LOGGER.error("An error occurred while deserializing component model for: {}.", component.getId(), e);
         } catch (ReflectException reflectException) {
-            LOGGER.error("An error occurred while setting component model for: [%s]", component.getId(),
+            LOGGER.error("An error occurred while setting component model for: {}.", component.getId(),
                 reflectException);
         }
     }
