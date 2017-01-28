@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+
 @Service
 public class ContactsService {
 

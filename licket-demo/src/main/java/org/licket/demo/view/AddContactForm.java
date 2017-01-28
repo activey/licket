@@ -36,31 +36,8 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
     protected void onInitializeContainer() {
         add(new LicketInput("name"));
         add(new LicketInput("description"));
-        add(new AbstractLicketList<EmailAddress>("email", ofString("emails"), EmailAddress.class, modelReloader()) {
-
-            @Override
-            protected void onInitializeContainer() {
-                add(new LicketInput("email"));
-            }
-        });
-
-        add(new AbstractLicketActionLink("add_email", remote(), modelReloader()) {
-            @Override
-            protected void onClick() {
-                addEmailAddress();
-            }
-
-            @Override
-            protected void onAfterClick(ComponentActionCallback componentActionCallback) {
-                componentActionCallback.reload(AddContactForm.this);
-            }
-        });
 
         add(new LicketFormSubmitButton("add"));
-    }
-
-    private void addEmailAddress() {
-        getComponentModel().get().addEmail("");
     }
 
     @Override
