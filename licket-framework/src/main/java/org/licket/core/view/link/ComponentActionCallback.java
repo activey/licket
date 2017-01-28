@@ -13,6 +13,7 @@ public class ComponentActionCallback extends ComponentFunctionCallback {
 
     private LicketComponent<?>[] components = {};
 
+    // TODO currently reloading of AbstractLicketList is not supported ;/
     public final void reload(LicketComponent<?>... components) {
         this.components = components;
     }

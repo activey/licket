@@ -6,7 +6,6 @@ import org.licket.demo.view.ContactsAppRoot;
 import org.licket.demo.view.ContactsPanel;
 import org.licket.semantic.SemanticUIPluginConfiguration;
 import org.licket.semantic.component.modal.ModalSettings;
-import org.licket.semantic.component.modal.ModalSettingsBuilder;
 import org.licket.spring.annotation.LicketComponent;
 import org.licket.spring.annotation.LicketRootContainer;
 import org.springframework.beans.factory.annotation.Autowired;

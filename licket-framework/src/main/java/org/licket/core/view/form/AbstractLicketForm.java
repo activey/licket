@@ -34,14 +34,16 @@ import org.licket.surface.element.SurfaceElement;
 public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer<T> {
 
     private LicketRemote licketRemote;
-    private LicketComponentModelReloader modelReloader;
 
     public AbstractLicketForm(String id, Class<T> modelClass, LicketComponentModel<T> model, LicketComponentView componentView,
                               LicketRemote licketRemote,
                               LicketComponentModelReloader modelReloader) {
         super(id, modelClass, model, componentView, modelReloader);
         this.licketRemote = checkNotNull(licketRemote, "Liket remote instance must not be null!");
-        this.modelReloader = checkNotNull(modelReloader, "Model reloader instance must not be null!");
+    }
+
+    public final LicketRemote remote() {
+        return licketRemote;
     }
 
     public final void submitForm(T formModelObject, ComponentActionCallback actionCallback) {
@@ -93,7 +95,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
     }
 
     private ExpressionStatementBuilder reloadComponent(LicketComponent<?> component) {
-        return expressionStatement(functionCall().target(property(property(thisLiteral(), modelReloader.vueName()), name("notifyModelChanged")))
+        return expressionStatement(functionCall().target(property(property(thisLiteral(), modelReloader().vueName()), name("notifyModelChanged")))
                 .argument(stringLiteral(component.getCompositeId().getValue()))
                 .argument(arrayElementGet()
                         .target(property(property("response", "body"), name("model")))

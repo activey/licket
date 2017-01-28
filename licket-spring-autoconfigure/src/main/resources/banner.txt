@@ -3,5 +3,5 @@
 / /__| | (__|   <  __/ |_
 \____/_|\___|_|\_\___|\__|
 
-Spring boot with AngularJS on steroids
+Spring boot with Vue.js on steroids
 
