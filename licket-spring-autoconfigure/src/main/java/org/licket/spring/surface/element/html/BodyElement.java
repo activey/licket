@@ -7,6 +7,8 @@ import javax.xml.stream.XMLStreamException;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.ResourceStorage;
+import org.licket.spring.surface.element.html.router.RootComponentWrapperElement;
+import org.licket.spring.surface.element.html.router.RouterViewElement;
 import org.licket.surface.SurfaceContext;
 import org.licket.surface.element.SurfaceElement;
 import org.licket.xml.dom.Nodes;
@@ -38,11 +40,12 @@ public class BodyElement extends SurfaceElement {
 
     @Override
     protected void onFinish(SurfaceContext surfaceContext) {
+        // detaching whole body content into buffer
         Nodes bodyNodes = new Nodes();
         newArrayList(children()).forEach(child -> bodyNodes.add(child.detach()));
+
         try {
-            resourcesStorage
-                    .putResource(new ByteArrayResource(getComponentId(), TEXT_HTML_VALUE, bodyNodes.toBytes()));
+            resourcesStorage.putResource(new ByteArrayResource(getComponentId(), TEXT_HTML_VALUE, bodyNodes.toBytes()));
             appendChildElement(newBody());
         } catch (XMLStreamException e) {
             LOGGER.error("An error occured while processing body element.", e);
@@ -59,8 +62,9 @@ public class BodyElement extends SurfaceElement {
     }
 
     private SurfaceElement newBody() {
-        SurfaceElement surfaceElement = new SurfaceElement(getComponentId(), getNamespace());
-        surfaceElement.addAttribute("id", getComponentId());
-        return surfaceElement;
+        RootComponentWrapperElement rootComponentWrapper = new RootComponentWrapperElement(getComponentId());
+        RouterViewElement routerView = new RouterViewElement();
+        rootComponentWrapper.addChildElement(routerView);
+        return rootComponentWrapper;
     }
 }

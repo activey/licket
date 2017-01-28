@@ -5,15 +5,18 @@ import org.licket.core.resource.FootParticipatingResource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.hippo.vue.component.VueComponentPropertiesDecorator;
+import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
-import org.licket.framework.hippo.ObjectPropertyBuilder;
+import org.licket.framework.hippo.PropertyNameBuilder;
 import org.licket.framework.hippo.StringLiteralBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static java.lang.String.format;
+import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
+import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.NewExpressionBuilder.newExpression;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
@@ -39,33 +42,57 @@ public class VueApplicationInitializerResource extends AbstractJavascriptDynamic
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
+        // initializing VueRouter instance
+        PropertyNameBuilder appRouter = property("app", "router");
+        scriptBlockBuilder.appendStatement(
+                expressionStatement(assignment()
+                        .left(appRouter)
+                        .right(newExpression()
+                                .target(name("VueRouter"))
+                                .argument(vueRoutesDefinitions())))
+        );
+
+        // initializing Vue instance
         scriptBlockBuilder.appendStatement(
             expressionStatement(assignment()
                     .left(property(name("app"), name("instance")))
                     .right(newExpression()
                             .target(name("Vue"))
-                            .argument(vueInstanceProperties())))
+                            .argument(objectLiteral().objectProperty(
+                                    propertyBuilder().name("router").value(appRouter)
+                            ))))
         );
-
+        // mounting Vue instance
+        scriptBlockBuilder.appendStatement(
+                expressionStatement(
+                    functionCall()
+                        .target(property(property("app", "instance"), "$mount"))
+                        .argument(applicationRootId()))
+        );
     }
 
-    private ObjectLiteralBuilder vueInstanceProperties() {
-        return objectLiteral()
-                .objectProperty(mountPoint())
-                .objectProperty(componentsTree());
+    private ObjectLiteralBuilder vueRoutesDefinitions() {
+        return objectLiteral().objectProperty(
+                propertyBuilder()
+                        .name("routes")
+                        .arrayValue(componentsTree())
+        );
     }
 
-    private ObjectPropertyBuilder componentsTree() {
-        ObjectLiteralBuilder components = objectLiteral();
+    private ArrayLiteralBuilder componentsTree() {
+        ArrayLiteralBuilder components = arrayLiteral();
         application.traverseDown(container -> {
-            new VueComponentPropertiesDecorator(container, resourceStorage).decorate(components);
+            ObjectLiteralBuilder componentObject = objectLiteral();
+            new VueComponentPropertiesDecorator(container, resourceStorage).decorate(componentObject);
+
+            components.element(objectLiteral()
+                    .objectProperty(propertyBuilder().name("path").value(stringLiteral("/")))
+                    .objectProperty(propertyBuilder().name("component").value(componentObject))
+            );
+
             return false;
         });
-        return propertyBuilder().name("components").value(components);
-    }
-
-    private ObjectPropertyBuilder mountPoint() {
-        return propertyBuilder().name("el").value(applicationRootId());
+        return components;
     }
 
     private StringLiteralBuilder applicationRootId() {

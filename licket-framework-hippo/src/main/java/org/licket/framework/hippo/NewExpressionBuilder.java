@@ -1,9 +1,9 @@
 package org.licket.framework.hippo;
 
-import org.mozilla.javascript.ast.NewExpression;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import org.mozilla.javascript.ast.NewExpression;
 
 /**
  * @author activey
@@ -13,9 +13,7 @@ public class NewExpressionBuilder extends AbstractAstNodeBuilder<NewExpression> 
     private List<AbstractAstNodeBuilder<?>> arguments = new LinkedList<>();
     private AbstractAstNodeBuilder<?> target;
 
-    private NewExpressionBuilder() {
-
-    }
+    private NewExpressionBuilder() {}
 
     public static NewExpressionBuilder newExpression() {
         return new NewExpressionBuilder();
@@ -38,6 +36,11 @@ public class NewExpressionBuilder extends AbstractAstNodeBuilder<NewExpression> 
 
     public NewExpressionBuilder argument(ObjectLiteralBuilder objectLiteral) {
         arguments.add(objectLiteral);
+        return this;
+    }
+
+    public NewExpressionBuilder argument(PropertyNameBuilder propertyBuilder) {
+        arguments.add(propertyBuilder);
         return this;
     }
 

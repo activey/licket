@@ -18,6 +18,7 @@ import org.licket.core.view.hippo.vue.extend.OnVueMountedDecorator;
 import org.licket.core.view.hippo.vue.extend.VueExtendMethodsDecorator;
 import org.licket.framework.hippo.FunctionNodeBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
+import org.licket.framework.hippo.ObjectPropertyBuilder;
 import org.licket.framework.hippo.StringLiteralBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +41,6 @@ public class VueComponentPropertiesDecorator {
 
     public void decorate(ObjectLiteralBuilder componentObjectBuilder) {
         componentObjectBuilder
-            .objectProperty(propertyBuilder().name(stringLiteral(component.getId())).value(componentProperties()));
-    }
-
-    private ObjectLiteralBuilder componentProperties() {
-        return objectLiteral()
                 .objectProperty(propertyBuilder().name("template").value(template()))
                 .objectProperty(propertyBuilder().name("data").value(data()))
                 .objectProperty(propertyBuilder().name("methods").value(methods()))
@@ -74,7 +70,13 @@ public class VueComponentPropertiesDecorator {
             if (!nestedComponent.getView().hasTemplate()) {
                 return false;
             }
-            new VueComponentPropertiesDecorator(nestedComponent, resourceStorage).decorate(nestedComponents);
+            ObjectLiteralBuilder nestedComponentObject = objectLiteral();
+            new VueComponentPropertiesDecorator(nestedComponent, resourceStorage).decorate(nestedComponentObject);
+            nestedComponents.objectProperty(
+                    propertyBuilder()
+                            .name(stringLiteral(nestedComponent.getId()))
+                            .value(nestedComponentObject));
+
             return false;
         });
         return nestedComponents;

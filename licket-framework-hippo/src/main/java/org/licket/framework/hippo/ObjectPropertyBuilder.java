@@ -34,7 +34,7 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
         return this;
     }
 
-    public ObjectPropertyBuilder arrayValue(AbstractAstNodeBuilder<ArrayLiteral> arrayLiteralBuilder) {
+    public ObjectPropertyBuilder arrayValue(ArrayLiteralBuilder arrayLiteralBuilder) {
         this.value = arrayLiteralBuilder;
         return this;
     }
