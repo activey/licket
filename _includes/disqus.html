@@ -1,17 +1,20 @@
-{% if site.disqus %}
+{% if page.comments %}
 <div class="comments">
     <div id="disqus_thread"></div>
-    <script type="text/javascript">
+    <script>
+        var disqus_config = function () {
+        this.page.url = "http://activey.github.io/licket/{{ page.url }}";
+        this.page.identifier = "{{ page.id }}";
+        };
+        (function() {
+        var d = document, s = d.createElement('script');
 
-	    var disqus_shortname = '{{ site.disqus }}';
+        s.src = '//ukasz-grabski.disqus.com/embed.js';
 
-	    (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-
-	</script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
 {% endif %}
