@@ -20,12 +20,17 @@ public class ArrayLiteralBuilder extends AbstractAstNodeBuilder<ArrayLiteral> {
         return new ArrayLiteralBuilder();
     }
 
+    public ArrayLiteralBuilder element(ObjectLiteralBuilder objectLiteral) {
+        elements.add(objectLiteral);
+        return this;
+    }
+
     public ArrayLiteralBuilder element(NameBuilder name) {
         elements.add(name);
         return this;
     }
 
-    public ArrayLiteralBuilder element(AbstractAstNodeBuilder<PropertyGet> propertyGet) {
+    public ArrayLiteralBuilder element(PropertyNameBuilder propertyGet) {
         elements.add(propertyGet);
         return this;
     }

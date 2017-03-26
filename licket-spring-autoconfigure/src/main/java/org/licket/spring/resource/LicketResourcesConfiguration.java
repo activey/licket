@@ -2,6 +2,7 @@ package org.licket.spring.resource;
 
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.vue.VueLibraryResource;
+import org.licket.core.resource.vue.VueRouterLibraryResource;
 import org.licket.core.resource.vue.boot.VueApplicationInitializerResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,12 @@ public class LicketResourcesConfiguration {
 
     @Bean
     @Order(2)
+    public VueRouterLibraryResource vueRouterLibraryResource() {
+        return new VueRouterLibraryResource();
+    }
+
+    @Bean
+    @Order(3)
     @SessionScope
     public VueApplicationInitializerResource vueApplicationModuleResource() {
         return new VueApplicationInitializerResource();
