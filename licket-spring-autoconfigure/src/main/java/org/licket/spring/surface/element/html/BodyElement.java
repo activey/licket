@@ -48,7 +48,7 @@ public class BodyElement extends SurfaceElement {
             resourcesStorage.putResource(new ByteArrayResource(getComponentId(), TEXT_HTML_VALUE, bodyNodes.toBytes()));
             appendChildElement(newBody());
         } catch (XMLStreamException e) {
-            LOGGER.error("An error occured while processing body element.", e);
+            LOGGER.error("An error occurred while processing body element.", e);
             return;
         }
 

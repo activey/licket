@@ -51,6 +51,7 @@ public abstract class Node {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         XMLStreamWriter outputFactory = XMLOutputFactory.newInstance().createXMLStreamWriter(output);
         toXML(outputFactory);
+        outputFactory.flush();
         return output.toByteArray();
     }
 }
