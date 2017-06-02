@@ -1,5 +1,22 @@
 package org.licket.core.view;
 
+import org.licket.core.id.CompositeId;
+import org.licket.core.model.LicketComponentModel;
+import org.licket.core.resource.ByteArrayResource;
+import org.licket.core.view.api.AbstractLicketComponentAPI;
+import org.licket.core.view.api.DefaultLicketComponentAPI;
+import org.licket.core.view.link.ComponentFunctionCallback;
+import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.framework.hippo.NameBuilder;
+import org.licket.surface.element.SurfaceElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.PostConstruct;
+import javax.xml.stream.XMLStreamException;
+import java.util.Optional;
+import java.util.function.Predicate;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -8,19 +25,6 @@ import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.view.LicketComponentView.noView;
 import static org.licket.framework.hippo.NameBuilder.name;
-import java.util.Optional;
-import java.util.function.Predicate;
-import javax.annotation.PostConstruct;
-import javax.xml.stream.XMLStreamException;
-import org.licket.core.id.CompositeId;
-import org.licket.core.model.LicketComponentModel;
-import org.licket.core.resource.ByteArrayResource;
-import org.licket.core.resource.ProxyResource;
-import org.licket.core.view.render.ComponentRenderingContext;
-import org.licket.framework.hippo.NameBuilder;
-import org.licket.surface.element.SurfaceElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
@@ -154,7 +158,6 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
             onElementReplaced(replaceElement(element));
         } catch (XMLStreamException e) {
             LOGGER.error("An error occured while rendering component.", e);
-            return;
         }
     }
 
@@ -172,4 +175,9 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     private void setRefAttribute(SurfaceElement element) {
         element.addAttribute("ref", getId());
     }
+
+    public AbstractLicketComponentAPI api(ComponentFunctionCallback functionCallback) {
+        return new DefaultLicketComponentAPI(this, functionCallback);
+    }
+
 }

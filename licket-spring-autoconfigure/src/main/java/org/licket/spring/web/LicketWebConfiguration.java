@@ -26,6 +26,7 @@ public class LicketWebConfiguration extends WebMvcConfigurerAdapter {
     public LicketFormController formControler() {
         return new LicketFormController();
     }
+
     @Bean
     @SessionScope
     public LicketActionLinkController actionLinkController() {

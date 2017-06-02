@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 /**
  * @author activey
  */
-public interface LicketComponent<T> extends VueClass {
+public interface LicketComponent<TYPE> extends VueClass {
 
     LicketComponentView getView();
 
@@ -19,13 +19,13 @@ public interface LicketComponent<T> extends VueClass {
 
     CompositeId getCompositeId();
 
-    Class<T> getComponentModelClass();
+    Class<TYPE> getComponentModelClass();
 
-    LicketComponentModel<T> getComponentModel();
+    LicketComponentModel<TYPE> getComponentModel();
 
-    void setComponentModel(LicketComponentModel<T> componentModel);
+    void setComponentModel(LicketComponentModel<TYPE> componentModel);
 
-    void setComponentModelObject(T componentModelObject);
+    void setComponentModelObject(TYPE componentModelObject);
 
     void setParent(LicketComponent<?> parent);
 
@@ -36,5 +36,5 @@ public interface LicketComponent<T> extends VueClass {
     Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser);
 
     // maybe it would make sense to have some components more complicated inner structure?
-    default void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {};
+    default void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {}
 }

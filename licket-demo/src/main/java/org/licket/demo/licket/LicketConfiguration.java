@@ -29,7 +29,7 @@ public class LicketConfiguration {
     }
 
     private ModalSettings modalDialogSettings() {
-        return builder().build();
+        return builder().showActions().build();
     }
 
     @LicketComponent
