@@ -3,12 +3,12 @@ package org.licket.demo.view;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
-import org.licket.core.view.container.LicketInlineContainer;
 import org.licket.core.view.link.AbstractLicketLink;
 import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.demo.model.Contact;
 import org.licket.demo.service.ContactsService;
+import org.licket.demo.view.modal.AddContactFormActionsSection;
 import org.licket.demo.view.modal.AddContactFormModalSection;
 import org.licket.semantic.component.modal.AbstractSemanticUIModal;
 import org.licket.semantic.component.modal.ModalSection;
@@ -27,6 +27,8 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
 
     @Autowired
     private ContactsService contactsService;
+
+    private AddContactForm addContactForm;
 
     @Autowired
     private LicketRemote remoteCommunication;
@@ -60,7 +62,7 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                 bodySection.add(new AddContactFormModalSection(contentId, modelReloader()) {
                     @Override
                     protected void onInitializeContainer() {
-                        add(new AddContactForm("new-contact-form", contactsService, remoteCommunication, modelReloader()) {
+                        add(addContactForm = new AddContactForm("new-contact-form", contactsService, remoteCommunication, modelReloader()) {
 
                             @Override
                             protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
@@ -78,9 +80,17 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
             }
 
             @Override
-            protected void onInitializeActions(ModalSection content, String contentId) {
-                content.add(new LicketInlineContainer<Void>(contentId, Void.class, modelReloader()) {
-                    // TODO not yet implemented
+            protected void onInitializeActions(ModalSection actionsSection, String contentId) {
+                actionsSection.add(new AddContactFormActionsSection(contentId, modelReloader()) {
+                    @Override
+                    protected void onInitializeContainer() {
+                        add(new AbstractLicketLink("add") {
+                          @Override
+                          protected void onClick(ComponentFunctionCallback callback) {
+                            addContactForm.api(callback).submit(this);
+                          }
+                        });
+                    }
                 });
             }
         });

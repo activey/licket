@@ -1,0 +1,29 @@
+package org.licket.core.view.form;
+
+import org.licket.core.view.LicketComponent;
+import org.licket.core.view.api.AbstractLicketComponentAPI;
+import org.licket.core.view.link.ComponentFunctionCallback;
+
+import static org.licket.core.view.tree.LicketComponentTreeWalkSequence.source;
+import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
+import static org.licket.framework.hippo.NameBuilder.name;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
+
+/**
+ * @author lukaszgrabski
+ */
+public class AbstractLicketFormAPI extends AbstractLicketComponentAPI {
+
+  public AbstractLicketFormAPI(LicketComponent<?> licketComponent, ComponentFunctionCallback functionCallback) {
+    super(licketComponent, functionCallback);
+  }
+
+  public final void submit(LicketComponent<?> caller) {
+    functionCallback().call(functionCall().target(
+            property(
+                    source(caller).target(component()).traverseSequence(),
+                    name("submitForm")
+            )));
+
+  }
+}

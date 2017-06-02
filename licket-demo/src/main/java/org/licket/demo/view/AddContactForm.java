@@ -36,8 +36,6 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
     protected void onInitializeContainer() {
         add(new LicketInput("name"));
         add(new LicketInput("description"));
-
-        add(new LicketFormSubmitButton("add"));
     }
 
     @Override

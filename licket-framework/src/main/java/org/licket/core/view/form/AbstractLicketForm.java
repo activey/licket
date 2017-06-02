@@ -1,5 +1,21 @@
 package org.licket.core.view.form;
 
+import org.licket.core.model.LicketComponentModel;
+import org.licket.core.module.application.LicketComponentModelReloader;
+import org.licket.core.module.application.LicketRemote;
+import org.licket.core.view.LicketComponent;
+import org.licket.core.view.LicketComponentView;
+import org.licket.core.view.container.AbstractLicketMultiContainer;
+import org.licket.core.view.hippo.vue.annotation.Name;
+import org.licket.core.view.hippo.vue.annotation.VueComponent;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.link.ComponentFunctionCallback;
+import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.framework.hippo.BlockBuilder;
+import org.licket.framework.hippo.ExpressionStatementBuilder;
+import org.licket.framework.hippo.NameBuilder;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.model.LicketComponentModel.ofModelObject;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
@@ -11,21 +27,6 @@ import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.ReturnStatementBuilder.returnStatement;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
-import org.licket.core.model.LicketComponentModel;
-import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemote;
-import org.licket.core.view.LicketComponentView;
-import org.licket.core.view.LicketComponent;
-import org.licket.core.view.container.AbstractLicketMultiContainer;
-import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
-import org.licket.core.view.hippo.vue.annotation.VueComponent;
-import org.licket.core.view.hippo.vue.annotation.Name;
-import org.licket.core.view.link.ComponentActionCallback;
-import org.licket.core.view.render.ComponentRenderingContext;
-import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.ExpressionStatementBuilder;
-import org.licket.framework.hippo.NameBuilder;
-import org.licket.surface.element.SurfaceElement;
 
 /**
  * @author activey
@@ -46,6 +47,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
         return licketRemote;
     }
 
+    @SuppressWarnings("unused")
     public final void submitForm(T formModelObject, ComponentActionCallback actionCallback) {
         setComponentModel(ofModelObject(formModelObject));
         onSubmit();
@@ -60,11 +62,6 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
             // TODO check if element is in fact a <form>, or not necessary?
             element.addAttribute("v-on:submit", "submitForm");
         });
-    }
-
-    @Override
-    protected void onElementReplaced(SurfaceElement surfaceElement) {
-        super.onElementReplaced(surfaceElement);
     }
 
     @VueComponentFunction
@@ -113,5 +110,10 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
                     )
             ))
             .appendStatement(returnStatement().returnValue(name("false")));
+    }
+
+    @Override
+    public AbstractLicketFormAPI api(ComponentFunctionCallback functionCallback) {
+        return new AbstractLicketFormAPI(this, functionCallback);
     }
 }
