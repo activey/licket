@@ -17,6 +17,7 @@
     </properties>
 
     <artifactId>licket-demo</artifactId>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
@@ -53,6 +54,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${org.springframework.boot.spring-boot-maven-plugin.version}</version>
+                <configuration>
+                    <mainClass>org.licket.demo.DemoSpringBootApp</mainClass>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -60,6 +64,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
             </plugin>
         </plugins>
     </build>

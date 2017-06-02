@@ -68,7 +68,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
     }
 
     @VueComponentFunction
-    public void afterSubmit(@Name("response") NameBuilder response, BlockBuilder functionBody) {
+    public final void afterSubmit(@Name("response") NameBuilder response, BlockBuilder functionBody) {
         // setting current form model directly without event emitter
         functionBody
             .appendStatement(

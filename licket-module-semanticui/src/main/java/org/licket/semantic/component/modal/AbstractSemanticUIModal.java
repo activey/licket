@@ -1,8 +1,19 @@
 package org.licket.semantic.component.modal;
 
+import org.licket.core.module.application.LicketComponentModelReloader;
+import org.licket.core.view.AbstractReloadableLicketComponent;
+import org.licket.core.view.LicketComponent;
+import org.licket.core.view.hippo.vue.annotation.OnVueMounted;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.link.ComponentFunctionCallback;
+import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.framework.hippo.BlockBuilder;
+import org.licket.framework.hippo.PropertyNameBuilder;
+
+import java.util.function.Predicate;
+
 import static org.licket.core.model.LicketComponentModel.ofModelObject;
 import static org.licket.core.view.LicketComponentView.fromComponentClass;
-import static org.licket.core.view.tree.LicketComponentTreeWalkSequence.source;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
@@ -10,18 +21,6 @@ import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
-
-import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.view.AbstractReloadableLicketComponent;
-import org.licket.core.view.LicketComponent;
-import org.licket.core.view.hippo.vue.annotation.OnVueMounted;
-import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
-import org.licket.core.view.render.ComponentRenderingContext;
-import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.FunctionCallBuilder;
-import org.licket.framework.hippo.PropertyNameBuilder;
-
-import java.util.function.Predicate;
 
 /**
  * @author grabslu
@@ -58,9 +57,7 @@ public abstract class AbstractSemanticUIModal extends AbstractReloadableLicketCo
     }
 
     protected void onBeforeRender(ComponentRenderingContext renderingContext) {
-        renderingContext.onSurfaceElement(surfaceElement -> {
-            surfaceElement.addAttribute("class", "ui modal");
-        });
+        renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("class", "ui modal"));
     }
 
     @VueComponentFunction
@@ -99,19 +96,8 @@ public abstract class AbstractSemanticUIModal extends AbstractReloadableLicketCo
         );
     }
 
-    public final FunctionCallBuilder callShow(LicketComponent<?> caller) {
-        return functionCall().target(
-                property(
-                        source(caller).target(this).traverseSequence(),
-                        name("show")
-                ));
-    }
-
-    public final FunctionCallBuilder callHide(LicketComponent<?> caller) {
-        return functionCall().target(
-                property(
-                        source(caller).target(this).traverseSequence(),
-                        name("hide")
-                ));
+    @Override
+    public SemanticUIModalAPI api(ComponentFunctionCallback componentFunctionCallback) {
+        return new SemanticUIModalAPI(this, componentFunctionCallback);
     }
 }

@@ -15,9 +15,7 @@ import org.licket.semantic.component.modal.ModalSection;
 import org.licket.semantic.component.modal.ModalSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
-import java.util.function.Consumer;
 
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.view.LicketComponentView.internalTemplateView;
@@ -51,7 +49,7 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
         add(new AbstractLicketLink("add-contact") {
             @Override
             protected void onClick(ComponentFunctionCallback callback) {
-                callback.call(modal.callShow(this));
+                modal.api(callback).show(this);
             }
         });
 
@@ -68,11 +66,11 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                             protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
                                 if (callback != null) {
                                     if (callback.test(getComponentModel().get(), componentActionCallback)) {
-                                        componentActionCallback.call(modal.callHide(this));
+                                        modal.api(componentActionCallback).hide(this);
                                     }
                                     return;
                                 }
-                                componentActionCallback.call(modal.callHide(this));
+                                modal.api(componentActionCallback).hide(this);
                             }
                         });
                     }

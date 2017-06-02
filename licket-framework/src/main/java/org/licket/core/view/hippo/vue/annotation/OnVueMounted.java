@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
  */
 @Target(METHOD)
 @Retention(RUNTIME)
+@SuppressWarnings("unused")
 public @interface OnVueMounted {
 }
