@@ -1,11 +1,11 @@
 package org.licket.demo.view;
 
-import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
-import static org.licket.core.view.LicketComponentView.fromComponentClass;
-
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
+import static org.licket.core.view.LicketComponentView.fromComponentClass;
 
 public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
 

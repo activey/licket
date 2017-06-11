@@ -3,7 +3,9 @@ package org.licket.spring.resource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.vue.VueLibraryResource;
 import org.licket.core.resource.vue.VueRouterLibraryResource;
-import org.licket.core.resource.vue.boot.VueApplicationInitializerResource;
+import org.licket.core.resource.vue.boot.VueGlobalInitializationResource;
+import org.licket.core.resource.vue.boot.VueInstanceInitializerResource;
+import org.licket.core.view.mount.MountedContainersResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -36,7 +38,21 @@ public class LicketResourcesConfiguration {
     @Bean
     @Order(3)
     @SessionScope
-    public VueApplicationInitializerResource vueApplicationModuleResource() {
-        return new VueApplicationInitializerResource();
+    public MountedContainersResource mountedContainersResource() {
+        return new MountedContainersResource();
+    }
+
+    @Bean
+    @Order(4)
+    @SessionScope
+    public VueGlobalInitializationResource globalInitializationResource() {
+        return new VueGlobalInitializationResource();
+    }
+
+    @Bean
+    @Order(5)
+    @SessionScope
+    public VueInstanceInitializerResource vueApplicationModuleResource() {
+        return new VueInstanceInitializerResource();
     }
 }

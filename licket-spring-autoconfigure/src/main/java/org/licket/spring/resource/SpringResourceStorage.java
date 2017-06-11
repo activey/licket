@@ -1,20 +1,5 @@
 package org.licket.spring.resource;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.String.format;
-import static java.util.Arrays.stream;
-import static java.util.stream.Stream.concat;
-import static org.licket.core.resource.css.StylesheetResource.CSS_MIMETYPE;
-import static org.licket.core.resource.javascript.JavascriptStaticResource.JAVASCRIPT_MIMETYPE;
-import static org.licket.core.view.LicketUrls.CONTEXT_RESOURCES;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-import javax.servlet.ServletContext;
-
 import org.licket.core.resource.FootParticipatingResource;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.resource.Resource;
@@ -22,6 +7,21 @@ import org.licket.core.resource.ResourceStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.servlet.ServletContext;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.String.format;
+import static java.util.Arrays.stream;
+import static java.util.stream.Stream.concat;
+import static org.licket.core.resource.css.StylesheetResource.CSS_MIMETYPE;
+import static org.licket.core.resource.javascript.JavascriptStaticResource.JAVASCRIPT_MIMETYPE;
+import static org.licket.core.view.LicketUrls.CONTEXT_RESOURCES;
 
 /**
  * @author activey

@@ -4,7 +4,10 @@ import org.licket.core.LicketApplication;
 import org.licket.core.resource.FootParticipatingResource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
+import org.licket.core.view.LicketComponent;
+import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.core.view.hippo.vue.component.VueComponentPropertiesDecorator;
+import org.licket.core.view.mount.MountedComponentsService;
 import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
@@ -27,13 +30,16 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 /**
  * @author activey
  */
-public class VueApplicationInitializerResource extends AbstractJavascriptDynamicResource implements FootParticipatingResource {
+public class VueInstanceInitializerResource extends AbstractJavascriptDynamicResource implements FootParticipatingResource {
 
     @Autowired
     private LicketApplication application;
 
     @Autowired
     private ResourceStorage resourceStorage;
+
+    @Autowired
+    private MountedComponentsService mountedComponentsService;
 
     @Override
     public String getName() {
@@ -81,18 +87,34 @@ public class VueApplicationInitializerResource extends AbstractJavascriptDynamic
 
     private ArrayLiteralBuilder componentsTree() {
         ArrayLiteralBuilder components = arrayLiteral();
-        application.traverseDown(container -> {
-            ObjectLiteralBuilder componentObject = objectLiteral();
-            new VueComponentPropertiesDecorator(container, resourceStorage).decorate(componentObject);
 
-            components.element(objectLiteral()
-                    .objectProperty(propertyBuilder().name("path").value(stringLiteral("/")))
-                    .objectProperty(propertyBuilder().name("component").value(componentObject))
-            );
-
+        // will mount root container to "/"
+        application.traverseDown(mountedContainer -> {
+            LicketMountPoint mountPoint = mountedContainer.getClass().getAnnotation(LicketMountPoint.class);
+            if (mountPoint == null) {
+                if (mountedContainer.isRoot(application)) {
+                    addComponentMountPoint(components, mountedContainer, "/");
+                    return false;
+                }
+                return false;
+            }
+            // iterating trough components annotated with @LicketMountPoint
+            addComponentMountPoint(components, mountedContainer, mountPoint.value());
             return false;
         });
         return components;
+    }
+
+    private void addComponentMountPoint(ArrayLiteralBuilder components, LicketComponent<?> licketComponent, String mountPoint) {
+        components.element(objectLiteral()
+                .objectProperty(propertyBuilder().name("path").value(stringLiteral(mountPoint)))
+                .objectProperty(propertyBuilder().name("component").value(
+                        new VueComponentPropertiesDecorator(licketComponent, resourceStorage).decorate(objectLiteral()))
+                )
+        );
+
+        // registering mounted component
+        mountedComponentsService.setMountedLink(licketComponent.getClass(), mountPoint);
     }
 
     private StringLiteralBuilder applicationRootId() {

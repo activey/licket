@@ -1,5 +1,6 @@
 package org.licket.core.view;
 
+import org.licket.core.LicketApplication;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketComponentModel;
 import org.licket.core.resource.ByteArrayResource;
@@ -36,6 +37,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     private LicketComponentView view;
     private LicketComponent<?> parent;
     private boolean initialized;
+    private boolean custom;
 
     public AbstractLicketComponent(String id, Class<T> modelClass) {
         this(id, modelClass, emptyComponentModel(), noView());
@@ -142,28 +144,37 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
             return;
         }
         renderingContext.onSurfaceElement(element -> {
-            setTemplate(renderingContext, element);
+            Optional<SurfaceElement> elementOptional = overrideComponentElement(element, renderingContext);
+            if (elementOptional.isPresent()) {
+                SurfaceElement replacedElement = elementOptional.get();
+                generateComponentTemplate(renderingContext, element);
+                element.replaceWith(replacedElement);
+                element.detach();
+                return;
+            }
+
+            generateComponentTemplate(renderingContext, element);
+            generateComponentElement(element);
         });
     }
 
-    private void setTemplate(ComponentRenderingContext renderingContext, SurfaceElement element) {
+    private void generateComponentTemplate(ComponentRenderingContext renderingContext, SurfaceElement element) {
         try {
-            if (getView().isTemplateExternal()) {
-                // renderingContext.renderResource(
-                // new ProxyResource(getView().viewResource(), getCompositeId().getValue()));
-            } else {
+            if (!getView().isTemplateExternal()) {
                 renderingContext
-                    .renderResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
+                        .renderResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
             }
-            onElementReplaced(replaceElement(element));
         } catch (XMLStreamException e) {
-            LOGGER.error("An error occured while rendering component.", e);
+            LOGGER.error("An error occurred while rendering component.", e);
         }
     }
 
-    protected void onElementReplaced(SurfaceElement surfaceElement) {}
+    protected Optional<SurfaceElement> overrideComponentElement(SurfaceElement surfaceElement, ComponentRenderingContext renderingContext) {
+        // when overriding it to override component rendering and providing
+        return Optional.empty();
+    }
 
-    private SurfaceElement replaceElement(SurfaceElement element) {
+    private SurfaceElement generateComponentElement(SurfaceElement element) {
         SurfaceElement componentElement = new SurfaceElement(getId(), element.getNamespace());
         setRefAttribute(componentElement);
         element.replaceWith(componentElement);
@@ -180,4 +191,17 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         return new DefaultLicketComponentAPI(this, functionCallback);
     }
 
+    @Override
+    public final boolean isRoot(LicketApplication licketApplication) {
+        return licketApplication.rootComponentContainer().getCompositeId().equals(getCompositeId());
+    }
+
+    @Override
+    public final boolean isCustom() {
+        return custom;
+    }
+
+    public void setCustom(boolean custom) {
+        this.custom = custom;
+    }
 }

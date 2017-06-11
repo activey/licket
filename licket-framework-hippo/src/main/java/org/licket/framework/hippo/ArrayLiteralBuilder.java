@@ -40,6 +40,11 @@ public class ArrayLiteralBuilder extends AbstractAstNodeBuilder<ArrayLiteral> {
         return this;
     }
 
+    public ArrayLiteralBuilder element(StringLiteralBuilder stringLiteralBuilder) {
+        elements.add(stringLiteralBuilder);
+        return this;
+    }
+
     @Override
     public ArrayLiteral build() {
         ArrayLiteral arrayLiteral = new ArrayLiteral();

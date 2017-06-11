@@ -50,7 +50,7 @@ public class LicketLabel extends AbstractLicketComponent<String> {
     private String placeholder() {
         Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketMultiContainer);
         if (parent != null) {
-            return format("{{%s.%s}}", parent.get().getId(), getComponentModel().get());
+            return format("{{model.%s}}", getComponentModel().get());
         }
         return format("{{%s}}", getComponentModel().get());
     }

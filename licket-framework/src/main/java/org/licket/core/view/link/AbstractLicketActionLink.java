@@ -41,24 +41,27 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
         // invoking post action callback
         onAfterClick(componentActionCallback);
 
+        // creating all after-click statements
+        componentActionCallback.forEachCall(call -> functionBody.appendStatement(
+                expressionStatement(call)
+        ));
+
         // sending reload request for gathered components
-        componentActionCallback.forEachToBeReloaded(component ->  {
-            functionBody.appendStatement(
-                    functionCall()
-                            .target(
-                                    property(
-                                            property(thisLiteral(), modelReloader.vueName()),
-                                            name("notifyModelChanged")
-                                    )
-                            )
-                            .argument(stringLiteral(component.getCompositeId().getValue()))
-                            .argument(
-                                    arrayElementGet()
-                                            .target(property(property("response", "body"), name("model")))
-                                            .element(stringLiteral(component.getCompositeId().getValue()))
-                            )
-            );
-        });
+        componentActionCallback.forEachToBeReloaded(component -> functionBody.appendStatement(
+                functionCall()
+                        .target(
+                                property(
+                                        property(thisLiteral(), modelReloader.vueName()),
+                                        name("notifyModelChanged")
+                                )
+                        )
+                        .argument(stringLiteral(component.getCompositeId().getValue()))
+                        .argument(
+                                arrayElementGet()
+                                        .target(property(property("response", "body"), name("model")))
+                                        .element(stringLiteral(component.getCompositeId().getValue()))
+                        )
+        ));
     }
 
     @VueComponentFunction
@@ -87,5 +90,7 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
         onAfterClick(componentActionCallback);
     }
 
-    protected abstract void onClick();
+    protected void onClick() {
+
+    }
 }

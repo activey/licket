@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
-@Scope("prototype")
+@Scope("session")
 @Bean
 public @interface LicketComponent {
 

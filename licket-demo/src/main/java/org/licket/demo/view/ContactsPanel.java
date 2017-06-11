@@ -28,13 +28,16 @@ public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
     @Autowired
     private LicketRemote remoteCommunication;
 
+    @Autowired
+    private ContactsList contactsList;
+
     public ContactsPanel(String id, LicketComponentModelReloader modelReloader) {
         super(id, Contacts.class, emptyComponentModel(), internalTemplateView(), modelReloader);
     }
 
     @Override
     protected void onInitializeContainer() {
-        add(new ContactsList("contact", new LicketComponentModel("contacts"), modelReloader()));
+        add(contactsList);
         add(new AbstractLicketActionLink("reload", remoteCommunication, modelReloader()) {
 
             protected void onClick() {
@@ -46,12 +49,7 @@ public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
                 componentActionCallback.reload(ContactsPanel.this);
             }
         });
-
         readContacts();
-    }
-
-    private ModalSettings modalSettings() {
-        return builder().showActions().build();
     }
 
     private void readContacts() {

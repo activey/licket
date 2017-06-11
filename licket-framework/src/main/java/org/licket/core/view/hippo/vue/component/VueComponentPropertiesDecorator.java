@@ -1,28 +1,31 @@
 package org.licket.core.view.hippo.vue.component;
 
-import static org.licket.core.view.hippo.ComponentModelDecorator.fromComponentModel;
-import static org.licket.framework.hippo.BlockBuilder.block;
-import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
-import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
-import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
-import static org.licket.framework.hippo.ReturnStatementBuilder.returnStatement;
-import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Optional;
+import com.google.common.io.CharStreams;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.vue.extend.OnVueCreatedDecorator;
 import org.licket.core.view.hippo.vue.extend.OnVueMountedDecorator;
 import org.licket.core.view.hippo.vue.extend.VueExtendMethodsDecorator;
+import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.FunctionNodeBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
-import org.licket.framework.hippo.ObjectPropertyBuilder;
 import org.licket.framework.hippo.StringLiteralBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.io.CharStreams;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Optional;
+
+import static org.licket.core.view.hippo.ComponentModelDecorator.fromComponentModel;
+import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
+import static org.licket.framework.hippo.BlockBuilder.block;
+import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
+import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
+import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
+import static org.licket.framework.hippo.ReturnStatementBuilder.returnStatement;
+import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 /**
  * @author activey
@@ -39,14 +42,19 @@ public class VueComponentPropertiesDecorator {
         this.resourceStorage = resourceStorage;
     }
 
-    public void decorate(ObjectLiteralBuilder componentObjectBuilder) {
+    public ObjectLiteralBuilder decorate(ObjectLiteralBuilder componentObjectBuilder) {
+        if (component.isStateful()) {
+            componentObjectBuilder.objectProperty(propertyBuilder().name("data").value(data()));
+        } else {
+            componentObjectBuilder.objectProperty(propertyBuilder().name("props").value(props()));
+        }
         componentObjectBuilder
                 .objectProperty(propertyBuilder().name("template").value(template()))
-                .objectProperty(propertyBuilder().name("data").value(data()))
                 .objectProperty(propertyBuilder().name("methods").value(methods()))
                 .objectProperty(propertyBuilder().name("components").value(nestedComponents()))
                 .objectProperty(propertyBuilder().name("created").value(created()))
                 .objectProperty(propertyBuilder().name("mounted").value(mounted()));
+        return componentObjectBuilder;
     }
 
     private ObjectLiteralBuilder methods() {
@@ -64,10 +72,14 @@ public class VueComponentPropertiesDecorator {
             .returnValue(objectLiteral().objectProperty(propertyBuilder().name("model").value(modelData)))));
     }
 
+    private ArrayLiteralBuilder props() {
+        return arrayLiteral().element(StringLiteralBuilder.stringLiteral("model"));
+    }
+
     private ObjectLiteralBuilder nestedComponents() {
         ObjectLiteralBuilder nestedComponents = objectLiteral();
         component.traverseDown(nestedComponent -> {
-            if (!nestedComponent.getView().hasTemplate()) {
+            if (nestedComponent.isCustom() || !nestedComponent.getView().hasTemplate() || !nestedComponent.isStateful()) {
                 return false;
             }
             ObjectLiteralBuilder nestedComponentObject = objectLiteral();
@@ -93,6 +105,8 @@ public class VueComponentPropertiesDecorator {
                 LOGGER.error("An error occurred while serializing component view.", e);
             }
         }
+        LOGGER.error("Unable to find template resource for component: {}.", component.getCompositeId().getValue());
+
         return stringLiteral("<!-- Unable to find template resource -->");
     }
 

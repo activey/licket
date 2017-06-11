@@ -17,14 +17,14 @@ public class ComponentTemplateCompiler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComponentTemplateCompiler.class);
 
-    private Supplier<LicketComponent<?>> rootComponentSupplier;
+    private Supplier<LicketComponent<?>> componentSupplier;
 
-    public ComponentTemplateCompiler(Supplier<LicketComponent<?>> rootComponentSupplier) {
-        this.rootComponentSupplier = rootComponentSupplier;
+    public ComponentTemplateCompiler(Supplier<LicketComponent<?>> componentSupplier) {
+        this.componentSupplier = componentSupplier;
     }
 
     public byte[] compile(SurfaceContext surfaceContext) {
-        LicketComponent<?> component = rootComponentSupplier.get();
+        LicketComponent<?> component = componentSupplier.get();
         if (component == null) {
             LOGGER.warn("Unable to find component.");
         }
@@ -34,8 +34,7 @@ public class ComponentTemplateCompiler {
 
     private ByteArrayOutputStream compileComponentTemplate(Resource componentViewResource, SurfaceContext surfaceContext) {
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-        surfaceContext.processTemplateContent(componentViewResource.getStream(),
-                byteArrayStream);
+        surfaceContext.processTemplateContent(componentViewResource.getStream(), byteArrayStream);
         return byteArrayStream;
     }
 }

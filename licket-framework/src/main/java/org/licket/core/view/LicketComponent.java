@@ -1,5 +1,6 @@
 package org.licket.core.view;
 
+import org.licket.core.LicketApplication;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketComponentModel;
 import org.licket.core.view.hippo.vue.extend.VueClass;
@@ -37,4 +38,14 @@ public interface LicketComponent<TYPE> extends VueClass {
 
     // maybe it would make sense to have some components more complicated inner structure?
     default void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {}
+
+    boolean isRoot(LicketApplication licketApplication);
+
+    default boolean isCustom() {
+        return false;
+    }
+
+    default boolean isStateful() {
+        return true;
+    }
 }
