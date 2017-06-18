@@ -4,6 +4,7 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.OnVueMounted;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
@@ -24,12 +25,14 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  */
 public abstract class AbstractSemanticUIModal extends AbstractLicketMultiContainer<ModalSettings> {
 
+    private final LicketComponentModelReloader modelReloader;
     private ModalSection headerContainer;
     private ModalSection bodyContainer;
     private ModalSection actionsContainer;
 
     public AbstractSemanticUIModal(String id, ModalSettings modalSettings, LicketComponentModelReloader modelReloader) {
-        super(id, ModalSettings.class, ofModelObject(modalSettings), fromComponentClass(AbstractSemanticUIModal.class), modelReloader);
+        super(id, ModalSettings.class, ofModelObject(modalSettings), fromComponentClass(AbstractSemanticUIModal.class));
+        this.modelReloader = modelReloader;
     }
 
     @Override
@@ -103,7 +106,12 @@ public abstract class AbstractSemanticUIModal extends AbstractLicketMultiContain
     }
 
     @Override
-    public SemanticUIModalAPI api(ComponentFunctionCallback componentFunctionCallback) {
-        return new SemanticUIModalAPI(this, componentFunctionCallback);
+    public SemanticUIModalAPI api(ComponentActionCallback componentActionCallback) {
+        return new SemanticUIModalAPI(this, componentActionCallback);
+    }
+
+    @Override
+    public final LicketComponentModelReloader getModelReloader() {
+        return modelReloader;
     }
 }

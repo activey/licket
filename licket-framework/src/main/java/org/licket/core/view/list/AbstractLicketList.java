@@ -12,12 +12,8 @@ import org.licket.surface.element.SurfaceElement;
 
 public abstract class AbstractLicketList<T> extends AbstractLicketMultiContainer<String> {
 
-    private Class<T> elementClass;
-
-    public AbstractLicketList(String id, LicketComponentModel<String> enclosingComponentPropertyModel,
-                              Class<T> elementClass, LicketComponentModelReloader modelReloader) {
-        super(id, String.class, enclosingComponentPropertyModel, internalTemplateView(), modelReloader);
-        this.elementClass = elementClass;
+    public AbstractLicketList(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
+        super(id, String.class, enclosingComponentPropertyModel, internalTemplateView());
         // TODO analyze element class provided and check its properties against passed enclosingComponentPropertyModel
     }
 
@@ -35,6 +31,7 @@ public abstract class AbstractLicketList<T> extends AbstractLicketMultiContainer
     }
 
     private void setForAttribute(SurfaceElement element) {
+        // TODO check if enclosing property model has collection defined with name from getComponentModel().get()
         element.addAttribute("v-for", format("%s in model.%s", getId(), getComponentModel().get()));
     }
 
@@ -44,7 +41,7 @@ public abstract class AbstractLicketList<T> extends AbstractLicketMultiContainer
 
     @Override
     public boolean isStateful() {
-        // list are stateless, so we cant put them into components tree, they have to be global defined
+        // list are stateless, so we can't put them into components tree, they have to be global defined
         return false;
     }
 }

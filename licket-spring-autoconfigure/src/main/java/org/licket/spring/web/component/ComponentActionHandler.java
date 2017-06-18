@@ -43,6 +43,7 @@ public class ComponentActionHandler {
     public final void tryHandleLinkClick(ComponentActionCallback componentActionCallback) {
         try {
             LOGGER.trace("Trying to handle link click [{}].", component.getId());
+            // possible only on
             on(component).call("invokeAction", componentActionCallback);
         } catch (ReflectException reflectException) {
             LOGGER.error("An error occurred while setting component model for: [%s]", component.getId(),

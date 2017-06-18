@@ -85,6 +85,7 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
             .onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("v-on:click", "handleClick"));
     }
 
+    @SuppressWarnings("unused")
     public final void invokeAction(ComponentActionCallback componentActionCallback) {
         onClick();
         onAfterClick(componentActionCallback);

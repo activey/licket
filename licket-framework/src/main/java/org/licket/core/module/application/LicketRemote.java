@@ -52,7 +52,8 @@ public class LicketRemote implements VueClass {
     public FunctionCallBuilder callSubmitForm(String formId, PropertyNameBuilder callbackFunction) {
         return functionCall()
                 .target(property(property(thisLiteral(), vueName()), name("submitForm")))
-                .argument(stringLiteral(formId)).argument(property(thisLiteral(), name("model")))
+                .argument(stringLiteral(formId))
+                .argument(property(thisLiteral(), name("model")))
                 .argument(callbackFunction);
     }
 }

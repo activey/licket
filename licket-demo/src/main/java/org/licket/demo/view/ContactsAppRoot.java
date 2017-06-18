@@ -15,8 +15,11 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
     @Autowired
     private AddContactPanel addContactPanel;
 
-    public ContactsAppRoot(String id, LicketComponentModelReloader modelReloader) {
-        super(id, Void.class, emptyComponentModel(), fromComponentClass(ContactsAppRoot.class), modelReloader);
+    @Autowired
+    private LicketComponentModelReloader modelReloader;
+
+    public ContactsAppRoot(String id) {
+        super(id, Void.class, emptyComponentModel(), fromComponentClass(ContactsAppRoot.class));
     }
 
     @Override
@@ -24,10 +27,13 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
         addContactPanel.onContactAdded((contact, componentActionCallback) -> {
             contactsPanel.reloadList();
             componentActionCallback.reload(contactsPanel);
-
-            return true;
         });
         add(contactsPanel);
         add(addContactPanel);
+    }
+
+    @Override
+    protected LicketComponentModelReloader getModelReloader() {
+        return modelReloader;
     }
 }

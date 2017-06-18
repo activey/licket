@@ -5,19 +5,19 @@ package org.licket.demo.model;
  */
 public class EmailAddress {
 
-    private String email;
+    private String value;
 
     public EmailAddress() {}
 
     public EmailAddress(String emailAddress) {
-        this.email = emailAddress;
+        this.value = emailAddress;
     }
 
-    public String getEmail() {
-        return email;
+    public String getValue() {
+        return value;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setValue(String value) {
+        this.value = value;
     }
 }

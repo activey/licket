@@ -11,8 +11,16 @@ import static org.licket.core.view.LicketComponentView.fromComponentClass;
  */
 public class AddContactFormModalSection extends AbstractLicketMonoContainer<Void> {
 
+  private final LicketComponentModelReloader modelReloader;
+
   public AddContactFormModalSection(String id, LicketComponentModelReloader modelReloader) {
     super(id, Void.class, emptyComponentModel(),
-        fromComponentClass(AddContactFormModalSection.class), modelReloader);
+        fromComponentClass(AddContactFormModalSection.class));
+    this.modelReloader = modelReloader;
+  }
+
+  @Override
+  protected LicketComponentModelReloader getModelReloader() {
+    return modelReloader;
   }
 }

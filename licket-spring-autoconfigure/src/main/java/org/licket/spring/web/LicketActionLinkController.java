@@ -30,8 +30,6 @@ public class LicketActionLinkController {
         if (!link.isPresent()) {
             throw componentNotFound(linkComponentCompositeId);
         }
-
-        LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
         // component callback
         ComponentActionCallback componentActionCallback = new ComponentActionCallback();
 
@@ -39,6 +37,7 @@ public class LicketActionLinkController {
         onComponent(link.get()).tryHandleLinkClick(componentActionCallback);
 
         // sending back list of reloaded component models
+        LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
         componentActionCallback.forEachToBeReloaded(component -> modelGroup
             .addModel(component.getCompositeId().getValue(), component.getComponentModel().get()));
 

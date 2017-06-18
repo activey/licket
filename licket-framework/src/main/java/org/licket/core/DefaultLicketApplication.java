@@ -1,14 +1,5 @@
 package org.licket.core;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Lists.newArrayList;
-import static org.licket.core.id.CompositeId.fromStringValue;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-
 import org.licket.core.id.CompositeId;
 import org.licket.core.view.ComponentChildLocator;
 import org.licket.core.view.LicketComponent;
@@ -16,6 +7,15 @@ import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.core.view.hippo.vue.VuePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.licket.core.id.CompositeId.fromStringValue;
 
 public class DefaultLicketApplication implements LicketApplication, Serializable  {
 
@@ -79,9 +79,6 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
 
     @Override
     public void traverseDown(Predicate<LicketComponent<?>> componentVisitor) {
-//        if (componentVisitor.test(rootContainer)) {
-//            rootContainer.traverseDown(componentVisitor);
-//        }
         allDeclaredComponents.forEach(mountedContainer -> {
             if (componentVisitor.test(mountedContainer)) {
                 mountedContainer.traverseDown(componentVisitor);

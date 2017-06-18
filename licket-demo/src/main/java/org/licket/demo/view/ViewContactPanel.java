@@ -23,12 +23,17 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
   @Autowired
   private LicketComponentModelReloader modelReloader;
 
-  public ViewContactPanel(String id, LicketComponentModelReloader modelReloader) {
-    super(id, Contact.class, ofModelObject(new Contact()), fromComponentClass(ViewContactPanel.class), modelReloader);
+  public ViewContactPanel(String id) {
+    super(id, Contact.class, ofModelObject(new Contact()), fromComponentClass(ViewContactPanel.class));
   }
 
   @Override
   protected void onInitializeContainer() {
-    add(new MountedComponentLink("rootLink", remoteCommunication, modelReloader, ContactsAppRoot.class));
+    add(new MountedComponentLink("rootLink", remoteCommunication, modelReloader(), ContactsAppRoot.class));
+  }
+
+  @Override
+  protected LicketComponentModelReloader getModelReloader() {
+    return modelReloader;
   }
 }

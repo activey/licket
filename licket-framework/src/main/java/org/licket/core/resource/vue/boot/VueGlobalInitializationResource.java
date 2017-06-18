@@ -5,7 +5,6 @@ import org.licket.core.resource.FootParticipatingResource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.hippo.vue.component.VueComponentPropertiesDecorator;
-import org.licket.core.view.mount.MountedComponentsService;
 import org.licket.framework.hippo.BlockBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,9 +24,6 @@ public class VueGlobalInitializationResource extends AbstractJavascriptDynamicRe
 
   @Autowired
   private ResourceStorage resourceStorage;
-
-  @Autowired
-  private MountedComponentsService mountedComponentsService;
 
   @Override
   public String getName() {

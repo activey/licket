@@ -22,18 +22,17 @@ public abstract class AbstractLicketMultiContainer<T> extends AbstractReloadable
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLicketMultiContainer.class);
     private List<LicketComponent<?>> items = newArrayList();
 
-    public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModelReloader modelReloader) {
-        super(id, modelClass, modelReloader);
+    public AbstractLicketMultiContainer(String id, Class<T> modelClass) {
+        super(id, modelClass);
+    }
+
+    public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel) {
+        super(id, modelClass, componentModel);
     }
 
     public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
-                                        LicketComponentModelReloader modelReloader) {
-        super(id, modelClass, componentModel, modelReloader);
-    }
-
-    public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
-                                        LicketComponentView view, LicketComponentModelReloader modelReloader) {
-        super(id, modelClass, componentModel, view, modelReloader);
+                                        LicketComponentView view) {
+        super(id, modelClass, componentModel, view);
     }
 
     @Override

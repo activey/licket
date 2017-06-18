@@ -2,8 +2,8 @@ package org.licket.spring;
 
 import org.licket.core.DefaultLicketApplication;
 import org.licket.core.LicketApplication;
-import org.licket.core.view.mount.MountedComponentsService;
-import org.licket.spring.mount.DefaultMountedComponentsService;
+import org.licket.core.view.mount.MountedComponents;
+import org.licket.spring.mount.DefaultMountedComponents;
 import org.licket.spring.resource.LicketResourcesConfiguration;
 import org.licket.spring.surface.LicketSurfaceConfiguration;
 import org.licket.spring.web.LicketWebConfiguration;
@@ -36,7 +36,7 @@ public class LicketAutoconfigure {
 
     @Bean
     @SessionScope
-    public MountedComponentsService mountedComponents() {
-        return new DefaultMountedComponentsService();
+    public MountedComponents mountedComponents() {
+        return new DefaultMountedComponents();
     }
 }

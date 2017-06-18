@@ -6,7 +6,7 @@ import org.licket.core.model.LicketComponentModel;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.view.api.AbstractLicketComponentAPI;
 import org.licket.core.view.api.DefaultLicketComponentAPI;
-import org.licket.core.view.link.ComponentFunctionCallback;
+import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.surface.element.SurfaceElement;
@@ -187,8 +187,8 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         element.addAttribute("ref", getId());
     }
 
-    public AbstractLicketComponentAPI api(ComponentFunctionCallback functionCallback) {
-        return new DefaultLicketComponentAPI(this, functionCallback);
+    public AbstractLicketComponentAPI api(ComponentActionCallback componentActionCallback) {
+        return new DefaultLicketComponentAPI(this, componentActionCallback);
     }
 
     @Override

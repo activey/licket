@@ -41,7 +41,8 @@ public class LicketComponentController {
 //        if (!component.isPresent()) {
 //            throw componentNotFound(compositeId);
 //        }
-//        return new LicketComponentModelGroup(component.get().getComponentModel().get());
+//        LicketComponentModelGroup componentReloadResponse = new LicketComponentModelGroup();
+//        componentReloadResponse.addModel();
 //    }
 
     // @Cacheable("component-view-cache")
