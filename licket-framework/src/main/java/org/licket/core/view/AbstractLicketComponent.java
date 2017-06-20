@@ -3,11 +3,16 @@ package org.licket.core.view;
 import org.licket.core.LicketApplication;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketComponentModel;
+import org.licket.core.module.application.LicketRemote;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.view.api.AbstractLicketComponentAPI;
 import org.licket.core.view.api.DefaultLicketComponentAPI;
+import org.licket.core.view.hippo.vue.annotation.Name;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.surface.element.SurfaceElement;
 import org.slf4j.Logger;
@@ -25,7 +30,14 @@ import static org.licket.core.id.CompositeId.fromStringValue;
 import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.view.LicketComponentView.noView;
+import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
+import static org.licket.framework.hippo.AssignmentBuilder.assignment;
+import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
+import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
+import static org.licket.framework.hippo.ReturnStatementBuilder.returnStatement;
+import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
@@ -204,4 +216,28 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     public void setCustom(boolean custom) {
         this.custom = custom;
     }
+
+    @SuppressWarnings("unused")
+    public final void mountComponent(T componentMountingParams, ComponentFunctionCallback componentFunctionCallback) {
+        onComponentMounted(componentMountingParams, componentFunctionCallback);
+    }
+
+    @VueComponentFunction
+    public final void afterMount(@Name("response") NameBuilder response, BlockBuilder functionBody) {
+        // setting current form model directly without event emitter
+        functionBody
+                .appendStatement(
+                        expressionStatement(assignment().left(property(thisLiteral(), name("model")))
+                                .right(arrayElementGet()
+                                        .target(
+                                                property(property("response", "body"), "model"))
+                                        .element(stringLiteral(getCompositeId().getValue())))));
+    }
+
+    /**
+     * Override to be able to update component model upon mounting params entity
+     * @param componentMountingParams
+     * @param componentFunctionCallback
+     */
+    protected void onComponentMounted(T componentMountingParams, ComponentFunctionCallback componentFunctionCallback) {}
 }

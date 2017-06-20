@@ -7,17 +7,17 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.collect.Lists.newArrayList;
 
 @Service
 public class ContactsService {
-    private AtomicLong idGenerator = new AtomicLong(1);
+    private static AtomicLong idGenerator = new AtomicLong(1);
     private Faker faker = new Faker();
 
     private List<Contact> contacts = newArrayList();
-
 
     @PostConstruct
     private void initContacts() {
@@ -30,15 +30,23 @@ public class ContactsService {
         return contacts;
     }
 
-    public void addContact(Contact contact) {
-        contacts.add(0, contact);
-    }
-
-    private Contact contact(Internet internet, String name, String description) {
+    public Contact contact(Internet internet, String name, String description) {
         Contact contact = new Contact(idGenerator.getAndIncrement(), name, description);
         contact.addEmail(internet.emailAddress());
         contact.addEmail(internet.emailAddress());
         contact.addEmail(internet.emailAddress());
         return contact;
+    }
+
+    public static Contact emptyContact() {
+        return new Contact(idGenerator.getAndIncrement(), "", "");
+    }
+
+    public Optional<Contact> getContactById(long contactId) {
+        return contacts.stream().filter(contact -> contact.getId() == contactId).findFirst();
+    }
+
+    public void addContact(Contact contact) {
+        contacts.add(contact);
     }
 }

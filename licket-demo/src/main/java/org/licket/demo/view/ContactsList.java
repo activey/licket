@@ -2,9 +2,7 @@ package org.licket.demo.view;
 
 import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.LicketLabel;
-import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.list.AbstractLicketList;
 import org.licket.core.view.mount.MountedComponentLink;
 import org.licket.core.view.mount.params.MountingParamsAggregator;
@@ -18,10 +16,10 @@ import static org.licket.core.view.mount.params.ParamValue.fromParentModel;
 public class ContactsList extends AbstractLicketList<Contact> {
 
     @Autowired
-    private LicketRemote licketRemote;
+    private LicketComponentModelReloader modelReloader;
 
     @Autowired
-    private LicketComponentModelReloader modelReloader;
+    private ViewContactPanel viewContactPanel;
 
     public ContactsList(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
         super(id, enclosingComponentPropertyModel);
@@ -43,15 +41,10 @@ public class ContactsList extends AbstractLicketList<Contact> {
                 add(new LicketLabel("value"));
             }
         });
-        add(new MountedComponentLink<Contact>("view-contact", licketRemote, modelReloader(), ViewContactPanel.class) {
+        add(new MountedComponentLink<Contact>("view-contact", ViewContactPanel.class) {
             @Override
             protected void aggregateParams(MountingParamsAggregator paramsAggregator) {
                 paramsAggregator.name("id").value(fromParentModel("id"));
-            }
-
-            @Override
-            protected void onAfterMount(ComponentActionCallback componentActionCallback) {
-                componentActionCallback.reload();
             }
         });
     }

@@ -9,6 +9,7 @@ import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponent;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.ExpressionStatementBuilder;
@@ -38,13 +39,16 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
 
     public final LicketRemote remote() {
         LicketRemote remote = getRemote();
-        checkNotNull(remote, "Liket remote instance must not be null!");
+        checkNotNull(remote, "Licket remote instance must not be null!");
         return remote;
     }
 
     protected abstract LicketRemote getRemote();
 
     @SuppressWarnings("unused")
+    /**
+     * Executed from within LicketFormConmtro
+     */
     public final void submitForm(T formModelObject, ComponentActionCallback actionCallback) {
         setComponentModel(ofModelObject(formModelObject));
         onSubmit();

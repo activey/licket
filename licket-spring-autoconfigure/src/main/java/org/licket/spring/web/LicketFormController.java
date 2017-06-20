@@ -25,7 +25,6 @@ public class LicketFormController {
     @Autowired
     private LicketApplication licketApplication;
 
-    @Deprecated
     @PostMapping(value = "/submit/{formComponentCompositeId}", produces = "application/json")
     public @ResponseBody LicketComponentModelGroup submitForm(@RequestBody JsonNode formData,
                                                               @PathVariable String formComponentCompositeId) {
@@ -34,15 +33,15 @@ public class LicketFormController {
             throw componentNotFound(formComponentCompositeId);
         }
 
-        LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
-        // refreshing form model as first
-        modelGroup.addModel(form.get().getCompositeId().getValue(), form.get().getComponentModel().get());
-
         // component callback
         ComponentActionCallback componentActionCallback = new ComponentActionCallback();
 
         // submitting form component
         onComponent(form.get()).trySubmitForm(formData, componentActionCallback);
+
+        // refreshing form model after submit
+        LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
+        modelGroup.addModel(form.get().getCompositeId().getValue(), form.get().getComponentModel().get());
 
         // sending back list of reloaded component models
         componentActionCallback.forEachToBeReloaded(component -> modelGroup

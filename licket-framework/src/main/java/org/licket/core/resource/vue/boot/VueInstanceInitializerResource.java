@@ -1,6 +1,7 @@
 package org.licket.core.resource.vue.boot;
 
 import org.licket.core.LicketApplication;
+import org.licket.core.module.application.LicketRemote;
 import org.licket.core.resource.FootParticipatingResource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
@@ -10,7 +11,6 @@ import org.licket.core.view.hippo.vue.component.VueComponentPropertiesDecorator;
 import org.licket.core.view.mount.MountedComponents;
 import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.FunctionNodeBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
 import org.licket.framework.hippo.StringLiteralBuilder;
@@ -23,10 +23,8 @@ import java.lang.reflect.Modifier;
 import static java.lang.String.format;
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
-import static org.licket.framework.hippo.BlockBuilder.block;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
-import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.NewExpressionBuilder.newExpression;
 import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
@@ -49,6 +47,9 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
 
     @Autowired
     private MountedComponents mountedComponents;
+
+    @Autowired
+    private LicketRemote licketRemote;
 
     @Override
     public String getName() {
@@ -89,11 +90,8 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
     }
 
     private ObjectLiteralBuilder vueRoutesDefinitions() {
-        return objectLiteral().objectProperty(
-                propertyBuilder()
-                        .name("routes")
-                        .arrayValue(componentsTree())
-        );
+        return objectLiteral()
+                .objectProperty(propertyBuilder().name("routes").arrayValue(componentsTree()));
     }
 
     private ArrayLiteralBuilder componentsTree() {
@@ -120,27 +118,9 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
                 .objectProperty(propertyBuilder().name("path").value(stringLiteral(mountedComponents.mountedComponent(licketComponent.getClass()).path())))
                 .objectProperty(propertyBuilder().name("name").value(stringLiteral(licketComponent.getClass().getName())))
                 .objectProperty(propertyBuilder().name("component").value(
-                    new VueComponentPropertiesDecorator(licketComponent, resourceStorage).decorate(objectLiteral()))
+                    new VueComponentPropertiesDecorator(licketComponent, resourceStorage, licketRemote).decorate(objectLiteral()))
                 )
-                .objectProperty(propertyBuilder().name("beforeEnter").value(beforeEnterFunction(licketComponent)))
         );
-    }
-
-    // TODO temporary
-    private FunctionNodeBuilder beforeEnterFunction(LicketComponent<?> licketComponent) {
-        return functionNode()
-            .param(name("to"))
-            .param(name("from"))
-            .param(name("next"))
-            .body(block()
-                .appendStatement(expressionStatement(
-                    functionCall()
-                        .target(property("console", "log"))
-                        .argument(stringLiteral(mountedComponents.mountedComponent(licketComponent.getClass()).path()))))
-                .appendStatement(expressionStatement(
-                    functionCall()
-                        .target(name("next"))))
-                );
     }
 
     private StringLiteralBuilder applicationRootId() {

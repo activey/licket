@@ -4,6 +4,7 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.link.AbstractLicketActionLink;
+import org.licket.core.view.link.AbstractLicketLink;
 import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.mount.params.MountingParamsAggregator;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
@@ -18,29 +19,23 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 /**
  * @author lukaszgrabski
  */
-public class MountedComponentLink<T> extends AbstractLicketActionLink {
+public class MountedComponentLink<T> extends AbstractLicketLink {
 
   private final Class<? extends LicketComponent<T>> componentClass;
 
-  public MountedComponentLink(String id, LicketRemote licketRemote, LicketComponentModelReloader modelReloader, Class<? extends LicketComponent<T>> componentClass) {
-    super(id, licketRemote, modelReloader);
+  public MountedComponentLink(String id, Class<? extends LicketComponent<T>> componentClass) {
+    super(id);
     this.componentClass = componentClass;
   }
 
   @Override
-  protected final void onAfterClick(ComponentActionCallback componentActionCallback) {
+  protected final void onClick(ComponentActionCallback componentActionCallback) {
     // TODO retrieve component instance knowing it's componentClass
     componentActionCallback.call(functionCall()
             .target(property(property("this", "$router"), "push"))
             .argument(objectLiteral()
                       .objectProperty(propertyBuilder().name("name").value(stringLiteral(componentClass.getName())))
                       .objectProperty(propertyBuilder().name("params").value(mountingParams()))));
-
-    onAfterMount(componentActionCallback);
-  }
-
-  protected void onAfterMount(ComponentActionCallback componentActionCallback) {
-
   }
 
   private ObjectLiteralBuilder mountingParams() {

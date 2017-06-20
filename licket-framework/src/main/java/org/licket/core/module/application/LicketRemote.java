@@ -44,6 +44,14 @@ public class LicketRemote implements VueClass {
             .callHttpPost("`/licket/link/click/${linkComponentCompositeId}`", responseListener)));
     }
 
+    @VueComponentFunction
+    public void mountComponent(@Name("componentCompositeId") NameBuilder componentCompositeId,
+                           @Name("mountingParams") NameBuilder mountingParams,
+                           @Name("responseListener") NameBuilder responseListener, BlockBuilder body) {
+        body.appendStatement(expressionStatement(httpCommunicationService
+                .callHttpPostWithData("`/licket/component/${componentCompositeId}/mount`", mountingParams, responseListener)));
+    }
+
     @Override
     public NameBuilder vueName() {
         return name("$licketRemoteService");
@@ -54,6 +62,14 @@ public class LicketRemote implements VueClass {
                 .target(property(property(thisLiteral(), vueName()), name("submitForm")))
                 .argument(stringLiteral(formId))
                 .argument(property(thisLiteral(), name("model")))
+                .argument(callbackFunction);
+    }
+
+    public FunctionCallBuilder callMountComponent(String componentId, PropertyNameBuilder callbackFunction) {
+        return functionCall()
+                .target(property(property(name("vm"), vueName()), name("mountComponent")))
+                .argument(stringLiteral(componentId))
+                .argument(property(property(name("vm"), "$route"), name("params")))
                 .argument(callbackFunction);
     }
 }

@@ -1,9 +1,11 @@
 package org.licket.core.view.hippo.vue.component;
 
 import com.google.common.io.CharStreams;
+import org.licket.core.module.application.LicketRemote;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.LicketComponent;
+import org.licket.core.view.hippo.vue.extend.OnVueBeforeRouteEnterDecorator;
 import org.licket.core.view.hippo.vue.extend.OnVueCreatedDecorator;
 import org.licket.core.view.hippo.vue.extend.OnVueMountedDecorator;
 import org.licket.core.view.hippo.vue.extend.VueExtendMethodsDecorator;
@@ -34,12 +36,14 @@ public class VueComponentPropertiesDecorator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VueComponentPropertiesDecorator.class);
 
-    private LicketComponent<?> component;
-    private ResourceStorage resourceStorage;
+    private final LicketComponent<?> component;
+    private final ResourceStorage resourceStorage;
+    private final LicketRemote licketRemote;
 
-    public VueComponentPropertiesDecorator(LicketComponent<?> component, ResourceStorage resourceStorage) {
+    public VueComponentPropertiesDecorator(LicketComponent<?> component, ResourceStorage resourceStorage, LicketRemote licketRemote) {
         this.component = component;
         this.resourceStorage = resourceStorage;
+        this.licketRemote = licketRemote;
     }
 
     public ObjectLiteralBuilder decorate(ObjectLiteralBuilder componentObjectBuilder) {
@@ -54,6 +58,10 @@ public class VueComponentPropertiesDecorator {
                 .objectProperty(propertyBuilder().name("components").value(nestedComponents()))
                 .objectProperty(propertyBuilder().name("created").value(created()))
                 .objectProperty(propertyBuilder().name("mounted").value(mounted()));
+
+        // if is mounted component
+        OnVueBeforeRouteEnterDecorator.fromLicketComponent(component, licketRemote).decorate(componentObjectBuilder);
+
         return componentObjectBuilder;
     }
 
@@ -83,7 +91,7 @@ public class VueComponentPropertiesDecorator {
                 return false;
             }
             ObjectLiteralBuilder nestedComponentObject = objectLiteral();
-            new VueComponentPropertiesDecorator(nestedComponent, resourceStorage).decorate(nestedComponentObject);
+            new VueComponentPropertiesDecorator(nestedComponent, resourceStorage, licketRemote).decorate(nestedComponentObject);
             nestedComponents.objectProperty(
                     propertyBuilder()
                             .name(stringLiteral(nestedComponent.getId()))

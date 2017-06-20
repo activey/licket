@@ -39,8 +39,6 @@ public interface LicketComponent<TYPE> extends VueClass {
     // maybe it would make sense to have some components more complicated inner structure?
     default void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {}
 
-    boolean isRoot(LicketApplication licketApplication);
-
     default boolean isCustom() {
         return false;
     }
@@ -48,4 +46,6 @@ public interface LicketComponent<TYPE> extends VueClass {
     default boolean isStateful() {
         return true;
     }
+
+    boolean isRoot(LicketApplication licketApplication);
 }

@@ -55,6 +55,9 @@ public class CompositeId {
     }
 
     public final String current() {
+        if (idParts.length == 1) {
+            return idParts[0];
+        }
         return idParts[index];
     }
 

@@ -1,6 +1,7 @@
 package org.licket.core.resource.vue.boot;
 
 import org.licket.core.LicketApplication;
+import org.licket.core.module.application.LicketRemote;
 import org.licket.core.resource.FootParticipatingResource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
@@ -25,6 +26,9 @@ public class VueGlobalInitializationResource extends AbstractJavascriptDynamicRe
   @Autowired
   private ResourceStorage resourceStorage;
 
+  @Autowired
+  private LicketRemote licketRemote;
+
   @Override
   public String getName() {
     return "Licket.application.global.js";
@@ -42,7 +46,7 @@ public class VueGlobalInitializationResource extends AbstractJavascriptDynamicRe
                 .target(property("Vue", "component"))
                 // TODO its not really unique ...
                 .argument(stringLiteral(licketComponent.getId()))
-                .argument(new VueComponentPropertiesDecorator(licketComponent, resourceStorage).decorate(objectLiteral()))));
+                .argument(new VueComponentPropertiesDecorator(licketComponent, resourceStorage, licketRemote).decorate(objectLiteral()))));
       return true;
     });
   }

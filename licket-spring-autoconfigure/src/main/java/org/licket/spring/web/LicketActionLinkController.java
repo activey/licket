@@ -34,7 +34,7 @@ public class LicketActionLinkController {
         ComponentActionCallback componentActionCallback = new ComponentActionCallback();
 
         // handling action link click
-        onComponent(link.get()).tryHandleLinkClick(componentActionCallback);
+        onComponent(link.get()).tryLinkClick(componentActionCallback);
 
         // sending back list of reloaded component models
         LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
