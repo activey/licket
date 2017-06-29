@@ -41,11 +41,11 @@ public class ComponentActionHandler {
         }
     }
 
-    public final void tryMountComponent(JsonNode componentMountingParams, ComponentFunctionCallback componentFunctionCallback) {
+    public final void tryMountComponent(JsonNode componentMountingParams, ComponentActionCallback componentActionCallback) {
         try {
             LOGGER.trace("Trying to mount component [{}].", component.getCompositeId().getValue());
 
-            on(component).call("mountComponent", componentModelFromActionRequest(componentMountingParams), componentFunctionCallback);
+            on(component).call("mountComponent", componentModelFromActionRequest(componentMountingParams), componentActionCallback);
         } catch (JsonProcessingException e) {
             LOGGER.error("An error occurred while deserializing component model for: {}.", component.getId(), e);
         } catch (ReflectException reflectException) {

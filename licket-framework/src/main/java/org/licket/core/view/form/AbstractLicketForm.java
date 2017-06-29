@@ -83,9 +83,8 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
         onAfterSubmit(componentActionCallback);
 
         // sending reload request for gathered components
-        componentActionCallback.forEachToBeReloaded(component -> {
-            functionBody.appendStatement(reloadComponent(component));
-        });
+        componentActionCallback.forEachToBeReloaded(component -> functionBody.appendStatement(reloadComponent(component)));
+
         // invoking javascript calls
         componentActionCallback.forEachCall(call -> functionBody.appendStatement(
                 expressionStatement(call)

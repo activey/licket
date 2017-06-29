@@ -46,6 +46,4 @@ public interface LicketComponent<TYPE> extends VueClass {
     default boolean isStateful() {
         return true;
     }
-
-    boolean isRoot(LicketApplication licketApplication);
 }

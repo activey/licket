@@ -43,13 +43,10 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
     private LicketApplication application;
 
     @Autowired
-    private ResourceStorage resourceStorage;
-
-    @Autowired
     private MountedComponents mountedComponents;
 
     @Autowired
-    private LicketRemote licketRemote;
+    private VueComponentPropertiesDecorator componentPropertiesDecorator;
 
     @Override
     public String getName() {
@@ -101,10 +98,6 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
         application.traverseDown(mountedContainer -> {
             LicketMountPoint mountPoint = mountedContainer.getClass().getAnnotation(LicketMountPoint.class);
             if (mountPoint == null) {
-                if (mountedContainer.isRoot(application)) {
-                    addComponentMountPoint(components, mountedContainer);
-                    return false;
-                }
                 return false;
             }
             addComponentMountPoint(components, mountedContainer);
@@ -118,7 +111,7 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
                 .objectProperty(propertyBuilder().name("path").value(stringLiteral(mountedComponents.mountedComponent(licketComponent.getClass()).path())))
                 .objectProperty(propertyBuilder().name("name").value(stringLiteral(licketComponent.getClass().getName())))
                 .objectProperty(propertyBuilder().name("component").value(
-                    new VueComponentPropertiesDecorator(licketComponent, resourceStorage, licketRemote).decorate(objectLiteral()))
+                    componentPropertiesDecorator.decorate(licketComponent, objectLiteral()))
                 )
         );
     }
@@ -131,10 +124,6 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
         application.traverseDown(mountedContainer -> {
             LicketMountPoint mountPoint = mountedContainer.getClass().getAnnotation(LicketMountPoint.class);
             if (mountPoint == null) {
-                if (mountedContainer.isRoot(application)) {
-                    registerComponentMountPoint(mountedContainer, "/");
-                    return false;
-                }
                 return false;
             }
             // iterating trough components annotated with @LicketMountPoint

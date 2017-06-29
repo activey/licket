@@ -12,6 +12,7 @@ import org.licket.core.id.CompositeId;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
+import org.licket.core.view.LicketComponent;
 import org.licket.spring.surface.element.html.compiler.ComponentTemplateCompiler;
 import org.licket.surface.SurfaceContext;
 import org.licket.surface.tag.ElementFactories;
@@ -48,10 +49,9 @@ public class LicketRootController {
     // TODO refactor whole method
     LOGGER.debug("Initializing licket application: {}.", licketApplication.getName());
 
-
     // compiling all other components with external view markup
     licketApplication.traverseDown(licketComponent -> {
-      if (licketComponent.isRoot(licketApplication)) {
+      if (isRootComponent(licketComponent)) {
         // compiling root component template
         ComponentTemplateCompiler templateCompiler =
                 new ComponentTemplateCompiler(() -> licketComponent);
@@ -70,6 +70,10 @@ public class LicketRootController {
               templateCompiler.compile(surfaceContext(licketComponent.getCompositeId()))));
       return true;
     });
+  }
+
+  private boolean isRootComponent(LicketComponent<?> licketComponent) {
+    return licketApplication.rootComponentContainer().getCompositeId().equals(licketComponent.getCompositeId());
   }
 
   private SurfaceContext surfaceContext(CompositeId parentCompositeId) {

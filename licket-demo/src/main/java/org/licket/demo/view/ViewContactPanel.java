@@ -4,7 +4,6 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.LicketLabel;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
-import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.core.view.mount.MountedComponentLink;
 import org.licket.demo.model.Contact;
 import org.licket.demo.service.ContactsService;
@@ -43,7 +42,7 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
   }
 
   @Override
-  protected void onComponentMounted(Contact componentMountingParams, ComponentFunctionCallback componentFunctionCallback) {
+  protected void onComponentMounted(Contact componentMountingParams) {
     Optional<Contact> contactOptional = contactsService.getContactById(componentMountingParams.getId());
     if (!contactOptional.isPresent()) {
       return;

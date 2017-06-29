@@ -2,11 +2,14 @@ package org.licket.demo.view;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
+import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
+import org.licket.core.view.link.ComponentActionCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.view.LicketComponentView.fromComponentClass;
 
+@LicketMountPoint("/")
 public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
 
     @Autowired
@@ -33,7 +36,17 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
     }
 
     @Override
-    protected LicketComponentModelReloader getModelReloader() {
+    protected final LicketComponentModelReloader getModelReloader() {
         return modelReloader;
+    }
+
+    @Override
+    protected final void onComponentMounted(Void componentMountingParams) {
+        contactsPanel.reloadList();
+    }
+
+    @Override
+    protected void onAfterComponentMounted(ComponentActionCallback componentActionCallback) {
+        componentActionCallback.reload(contactsPanel);
     }
 }

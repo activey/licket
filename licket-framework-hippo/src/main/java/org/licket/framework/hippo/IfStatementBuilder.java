@@ -25,7 +25,16 @@ public class IfStatementBuilder extends AbstractAstNodeBuilder<IfStatement> {
 
     public IfStatementBuilder then(AssignmentBuilder then) {
         this.thenStatement = then;
+        return this;
+    }
 
+    public IfStatementBuilder then(ReturnStatementBuilder then) {
+        this.thenStatement = then;
+        return this;
+    }
+
+    public IfStatementBuilder then(BlockBuilder then) {
+        this.thenStatement = then;
         return this;
     }
 
@@ -37,7 +46,6 @@ public class IfStatementBuilder extends AbstractAstNodeBuilder<IfStatement> {
         AstNode thenNode = thenStatement.build();
 //        thenNode.setType(Token.BLOCK);
         ifStatement.setThenPart(thenNode);
-
         return ifStatement;
     }
 }

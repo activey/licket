@@ -14,7 +14,6 @@ import static java.util.Arrays.stream;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang.StringUtils.trimToNull;
-import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 
 /**
@@ -55,11 +54,17 @@ public class VueExtendMethodsDecorator {
     }
 
     private Optional<VueComponentFunction> getClassFunction(Method method) {
-        VueComponentFunction classFunction = method.getAnnotation(VueComponentFunction.class);
-        if (isPrivate(method.getModifiers())) {
-            LOGGER.warn("Private methods, like {}, are not supported for now.", method.getName());
-            return empty();
-        }
-        return ofNullable(classFunction);
+      if (isPrivate(method.getModifiers())) {
+        LOGGER.warn("Private methods, like {}, are not supported for now.", method.getName());
+        return empty();
+      }
+      VueComponentFunction classFunction = method.getAnnotation(VueComponentFunction.class);
+      if (classFunction == null) {
+        return empty();
+      }
+      if (!stream(classFunction.predicates()).allMatch(vueClassPredicate -> vueClassPredicate.predicate().test(vueClass))) {
+          return empty();
+      }
+      return ofNullable(classFunction);
     }
 }

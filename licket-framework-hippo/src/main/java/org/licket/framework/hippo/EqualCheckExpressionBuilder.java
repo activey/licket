@@ -27,6 +27,11 @@ public class EqualCheckExpressionBuilder extends AbstractAstNodeBuilder<InfixExp
         return this;
     }
 
+    public EqualCheckExpressionBuilder right(PropertyNameBuilder right) {
+        this.right = right;
+        return this;
+    }
+
     @Override
     public InfixExpression build() {
         InfixExpression infixExpression = new InfixExpression();

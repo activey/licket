@@ -1,9 +1,7 @@
 package org.licket.core.resource.vue.boot;
 
 import org.licket.core.LicketApplication;
-import org.licket.core.module.application.LicketRemote;
 import org.licket.core.resource.FootParticipatingResource;
-import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.hippo.vue.component.VueComponentPropertiesDecorator;
 import org.licket.framework.hippo.BlockBuilder;
@@ -24,10 +22,7 @@ public class VueGlobalInitializationResource extends AbstractJavascriptDynamicRe
   private LicketApplication application;
 
   @Autowired
-  private ResourceStorage resourceStorage;
-
-  @Autowired
-  private LicketRemote licketRemote;
+  private VueComponentPropertiesDecorator componentPropertiesDecorator;
 
   @Override
   public String getName() {
@@ -46,7 +41,7 @@ public class VueGlobalInitializationResource extends AbstractJavascriptDynamicRe
                 .target(property("Vue", "component"))
                 // TODO its not really unique ...
                 .argument(stringLiteral(licketComponent.getId()))
-                .argument(new VueComponentPropertiesDecorator(licketComponent, resourceStorage, licketRemote).decorate(objectLiteral()))));
+                .argument(componentPropertiesDecorator.decorate(licketComponent, objectLiteral()))));
       return true;
     });
   }

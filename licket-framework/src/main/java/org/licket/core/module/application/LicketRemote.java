@@ -21,6 +21,10 @@ import org.licket.framework.hippo.*;
  */
 public class LicketRemote implements VueClass {
 
+    public static NameBuilder serviceName() {
+        return NameBuilder.name("$licketRemoteService");
+    }
+
     @Name("http")
     private final HttpCommunicationService httpCommunicationService;
 
@@ -54,7 +58,7 @@ public class LicketRemote implements VueClass {
 
     @Override
     public NameBuilder vueName() {
-        return name("$licketRemoteService");
+        return LicketRemote.serviceName();
     }
 
     public FunctionCallBuilder callSubmitForm(String formId, PropertyNameBuilder callbackFunction) {
@@ -65,11 +69,11 @@ public class LicketRemote implements VueClass {
                 .argument(callbackFunction);
     }
 
-    public FunctionCallBuilder callMountComponent(String componentId, PropertyNameBuilder callbackFunction) {
+    public FunctionCallBuilder callMountComponent(String componentId, FunctionNodeBuilder callbackFunction) {
         return functionCall()
-                .target(property(property(name("vm"), vueName()), name("mountComponent")))
+                .target(property(property(property("app", "instance"), vueName()), name("mountComponent")))
                 .argument(stringLiteral(componentId))
-                .argument(property(property(name("vm"), "$route"), name("params")))
+                .argument(property(name("to"), name("params")))
                 .argument(callbackFunction);
     }
 }

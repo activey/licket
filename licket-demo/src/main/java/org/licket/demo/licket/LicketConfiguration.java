@@ -11,8 +11,11 @@ import org.licket.semantic.SemanticUIPluginConfiguration;
 import org.licket.semantic.component.modal.ModalSettings;
 import org.licket.spring.annotation.LicketComponent;
 import org.licket.spring.annotation.LicketRootContainer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.util.IdGenerator;
+import org.springframework.util.JdkIdGenerator;
 
 import static org.licket.semantic.component.modal.ModalSettingsBuilder.builder;
 
@@ -35,7 +38,7 @@ public class LicketConfiguration {
         return new ContactsList("contact", new LicketComponentModel("contacts"));
     }
 
-    @LicketComponent
+    @LicketComponent("dupa")
     public AddContactForm addContactForm() {
         return new AddContactForm("new-contact-form");
     }
@@ -52,5 +55,10 @@ public class LicketConfiguration {
     @LicketComponent
     public AddContactPanel addContactPanel() {
         return new AddContactPanel("add-contact-panel", modalDialogSettings());
+    }
+
+    @Bean
+    public IdGenerator idGenerator() {
+        return new JdkIdGenerator();
     }
 }

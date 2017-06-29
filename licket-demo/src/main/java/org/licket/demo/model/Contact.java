@@ -5,18 +5,18 @@ import java.util.List;
 
 public class Contact {
 
-    private long id;
+    private String id;
     private String pictureUrl;
     private String name;
     private String description;
 
     public Contact() {}
 
-    public Contact(long id) {
+    public Contact(String id) {
         this.id = id;
     }
 
-    public Contact(long id, String name, String description) {
+    public Contact(String id, String name, String description) {
         this(id);
         this.name = name;
         this.description = description;
@@ -56,11 +56,11 @@ public class Contact {
         this.description = description;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

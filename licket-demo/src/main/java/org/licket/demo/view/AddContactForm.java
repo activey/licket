@@ -11,9 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.function.BiConsumer;
 
-import static org.licket.core.model.LicketComponentModel.ofModelObject;
+import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.view.LicketComponentView.internalTemplateView;
-import static org.licket.demo.service.ContactsService.emptyContact;
 
 /**
  * @author activey
@@ -32,7 +31,7 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
     private BiConsumer<Contact, ComponentActionCallback> callback;
 
     public AddContactForm(String id) {
-        super(id, Contact.class, ofModelObject(emptyContact()), internalTemplateView());
+        super(id, Contact.class, emptyComponentModel(), internalTemplateView());
     }
 
     public final void onContactAdded(BiConsumer<Contact, ComponentActionCallback> callback) {
@@ -52,7 +51,7 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
     }
 
     private void clearInput() {
-        setComponentModelObject(emptyContact());
+        setComponentModelObject(contactsService.emptyContact());
     }
 
     @Override

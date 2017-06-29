@@ -33,7 +33,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @Controller
 @RequestMapping(CONTEXT_COMPONENT)
-@CrossOrigin(origins = "http://localhost:8000")
+@CrossOrigin(origins = "*")
 public class LicketComponentController {
 
     @Autowired
@@ -64,18 +64,23 @@ public class LicketComponentController {
     @PostMapping(value = "/{compositeId}/mount", produces = APPLICATION_JSON_VALUE)
     public @ResponseBody LicketComponentModelGroup mountComponent(@RequestBody JsonNode formData,
                                                               @PathVariable String compositeId) {
-        Optional<LicketComponent<?>> component = licketApplication.findComponent(compositeId);
-        if (!component.isPresent()) {
+        Optional<LicketComponent<?>> componentOptional = licketApplication.findComponent(compositeId);
+        if (!componentOptional.isPresent()) {
             throw componentNotFound(compositeId);
         }
 
         // handling mount
-        ComponentFunctionCallback functionCallback = new ComponentActionCallback();
-        onComponent(component.get()).tryMountComponent(formData, functionCallback);
+        ComponentActionCallback componentActionCallback = new ComponentActionCallback();
+        onComponent(componentOptional.get()).tryMountComponent(formData, componentActionCallback);
 
         // refreshing component model after mounting operation
         LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
-        modelGroup.addModel(component.get().getCompositeId().getValue(), component.get().getComponentModel().get());
+        modelGroup.addModel(componentOptional.get().getCompositeId().getValue(), componentOptional.get().getComponentModel().get());
+
+        // sending back list of reloaded component models
+        componentActionCallback.forEachToBeReloaded(component -> modelGroup
+                .addModel(component.getCompositeId().getValue(), component.getComponentModel().get()));
+
         return modelGroup;
     }
 }

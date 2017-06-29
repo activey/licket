@@ -15,6 +15,7 @@ import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.licket.framework.hippo.StringLiteralBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -36,46 +37,50 @@ public class VueComponentPropertiesDecorator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VueComponentPropertiesDecorator.class);
 
-    private final LicketComponent<?> component;
-    private final ResourceStorage resourceStorage;
-    private final LicketRemote licketRemote;
+    @Autowired
+    private ResourceStorage resourceStorage;
 
-    public VueComponentPropertiesDecorator(LicketComponent<?> component, ResourceStorage resourceStorage, LicketRemote licketRemote) {
-        this.component = component;
-        this.resourceStorage = resourceStorage;
-        this.licketRemote = licketRemote;
-    }
+    @Autowired
+    private LicketRemote licketRemote;
 
-    public ObjectLiteralBuilder decorate(ObjectLiteralBuilder componentObjectBuilder) {
+    @Autowired
+    private OnVueBeforeRouteEnterDecorator routeEnterDecorator;
+
+    public ObjectLiteralBuilder decorate(LicketComponent<?> component, ObjectLiteralBuilder componentObjectBuilder) {
         if (component.isStateful()) {
-            componentObjectBuilder.objectProperty(propertyBuilder().name("data").value(data()));
+            componentObjectBuilder.objectProperty(propertyBuilder().name("data").value(data(component)));
         } else {
             componentObjectBuilder.objectProperty(propertyBuilder().name("props").value(props()));
         }
         componentObjectBuilder
-                .objectProperty(propertyBuilder().name("template").value(template()))
-                .objectProperty(propertyBuilder().name("methods").value(methods()))
-                .objectProperty(propertyBuilder().name("components").value(nestedComponents()))
-                .objectProperty(propertyBuilder().name("created").value(created()))
-                .objectProperty(propertyBuilder().name("mounted").value(mounted()));
+                .objectProperty(propertyBuilder().name("template").value(template(component)))
+                .objectProperty(propertyBuilder().name("methods").value(methods(component)))
+                .objectProperty(propertyBuilder().name("components").value(nestedComponents(component)))
+                .objectProperty(propertyBuilder().name("created").value(created(component)))
+                .objectProperty(propertyBuilder().name("mounted").value(mounted(component)));
 
-        // if is mounted component
-        OnVueBeforeRouteEnterDecorator.fromLicketComponent(component, licketRemote).decorate(componentObjectBuilder);
+        // if it is mounted component or root
+        routeEnterDecorator.decorate(component, componentObjectBuilder);
+//        afterMountDecorator.decorate(component, componentObjectBuilder);
 
         return componentObjectBuilder;
     }
 
-    private ObjectLiteralBuilder methods() {
+    private ObjectLiteralBuilder methods(LicketComponent<?> component) {
         return VueExtendMethodsDecorator.fromClass(component).decorate(objectLiteral());
     }
 
-    private FunctionNodeBuilder data() {
+    private FunctionNodeBuilder data(LicketComponent<?> component) {
         ObjectLiteralBuilder modelData = objectLiteral();
         try {
             fromComponentModel(component.getComponentModel()).decorate(modelData);
         } catch (IOException e) {
             LOGGER.error("An error occurred while generating component model data. Returning empty model.", e);
         }
+        functionNode().body(
+                block()
+        );
+
         return functionNode().body(block().appendStatement(returnStatement()
             .returnValue(objectLiteral().objectProperty(propertyBuilder().name("model").value(modelData)))));
     }
@@ -84,14 +89,14 @@ public class VueComponentPropertiesDecorator {
         return arrayLiteral().element(StringLiteralBuilder.stringLiteral("model"));
     }
 
-    private ObjectLiteralBuilder nestedComponents() {
+    private ObjectLiteralBuilder nestedComponents(LicketComponent<?> component) {
         ObjectLiteralBuilder nestedComponents = objectLiteral();
         component.traverseDown(nestedComponent -> {
             if (nestedComponent.isCustom() || !nestedComponent.getView().hasTemplate() || !nestedComponent.isStateful()) {
                 return false;
             }
             ObjectLiteralBuilder nestedComponentObject = objectLiteral();
-            new VueComponentPropertiesDecorator(nestedComponent, resourceStorage, licketRemote).decorate(nestedComponentObject);
+            decorate(nestedComponent, nestedComponentObject);
             nestedComponents.objectProperty(
                     propertyBuilder()
                             .name(stringLiteral(nestedComponent.getId()))
@@ -102,7 +107,7 @@ public class VueComponentPropertiesDecorator {
         return nestedComponents;
     }
 
-    private StringLiteralBuilder template() {
+    private StringLiteralBuilder template(LicketComponent<?> component) {
         Optional<Resource> componentViewResourceOptional = resourceStorage
             .getResource(component.getCompositeId().getValue());
         if (componentViewResourceOptional.isPresent()) {
@@ -118,11 +123,11 @@ public class VueComponentPropertiesDecorator {
         return stringLiteral("<!-- Unable to find template resource -->");
     }
 
-    private FunctionNodeBuilder created() {
+    private FunctionNodeBuilder created(LicketComponent<?> component) {
         return functionNode().body(OnVueCreatedDecorator.fromVueClass(component).decorate(block()));
     }
 
-    private FunctionNodeBuilder mounted() {
+    private FunctionNodeBuilder mounted(LicketComponent<?> component) {
         return functionNode().body(OnVueMountedDecorator.fromVueClass(component).decorate(block()));
     }
 }

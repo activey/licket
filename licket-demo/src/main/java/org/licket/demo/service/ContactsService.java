@@ -3,7 +3,9 @@ package org.licket.demo.service;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Internet;
 import org.licket.demo.model.Contact;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.IdGenerator;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -14,8 +16,9 @@ import static com.google.common.collect.Lists.newArrayList;
 
 @Service
 public class ContactsService {
-    private static AtomicLong idGenerator = new AtomicLong(1);
     private Faker faker = new Faker();
+    @Autowired
+    private IdGenerator idGenerator;
 
     private List<Contact> contacts = newArrayList();
 
@@ -31,22 +34,23 @@ public class ContactsService {
     }
 
     public Contact contact(Internet internet, String name, String description) {
-        Contact contact = new Contact(idGenerator.getAndIncrement(), name, description);
+        Contact contact = new Contact(idGenerator.generateId().toString(), name, description);
         contact.addEmail(internet.emailAddress());
         contact.addEmail(internet.emailAddress());
         contact.addEmail(internet.emailAddress());
         return contact;
     }
 
-    public static Contact emptyContact() {
-        return new Contact(idGenerator.getAndIncrement(), "", "");
+    public Contact emptyContact() {
+        return new Contact();
     }
 
-    public Optional<Contact> getContactById(long contactId) {
-        return contacts.stream().filter(contact -> contact.getId() == contactId).findFirst();
+    public Optional<Contact> getContactById(String contactId) {
+        return contacts.stream().filter(contact -> contact.getId().equals(contactId)).findFirst();
     }
 
     public void addContact(Contact contact) {
-        contacts.add(contact);
+        contact.setId(idGenerator.generateId().toString());
+        contacts.add(0, contact);
     }
 }
