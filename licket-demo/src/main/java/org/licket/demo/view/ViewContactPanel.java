@@ -5,6 +5,7 @@ import org.licket.core.view.LicketLabel;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.core.view.mount.MountedComponentLink;
+import org.licket.core.view.mount.params.MountingParams;
 import org.licket.demo.model.Contact;
 import org.licket.demo.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,12 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
   }
 
   @Override
-  protected void onComponentMounted(Contact componentMountingParams) {
-    Optional<Contact> contactOptional = contactsService.getContactById(componentMountingParams.getId());
+  protected void onComponentMounted(MountingParams componentMountingParams) {
+    Optional<String> contactId = componentMountingParams.getString("id");
+    if (!contactId.isPresent()) {
+      return;
+    }
+    Optional<Contact> contactOptional = contactsService.getContactById(contactId.get());
     if (!contactOptional.isPresent()) {
       return;
     }

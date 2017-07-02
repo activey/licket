@@ -1,4 +1,4 @@
-package org.licket.core.view.model;
+package org.licket.core.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

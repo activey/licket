@@ -10,15 +10,15 @@ import static com.google.common.collect.Lists.newArrayList;
  */
 public class MountingParamsAggregator {
 
-  private List<Param> aggregatedParams = newArrayList();
+  private List<MountingParamDecorator> aggregatedMountingParamDecorators = newArrayList();
 
-  public Param name(String paramName) {
-    Param newParam = new Param(paramName);
-    aggregatedParams.add(newParam);
-    return newParam;
+  public MountingParamDecorator name(String paramName) {
+    MountingParamDecorator newMountingParamDecorator = new MountingParamDecorator(paramName);
+    aggregatedMountingParamDecorators.add(newMountingParamDecorator);
+    return newMountingParamDecorator;
   }
 
-  public void forEach(Consumer<Param> paramConsumer) {
-    aggregatedParams.forEach(paramConsumer);
+  public void forEach(Consumer<MountingParamDecorator> paramConsumer) {
+    aggregatedMountingParamDecorators.forEach(paramConsumer);
   }
 }

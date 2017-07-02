@@ -1,15 +1,16 @@
 package org.licket.spring.web.component;
 
-import static org.joor.Reflect.on;
-import org.joor.ReflectException;
-import org.licket.core.view.LicketComponent;
-import org.licket.core.view.link.ComponentActionCallback;
-import org.licket.core.view.link.ComponentFunctionCallback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.joor.ReflectException;
+import org.licket.core.view.LicketComponent;
+import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.mount.params.MountingParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.joor.Reflect.on;
 
 /**
  * @author activey
@@ -45,7 +46,7 @@ public class ComponentActionHandler {
         try {
             LOGGER.trace("Trying to mount component [{}].", component.getCompositeId().getValue());
 
-            on(component).call("mountComponent", componentModelFromActionRequest(componentMountingParams), componentActionCallback);
+            on(component).call("mountComponent", mountingParamsFromActionRequest(componentMountingParams), componentActionCallback);
         } catch (JsonProcessingException e) {
             LOGGER.error("An error occurred while deserializing component model for: {}.", component.getId(), e);
         } catch (ReflectException reflectException) {
@@ -67,5 +68,11 @@ public class ComponentActionHandler {
 
     private Object componentModelFromActionRequest(JsonNode formData) throws JsonProcessingException {
         return new ObjectMapper().treeToValue(formData, component.getComponentModelClass());
+    }
+
+    private MountingParams mountingParamsFromActionRequest(JsonNode mountingParams) throws JsonProcessingException {
+        MountingParams params = new MountingParams();
+        mountingParams.fieldNames().forEachRemaining(fieldName -> params.newParam(fieldName, mountingParams.get(fieldName).textValue()));
+        return params;
     }
 }

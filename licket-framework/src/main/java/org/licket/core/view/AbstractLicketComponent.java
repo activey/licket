@@ -9,6 +9,7 @@ import org.licket.core.view.api.DefaultLicketComponentAPI;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.mount.params.MountingParams;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.ExpressionStatementBuilder;
@@ -214,8 +215,8 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     @SuppressWarnings("unused")
-    public final void mountComponent(T componentMountingParams, ComponentActionCallback componentActionCallback) {
-        onComponentMounted(componentMountingParams);
+    public final void mountComponent(MountingParams mountingParams, ComponentActionCallback componentActionCallback) {
+        onComponentMounted(mountingParams);
         onAfterComponentMounted(componentActionCallback);
     }
 
@@ -256,7 +257,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
      * Override to be able to update component model upon mounting params entity
      * @param componentMountingParams
      */
-    protected void onComponentMounted(T componentMountingParams) {}
+    protected void onComponentMounted(MountingParams componentMountingParams) {}
 
     /**
      *

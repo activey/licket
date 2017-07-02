@@ -3,16 +3,16 @@ package org.licket.core.view.mount.params;
 /**
  * @author lukaszgrabski
  */
-public class Param {
+public class MountingParamDecorator {
 
   private final String name;
-  private ParamValue value;
+  private MountingParamValueDecorator value;
 
-  public Param(String name) {
+  public MountingParamDecorator(String name) {
     this.name = name;
   }
 
-  public void value(ParamValue value) {
+  public void value(MountingParamValueDecorator value) {
     this.value = value;
   }
 
@@ -20,7 +20,7 @@ public class Param {
     return name;
   }
 
-  public ParamValue getValue() {
+  public MountingParamValueDecorator getValue() {
     return value;
   }
 }

@@ -1,9 +1,6 @@
 package org.licket.core.view.mount;
 
-import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.link.AbstractLicketLink;
 import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.mount.params.MountingParamsAggregator;
@@ -52,6 +49,6 @@ public class MountedComponentLink<T> extends AbstractLicketLink {
   }
 
   protected void aggregateParams(MountingParamsAggregator paramsAggregator) {
-    // override this to define mounting link params
+    // override this to provide mounting parameters
   }
 }

@@ -11,15 +11,12 @@ import org.licket.demo.model.EmailAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.licket.core.model.LicketComponentModel.ofString;
-import static org.licket.core.view.mount.params.ParamValue.fromParentModel;
+import static org.licket.core.view.mount.params.MountingParamValueDecorator.fromParentModel;
 
 public class ContactsList extends AbstractLicketList<Contact> {
 
     @Autowired
     private LicketComponentModelReloader modelReloader;
-
-    @Autowired
-    private ViewContactPanel viewContactPanel;
 
     public ContactsList(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
         super(id, enclosingComponentPropertyModel);

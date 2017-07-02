@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.licket.core.LicketApplication;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.link.ComponentActionCallback;
-import org.licket.core.view.model.LicketComponentModelGroup;
+import org.licket.core.model.LicketComponentModelGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import com.fasterxml.jackson.databind.JsonNode;
