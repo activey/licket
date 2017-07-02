@@ -113,7 +113,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
     }
 
     @Override
-    public AbstractLicketFormAPI api(ComponentActionCallback functionCallback) {
+    public AbstractLicketFormAPI api(ComponentFunctionCallback functionCallback) {
         return new AbstractLicketFormAPI(this, functionCallback);
     }
 }

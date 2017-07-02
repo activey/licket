@@ -9,6 +9,7 @@ import org.licket.core.view.api.DefaultLicketComponentAPI;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.core.view.mount.params.MountingParams;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
@@ -201,8 +202,8 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         element.addAttribute("ref", getId());
     }
 
-    public AbstractLicketComponentAPI api(ComponentActionCallback componentActionCallback) {
-        return new DefaultLicketComponentAPI(this, componentActionCallback);
+    public AbstractLicketComponentAPI api(ComponentFunctionCallback componentFunctionCallback) {
+        return new DefaultLicketComponentAPI(this, componentFunctionCallback);
     }
 
     @Override

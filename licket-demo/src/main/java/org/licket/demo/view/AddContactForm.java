@@ -50,6 +50,10 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
         clearInput();
     }
 
+    public void generateRandomData() {
+        setComponentModelObject(contactsService.randomContact());
+    }
+
     private void clearInput() {
         setComponentModelObject(contactsService.emptyContact());
     }

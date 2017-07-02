@@ -1,9 +1,12 @@
 package org.licket.demo.view;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
+import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.LicketLabel;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
+import org.licket.core.view.link.AbstractLicketActionLink;
+import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.core.view.list.AbstractLicketList;
 import org.licket.core.view.mount.MountedComponentLink;
 import org.licket.core.view.mount.params.MountingParams;
@@ -26,6 +29,9 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
 
   @Autowired
   private LicketComponentModelReloader modelReloader;
+
+  @Autowired
+  private LicketRemote licketRemote;
 
   @Autowired
   private ContactsService contactsService;
@@ -51,8 +57,19 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
             }
         });
 
-
+    add(new LicketLabel("content"));
     add(new MountedComponentLink("rootLink", ContactsAppRoot.class));
+    add(new AbstractLicketActionLink("deleteLink", licketRemote, modelReloader()) {
+      @Override
+      protected void onClick() {
+        contactsService.deleteContactById(ViewContactPanel.this.getComponentModel().get().getId());
+      }
+
+      @Override
+      protected void onAfterClick(ComponentActionCallback componentActionCallback) {
+        componentActionCallback.navigateToMounted(ContactsAppRoot.class);
+      }
+    });
   }
 
   @Override

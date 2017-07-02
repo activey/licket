@@ -3,8 +3,10 @@ package org.licket.demo.view;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
+import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.link.AbstractLicketLink;
 import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.demo.model.Contact;
 import org.licket.demo.view.modal.AddContactFormActionsSection;
 import org.licket.demo.view.modal.AddContactFormModalSection;
@@ -51,7 +53,7 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
     protected void onInitializeContainer() {
         add(new AbstractLicketLink("add-contact") {
             @Override
-            protected void onClick(ComponentActionCallback callback) {
+            protected void onClick(ComponentFunctionCallback callback) {
                 modal.api(callback).show(this);
             }
         });
@@ -75,9 +77,21 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                     protected void onInitializeContainer() {
                         add(new AbstractLicketLink("add") {
                           @Override
-                          protected void onClick(ComponentActionCallback callback) {
+                          protected void onClick(ComponentFunctionCallback callback) {
                             addContactForm.api(callback).submit(this);
                           }
+                        });
+
+                        add(new AbstractLicketActionLink("add_random", remoteCommunication, modelReloader()) {
+                            @Override
+                            protected void onClick() {
+                                addContactForm.generateRandomData();
+                            }
+
+                            @Override
+                            protected void onAfterClick(ComponentActionCallback componentActionCallback) {
+                                componentActionCallback.reload(addContactForm);
+                            }
                         });
                     }
                 });

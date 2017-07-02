@@ -9,6 +9,7 @@ public class Contact {
     private String pictureUrl;
     private String name;
     private String description;
+    private String content;
 
     public Contact() {}
 
@@ -62,5 +63,13 @@ public class Contact {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

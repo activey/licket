@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.apache.commons.collections.ListUtils.synchronizedList;
 
 @Service
 public class ContactsService {
@@ -20,12 +21,12 @@ public class ContactsService {
     @Autowired
     private IdGenerator idGenerator;
 
-    private List<Contact> contacts = newArrayList();
+    private List<Contact> contacts = synchronizedList(newArrayList());
 
     @PostConstruct
     private void initContacts() {
         contacts = newArrayList(
-                contact(faker.internet(), faker.name().fullName(), faker.lorem().paragraph())
+                randomContact()
         );
     }
 
@@ -45,6 +46,12 @@ public class ContactsService {
         return new Contact();
     }
 
+    public Contact randomContact() {
+        Contact contact = contact(faker.internet(), faker.name().fullName(), faker.lorem().paragraph());
+        contact.setContent(faker.lorem().sentence(100));
+        return contact;
+    }
+
     public Optional<Contact> getContactById(String contactId) {
         return contacts.stream().filter(contact -> contact.getId().equals(contactId)).findFirst();
     }
@@ -52,5 +59,9 @@ public class ContactsService {
     public void addContact(Contact contact) {
         contact.setId(idGenerator.generateId().toString());
         contacts.add(0, contact);
+    }
+
+    public boolean deleteContactById(String contactId) {
+        return contacts.removeIf(contact -> contact.getId().equals(contactId));
     }
 }

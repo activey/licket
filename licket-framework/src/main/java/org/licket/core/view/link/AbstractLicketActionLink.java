@@ -35,7 +35,7 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
     }
 
     @VueComponentFunction
-    public void afterClick(@Name("response") NameBuilder response, BlockBuilder functionBody) {
+    public final void afterClick(@Name("response") NameBuilder response, BlockBuilder functionBody) {
         ComponentActionCallback componentActionCallback = new ComponentActionCallback();
 
         // invoking post action callback
@@ -76,8 +76,6 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
         );
     }
 
-    protected void onAfterClick(ComponentActionCallback componentActionCallback) {}
-
     @Override
     protected void onBeforeRender(ComponentRenderingContext renderingContext) {
         // basically invokeAction() should handle all the stuff, the rest is done on javascript level
@@ -91,7 +89,7 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
         onAfterClick(componentActionCallback);
     }
 
-    protected void onClick() {
+    protected void onClick() {}
 
-    }
+    protected void onAfterClick(ComponentActionCallback componentActionCallback) {}
 }

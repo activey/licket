@@ -20,7 +20,7 @@ public abstract class AbstractLicketLink extends AbstractLicketComponent<Void> {
 
     @VueComponentFunction
     public final void handleClick(BlockBuilder functionBlock) {
-        ComponentActionCallback callback = new ComponentActionCallback();
+        ComponentFunctionCallback callback = new ComponentFunctionCallback();
         onClick(callback);
 
         callback.forEachCall(call -> functionBlock.appendStatement(
@@ -28,7 +28,7 @@ public abstract class AbstractLicketLink extends AbstractLicketComponent<Void> {
         ));
     }
 
-    protected void onClick(ComponentActionCallback callback) {}
+    protected void onClick(ComponentFunctionCallback callback) {}
 
     @Override
     protected void onBeforeRender(ComponentRenderingContext renderingContext) {

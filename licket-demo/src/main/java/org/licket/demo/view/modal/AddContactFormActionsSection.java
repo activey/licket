@@ -2,6 +2,7 @@ package org.licket.demo.view.modal;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.AbstractLicketMonoContainer;
+import org.licket.core.view.container.AbstractLicketMultiContainer;
 
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.view.LicketComponentView.fromComponentClass;
@@ -9,7 +10,7 @@ import static org.licket.core.view.LicketComponentView.fromComponentClass;
 /**
  * @author lukaszgrabski
  */
-public class AddContactFormActionsSection extends AbstractLicketMonoContainer<Void> {
+public class AddContactFormActionsSection extends AbstractLicketMultiContainer<Void> {
 
   private final LicketComponentModelReloader modelReloader;
 
