@@ -38,7 +38,7 @@ public class LicketConfiguration {
         return new ContactsList("contact", new LicketComponentModel("contacts"));
     }
 
-    @LicketComponent("dupa")
+    @LicketComponent
     public AddContactForm addContactForm() {
         return new AddContactForm("new-contact-form");
     }
