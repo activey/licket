@@ -20,9 +20,6 @@ import static org.licket.demo.model.Contacts.fromIterable;
 public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
 
     @Autowired
-    private LicketRemote remoteCommunication;
-
-    @Autowired
     private LicketComponentModelReloader modelReloader;
 
     @Autowired
@@ -38,17 +35,7 @@ public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
     @Override
     protected void onInitializeContainer() {
         add(contactsList);
-        add(new AbstractLicketActionLink("reload", remoteCommunication, modelReloader()) {
 
-            protected void onClick() {
-                reloadList();
-            }
-
-            @Override
-            protected void onAfterClick(ComponentActionCallback componentActionCallback) {
-                componentActionCallback.reload(ContactsPanel.this);
-            }
-        });
         readContacts();
     }
 

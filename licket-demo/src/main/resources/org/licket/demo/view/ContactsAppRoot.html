@@ -4,47 +4,45 @@
         <title>Contacts Page</title>
     </head>
     <body>
-        <div>
+        <div class="ui container">
             <h1 class="ui center aligned header">Contacts list</h1>
 
-            <div class="ui container" lick:id="add-contact-panel">
-                <div class="ui submit button" lick:id="add-contact">
-                    Add contact
-                </div>
-                <div lick:id="form-modal"></div>
-            </div>
-
-            <div class="ui container" lick:id="contacts-panel">
-                <div class="ui relaxed divided items">
-                    <div class="item" lick:id="contact">
-                        <div class="ui small image">
-                            <!--<img src="assets/images/wireframe/image.png"></img>-->
+            <div class="ui grid">
+                <div class="two column row">
+                    <div class="left floated column">
+                        <div class="ui container" lick:id="add-contact-panel">
+                            <div class="ui submit button" lick:id="add-contact">
+                                <i class="icon add"></i>
+                                Add contact
+                            </div>
+                            <div lick:id="form-modal"></div>
                         </div>
-                        <div class="content">
-                            <a class="header" lick:id="name">Content Header</a>
-                            <div class="meta">
-                                <a lick:id="email">
-                                    <span lick:id="email">
-                                        some.email@domain.com
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="description" lick:id="description">
-                                A description which may flow for several lines and give context to the content.
-                            </div>
-                            <div class="extra">
-                                <a class="ui right floated primary button" lick:id="view-contact">
-                                    View contact
-                                    <i class="right chevron icon"></i>
-                                </a>
+                    </div>
+                    <div class="right floated column">
+                        <button class="ui primary right floated button" lick:id="reload">
+                            Reload list model
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="ui container" lick:id="contacts-panel">
+                        <div class="ui cards">
+                            <div class="card" lick:id="contact">
+                                <div class="content">
+                                    <div class="header" lick:id="name">Person name</div>
+                                    <div class="description" lick:id="description">
+                                        A description which may flow for several lines and give context to the content.
+                                    </div>
+                                </div>
+                                <div class="ui bottom attached button" lick:id="view-contact">
+                                    <i class="search icon"></i>
+                                    Contact details
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <button class="ui primary button" lick:id="reload">
-                    Reload list model
-                </button>
             </div>
         </div>
     </body>
