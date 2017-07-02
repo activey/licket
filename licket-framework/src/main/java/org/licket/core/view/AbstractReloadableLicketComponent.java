@@ -28,23 +28,16 @@ public abstract class AbstractReloadableLicketComponent<T> extends AbstractLicke
     @Name("model")
     private ObjectLiteralBuilder modelProperty;
     
-    private final LicketComponentModelReloader modelReloader;
-
-    public AbstractReloadableLicketComponent(String id, Class<T> modelClass, LicketComponentModelReloader modelReloader) {
+    public AbstractReloadableLicketComponent(String id, Class<T> modelClass) {
         super(id, modelClass);
-        this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
     }
 
-    public AbstractReloadableLicketComponent(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
-                                   LicketComponentModelReloader modelReloader) {
+    public AbstractReloadableLicketComponent(String id, Class<T> modelClass, LicketComponentModel<T> componentModel) {
         super(id, modelClass, componentModel);
-        this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
     }
 
-    public AbstractReloadableLicketComponent(String id, Class<T> modelClass, LicketComponentModel<T> componentModel, LicketComponentView view,
-                                   LicketComponentModelReloader modelReloader) {
+    public AbstractReloadableLicketComponent(String id, Class<T> modelClass, LicketComponentModel<T> componentModel, LicketComponentView view) {
         super(id, modelClass, componentModel, view);
-        this.modelReloader = checkNotNull(modelReloader, "Model reloader has to be not null!");
     }
 
     @VueComponentFunction
@@ -67,12 +60,16 @@ public abstract class AbstractReloadableLicketComponent<T> extends AbstractLicke
     public void onVueCreated(BlockBuilder body) {
         body.appendStatement(expressionStatement(
                 functionCall()
-                        .target(property(property(thisLiteral(), modelReloader.vueName()), name("listenForModelChange")))
+                        .target(property(property(thisLiteral(), modelReloader().vueName()), name("listenForModelChange")))
                         .argument(property(thisLiteral(), name("handleModelChanged")))
         ));
     }
 
     protected final LicketComponentModelReloader modelReloader() {
-        return modelReloader;
+        LicketComponentModelReloader modelReloader = getModelReloader();
+        checkNotNull(modelReloader, "Model reloader has to be not null!");
+        return getModelReloader();
     }
+
+    protected abstract LicketComponentModelReloader getModelReloader();
 }

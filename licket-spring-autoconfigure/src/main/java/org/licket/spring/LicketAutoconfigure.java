@@ -2,6 +2,9 @@ package org.licket.spring;
 
 import org.licket.core.DefaultLicketApplication;
 import org.licket.core.LicketApplication;
+import org.licket.core.view.mount.MountedComponents;
+import org.licket.spring.decorator.LicketComponentDecoratorsConfiguration;
+import org.licket.spring.mount.DefaultMountedComponents;
 import org.licket.spring.resource.LicketResourcesConfiguration;
 import org.licket.spring.surface.LicketSurfaceConfiguration;
 import org.licket.spring.web.LicketWebConfiguration;
@@ -18,7 +21,8 @@ import org.springframework.web.context.annotation.SessionScope;
 @Import({
         LicketResourcesConfiguration.class,
         LicketWebConfiguration.class,
-        LicketSurfaceConfiguration.class
+        LicketSurfaceConfiguration.class,
+        LicketComponentDecoratorsConfiguration.class
 })
 @PropertySource("classpath:/licket.properties")
 public class LicketAutoconfigure {
@@ -30,5 +34,11 @@ public class LicketAutoconfigure {
     @SessionScope
     public LicketApplication licketApplication() {
         return new DefaultLicketApplication(applicationName);
+    }
+
+    @Bean
+    @SessionScope
+    public MountedComponents mountedComponents() {
+        return new DefaultMountedComponents();
     }
 }

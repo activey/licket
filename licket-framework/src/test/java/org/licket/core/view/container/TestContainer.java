@@ -7,7 +7,15 @@ import org.licket.core.module.application.LicketComponentModelReloader;
  */
 public class TestContainer extends AbstractLicketMultiContainer<Void> {
 
+    private final LicketComponentModelReloader modelReloader;
+
     public TestContainer(String id, LicketComponentModelReloader modelReloader) {
-        super(id, Void.class, modelReloader);
+        super(id, Void.class);
+        this.modelReloader = modelReloader;
+    }
+
+    @Override
+    protected LicketComponentModelReloader getModelReloader() {
+        return modelReloader;
     }
 }

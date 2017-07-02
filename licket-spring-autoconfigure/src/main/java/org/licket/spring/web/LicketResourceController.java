@@ -14,9 +14,13 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.HandlerMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author activey
@@ -31,9 +35,16 @@ public class LicketResourceController {
     @Autowired
     private ResourceStorage resourcesStorage;
 
-    @GetMapping(value = "/{resourceName:.+}")
-    public ResponseEntity<InputStreamResource> getResource(@PathVariable String resourceName) {
-        Optional<Resource> resourceOptional = resourcesStorage.getResource(resourceName);
+    @GetMapping(value = "/**")
+    public ResponseEntity<InputStreamResource> getResource(HttpServletRequest request) {
+      String path = (String) request.getAttribute(
+              HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+      String bestMatchPattern = (String ) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+
+      AntPathMatcher antPathMatcher = new AntPathMatcher();
+      String finalPath = antPathMatcher.extractPathWithinPattern(bestMatchPattern, path);
+
+      Optional<Resource> resourceOptional = resourcesStorage.getResource(finalPath);
         if (!resourceOptional.isPresent()) {
             return status(HttpStatus.NOT_FOUND).contentLength(0).body(null);
         }

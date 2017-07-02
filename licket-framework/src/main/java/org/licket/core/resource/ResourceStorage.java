@@ -1,6 +1,5 @@
 package org.licket.core.resource;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Optional;
 import java.util.stream.Stream;
 

@@ -32,7 +32,7 @@ public class OnVueMountedDecorator {
     }
 
     public final BlockBuilder decorate(BlockBuilder constructorBody) {
-        // analyzing @OnVueCreated annotation
+        // analyzing @OnVueMounted annotation
         stream(vueClass.getClass().getMethods())
                 .forEach(method -> writeClassConstructorBody(constructorBody, method));
         return constructorBody;

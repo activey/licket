@@ -54,6 +54,11 @@ public class BlockBuilder extends AbstractAstNodeBuilder<Block> {
         return this;
     }
 
+    public BlockBuilder appendStatement(IfStatementBuilder ifStatement) {
+        statements.add(ifStatement);
+        return this;
+    }
+
     @Override
     public Block build() {
         Block block = new Block();

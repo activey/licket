@@ -1,16 +1,24 @@
 package org.licket.core.resource.vue.boot;
 
 import org.licket.core.LicketApplication;
+import org.licket.core.module.application.LicketRemote;
 import org.licket.core.resource.FootParticipatingResource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
+import org.licket.core.view.LicketComponent;
+import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.core.view.hippo.vue.component.VueComponentPropertiesDecorator;
+import org.licket.core.view.mount.MountedComponents;
 import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
 import org.licket.framework.hippo.StringLiteralBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.lang.reflect.Modifier;
 
 import static java.lang.String.format;
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
@@ -27,13 +35,18 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 /**
  * @author activey
  */
-public class VueApplicationInitializerResource extends AbstractJavascriptDynamicResource implements FootParticipatingResource {
+public class VueInstanceInitializerResource extends AbstractJavascriptDynamicResource implements FootParticipatingResource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VueInstanceInitializerResource.class);
 
     @Autowired
     private LicketApplication application;
 
     @Autowired
-    private ResourceStorage resourceStorage;
+    private MountedComponents mountedComponents;
+
+    @Autowired
+    private VueComponentPropertiesDecorator componentPropertiesDecorator;
 
     @Override
     public String getName() {
@@ -42,6 +55,8 @@ public class VueApplicationInitializerResource extends AbstractJavascriptDynamic
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
+        registerMountPoints();
+
         // initializing VueRouter instance
         PropertyNameBuilder appRouter = property("app", "router");
         scriptBlockBuilder.appendStatement(
@@ -72,30 +87,61 @@ public class VueApplicationInitializerResource extends AbstractJavascriptDynamic
     }
 
     private ObjectLiteralBuilder vueRoutesDefinitions() {
-        return objectLiteral().objectProperty(
-                propertyBuilder()
-                        .name("routes")
-                        .arrayValue(componentsTree())
-        );
+        return objectLiteral()
+                .objectProperty(propertyBuilder().name("routes").arrayValue(componentsTree()));
     }
 
     private ArrayLiteralBuilder componentsTree() {
         ArrayLiteralBuilder components = arrayLiteral();
-        application.traverseDown(container -> {
-            ObjectLiteralBuilder componentObject = objectLiteral();
-            new VueComponentPropertiesDecorator(container, resourceStorage).decorate(componentObject);
 
-            components.element(objectLiteral()
-                    .objectProperty(propertyBuilder().name("path").value(stringLiteral("/")))
-                    .objectProperty(propertyBuilder().name("component").value(componentObject))
-            );
-
+        // will mount root container to "/"
+        application.traverseDown(mountedContainer -> {
+            LicketMountPoint mountPoint = mountedContainer.getClass().getAnnotation(LicketMountPoint.class);
+            if (mountPoint == null) {
+                return false;
+            }
+            addComponentMountPoint(components, mountedContainer);
             return false;
         });
         return components;
     }
 
+    private void addComponentMountPoint(ArrayLiteralBuilder components, LicketComponent<?> licketComponent) {
+        components.element(objectLiteral()
+                .objectProperty(propertyBuilder().name("path").value(stringLiteral(mountedComponents.mountedComponent(licketComponent.getClass()).path())))
+                .objectProperty(propertyBuilder().name("name").value(stringLiteral(licketComponent.getClass().getName())))
+                .objectProperty(propertyBuilder().name("component").value(
+                    componentPropertiesDecorator.decorate(licketComponent, objectLiteral()))
+                )
+        );
+    }
+
     private StringLiteralBuilder applicationRootId() {
         return stringLiteral(format("#%s", application.rootComponentContainer().getId()));
+    }
+
+    private void registerMountPoints() {
+        application.traverseDown(mountedContainer -> {
+            LicketMountPoint mountPoint = mountedContainer.getClass().getAnnotation(LicketMountPoint.class);
+            if (mountPoint == null) {
+                return false;
+            }
+            // iterating trough components annotated with @LicketMountPoint
+            registerComponentMountPoint(mountedContainer, mountPoint.value());
+            return false;
+        });
+    }
+
+    private void registerComponentMountPoint(LicketComponent<?> licketComponent, String mountPoint) {
+        if (isComponentAbstract(licketComponent)) {
+            LOGGER.warn("Currently not supported to mount abstract component like this one: {}.", licketComponent.getCompositeId().getValue());
+            return;
+        }
+        // registering mounted component
+        mountedComponents.setMountedLink(licketComponent.getClass(), mountPoint);
+    }
+
+    private boolean isComponentAbstract(LicketComponent<?> licketComponent) {
+        return Modifier.isAbstract(licketComponent.getClass().getModifiers());
     }
 }

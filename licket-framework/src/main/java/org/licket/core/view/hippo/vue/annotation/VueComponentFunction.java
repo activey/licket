@@ -6,6 +6,7 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.licket.core.view.hippo.vue.annotation.VueComponentFunctionPredicate.ANY;
 
 /**
  * @author activey
@@ -17,4 +18,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface VueComponentFunction {
 
     String value() default "";
+
+    VueComponentFunctionPredicate[] predicates() default { ANY };
 }

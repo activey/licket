@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.licket.core.LicketApplication;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.link.ComponentActionCallback;
-import org.licket.core.view.model.LicketComponentModelGroup;
+import org.licket.core.model.LicketComponentModelGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,15 +30,14 @@ public class LicketActionLinkController {
         if (!link.isPresent()) {
             throw componentNotFound(linkComponentCompositeId);
         }
-
-        LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
         // component callback
         ComponentActionCallback componentActionCallback = new ComponentActionCallback();
 
         // handling action link click
-        onComponent(link.get()).tryHandleLinkClick(componentActionCallback);
+        onComponent(link.get()).tryLinkClick(componentActionCallback);
 
         // sending back list of reloaded component models
+        LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
         componentActionCallback.forEachToBeReloaded(component -> modelGroup
             .addModel(component.getCompositeId().getValue(), component.getComponentModel().get()));
 

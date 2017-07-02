@@ -2,11 +2,17 @@ package org.licket.core.view;
 
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketComponentModel;
+import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.view.api.AbstractLicketComponentAPI;
 import org.licket.core.view.api.DefaultLicketComponentAPI;
-import org.licket.core.view.link.ComponentFunctionCallback;
+import org.licket.core.view.hippo.vue.annotation.Name;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.mount.params.MountingParams;
 import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.framework.hippo.BlockBuilder;
+import org.licket.framework.hippo.ExpressionStatementBuilder;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.surface.element.SurfaceElement;
 import org.slf4j.Logger;
@@ -24,7 +30,15 @@ import static org.licket.core.id.CompositeId.fromStringValue;
 import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.view.LicketComponentView.noView;
+import static org.licket.core.view.hippo.vue.annotation.VueComponentFunctionPredicate.MOUNTED_ONLY;
+import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
+import static org.licket.framework.hippo.AssignmentBuilder.assignment;
+import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
+import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
+import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
+import static org.licket.framework.hippo.PropertyNameBuilder.property;
+import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
@@ -36,6 +50,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     private LicketComponentView view;
     private LicketComponent<?> parent;
     private boolean initialized;
+    private boolean custom;
 
     public AbstractLicketComponent(String id, Class<T> modelClass) {
         this(id, modelClass, emptyComponentModel(), noView());
@@ -57,6 +72,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     @PostConstruct
     public final void initialize() {
         if (initialized) {
+            LOGGER.warn("Component is already initialized: {}", getCompositeId().getValue());
             return;
         }
         LOGGER.debug("Initializing component: {}", getCompositeId().getValue());
@@ -142,28 +158,37 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
             return;
         }
         renderingContext.onSurfaceElement(element -> {
-            setTemplate(renderingContext, element);
+            Optional<SurfaceElement> elementOptional = overrideComponentElement(element, renderingContext);
+            if (elementOptional.isPresent()) {
+                SurfaceElement replacedElement = elementOptional.get();
+                generateComponentTemplate(renderingContext, element);
+                element.replaceWith(replacedElement);
+                element.detach();
+                return;
+            }
+
+            generateComponentTemplate(renderingContext, element);
+            generateComponentElement(element);
         });
     }
 
-    private void setTemplate(ComponentRenderingContext renderingContext, SurfaceElement element) {
+    private void generateComponentTemplate(ComponentRenderingContext renderingContext, SurfaceElement element) {
         try {
-            if (getView().isTemplateExternal()) {
-                // renderingContext.renderResource(
-                // new ProxyResource(getView().viewResource(), getCompositeId().getValue()));
-            } else {
+            if (!getView().isTemplateExternal()) {
                 renderingContext
-                    .renderResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
+                        .renderResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
             }
-            onElementReplaced(replaceElement(element));
         } catch (XMLStreamException e) {
-            LOGGER.error("An error occured while rendering component.", e);
+            LOGGER.error("An error occurred while rendering component.", e);
         }
     }
 
-    protected void onElementReplaced(SurfaceElement surfaceElement) {}
+    protected Optional<SurfaceElement> overrideComponentElement(SurfaceElement surfaceElement, ComponentRenderingContext renderingContext) {
+        // when overriding it to override component rendering and providing
+        return Optional.empty();
+    }
 
-    private SurfaceElement replaceElement(SurfaceElement element) {
+    private SurfaceElement generateComponentElement(SurfaceElement element) {
         SurfaceElement componentElement = new SurfaceElement(getId(), element.getNamespace());
         setRefAttribute(componentElement);
         element.replaceWith(componentElement);
@@ -176,8 +201,67 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         element.addAttribute("ref", getId());
     }
 
-    public AbstractLicketComponentAPI api(ComponentFunctionCallback functionCallback) {
-        return new DefaultLicketComponentAPI(this, functionCallback);
+    public AbstractLicketComponentAPI api(ComponentActionCallback componentActionCallback) {
+        return new DefaultLicketComponentAPI(this, componentActionCallback);
     }
 
+    @Override
+    public final boolean isCustom() {
+        return custom;
+    }
+
+    public void setCustom(boolean custom) {
+        this.custom = custom;
+    }
+
+    @SuppressWarnings("unused")
+    public final void mountComponent(MountingParams mountingParams, ComponentActionCallback componentActionCallback) {
+        onComponentMounted(mountingParams);
+        onAfterComponentMounted(componentActionCallback);
+    }
+
+    @VueComponentFunction(predicates = MOUNTED_ONLY)
+    public final void afterMount(@Name("response") NameBuilder response, BlockBuilder functionBody) {
+        // setting current form model directly without event emitter
+        functionBody
+                .appendStatement(
+                        expressionStatement(assignment().left(property(thisLiteral(), name("model")))
+                                .right(arrayElementGet()
+                                        .target(
+                                                property(property("response", "body"), "model"))
+                                        .element(stringLiteral(getCompositeId().getValue())))));
+        // gathering all others
+        ComponentActionCallback componentActionCallback = new ComponentActionCallback();
+
+        // invoking post action callback
+        onAfterComponentMounted(componentActionCallback);
+
+        // sending reload request for gathered components
+        componentActionCallback.forEachToBeReloaded(component -> functionBody.appendStatement(reloadComponent(component)));
+
+        // invoking javascript calls
+        componentActionCallback.forEachCall(call -> functionBody.appendStatement(
+                expressionStatement(call)
+        ));
+    }
+
+    private ExpressionStatementBuilder reloadComponent(LicketComponent<?> component) {
+        return expressionStatement(functionCall().target(property(property(thisLiteral(), LicketComponentModelReloader.serviceName()), name("notifyModelChanged")))
+                .argument(stringLiteral(component.getCompositeId().getValue()))
+                .argument(arrayElementGet()
+                        .target(property(property("response", "body"), name("model")))
+                        .element(stringLiteral(component.getCompositeId().getValue()))));
+    }
+
+    /**
+     * Override to be able to update component model upon mounting params entity
+     * @param componentMountingParams
+     */
+    protected void onComponentMounted(MountingParams componentMountingParams) {}
+
+    /**
+     *
+     * @param componentActionCallback
+     */
+    protected void onAfterComponentMounted(ComponentActionCallback componentActionCallback) {}
 }

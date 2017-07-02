@@ -34,7 +34,9 @@ public class ReturnStatementBuilder extends AbstractAstNodeBuilder<ReturnStateme
     @Override
     public ReturnStatement build() {
         ReturnStatement returnStatement = new ReturnStatement();
-        returnStatement.setReturnValue(returnValue.build());
+        if (returnValue != null) {
+            returnStatement.setReturnValue(returnValue.build());
+        }
         return returnStatement;
     }
 }

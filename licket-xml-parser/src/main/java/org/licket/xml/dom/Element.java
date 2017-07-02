@@ -29,6 +29,10 @@ public class Element extends Node {
         return children;
     }
 
+    public Iterable<Attribute> attributes() {
+        return attributes;
+    }
+
     public void appendChildElement(Element childElement) {
         childElement.setParent(this);
         children.add(childElement);

@@ -1,38 +1,47 @@
 package org.licket.core.view.list;
 
 import static java.lang.String.format;
-import static org.licket.core.view.LicketComponentView.noView;
+import static org.licket.core.view.LicketComponentView.internalTemplateView;
+
 import java.util.Optional;
 import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.surface.element.SurfaceElement;
 
 public abstract class AbstractLicketList<T> extends AbstractLicketMultiContainer<String> {
 
-    private Class<T> elementClass;
-
-    public AbstractLicketList(String id, LicketComponentModel<String> enclosingComponentPropertyModel,
-                              Class<T> elementClass, LicketComponentModelReloader modelReloader) {
-        super(id, String.class, enclosingComponentPropertyModel, noView(), modelReloader);
-        this.elementClass = elementClass;
+    public AbstractLicketList(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
+        super(id, String.class, enclosingComponentPropertyModel, internalTemplateView());
         // TODO analyze element class provided and check its properties against passed enclosingComponentPropertyModel
     }
 
     @Override
-    protected final void onRenderContainer(ComponentRenderingContext renderingContext) {
-        Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketMultiContainer);
-        if (!parent.isPresent()) {
-            return;
-        }
-        AbstractLicketMultiContainer parentContainer = (AbstractLicketMultiContainer) parent.get();
-        renderingContext.onSurfaceElement(element -> {
-            String firstPart = "model";
-            if (!parentContainer.getView().hasTemplate()) {
-                firstPart = parentContainer.getId();
-            }
-            element.addAttribute("v-for", format("%s in %s.%s", getId(), firstPart, getComponentModel().get()));
-        });
+    protected Optional<SurfaceElement> overrideComponentElement(SurfaceElement surfaceElement, ComponentRenderingContext renderingContext) {
+        SurfaceElement element = new SurfaceElement(getId(), surfaceElement.getNamespace());
+        setRefAttribute(element);
+        setForAttribute(element);
+        setBindAttribute(element);
+        return Optional.of(element);
+    }
+
+    private void setRefAttribute(SurfaceElement element) {
+        element.addAttribute("ref", getId());
+    }
+
+    private void setForAttribute(SurfaceElement element) {
+        // TODO check if enclosing property model has collection defined with name from getComponentModel().get()
+        element.addAttribute("v-for", format("%s in model.%s", getId(), getComponentModel().get()));
+    }
+
+    private void setBindAttribute(SurfaceElement element) {
+        element.addAttribute("v-bind:model", getId());
+    }
+
+    @Override
+    public boolean isStateful() {
+        // list are stateless, so we can't put them into components tree, they have to be global defined
+        return false;
     }
 }

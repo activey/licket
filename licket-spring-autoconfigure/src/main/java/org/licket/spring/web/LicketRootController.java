@@ -8,9 +8,11 @@ import static org.springframework.http.ResponseEntity.status;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
 import org.licket.core.LicketApplication;
+import org.licket.core.id.CompositeId;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
+import org.licket.core.view.LicketComponent;
 import org.licket.spring.surface.element.html.compiler.ComponentTemplateCompiler;
 import org.licket.surface.SurfaceContext;
 import org.licket.surface.tag.ElementFactories;
@@ -47,15 +49,35 @@ public class LicketRootController {
     // TODO refactor whole method
     LOGGER.debug("Initializing licket application: {}.", licketApplication.getName());
 
-    // compiling root component template
-    ComponentTemplateCompiler templateCompiler =
-        new ComponentTemplateCompiler(() -> licketApplication.rootComponentContainer());
-    resourcesStorage.putResource(new ByteArrayResource("index.html", TEXT_HTML_VALUE,
-        templateCompiler.compile(surfaceContext())));
+    // compiling all other components with external view markup
+    licketApplication.traverseDown(licketComponent -> {
+      if (isRootComponent(licketComponent)) {
+        // compiling root component template
+        ComponentTemplateCompiler templateCompiler =
+                new ComponentTemplateCompiler(() -> licketComponent);
+        resourcesStorage.putResource(new ByteArrayResource("index.html", TEXT_HTML_VALUE,
+                templateCompiler.compile(surfaceContext(null))));
+        return true;
+      }
+
+      // rendering external resource markup
+      if (!licketComponent.getView().isTemplateExternal()) {
+        return true;
+      }
+      ComponentTemplateCompiler templateCompiler =
+              new ComponentTemplateCompiler(() -> licketComponent);
+      resourcesStorage.putResource(new ByteArrayResource(licketComponent.getCompositeId().getValue(), TEXT_HTML_VALUE,
+              templateCompiler.compile(surfaceContext(licketComponent.getCompositeId()))));
+      return true;
+    });
   }
 
-  private SurfaceContext surfaceContext() {
-    return new SurfaceContext(surfaceElementFactories);
+  private boolean isRootComponent(LicketComponent<?> licketComponent) {
+    return licketApplication.rootComponentContainer().getCompositeId().equals(licketComponent.getCompositeId());
+  }
+
+  private SurfaceContext surfaceContext(CompositeId parentCompositeId) {
+    return new SurfaceContext(surfaceElementFactories, parentCompositeId);
   }
 
   @GetMapping(value = "/index", produces = TEXT_HTML_VALUE)

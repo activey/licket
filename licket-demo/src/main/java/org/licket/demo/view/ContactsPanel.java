@@ -1,6 +1,5 @@
 package org.licket.demo.view;
 
-import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
@@ -8,14 +7,12 @@ import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.demo.model.Contacts;
 import org.licket.demo.service.ContactsService;
-import org.licket.semantic.component.modal.ModalSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.model.LicketComponentModel.ofModelObject;
 import static org.licket.core.view.LicketComponentView.internalTemplateView;
 import static org.licket.demo.model.Contacts.fromIterable;
-import static org.licket.semantic.component.modal.ModalSettingsBuilder.builder;
 
 /**
  * @author activey
@@ -23,35 +20,23 @@ import static org.licket.semantic.component.modal.ModalSettingsBuilder.builder;
 public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
 
     @Autowired
-    private ContactsService contactsService;
+    private LicketComponentModelReloader modelReloader;
 
     @Autowired
-    private LicketRemote remoteCommunication;
+    private ContactsList contactsList;
 
-    public ContactsPanel(String id, LicketComponentModelReloader modelReloader) {
-        super(id, Contacts.class, emptyComponentModel(), internalTemplateView(), modelReloader);
+    @Autowired
+    private ContactsService contactsService;
+
+    public ContactsPanel(String id) {
+        super(id, Contacts.class, emptyComponentModel(), internalTemplateView());
     }
 
     @Override
     protected void onInitializeContainer() {
-        add(new ContactsList("contact", new LicketComponentModel("contacts"), modelReloader()));
-        add(new AbstractLicketActionLink("reload", remoteCommunication, modelReloader()) {
-
-            protected void onClick() {
-                reloadList();
-            }
-
-            @Override
-            protected void onAfterClick(ComponentActionCallback componentActionCallback) {
-                componentActionCallback.reload(ContactsPanel.this);
-            }
-        });
+        add(contactsList);
 
         readContacts();
-    }
-
-    private ModalSettings modalSettings() {
-        return builder().showActions().build();
     }
 
     private void readContacts() {
@@ -60,5 +45,10 @@ public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
 
     public void reloadList() {
         readContacts();
+    }
+
+    @Override
+    protected LicketComponentModelReloader getModelReloader() {
+        return modelReloader;
     }
 }

@@ -21,6 +21,10 @@ import org.licket.framework.hippo.*;
  */
 public class LicketRemote implements VueClass {
 
+    public static NameBuilder serviceName() {
+        return NameBuilder.name("$licketRemoteService");
+    }
+
     @Name("http")
     private final HttpCommunicationService httpCommunicationService;
 
@@ -44,15 +48,32 @@ public class LicketRemote implements VueClass {
             .callHttpPost("`/licket/link/click/${linkComponentCompositeId}`", responseListener)));
     }
 
+    @VueComponentFunction
+    public void mountComponent(@Name("componentCompositeId") NameBuilder componentCompositeId,
+                           @Name("mountingParams") NameBuilder mountingParams,
+                           @Name("responseListener") NameBuilder responseListener, BlockBuilder body) {
+        body.appendStatement(expressionStatement(httpCommunicationService
+                .callHttpPostWithData("`/licket/component/${componentCompositeId}/mount`", mountingParams, responseListener)));
+    }
+
     @Override
     public NameBuilder vueName() {
-        return name("$licketRemoteService");
+        return LicketRemote.serviceName();
     }
 
     public FunctionCallBuilder callSubmitForm(String formId, PropertyNameBuilder callbackFunction) {
         return functionCall()
                 .target(property(property(thisLiteral(), vueName()), name("submitForm")))
-                .argument(stringLiteral(formId)).argument(property(thisLiteral(), name("model")))
+                .argument(stringLiteral(formId))
+                .argument(property(thisLiteral(), name("model")))
+                .argument(callbackFunction);
+    }
+
+    public FunctionCallBuilder callMountComponent(String componentId, FunctionNodeBuilder callbackFunction) {
+        return functionCall()
+                .target(property(property(property("app", "instance"), vueName()), name("mountComponent")))
+                .argument(stringLiteral(componentId))
+                .argument(property(name("to"), name("params")))
                 .argument(callbackFunction);
     }
 }

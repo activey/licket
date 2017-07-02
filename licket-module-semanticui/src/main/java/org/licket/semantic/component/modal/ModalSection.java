@@ -12,7 +12,15 @@ import static org.licket.core.view.LicketComponentView.internalTemplateView;
  */
 public class ModalSection extends AbstractLicketMonoContainer<Void> {
 
+  private final LicketComponentModelReloader modelReloader;
+
   public ModalSection(String id, LicketComponentModelReloader modelReloader) {
-    super(id, Void.class, emptyComponentModel(), internalTemplateView(), modelReloader);
+    super(id, Void.class, emptyComponentModel(), internalTemplateView());
+    this.modelReloader = modelReloader;
+  }
+
+  @Override
+  public LicketComponentModelReloader getModelReloader() {
+    return modelReloader;
   }
 }

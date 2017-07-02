@@ -64,6 +64,11 @@ public class ObjectPropertyBuilder extends AbstractAstNodeBuilder<ObjectProperty
         return this;
     }
 
+    public ObjectPropertyBuilder value(ArrayLiteralBuilder props) {
+        this.value = props;
+        return this;
+    }
+
     @Override
     public ObjectProperty build() {
         ObjectProperty objectProperty = new ObjectProperty();

@@ -14,18 +14,17 @@ public abstract class AbstractLicketMonoContainer<T> extends AbstractReloadableL
 
     private LicketComponent<?> child;
 
-    public AbstractLicketMonoContainer(String id, Class<T> modelClass, LicketComponentModelReloader modelReloader) {
-        super(id, modelClass, modelReloader);
+    public AbstractLicketMonoContainer(String id, Class<T> modelClass) {
+        super(id, modelClass);
+    }
+
+    public AbstractLicketMonoContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel) {
+        super(id, modelClass, componentModel);
     }
 
     public AbstractLicketMonoContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
-                                       LicketComponentModelReloader modelReloader) {
-        super(id, modelClass, componentModel, modelReloader);
-    }
-
-    public AbstractLicketMonoContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
-                                       LicketComponentView view, LicketComponentModelReloader modelReloader) {
-        super(id, modelClass, componentModel, view, modelReloader);
+                                       LicketComponentView view) {
+        super(id, modelClass, componentModel, view);
     }
 
     public final void add(LicketComponent<?> child) {

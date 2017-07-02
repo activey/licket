@@ -23,6 +23,10 @@ public class LicketComponentModelReloader implements VueClass {
     @Name("eventHub")
     private PropertyNameBuilder eventHub = property("app", "ApplicationEventHub");
 
+    public static NameBuilder serviceName() {
+        return name("$licketModelReloader");
+    }
+
     @VueComponentFunction
     public void listenForModelChange(@Name("changeListener") NameBuilder changeListener, BlockBuilder body) {
         body.appendStatement(expressionStatement(functionCall()
@@ -52,6 +56,6 @@ public class LicketComponentModelReloader implements VueClass {
 
     @Override
     public NameBuilder vueName() {
-        return name("$licketModelReloader");
+        return LicketComponentModelReloader.serviceName();
     }
 }

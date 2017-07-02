@@ -10,7 +10,7 @@ import static org.licket.framework.hippo.NameBuilder.name;
 public class PropertyNameBuilder extends AbstractAstNodeBuilder<PropertyGet> {
 
     private final AbstractAstNodeBuilder left;
-    private final NameBuilder right;
+    private NameBuilder right;
 
     private PropertyNameBuilder(AbstractAstNodeBuilder left, NameBuilder right) {
         this.left = left;
@@ -27,6 +27,11 @@ public class PropertyNameBuilder extends AbstractAstNodeBuilder<PropertyGet> {
 
     public static PropertyNameBuilder property(String left, String right) {
         return new PropertyNameBuilder(name(left), name(right));
+    }
+
+    public PropertyNameBuilder right(NameBuilder astNode) {
+        this.right = astNode;
+        return this;
     }
 
     public PropertyGet build() {

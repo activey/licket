@@ -1,7 +1,6 @@
 package org.licket.core.view.form;
 
 import org.licket.core.model.LicketComponentModel;
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.LicketComponentView;
@@ -34,20 +33,22 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 @VueComponent
 public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer<T> {
 
-    private LicketRemote licketRemote;
-
-    public AbstractLicketForm(String id, Class<T> modelClass, LicketComponentModel<T> model, LicketComponentView componentView,
-                              LicketRemote licketRemote,
-                              LicketComponentModelReloader modelReloader) {
-        super(id, modelClass, model, componentView, modelReloader);
-        this.licketRemote = checkNotNull(licketRemote, "Liket remote instance must not be null!");
+    public AbstractLicketForm(String id, Class<T> modelClass, LicketComponentModel<T> model, LicketComponentView componentView) {
+        super(id, modelClass, model, componentView);
     }
 
     public final LicketRemote remote() {
-        return licketRemote;
+        LicketRemote remote = getRemote();
+        checkNotNull(remote, "Licket remote instance must not be null!");
+        return remote;
     }
 
+    protected abstract LicketRemote getRemote();
+
     @SuppressWarnings("unused")
+    /**
+     * Executed from within LicketFormConmtro
+     */
     public final void submitForm(T formModelObject, ComponentActionCallback actionCallback) {
         setComponentModel(ofModelObject(formModelObject));
         onSubmit();
@@ -82,9 +83,8 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
         onAfterSubmit(componentActionCallback);
 
         // sending reload request for gathered components
-        componentActionCallback.forEachToBeReloaded(component -> {
-            functionBody.appendStatement(reloadComponent(component));
-        });
+        componentActionCallback.forEachToBeReloaded(component -> functionBody.appendStatement(reloadComponent(component)));
+
         // invoking javascript calls
         componentActionCallback.forEachCall(call -> functionBody.appendStatement(
                 expressionStatement(call)
@@ -105,7 +105,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
     public void submitForm(BlockBuilder functionBlock) {
         functionBlock
             .appendStatement(expressionStatement(
-                    licketRemote.callSubmitForm(
+                    remote().callSubmitForm(
                             getCompositeId().getValue(), property(thisLiteral(), name("afterSubmit"))
                     )
             ))
@@ -113,7 +113,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
     }
 
     @Override
-    public AbstractLicketFormAPI api(ComponentFunctionCallback functionCallback) {
+    public AbstractLicketFormAPI api(ComponentActionCallback functionCallback) {
         return new AbstractLicketFormAPI(this, functionCallback);
     }
 }

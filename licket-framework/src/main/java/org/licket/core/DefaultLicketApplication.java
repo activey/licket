@@ -1,13 +1,5 @@
 package org.licket.core;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static org.licket.core.id.CompositeId.fromStringValue;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-
 import org.licket.core.id.CompositeId;
 import org.licket.core.view.ComponentChildLocator;
 import org.licket.core.view.LicketComponent;
@@ -15,6 +7,15 @@ import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.core.view.hippo.vue.VuePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.licket.core.id.CompositeId.fromStringValue;
 
 public class DefaultLicketApplication implements LicketApplication, Serializable  {
 
@@ -25,7 +26,10 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
     private LicketComponentContainer<?> rootContainer;
 
     @Autowired
-    private List<VuePlugin> modules = newArrayList();
+    private List<LicketComponent<?>> allDeclaredComponents = newArrayList();
+
+    @Autowired
+    private List<VuePlugin> plugins = newArrayList();
 
     public DefaultLicketApplication(String name) {
         this.name = name;
@@ -43,9 +47,29 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
 
     @Override
     public Optional<LicketComponent<?>> findComponent(CompositeId compositeId) {
-        if (compositeId.current().equals(rootContainer.getId())) {
+        checkNotNull(rootContainer, "Can not find component definition annotated with @LicketRootContainer");
+        Optional<LicketComponent<?>> licketComponentOptional = findComponent(rootContainer, compositeId);
+        if (licketComponentOptional.isPresent()) {
+            return licketComponentOptional;
+        }
+
+        // looking in declared components, @TODO include only those with @LicketMountPoint?
+        for (LicketComponent<?> rootElement : allDeclaredComponents) {
+            if (rootElement.getCompositeId().equals(compositeId)) {
+                return Optional.of(rootElement);
+            }
+            licketComponentOptional = findComponent(rootElement, compositeId);
+            if (licketComponentOptional.isPresent()) {
+                return licketComponentOptional;
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<LicketComponent<?>> findComponent(LicketComponent<?> rootElement, CompositeId compositeId) {
+        if (compositeId.current().equals(rootElement.getId())) {
             compositeId.forward();
-            ComponentChildLocator locator = new ComponentChildLocator(rootContainer);
+            ComponentChildLocator locator = new ComponentChildLocator(rootElement);
             return locator.findByCompositeId(compositeId);
         }
         return Optional.empty();
@@ -58,13 +82,15 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
 
     @Override
     public void traverseDown(Predicate<LicketComponent<?>> componentVisitor) {
-        if (componentVisitor.test(rootContainer)) {
-            rootContainer.traverseDown(componentVisitor);
-        }
+        allDeclaredComponents.forEach(mountedContainer -> {
+            if (componentVisitor.test(mountedContainer)) {
+                mountedContainer.traverseDown(componentVisitor);
+            }
+        });
     }
 
     @Override
-    public final Iterable<VuePlugin> modules() {
-        return modules;
+    public final Iterable<VuePlugin> plugins() {
+        return plugins;
     }
 }
