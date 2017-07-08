@@ -3,20 +3,24 @@ package org.licket.demo.service;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Internet;
 import org.licket.demo.model.Contact;
+import org.licket.demo.model.EmailAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.IdGenerator;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
+import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Lists.newArrayList;
-import static org.apache.commons.collections.ListUtils.synchronizedList;
+import static java.util.Collections.synchronizedList;
 
 @Service
 public class ContactsService {
+
+    private static final String PICTURE_URL = "https://api.adorable.io/avatars/200/%s.png";
     private Faker faker = new Faker();
     @Autowired
     private IdGenerator idGenerator;
@@ -43,12 +47,16 @@ public class ContactsService {
     }
 
     public Contact emptyContact() {
-        return new Contact();
+        Contact contact = new Contact();
+        contact.addEmail(faker.internet().emailAddress());
+        contact.setPictureUrl(String.format(PICTURE_URL, getFirst(contact.getEmails(), new EmailAddress()).getValue()));
+        return contact;
     }
 
     public Contact randomContact() {
         Contact contact = contact(faker.internet(), faker.name().fullName(), faker.lorem().paragraph());
         contact.setContent(faker.lorem().sentence(100));
+        contact.setPictureUrl(String.format(PICTURE_URL, getFirst(contact.getEmails(), new EmailAddress()).getValue()));
         return contact;
     }
 

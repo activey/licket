@@ -7,10 +7,6 @@ import org.licket.core.resource.AbstractClasspathResource;
  */
 public class ImageResource extends AbstractClasspathResource {
 
-    public static ImageResource fromClasspath(String classpathLocation, ImageType imageType) {
-        return new ImageResource(classpathLocation, imageType);
-    }
-
     public ImageResource(String classpathLocation, ImageType imageType) {
         super(classpathLocation, imageType.getMimetype());
     }

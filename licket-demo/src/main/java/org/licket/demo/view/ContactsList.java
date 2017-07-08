@@ -4,6 +4,7 @@ import org.licket.core.model.LicketComponentModel;
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.LicketLabel;
 import org.licket.core.view.list.AbstractLicketList;
+import org.licket.core.view.media.LicketImage;
 import org.licket.core.view.mount.MountedComponentLink;
 import org.licket.core.view.mount.params.MountingParamsAggregator;
 import org.licket.demo.model.Contact;
@@ -22,6 +23,7 @@ public class ContactsList extends AbstractLicketList<Contact> {
 
     @Override
     protected void onInitializeContainer() {
+        add(new LicketImage("pictureUrl"));
         add(new LicketLabel("name"));
         add(new LicketLabel("description"));
         add(new MountedComponentLink<Contact>("view-contact", ViewContactPanel.class) {

@@ -9,6 +9,7 @@ import org.licket.demo.model.Contact;
 import org.licket.demo.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.function.BiConsumer;
 
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
@@ -32,6 +33,11 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
 
     public AddContactForm(String id) {
         super(id, Contact.class, emptyComponentModel(), internalTemplateView());
+    }
+
+    @PostConstruct
+    private void postConstruct() {
+        setComponentModelObject(contactsService.emptyContact());
     }
 
     public final void onContactAdded(BiConsumer<Contact, ComponentActionCallback> callback) {
