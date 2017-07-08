@@ -1,29 +1,27 @@
 package org.licket.core.module.application;
 
+import org.licket.core.module.resource.HttpCommunicationService;
+import org.licket.core.view.hippo.vue.annotation.Name;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.hippo.vue.extend.VueClass;
+import org.licket.framework.hippo.BlockBuilder;
+import org.licket.framework.hippo.FunctionCallBuilder;
+import org.licket.framework.hippo.FunctionNodeBuilder;
+import org.licket.framework.hippo.NameBuilder;
+import org.licket.framework.hippo.PropertyNameBuilder;
+
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.licket.framework.hippo.BlockBuilder.block;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
-import static org.licket.framework.hippo.FunctionNodeBuilder.functionNode;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
-import org.licket.core.module.resource.HttpCommunicationService;
-import org.licket.core.view.hippo.vue.annotation.Name;
-import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
-import org.licket.core.view.hippo.vue.extend.VueClass;
-import org.licket.framework.hippo.*;
-
 /**
  * @author grabslu
  */
 public class LicketRemote implements VueClass {
-
-    public static NameBuilder serviceName() {
-        return NameBuilder.name("$licketRemoteService");
-    }
 
     @Name("http")
     private final HttpCommunicationService httpCommunicationService;
@@ -58,7 +56,7 @@ public class LicketRemote implements VueClass {
 
     @Override
     public NameBuilder vueName() {
-        return LicketRemote.serviceName();
+        return NameBuilder.name("$licketRemoteService");
     }
 
     public FunctionCallBuilder callSubmitForm(String formId, PropertyNameBuilder callbackFunction) {
@@ -71,7 +69,7 @@ public class LicketRemote implements VueClass {
 
     public FunctionCallBuilder callMountComponent(String componentId, FunctionNodeBuilder callbackFunction) {
         return functionCall()
-                .target(property(property(property("app", "instance"), vueName()), name("mountComponent")))
+                .target(property(property(name("vm"), vueName()), name("mountComponent")))
                 .argument(stringLiteral(componentId))
                 .argument(property(name("to"), name("params")))
                 .argument(callbackFunction);

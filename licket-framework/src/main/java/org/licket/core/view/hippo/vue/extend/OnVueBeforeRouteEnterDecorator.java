@@ -46,31 +46,33 @@ public class OnVueBeforeRouteEnterDecorator {
             .param(name("from"))
             .param(name("next"))
             .body(block()
-                    .appendStatement(
-                        ifStatement()
+                    .appendStatement(ifStatement()
                             .condition(equalCheckExpression().left(property("from", "path")).right(property("to", "path")))
                             .then(block()
                                     .appendStatement(expressionStatement(functionCall().target(name("next"))))
                                     .appendStatement(returnStatement())))
-                    .appendStatement(licketRemote.callMountComponent(licketComponent.getCompositeId().getValue(),
-                      functionNode()
-                            .param(name("response"))
-                            .body(block()
-                                    .appendStatement(expressionStatement(
-                                            functionCall()
-                                                    .target(name("next"))
-                                                    .argument(nextFunction()))
-                                    )
-            ))));
+                    .appendStatement(expressionStatement(
+                            functionCall()
+                                    .target(name("next"))
+                                    .argument(nextFunction(licketComponent)))));
+
   }
 
-  private FunctionNodeBuilder nextFunction() {
+  private FunctionNodeBuilder nextFunction(LicketComponent<?> licketComponent) {
     return functionNode()
             .param(name("vm"))
-            .body(block().appendStatement(
-                    functionCall()
-                            .target(property(name("vm"), name("afterMount")))
-                            .argument(name("response")))
+            .body(
+                    block()
+                      .appendStatement(licketRemote.callMountComponent(
+                              licketComponent.getCompositeId().getValue(),
+                              functionNode()
+                                      .param(name("response"))
+                                      .body(block().appendStatement(
+                                              functionCall()
+                                                      .target(property(name("vm"), name("afterMount")))
+                                                      .argument(name("response"))))
+                      )
+                    )
             );
   }
 }
