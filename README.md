@@ -3,6 +3,9 @@
 <img width="200" src="https://raw.githubusercontent.com/activey/licket/master/licket.png"></img>
 
 # Licket baby!
+[![European server](http://heroku-badge.herokuapp.com/?app=licket-demo-eu&style=flat&svg=1)](https://licket-demo-eu.herokuapp.com/):eu:
+[![US server](http://heroku-badge.herokuapp.com/?app=licket-demo&style=flat&svg=1)](https://licket-demo.herokuapp.com/):us:
+
 Here it is, brand new sweets to make your life even sweeter than before. Yes you! my brave web developer ;)
 
 What is Licket you ask? Licket is a Java based, Spring Boot driven and Vue.js flavoured stack!
