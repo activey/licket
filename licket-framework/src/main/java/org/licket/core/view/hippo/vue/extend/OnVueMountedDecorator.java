@@ -9,7 +9,6 @@ import static org.joor.Reflect.on;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.licket.core.view.hippo.vue.annotation.OnVueCreated;
 import org.licket.core.view.hippo.vue.annotation.OnVueMounted;
 import org.licket.framework.hippo.BlockBuilder;
 import org.slf4j.Logger;
@@ -48,11 +47,10 @@ public class OnVueMountedDecorator {
     }
 
     private Optional<OnVueMounted> onVueMountedFunction(Method method) {
-        OnVueMounted onVueCreatedFunction = method.getAnnotation(OnVueMounted.class);
         if (isPrivate(method.getModifiers())) {
             LOGGER.warn("Private methods, like {}, are not supported for now.", method.getName());
             return empty();
         }
-        return ofNullable(onVueCreatedFunction);
+        return ofNullable(method.getAnnotation(OnVueMounted.class));
     }
 }
