@@ -1,16 +1,12 @@
 package org.licket.demo.view;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
-import org.licket.core.view.link.AbstractLicketActionLink;
-import org.licket.core.view.link.ComponentActionCallback;
 import org.licket.demo.model.Contacts;
 import org.licket.demo.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
-import static org.licket.core.model.LicketComponentModel.ofModelObject;
 import static org.licket.core.view.LicketComponentView.internalTemplateView;
 import static org.licket.demo.model.Contacts.fromIterable;
 
@@ -40,7 +36,7 @@ public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
     }
 
     private void readContacts() {
-        setComponentModel(ofModelObject(fromIterable(contactsService.getAllContacts())));
+        setComponentModelObject(fromIterable(contactsService.getAllContacts()));
     }
 
     public void reloadList() {

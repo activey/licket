@@ -6,7 +6,7 @@ import org.licket.core.view.LicketLabel;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.core.view.link.AbstractLicketActionLink;
-import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.list.AbstractLicketList;
 import org.licket.core.view.mount.MountedComponentLink;
 import org.licket.core.view.mount.params.MountingParams;
@@ -87,6 +87,6 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
     if (!contactOptional.isPresent()) {
       return;
     }
-    setComponentModel(ofModelObject(contactOptional.get()));
+    setComponentModelObject(contactOptional.get());
   }
 }

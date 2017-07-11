@@ -18,6 +18,14 @@ public class KeywordLiteralBuilder extends AbstractAstNodeBuilder<KeywordLiteral
         return new KeywordLiteralBuilder(Token.THIS);
     }
 
+    public static KeywordLiteralBuilder trueLiteral() {
+        return new KeywordLiteralBuilder(Token.TRUE);
+    }
+
+    public static KeywordLiteralBuilder falseLiteral() {
+        return new KeywordLiteralBuilder(Token.FALSE);
+    }
+
     @Override
     public KeywordLiteral build() {
         KeywordLiteral keywordLiteral = new KeywordLiteral();

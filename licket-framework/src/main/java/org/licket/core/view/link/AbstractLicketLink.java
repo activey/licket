@@ -1,6 +1,7 @@
 package org.licket.core.view.link;
 
 import org.licket.core.view.AbstractLicketComponent;
+import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;

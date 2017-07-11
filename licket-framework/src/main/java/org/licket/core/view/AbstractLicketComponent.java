@@ -2,18 +2,14 @@ package org.licket.core.view;
 
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketComponentModel;
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.view.api.AbstractLicketComponentAPI;
 import org.licket.core.view.api.DefaultLicketComponentAPI;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
-import org.licket.core.view.link.ComponentActionCallback;
-import org.licket.core.view.link.ComponentFunctionCallback;
 import org.licket.core.view.mount.params.MountingParams;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.ExpressionStatementBuilder;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.surface.element.SurfaceElement;
 import org.slf4j.Logger;
@@ -30,12 +26,12 @@ import static java.util.Optional.of;
 import static org.licket.core.id.CompositeId.fromStringValue;
 import static org.licket.core.id.CompositeId.fromStringValueWithAdditionalParts;
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
+import static org.licket.core.module.application.LicketComponentModelReloader.callReloadComponent;
 import static org.licket.core.view.LicketComponentView.noView;
 import static org.licket.core.view.hippo.vue.annotation.VueComponentFunctionPredicate.MOUNTED_ONLY;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
-import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
@@ -238,20 +234,12 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         onAfterComponentMounted(componentActionCallback);
 
         // sending reload request for gathered components
-        componentActionCallback.forEachToBeReloaded(component -> functionBody.appendStatement(reloadComponent(component)));
+        componentActionCallback.forEachToBeReloaded((component, patch) -> functionBody.appendStatement(expressionStatement(callReloadComponent(component, patch))));
 
         // invoking javascript calls
         componentActionCallback.forEachCall(call -> functionBody.appendStatement(
                 expressionStatement(call)
         ));
-    }
-
-    private ExpressionStatementBuilder reloadComponent(LicketComponent<?> component) {
-        return expressionStatement(functionCall().target(property(property(thisLiteral(), LicketComponentModelReloader.serviceName()), name("notifyModelChanged")))
-                .argument(stringLiteral(component.getCompositeId().getValue()))
-                .argument(arrayElementGet()
-                        .target(property(property("response", "body"), name("model")))
-                        .element(stringLiteral(component.getCompositeId().getValue()))));
     }
 
     /**

@@ -1,4 +1,4 @@
-package org.licket.core.view.link;
+package org.licket.core.view;
 
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.mount.params.MountingParamsAggregator;

@@ -10,6 +10,7 @@ public class Contact {
     private String name;
     private String description;
     private String content;
+    private List<EmailAddress> emails = new ArrayList<>();
 
     public Contact() {}
 
@@ -22,8 +23,6 @@ public class Contact {
         this.name = name;
         this.description = description;
     }
-
-    private List<EmailAddress> emails = new ArrayList<>();
 
     public void addEmail(String emailAddress) {
         emails.add(new EmailAddress(emailAddress));

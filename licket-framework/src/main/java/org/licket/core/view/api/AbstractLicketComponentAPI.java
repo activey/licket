@@ -1,7 +1,7 @@
 package org.licket.core.view.api;
 
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.link.ComponentFunctionCallback;
+import org.licket.core.view.ComponentFunctionCallback;
 
 /**
  * @author lukaszgrabski
