@@ -75,6 +75,11 @@ public class FunctionCallBuilder extends AbstractAstNodeBuilder<FunctionCall> {
         return this;
     }
 
+    public FunctionCallBuilder argument(KeywordLiteralBuilder keywordLiteralBuilder) {
+        arguments.add(keywordLiteralBuilder);
+        return this;
+    }
+
     @Override
     public FunctionCall build() {
         FunctionCall functionCall = new FunctionCall();

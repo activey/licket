@@ -2,7 +2,7 @@ package org.licket.core.view.form;
 
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.api.AbstractLicketComponentAPI;
-import org.licket.core.view.link.ComponentFunctionCallback;
+import org.licket.core.view.ComponentFunctionCallback;
 
 import static org.licket.core.view.tree.LicketComponentTreeWalkSequence.source;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;

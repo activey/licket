@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joor.ReflectException;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.mount.params.MountingParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

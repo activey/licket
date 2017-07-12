@@ -1,24 +1,25 @@
 package org.licket.core.view.link;
 
+import org.licket.core.module.application.LicketComponentModelReloader;
+import org.licket.core.module.application.LicketRemote;
+import org.licket.core.view.AbstractLicketComponent;
+import org.licket.core.view.ComponentActionCallback;
+import org.licket.core.view.hippo.vue.annotation.Name;
+import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.render.ComponentRenderingContext;
+import org.licket.framework.hippo.BlockBuilder;
+import org.licket.framework.hippo.NameBuilder;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
+import static org.licket.core.module.application.LicketComponentModelReloader.callReloadComponent;
 import static org.licket.core.view.LicketComponentView.internalTemplateView;
-import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
-
-import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemote;
-import org.licket.core.view.AbstractLicketComponent;
-import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
-import org.licket.core.view.hippo.vue.annotation.Name;
-import org.licket.core.view.render.ComponentRenderingContext;
-import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.NameBuilder;
 
 /**
  * @author activey
@@ -47,21 +48,7 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
         ));
 
         // sending reload request for gathered components
-        componentActionCallback.forEachToBeReloaded(component -> functionBody.appendStatement(
-                functionCall()
-                        .target(
-                                property(
-                                        property(thisLiteral(), modelReloader.vueName()),
-                                        name("notifyModelChanged")
-                                )
-                        )
-                        .argument(stringLiteral(component.getCompositeId().getValue()))
-                        .argument(
-                                arrayElementGet()
-                                        .target(property(property("response", "body"), name("model")))
-                                        .element(stringLiteral(component.getCompositeId().getValue()))
-                        )
-        ));
+        componentActionCallback.forEachToBeReloaded((component, patch) -> functionBody.appendStatement(expressionStatement(callReloadComponent(component, patch))));
     }
 
     @VueComponentFunction

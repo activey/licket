@@ -10,6 +10,7 @@ public class LicketComponentModel<T> {
 
     private T modelObject;
     private Supplier<T> modelObjectSupplier;
+    private LicketComponentModelPatch modelPatch;
 
     public LicketComponentModel(T modelObject) {
         this(of(modelObject));
@@ -38,7 +39,16 @@ public class LicketComponentModel<T> {
         return modelObject;
     }
 
+    public LicketComponentModelPatch<T> getPatch() {
+        return modelPatch;
+    }
+
     public void set(T modelObject) {
+        // computing model object patch
+        if (this.modelObject != null && modelObject != null) {
+            this.modelPatch = new LicketComponentModelPatch<>(this.modelObject, modelObject);
+        }
+
         this.modelObject = modelObject;
     }
 }

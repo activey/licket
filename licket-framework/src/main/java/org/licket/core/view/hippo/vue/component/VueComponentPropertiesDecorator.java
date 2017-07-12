@@ -80,7 +80,6 @@ public class VueComponentPropertiesDecorator {
         functionNode().body(
                 block()
         );
-
         return functionNode().body(block().appendStatement(returnStatement()
             .returnValue(objectLiteral().objectProperty(propertyBuilder().name("model").value(modelData)))));
     }

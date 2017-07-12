@@ -4,7 +4,7 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.OnVueMounted;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
-import org.licket.core.view.link.ComponentFunctionCallback;
+import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;

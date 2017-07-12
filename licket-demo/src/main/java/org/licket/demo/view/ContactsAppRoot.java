@@ -5,7 +5,7 @@ import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.core.view.link.AbstractLicketActionLink;
-import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.mount.params.MountingParams;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,7 +35,7 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
     protected void onInitializeContainer() {
         addContactPanel.onContactAdded((contact, componentActionCallback) -> {
             contactsPanel.reloadList();
-            componentActionCallback.reload(contactsPanel);
+            componentActionCallback.patch(contactsPanel);
         });
         add(contactsPanel);
         add(addContactPanel);
@@ -48,7 +48,7 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
 
             @Override
             protected void onAfterClick(ComponentActionCallback componentActionCallback) {
-                componentActionCallback.reload(contactsPanel);
+                componentActionCallback.patch(contactsPanel);
             }
         });
     }

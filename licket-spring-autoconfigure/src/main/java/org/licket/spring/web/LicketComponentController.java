@@ -2,11 +2,11 @@ package org.licket.spring.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.licket.core.LicketApplication;
+import org.licket.core.model.LicketComponentModelGroup;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.link.ComponentActionCallback;
-import org.licket.core.model.LicketComponentModelGroup;
+import org.licket.core.view.ComponentActionCallback;
 import org.licket.surface.tag.ElementFactories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -77,9 +77,6 @@ public class LicketComponentController {
         modelGroup.addModel(componentOptional.get().getCompositeId().getValue(), componentOptional.get().getComponentModel().get());
 
         // sending back list of reloaded component models
-        componentActionCallback.forEachToBeReloaded(component -> modelGroup
-                .addModel(component.getCompositeId().getValue(), component.getComponentModel().get()));
-
-        return modelGroup;
+        return modelGroup.collectModels(componentActionCallback);
     }
 }

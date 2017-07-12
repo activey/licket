@@ -4,7 +4,7 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.form.AbstractLicketForm;
 import org.licket.core.view.form.LicketInput;
-import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.ComponentActionCallback;
 import org.licket.demo.model.Contact;
 import org.licket.demo.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;

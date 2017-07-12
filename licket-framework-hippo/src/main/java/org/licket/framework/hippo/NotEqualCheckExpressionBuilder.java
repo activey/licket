@@ -6,38 +6,38 @@ import org.mozilla.javascript.ast.InfixExpression;
 /**
  * @author activey
  */
-public class EqualCheckExpressionBuilder extends AbstractAstNodeBuilder<InfixExpression> {
+public class NotEqualCheckExpressionBuilder extends AbstractAstNodeBuilder<InfixExpression> {
 
     private AbstractAstNodeBuilder<?> left;
     private AbstractAstNodeBuilder<?> right;
 
-    public static EqualCheckExpressionBuilder equalCheckExpression() {
-        return new EqualCheckExpressionBuilder();
+    public static NotEqualCheckExpressionBuilder notEqualCheckExpression() {
+        return new NotEqualCheckExpressionBuilder();
     }
 
-    private EqualCheckExpressionBuilder() {}
+    private NotEqualCheckExpressionBuilder() {}
 
-    public EqualCheckExpressionBuilder left(PropertyNameBuilder left) {
+    public NotEqualCheckExpressionBuilder left(PropertyNameBuilder left) {
         this.left = left;
         return this;
     }
 
-    public EqualCheckExpressionBuilder left(NameBuilder left) {
+    public NotEqualCheckExpressionBuilder left(NameBuilder left) {
         this.left = left;
         return this;
     }
 
-    public EqualCheckExpressionBuilder right(StringLiteralBuilder right) {
+    public NotEqualCheckExpressionBuilder right(StringLiteralBuilder right) {
         this.right = right;
         return this;
     }
 
-    public EqualCheckExpressionBuilder right(PropertyNameBuilder right) {
+    public NotEqualCheckExpressionBuilder right(PropertyNameBuilder right) {
         this.right = right;
         return this;
     }
 
-    public EqualCheckExpressionBuilder right(KeywordLiteralBuilder right) {
+    public NotEqualCheckExpressionBuilder right(KeywordLiteralBuilder right) {
         this.right = right;
         return this;
     }
@@ -47,7 +47,7 @@ public class EqualCheckExpressionBuilder extends AbstractAstNodeBuilder<InfixExp
         InfixExpression infixExpression = new InfixExpression();
         infixExpression.setLeft(left.build());
         infixExpression.setRight(right.build());
-        infixExpression.setOperator(Token.EQ);
+        infixExpression.setOperator(Token.NE);
         return infixExpression;
     }
 }

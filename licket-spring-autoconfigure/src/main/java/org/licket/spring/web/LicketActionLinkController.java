@@ -7,7 +7,7 @@ import static org.licket.spring.web.component.ComponentActionHandler.onComponent
 import java.util.Optional;
 import org.licket.core.LicketApplication;
 import org.licket.core.view.LicketComponent;
-import org.licket.core.view.link.ComponentActionCallback;
+import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.model.LicketComponentModelGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,10 +37,6 @@ public class LicketActionLinkController {
         onComponent(link.get()).tryLinkClick(componentActionCallback);
 
         // sending back list of reloaded component models
-        LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
-        componentActionCallback.forEachToBeReloaded(component -> modelGroup
-            .addModel(component.getCompositeId().getValue(), component.getComponentModel().get()));
-
-        return modelGroup;
+        return new LicketComponentModelGroup().collectModels(componentActionCallback);
     }
 }

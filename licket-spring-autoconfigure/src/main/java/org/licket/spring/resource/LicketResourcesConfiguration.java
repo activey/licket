@@ -1,6 +1,7 @@
 package org.licket.spring.resource;
 
 import org.licket.core.resource.ResourceStorage;
+import org.licket.core.resource.patch.FastJsonPatchResource;
 import org.licket.core.resource.vue.VueLibraryResource;
 import org.licket.core.resource.vue.VueRouterLibraryResource;
 import org.licket.core.resource.vue.boot.VueGlobalInitializationResource;
@@ -46,5 +47,11 @@ public class LicketResourcesConfiguration {
     @SessionScope
     public VueInstanceInitializerResource vueApplicationModuleResource() {
         return new VueInstanceInitializerResource();
+    }
+
+    @Bean
+    @Order(5)
+    public FastJsonPatchResource jsonPatchResource() {
+        return new FastJsonPatchResource();
     }
 }
