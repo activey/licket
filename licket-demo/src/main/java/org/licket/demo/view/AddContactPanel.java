@@ -2,6 +2,7 @@ package org.licket.demo.view;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
+import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.link.AbstractLicketLink;
@@ -51,13 +52,6 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
 
     @Override
     protected void onInitializeContainer() {
-        add(new AbstractLicketLink("add-contact") {
-            @Override
-            protected void onClick(ComponentFunctionCallback callback) {
-                modal.api(callback).show(this);
-            }
-        });
-
         add(modal = new AbstractSemanticUIModal("form-modal", modalSettings, modelReloader()) {
 
             @Override
@@ -102,5 +96,9 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
     @Override
     public final LicketComponentModelReloader getModelReloader() {
         return modelReloader;
+    }
+
+    public final void showAddContactModal(ComponentFunctionCallback componentActionCallback, LicketComponent<?> caller) {
+        modal.api(componentActionCallback).show(caller);
     }
 }

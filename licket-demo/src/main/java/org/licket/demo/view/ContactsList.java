@@ -10,6 +10,9 @@ import org.licket.core.view.mount.params.MountingParamsAggregator;
 import org.licket.demo.model.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
+
+import static java.util.Optional.of;
 import static org.licket.core.view.mount.params.MountingParamValueDecorator.fromParentModel;
 
 public class ContactsList extends AbstractLicketList<Contact> {
@@ -37,5 +40,10 @@ public class ContactsList extends AbstractLicketList<Contact> {
     @Override
     protected LicketComponentModelReloader getModelReloader() {
         return modelReloader;
+    }
+
+    @Override
+    protected Optional<String> keyPropertyName() {
+        return of("id");
     }
 }

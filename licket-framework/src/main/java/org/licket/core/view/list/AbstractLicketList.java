@@ -1,6 +1,7 @@
 package org.licket.core.view.list;
 
 import static java.lang.String.format;
+import static java.util.Optional.empty;
 import static org.licket.core.view.LicketComponentView.internalTemplateView;
 
 import java.util.Optional;
@@ -33,6 +34,16 @@ public abstract class AbstractLicketList<T> extends AbstractLicketMultiContainer
     private void setForAttribute(SurfaceElement element) {
         // TODO check if enclosing property model has collection defined with name from getComponentModel().get()
         element.addAttribute("v-for", format("%s in model.%s", getId(), getComponentModel().get()));
+
+        Optional<String> keyPropertyName = keyPropertyName();
+        if (!keyPropertyName.isPresent()) {
+            return;
+        }
+        element.addAttribute("v-bind:key", format("%s.%s", getId(), keyPropertyName.get()));
+    }
+
+    protected Optional<String> keyPropertyName() {
+        return empty();
     }
 
     private void setBindAttribute(SurfaceElement element) {
