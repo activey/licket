@@ -3,44 +3,55 @@
     <head>
         <title>Contacts Page</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            #contacts-page {
+                margin-top: 5em;
+            }
+        </style>
     </head>
     <body>
-        <div class="ui container">
-            <h1 class="ui center aligned header">Contacts list</h1>
-
-            <div class="ui grid">
-                <div class="two column row">
-                    <div class="left floated column">
-                        <div class="ui container" lick:id="add-contact-panel">
-                            <div class="ui submit button" lick:id="add-contact">
-                                <i class="icon add"></i>
-                                Add contact
+        <div>
+            <div class="ui fixed inverted menu">
+                <div class="header item">
+                    Contacts list
+                </div>
+                <div class="right menu">
+                    <a class="ui item" lick:id="add-contact">
+                        <i class="add icon"/>
+                        Add contact
+                    </a>
+                    <a class="ui item" lick:id="reload">
+                        <i class="refresh icon" />
+                        Reload list
+                    </a>
+                </div>
+            </div>
+            <div class="ui container">
+                <div class="ui grid">
+                    <div class="two column row">
+                        <div class="left floated column">
+                            <div class="ui container" lick:id="add-contact-panel">
+                                <div lick:id="form-modal"></div>
                             </div>
-                            <div lick:id="form-modal"></div>
                         </div>
                     </div>
-                    <div class="right floated column">
-                        <button class="ui primary right floated button" lick:id="reload">
-                            Reload list model
-                        </button>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="ui four stackable cards" lick:id="contacts-panel">
-                        <div class="ui fluid card" lick:id="contact">
-                            <div class="image">
-                                <img lick:id="pictureUrl" />
-                            </div>
-                            <div class="content">
-                                <div class="header" lick:id="name">Person name</div>
-                                <div class="description" lick:id="description">
-                                    A description which may flow for several lines and give context to the content.
+                    <div class="row">
+                        <div class="ui four stackable cards" lick:id="contacts-panel">
+                            <div class="card" lick:id="contact">
+                                <div class="image">
+                                    <img lick:id="pictureUrl" />
                                 </div>
-                            </div>
-                            <div class="ui bottom attached button" lick:id="view-contact">
-                                <i class="search icon"></i>
-                                Contact details
+                                <div class="content">
+                                    <div class="header" lick:id="name">Person name</div>
+                                    <div class="description" lick:id="description">
+                                        A description which may flow for several lines and give context to the content.
+                                    </div>
+                                </div>
+                                <div class="ui bottom attached button" lick:id="view-contact">
+                                    <i class="search icon"></i>
+                                    Contact details
+                                </div>
                             </div>
                         </div>
                     </div>

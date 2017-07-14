@@ -185,13 +185,11 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         return Optional.empty();
     }
 
-    private SurfaceElement generateComponentElement(SurfaceElement element) {
+    private void generateComponentElement(SurfaceElement element) {
         SurfaceElement componentElement = new SurfaceElement(getId(), element.getNamespace());
         setRefAttribute(componentElement);
         element.replaceWith(componentElement);
         element.detach();
-
-        return componentElement;
     }
 
     private void setRefAttribute(SurfaceElement element) {

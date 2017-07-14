@@ -64,7 +64,12 @@ public class BodyElement extends SurfaceElement {
     private SurfaceElement newBody() {
         RootComponentWrapperElement rootComponentWrapper = new RootComponentWrapperElement(getComponentId());
         RouterViewElement routerView = new RouterViewElement();
-        rootComponentWrapper.addChildElement(routerView);
+
+        KeepAliveElement keepAliveElement = new KeepAliveElement();
+        keepAliveElement.addChildElement(routerView);
+
+        rootComponentWrapper.addChildElement(keepAliveElement);
+
         return rootComponentWrapper;
     }
 }
