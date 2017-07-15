@@ -40,23 +40,23 @@ public class ContactsService {
 
     public Contact contact(Internet internet, String name, String description) {
         Contact contact = new Contact(idGenerator.generateId().toString(), name, description);
-        contact.addEmail(internet.emailAddress());
-        contact.addEmail(internet.emailAddress());
-        contact.addEmail(internet.emailAddress());
+        contact.addEmail(idGenerator.generateId().toString(), internet.emailAddress());
+        contact.addEmail(idGenerator.generateId().toString(), internet.emailAddress());
+        contact.addEmail(idGenerator.generateId().toString(), internet.emailAddress());
         return contact;
     }
 
     public Contact emptyContact() {
         Contact contact = new Contact();
-        contact.addEmail(faker.internet().emailAddress());
-        contact.setPictureUrl(String.format(PICTURE_URL, getFirst(contact.getEmails(), new EmailAddress()).getValue()));
+        contact.addEmail(idGenerator.generateId().toString(), faker.internet().emailAddress());
+        contact.setPictureUrl(String.format(PICTURE_URL, getFirst(contact.getEmails(), new EmailAddress(idGenerator.generateId().toString())).getValue()));
         return contact;
     }
 
     public Contact randomContact() {
         Contact contact = contact(faker.internet(), faker.name().fullName(), faker.lorem().paragraph());
         contact.setContent(faker.lorem().sentence(100));
-        contact.setPictureUrl(String.format(PICTURE_URL, getFirst(contact.getEmails(), new EmailAddress()).getValue()));
+        contact.setPictureUrl(String.format(PICTURE_URL, getFirst(contact.getEmails(), new EmailAddress(idGenerator.generateId().toString())).getValue()));
         return contact;
     }
 

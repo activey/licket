@@ -98,7 +98,7 @@ public class VueComponentPropertiesDecorator {
             decorate(nestedComponent, nestedComponentObject);
             nestedComponents.objectProperty(
                     propertyBuilder()
-                            .name(stringLiteral(nestedComponent.getId()))
+                            .name(stringLiteral(nestedComponent.getCompositeId().getNormalizedValue()))
                             .value(nestedComponentObject));
 
             return false;

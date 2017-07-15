@@ -19,7 +19,7 @@ public interface ResourceStorage {
 
     Stream<HeadParticipatingResource> getStylesheetResources();
 
-    String getResourceUrl(Resource resource);
+    Stream<Resource> getAllResources();
 
-    void replaceResourceContent(Resource resource, byte[] newResourceContent);
+    String getResourceUrl(Resource resource);
 }

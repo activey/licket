@@ -11,7 +11,7 @@ import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.surface.element.SurfaceElement;
 
-public abstract class AbstractLicketList<T> extends AbstractLicketMultiContainer<String> {
+public abstract class AbstractLicketList extends AbstractLicketMultiContainer<String> {
 
     public AbstractLicketList(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
         super(id, String.class, enclosingComponentPropertyModel, internalTemplateView());
@@ -20,7 +20,7 @@ public abstract class AbstractLicketList<T> extends AbstractLicketMultiContainer
 
     @Override
     protected Optional<SurfaceElement> overrideComponentElement(SurfaceElement surfaceElement, ComponentRenderingContext renderingContext) {
-        SurfaceElement element = new SurfaceElement(getId(), surfaceElement.getNamespace());
+        SurfaceElement element = new SurfaceElement(getCompositeId().getNormalizedValue(), surfaceElement.getNamespace());
         setRefAttribute(element);
         setForAttribute(element);
         setBindAttribute(element);

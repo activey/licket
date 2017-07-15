@@ -35,7 +35,7 @@ public class BodyElement extends SurfaceElement {
 
     @Override
     protected void onStart() {
-        setComponentId(application.rootComponentContainer().getId());
+        setComponentId(application.rootComponentContainer().getCompositeId().getValue());
     }
 
     @Override

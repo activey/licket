@@ -42,9 +42,9 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
         add(contactsPanel);
         add(addContactPanel);
 
-        add(new AbstractLicketActionLink("reload", remoteCommunication, modelReloader()) {
+        add(new AbstractLicketActionLink<Void>("reload", Void.class, remoteCommunication, modelReloader()) {
 
-            protected void onClick() {
+            protected void onClick(Void modelObject) {
                 contactsPanel.reloadList();
             }
 

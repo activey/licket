@@ -5,11 +5,7 @@ import java.io.InputStream;
 /**
  * @author activey
  */
-public interface Resource {
+public interface Resource extends ResourceHeader {
 
     InputStream getStream();
-
-    String getMimeType();
-
-    String getName();
 }

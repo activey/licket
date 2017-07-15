@@ -44,7 +44,7 @@ public abstract class AbstractLicketMultiContainer<T> extends AbstractReloadable
 
     public final void add(LicketComponent<?> licketComponent) {
         if (items.contains(licketComponent)) {
-            LOGGER.trace("Licket component [{}] already used as a leaf!", licketComponent.getId());
+            LOGGER.trace("Licket component [{}] already used as a leaf!", licketComponent.getCompositeId().getValue());
             return;
         }
         licketComponent.setParent(this);

@@ -40,7 +40,7 @@ public class VueGlobalInitializationResource extends AbstractJavascriptDynamicRe
           expressionStatement(functionCall()
                 .target(property("Vue", "component"))
                 // TODO its not really unique ...
-                .argument(stringLiteral(licketComponent.getId()))
+                .argument(stringLiteral(licketComponent.getCompositeId().getNormalizedValue()))
                 .argument(componentPropertiesDecorator.decorate(licketComponent, objectLiteral()))));
       return true;
     });

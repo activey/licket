@@ -46,6 +46,12 @@ public class LicketWebConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    @SessionScope
+    public LicketDebugController debugController() {
+        return new LicketDebugController();
+    }
+
+    @Bean
     public ErrorHandler errorHandler() {
         return new ErrorHandler();
     }
