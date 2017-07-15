@@ -85,11 +85,6 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     @Override
-    public final void setComponentModel(LicketComponentModel<T> componentModel) {
-        this.componentModel = componentModel;
-    }
-
-    @Override
     public final Class<T> getComponentModelClass() {
         return modelClass;
     }
@@ -223,7 +218,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
                         expressionStatement(assignment().left(property(thisLiteral(), name("model")))
                                 .right(arrayElementGet()
                                         .target(
-                                                property(property("response", "body"), "model"))
+                                                property(property(response, "body"), "model"))
                                         .element(stringLiteral(getCompositeId().getValue())))));
         // gathering all others
         ComponentActionCallback componentActionCallback = new ComponentActionCallback();

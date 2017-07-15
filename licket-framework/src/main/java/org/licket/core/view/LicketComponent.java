@@ -1,6 +1,5 @@
 package org.licket.core.view;
 
-import org.licket.core.LicketApplication;
 import org.licket.core.id.CompositeId;
 import org.licket.core.model.LicketComponentModel;
 import org.licket.core.view.hippo.vue.extend.VueClass;
@@ -23,8 +22,6 @@ public interface LicketComponent<TYPE> extends VueClass {
     Class<TYPE> getComponentModelClass();
 
     LicketComponentModel<TYPE> getComponentModel();
-
-    void setComponentModel(LicketComponentModel<TYPE> componentModel);
 
     void setComponentModelObject(TYPE componentModelObject);
 

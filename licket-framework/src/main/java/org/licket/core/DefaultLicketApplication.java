@@ -53,7 +53,7 @@ public class DefaultLicketApplication implements LicketApplication, Serializable
             return licketComponentOptional;
         }
 
-        // looking in declared components, @TODO include only those with @LicketMountPoint?
+        // looking in declared components, TODO include only those with @LicketMountPoint?
         for (LicketComponent<?> rootElement : allDeclaredComponents) {
             if (rootElement.getCompositeId().equals(compositeId)) {
                 return Optional.of(rootElement);
