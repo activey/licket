@@ -151,7 +151,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
 
     private void doRender(ComponentRenderingContext renderingContext) {
         if (!getView().hasTemplate()) {
-            LOGGER.trace("No separate view for component component: [{}], using original element content.", getId());
+            LOGGER.trace("No separate view for component component: [{}], using original element content.", getCompositeId().getValue());
             return;
         }
         renderingContext.onSurfaceElement(element -> {
@@ -186,7 +186,7 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
     }
 
     private void generateComponentElement(SurfaceElement element) {
-        SurfaceElement componentElement = new SurfaceElement(getId(), element.getNamespace());
+        SurfaceElement componentElement = new SurfaceElement(getCompositeId().getNormalizedValue(), element.getNamespace());
         setRefAttribute(componentElement);
         element.replaceWith(componentElement);
         element.detach();

@@ -8,6 +8,7 @@ import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
+import org.licket.framework.hippo.FunctionCallBuilder;
 import org.licket.framework.hippo.NameBuilder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -18,19 +19,20 @@ import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionSt
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
+import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 /**
  * @author activey
  */
-public abstract class AbstractLicketActionLink extends AbstractLicketComponent<Void> {
+public abstract class AbstractLicketActionLink<T> extends AbstractLicketComponent<T> {
 
     private LicketRemote licketRemote;
     private LicketComponentModelReloader modelReloader;
 
-    public AbstractLicketActionLink(String id, LicketRemote licketRemote, LicketComponentModelReloader modelReloader) {
-        super(id, Void.class, emptyComponentModel(), internalTemplateView());
+    public AbstractLicketActionLink(String id, Class<T> modelClass, LicketRemote licketRemote, LicketComponentModelReloader modelReloader) {
+        super(id, modelClass, emptyComponentModel(), internalTemplateView());
         this.licketRemote = checkNotNull(licketRemote, "Licket remote must not be null!");
         this.modelReloader = checkNotNull(modelReloader, "Licket model reloader must not be null!");
     }
@@ -52,31 +54,41 @@ public abstract class AbstractLicketActionLink extends AbstractLicketComponent<V
     }
 
     @VueComponentFunction
-    public void handleClick(BlockBuilder functionBlock) {
-        functionBlock.appendStatement(
-                expressionStatement(
-                        functionCall()
-                                .target(property(property(thisLiteral(), licketRemote.vueName()), name("handleActionLinkClick")))
-                                .argument(stringLiteral(getCompositeId().getValue()))
-                                .argument(property(thisLiteral(), name("afterClick")))
-                )
-        );
+    public final void handleClick(BlockBuilder functionBlock) {
+        FunctionCallBuilder functionCall = functionCall()
+                .target(property(property(thisLiteral(), licketRemote.vueName()), name("handleActionLinkClick")))
+                .argument(stringLiteral(getCompositeId().getValue()));
+        decorateActionLinkModel(functionCall);
+        functionCall.argument(property(thisLiteral(), name("afterClick")));
+        functionBlock.appendStatement(expressionStatement(functionCall));
+    }
+
+    private void decorateActionLinkModel(FunctionCallBuilder functionCallBuilder) {
+        if (getComponentModelClass().isAssignableFrom(Void.class)) {
+            functionCallBuilder.argument(objectLiteral());
+            return;
+        }
+        /*
+          TODO if link model class is different than Void we just read parent component model data and send it over,
+          maybe it should be more sophisticated
+          */
+        functionCallBuilder.argument(property(property("this", "$parent"), "model"));
     }
 
     @Override
-    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
+    protected final void onBeforeRender(ComponentRenderingContext renderingContext) {
         // basically invokeAction() should handle all the stuff, the rest is done on javascript level
         renderingContext
             .onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("v-on:click", "handleClick"));
     }
 
     @SuppressWarnings("unused")
-    public final void invokeAction(ComponentActionCallback componentActionCallback) {
-        onClick();
+    public final void invokeAction(T modelObject, ComponentActionCallback componentActionCallback) {
+        onClick(modelObject);
         onAfterClick(componentActionCallback);
     }
 
-    protected void onClick() {}
+    protected void onClick(T modelObject) {}
 
     protected void onAfterClick(ComponentActionCallback componentActionCallback) {}
 }

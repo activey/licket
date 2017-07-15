@@ -1,11 +1,5 @@
 package org.licket.spring.web;
 
-import static org.licket.core.view.LicketUrls.CONTEXT_RESOURCES;
-import static org.springframework.http.MediaType.parseMediaType;
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
-
-import java.util.Optional;
 import org.licket.core.LicketApplication;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
@@ -16,11 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+
+import static org.licket.core.view.LicketUrls.CONTEXT_RESOURCES;
+import static org.springframework.http.MediaType.parseMediaType;
+import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 /**
  * @author activey

@@ -41,9 +41,10 @@ public class LicketRemote implements VueClass {
 
     @VueComponentFunction
     public void handleActionLinkClick(@Name("linkComponentCompositeId") NameBuilder linkComponentCompositeId,
+                                      @Name("modelData") NameBuilder modelData,
                                       @Name("responseListener") NameBuilder responseListener, BlockBuilder body) {
         body.appendStatement(expressionStatement(httpCommunicationService
-            .callHttpPost("`/licket/link/click/${linkComponentCompositeId}`", responseListener)));
+            .callHttpPostWithData("`/licket/link/click/${linkComponentCompositeId}`", modelData, responseListener)));
     }
 
     @VueComponentFunction

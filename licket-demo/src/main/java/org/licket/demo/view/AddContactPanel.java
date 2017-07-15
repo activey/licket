@@ -76,9 +76,21 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                           }
                         });
 
-                        add(new AbstractLicketActionLink("add_random", remoteCommunication, modelReloader()) {
+                        add(new AbstractLicketActionLink<Void>("add_email", Void.class, remoteCommunication, modelReloader()) {
                             @Override
-                            protected void onClick() {
+                            protected void onClick(Void modelObject) {
+                                addContactForm.addEmail();
+                            }
+
+                            @Override
+                            protected void onAfterClick(ComponentActionCallback componentActionCallback) {
+                                componentActionCallback.patch(addContactForm);
+                            }
+                        });
+
+                        add(new AbstractLicketActionLink<Void>("add_random", Void.class, remoteCommunication, modelReloader()) {
+                            @Override
+                            protected void onClick(Void modelObject) {
                                 addContactForm.generateRandomData();
                             }
 

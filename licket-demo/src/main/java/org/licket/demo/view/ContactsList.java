@@ -15,7 +15,7 @@ import java.util.Optional;
 import static java.util.Optional.of;
 import static org.licket.core.view.mount.params.MountingParamValueDecorator.fromParentModel;
 
-public class ContactsList extends AbstractLicketList<Contact> {
+public class ContactsList extends AbstractLicketList {
 
     @Autowired
     private LicketComponentModelReloader modelReloader;

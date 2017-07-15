@@ -31,14 +31,28 @@ public class ComponentActionHandler {
 
     public final void trySubmitForm(JsonNode formData, ComponentActionCallback componentActionCallback) {
         try {
-            LOGGER.trace("Trying to submit form [{}].", component.getId());
+            LOGGER.trace("Trying to submit form [{}].", component.getCompositeId().getValue());
 
             on(component).call("submitForm", componentModelFromActionRequest(formData), componentActionCallback);
         } catch (JsonProcessingException e) {
-            LOGGER.error("An error occurred while deserializing component model for: {}.", component.getId(), e);
+            LOGGER.error("An error occurred while deserializing component model for: {}.", component.getCompositeId().getValue(), e);
         } catch (ReflectException reflectException) {
-            LOGGER.error("An error occurred while setting component model for: {}.", component.getId(),
+            LOGGER.error("An error occurred while setting component model for: {}.", component.getCompositeId().getValue(),
                 reflectException);
+        }
+    }
+
+    public final void tryLinkClick(JsonNode modelData, ComponentActionCallback componentActionCallback) {
+        try {
+            LOGGER.trace("Trying to handle link click [{}].", component.getCompositeId().getValue());
+            // possible only on
+            on(component).call("invokeAction", componentModelFromActionRequest(modelData), componentActionCallback);
+        } catch (JsonProcessingException e) {
+            LOGGER.error("An error occurred while deserializing component model for: {}.", component.getCompositeId().getValue(), e);
+        }
+        catch (ReflectException reflectException) {
+            LOGGER.error("An error occurred while setting component model for: [%s]", component.getCompositeId().getValue(),
+                    reflectException);
         }
     }
 
@@ -48,21 +62,10 @@ public class ComponentActionHandler {
 
             on(component).call("mountComponent", mountingParamsFromActionRequest(componentMountingParams), componentActionCallback);
         } catch (JsonProcessingException e) {
-            LOGGER.error("An error occurred while deserializing component model for: {}.", component.getId(), e);
+            LOGGER.error("An error occurred while deserializing component model for: {}.", component.getCompositeId().getValue(), e);
         } catch (ReflectException reflectException) {
-            LOGGER.error("An error occurred while setting component model for: {}.", component.getId(),
+            LOGGER.error("An error occurred while setting component model for: {}.", component.getCompositeId().getValue(),
                     reflectException);
-        }
-    }
-
-    public final void tryLinkClick(ComponentActionCallback componentActionCallback) {
-        try {
-            LOGGER.trace("Trying to handle link click [{}].", component.getId());
-            // possible only on
-            on(component).call("invokeAction", componentActionCallback);
-        } catch (ReflectException reflectException) {
-            LOGGER.error("An error occurred while setting component model for: [%s]", component.getId(),
-                reflectException);
         }
     }
 

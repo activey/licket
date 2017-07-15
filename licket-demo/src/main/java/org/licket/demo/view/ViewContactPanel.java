@@ -11,7 +11,6 @@ import org.licket.core.view.list.AbstractLicketList;
 import org.licket.core.view.mount.MountedComponentLink;
 import org.licket.core.view.mount.params.MountingParams;
 import org.licket.demo.model.Contact;
-import org.licket.demo.model.EmailAddress;
 import org.licket.demo.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -44,7 +43,7 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
   protected void onInitializeContainer() {
     add(new LicketLabel("name"));
     add(new LicketLabel("description"));
-    add(new AbstractLicketList<EmailAddress>("email", ofString("emails")) {
+    add(new AbstractLicketList("email", ofString("emails")) {
 
             @Override
             protected LicketComponentModelReloader getModelReloader() {
@@ -55,13 +54,18 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
             protected void onInitializeContainer() {
                 add(new LicketLabel("value"));
             }
-        });
+
+      @Override
+      protected Optional<String> keyPropertyName() {
+        return Optional.of("id");
+      }
+    });
 
     add(new LicketLabel("content"));
     add(new MountedComponentLink("rootLink", ContactsAppRoot.class));
-    add(new AbstractLicketActionLink("deleteLink", licketRemote, modelReloader()) {
+    add(new AbstractLicketActionLink<Contact>("deleteLink", Contact.class, licketRemote, modelReloader()) {
       @Override
-      protected void onClick() {
+      protected void onClick(Contact modelObject) {
         contactsService.deleteContactById(ViewContactPanel.this.getComponentModel().get().getId());
       }
 
