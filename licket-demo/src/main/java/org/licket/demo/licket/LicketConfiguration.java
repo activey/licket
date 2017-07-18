@@ -1,6 +1,8 @@
 package org.licket.demo.licket;
 
 import org.licket.core.model.LicketComponentModel;
+import org.licket.core.resource.Resource;
+import org.licket.demo.resource.ApplicationCssResource;
 import org.licket.demo.view.AddContactForm;
 import org.licket.demo.view.AddContactPanel;
 import org.licket.demo.view.ContactsAppRoot;
@@ -60,5 +62,10 @@ public class LicketConfiguration {
     @Bean
     public IdGenerator idGenerator() {
         return new JdkIdGenerator();
+    }
+
+    @Bean
+    public Resource applicationCssResource() {
+        return new ApplicationCssResource();
     }
 }

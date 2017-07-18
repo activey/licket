@@ -1,0 +1,14 @@
+.ui.list-item.card, .ui.cards>.list-item.card {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.ui.list-leave-active.card, .ui.cards>.list-leave-active.card {
+  position: absolute;
+}
+
+#contacts-panel {
+    width: 100%;
+}
