@@ -6,18 +6,21 @@
 
         <p lick:id="content"></p>
 
-        <div class="ui relaxed horizontal list">
+        <div class="ui horizontal list">
             <div class="item" lick:id="email">
                 <a href="#" lick:id="value">email@domain.com</a>
             </div>
         </div>
 
-        <button class="ui right floated negative button" lick:id="deleteLink">
-            Delete contact
-        </button>
-        <button class="ui right floated labeled icon button" lick:id="rootLink">
-            <i class="arrow left icon"></i>
-            Back
-        </button>
+        <div class="ui right floated large buttons">
+            <button class="ui labeled icon button" lick:id="rootLink">
+                <i class="arrow left icon"></i>
+                Back
+            </button>
+            <div class="or"></div>
+            <button class="ui negative button" lick:id="deleteLink">
+                Delete contact
+            </button>
+        </div>
     </div>
 </div>

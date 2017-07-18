@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="ui container">
-                <div class="ui grid">
+                <div class="ui stackable grid">
                     <div class="two column row">
                         <div class="left floated column">
                             <div class="ui container" lick:id="add-contact-panel">
@@ -37,8 +37,8 @@
                     </div>
 
                     <div class="row">
-                        <div class="ui four stackable cards" lick:id="contacts-panel">
-                            <div class="card" lick:id="contact">
+                        <transition-group name="list" class="ui four stackable cards" tag="div" lick:id="contacts-panel">
+                            <div class="list-item card" lick:id="contact">
                                 <div class="image">
                                     <img lick:id="pictureUrl" />
                                 </div>
@@ -53,7 +53,7 @@
                                     Contact details
                                 </div>
                             </div>
-                        </div>
+                        </transition-group>
                     </div>
                 </div>
             </div>
