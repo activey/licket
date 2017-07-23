@@ -61,7 +61,7 @@ public class SpringResourceStorage implements ResourceStorage {
   @Override
   public void putResource(Resource resource) {
     if (hasResource(resource.getName(), resource.getMimeType())) {
-      LOGGER.debug("Resource with name = {} and mimetype = {} is already there, skipping...",
+      LOGGER.warn("Resource with name = {} and mimetype = {} is already there, skipping...",
               resource.getName(), resource.getMimeType());
       return;
     }

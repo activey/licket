@@ -2,7 +2,7 @@ package org.licket.demo.view;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
-import org.licket.core.view.form.AbstractLicketForm;
+import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.form.LicketInput;
 import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.link.AbstractLicketActionLink;
@@ -10,6 +10,7 @@ import org.licket.core.view.list.AbstractLicketList;
 import org.licket.demo.model.Contact;
 import org.licket.demo.model.EmailAddress;
 import org.licket.demo.service.ContactsService;
+import org.licket.semantic.component.form.AbstractSemanticUIForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.IdGenerator;
 
@@ -24,7 +25,7 @@ import static org.licket.core.view.LicketComponentView.internalTemplateView;
 /**
  * @author activey
  */
-public class AddContactForm extends AbstractLicketForm<Contact> {
+public class AddContactForm extends AbstractSemanticUIForm<Contact> {
 
     @Autowired
     private ContactsService contactsService;
@@ -69,6 +70,11 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
                 add(new AbstractLicketActionLink<EmailAddress>("delete_email", EmailAddress.class, remote, modelReloader) {
 
                     @Override
+                    protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
+                        AddContactForm.this.api(componentFunctionCallback).showLoading(this);
+                    }
+
+                    @Override
                     protected void onClick(EmailAddress emailAddress) {
                         AddContactForm.this.getComponentModel().patch(contact -> contact.removeEmailById(emailAddress.getId()));
                     }
@@ -76,6 +82,7 @@ public class AddContactForm extends AbstractLicketForm<Contact> {
                     @Override
                     protected void onAfterClick(ComponentActionCallback componentActionCallback) {
                         componentActionCallback.patch(AddContactForm.this);
+                        AddContactForm.this.api(componentActionCallback).hideLoading(this);
                     }
                 });
             }

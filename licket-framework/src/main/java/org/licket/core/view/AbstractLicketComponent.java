@@ -150,26 +150,26 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
             return;
         }
         renderingContext.onSurfaceElement(element -> {
+            generateComponentTemplate(renderingContext, element);
+
             Optional<SurfaceElement> elementOptional = overrideComponentElement(element, renderingContext);
             if (elementOptional.isPresent()) {
-                SurfaceElement replacedElement = elementOptional.get();
-                generateComponentTemplate(renderingContext, element);
-                element.replaceWith(replacedElement);
+                element.replaceWith(elementOptional.get());
                 element.detach();
                 return;
             }
-
-            generateComponentTemplate(renderingContext, element);
-            generateComponentElement(element);
+            generateComponentTag(element);
         });
     }
 
     private void generateComponentTemplate(ComponentRenderingContext renderingContext, SurfaceElement element) {
         try {
-            if (!getView().isTemplateExternal()) {
-                renderingContext
-                        .renderResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
+            if (getView().isTemplateExternal()) {
+                renderingContext.compileComponentTemplateResource(this);
+                return;
             }
+            renderingContext
+                    .addResource(new ByteArrayResource(getCompositeId().getValue(), "text/html", element.toBytes()));
         } catch (XMLStreamException e) {
             LOGGER.error("An error occurred while rendering component.", e);
         }
@@ -180,9 +180,10 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         return Optional.empty();
     }
 
-    private void generateComponentElement(SurfaceElement element) {
+    private void generateComponentTag(SurfaceElement element) {
         SurfaceElement componentElement = new SurfaceElement(getCompositeId().getNormalizedValue(), element.getNamespace());
         setRefAttribute(componentElement);
+
         element.replaceWith(componentElement);
         element.detach();
     }

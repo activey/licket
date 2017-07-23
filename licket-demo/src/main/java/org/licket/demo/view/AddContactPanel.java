@@ -46,6 +46,8 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
     public final void onContactAdded(BiConsumer<Contact, ComponentActionCallback> callbackConsumer) {
         addContactForm.onContactAdded((contact, componentActionCallback) -> {
             modal.api(componentActionCallback).hide(addContactForm);
+            addContactForm.api(componentActionCallback).hideLoading(addContactForm);
+
             callbackConsumer.accept(contact, componentActionCallback);
         });
     }
@@ -72,11 +74,20 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                         add(new AbstractLicketLink("add") {
                           @Override
                           protected void onClick(ComponentFunctionCallback callback) {
-                            addContactForm.api(callback).submit(this);
+                            addContactForm
+                                    .api(callback)
+                                    .showLoading(this)
+                                    .submit(this);
                           }
                         });
 
                         add(new AbstractLicketActionLink<Void>("add_email", Void.class, remoteCommunication, modelReloader()) {
+
+                            @Override
+                            protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
+                                addContactForm.api(componentFunctionCallback).showLoading(this);
+                            }
+
                             @Override
                             protected void onClick(Void modelObject) {
                                 addContactForm.addEmail();
@@ -85,10 +96,17 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                             @Override
                             protected void onAfterClick(ComponentActionCallback componentActionCallback) {
                                 componentActionCallback.patch(addContactForm);
+                                addContactForm.api(componentActionCallback).hideLoading(this);
                             }
                         });
 
                         add(new AbstractLicketActionLink<Void>("add_random", Void.class, remoteCommunication, modelReloader()) {
+
+                            @Override
+                            protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
+                                addContactForm.api(componentFunctionCallback).showLoading(this);
+                            }
+
                             @Override
                             protected void onClick(Void modelObject) {
                                 addContactForm.generateRandomData();
@@ -97,6 +115,7 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                             @Override
                             protected void onAfterClick(ComponentActionCallback componentActionCallback) {
                                 componentActionCallback.reload(addContactForm);
+                                addContactForm.api(componentActionCallback).hideLoading(this);
                             }
                         });
                     }

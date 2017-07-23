@@ -4,6 +4,7 @@ import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.ComponentActionCallback;
+import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.render.ComponentRenderingContext;
@@ -55,6 +56,12 @@ public abstract class AbstractLicketActionLink<T> extends AbstractLicketComponen
 
     @VueComponentFunction
     public final void handleClick(BlockBuilder functionBlock) {
+        ComponentFunctionCallback callback = new ComponentFunctionCallback();
+        onBeforeClick(callback);
+        callback.forEachCall(call -> functionBlock.appendStatement(
+                expressionStatement(call)
+        ));
+
         FunctionCallBuilder functionCall = functionCall()
                 .target(property(property(thisLiteral(), licketRemote.vueName()), name("handleActionLinkClick")))
                 .argument(stringLiteral(getCompositeId().getValue()));
@@ -91,4 +98,6 @@ public abstract class AbstractLicketActionLink<T> extends AbstractLicketComponen
     protected void onClick(T modelObject) {}
 
     protected void onAfterClick(ComponentActionCallback componentActionCallback) {}
+
+    protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {}
 }

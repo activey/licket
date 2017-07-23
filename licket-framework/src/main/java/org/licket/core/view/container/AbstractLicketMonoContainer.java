@@ -1,10 +1,10 @@
 package org.licket.core.view.container;
 
 import org.licket.core.model.LicketComponentModel;
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.AbstractReloadableLicketComponent;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.LicketComponentView;
+
 import java.util.function.Predicate;
 
 /**
