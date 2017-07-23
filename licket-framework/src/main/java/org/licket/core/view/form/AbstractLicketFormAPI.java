@@ -18,12 +18,12 @@ public class AbstractLicketFormAPI extends AbstractLicketComponentAPI {
     super(licketComponent, functionCallback);
   }
 
-  public final void submit(LicketComponent<?> caller) {
+  public final AbstractLicketFormAPI submit(LicketComponent<?> caller) {
     functionCallback().call(functionCall().target(
             property(
                     source(caller).target(component()).traverseSequence(),
                     name("submitForm")
             )));
-
+    return this;
   }
 }

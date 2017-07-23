@@ -2,16 +2,17 @@ package org.licket.demo.view;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
+import org.licket.core.view.ComponentActionCallback;
+import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.LicketLabel;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
-import org.licket.core.view.link.AbstractLicketActionLink;
-import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.list.AbstractLicketList;
 import org.licket.core.view.mount.MountedComponentLink;
 import org.licket.core.view.mount.params.MountingParams;
 import org.licket.demo.model.Contact;
 import org.licket.demo.service.ContactsService;
+import org.licket.semantic.component.button.AbstractSemanticActionLink;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
@@ -34,6 +35,8 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
 
   @Autowired
   private ContactsService contactsService;
+
+  private AbstractSemanticActionLink<Contact> deleteLink;
 
   public ViewContactPanel(String id) {
     super(id, Contact.class, ofModelObject(new Contact()), fromComponentClass(ViewContactPanel.class));
@@ -63,7 +66,13 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
 
     add(new LicketLabel("content"));
     add(new MountedComponentLink("rootLink", ContactsAppRoot.class));
-    add(new AbstractLicketActionLink<Contact>("deleteLink", Contact.class, licketRemote, modelReloader()) {
+    add(this.deleteLink = new AbstractSemanticActionLink<Contact>("deleteLink", Contact.class, licketRemote, modelReloader()) {
+
+      @Override
+      protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
+        deleteLink.api(componentFunctionCallback).showLoading(this);
+      }
+
       @Override
       protected void onClick(Contact modelObject) {
         contactsService.deleteContactById(ViewContactPanel.this.getComponentModel().get().getId());
@@ -71,6 +80,7 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
 
       @Override
       protected void onAfterClick(ComponentActionCallback componentActionCallback) {
+        deleteLink.api(componentActionCallback).hideLoading(this);
         componentActionCallback.navigateToMounted(ContactsAppRoot.class);
       }
     });

@@ -2,9 +2,8 @@ package org.licket.spring.surface.element.html;
 
 import org.licket.core.LicketApplication;
 import org.licket.core.id.CompositeId;
-import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.LicketComponent;
-import org.licket.spring.surface.element.render.SpringDrivenComponentRenderingContext;
+import org.licket.spring.surface.element.render.ComponentRenderingContextFactory;
 import org.licket.surface.SurfaceContext;
 import org.licket.surface.element.SurfaceElement;
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ public class DefaultHtmlElement extends SurfaceElement {
   private LicketApplication licketApplication;
 
   @Autowired
-  private ResourceStorage resourcesStorage;
+  private ComponentRenderingContextFactory renderingContextFactory;
 
   public DefaultHtmlElement(String name) {
     super(name, HTML_NAMESPACE);
@@ -48,6 +47,6 @@ public class DefaultHtmlElement extends SurfaceElement {
       return;
     }
     LicketComponent<?> component = componentOptional.get();
-    component.render(new SpringDrivenComponentRenderingContext(this, resourcesStorage));
+    component.render(renderingContextFactory.newRenderingContext(this));
   }
 }

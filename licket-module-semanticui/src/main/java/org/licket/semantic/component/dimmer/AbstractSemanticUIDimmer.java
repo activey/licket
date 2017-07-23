@@ -1,11 +1,10 @@
-package org.licket.semantic.component.modal;
+package org.licket.semantic.component.dimmer;
 
 import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.OnVueMounted;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
-import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
 
@@ -22,54 +21,37 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 /**
  * @author grabslu
  */
-public abstract class AbstractSemanticUIModal extends AbstractLicketMultiContainer<ModalSettings> {
+public abstract class AbstractSemanticUIDimmer extends AbstractLicketMultiContainer<DimmerSettings> {
 
     private final LicketComponentModelReloader modelReloader;
 
-    public AbstractSemanticUIModal(String id, ModalSettings modalSettings, LicketComponentModelReloader modelReloader) {
-        super(id, ModalSettings.class, ofModelObject(modalSettings), fromComponentClass(AbstractSemanticUIModal.class));
+    public AbstractSemanticUIDimmer(String id, DimmerSettings dimmerSettings, LicketComponentModelReloader modelReloader) {
+        super(id, DimmerSettings.class, ofModelObject(dimmerSettings), fromComponentClass(AbstractSemanticUIDimmer.class));
         this.modelReloader = modelReloader;
     }
 
     @Override
     protected final void onInitializeContainer() {
-        add(new ModalSection("header-section", modelReloader()) {
+        add(new SemanticUIDimmerContainer("dimmer-container", getComponentModel().get(), modelReloader) {
             @Override
             protected void onInitializeContainer() {
-                onInitializeHeader(this, "content-block");
-            }
-        });
-
-        add(new ModalSection("main-section", modelReloader()) {
-            @Override
-            protected void onInitializeContainer() {
-                onInitializeBody(this, "content-block");
-            }
-        });
-
-        add(new ModalSection("actions-section", modelReloader()) {
-            @Override
-            protected void onInitializeContainer() {
-                onInitializeActions(this, "content-block");
+                add(new DimmerContent("content-section", modelReloader) {
+                    @Override
+                    protected void onInitializeContainer() {
+                        onInitializeContent(this, "content-block");
+                    }
+                });
             }
         });
     }
 
-    protected void onInitializeHeader(ModalSection modalSection, String contentId) {}
-
-    protected void onInitializeBody(ModalSection content, String contentId) {}
-
-    protected void onInitializeActions(ModalSection content, String contentId) {}
-
-    protected void onRenderContainer(ComponentRenderingContext renderingContext) {
-        renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("class", "ui modal"));
-    }
+    protected void onInitializeContent(DimmerContent dimmerContent, String contentId) {}
 
     @VueComponentFunction
     public final void show(BlockBuilder body) {
         body.appendStatement(expressionStatement(
                 functionCall()
-                        .target(semanticModal())
+                        .target(semanticDimmer())
                         .argument(stringLiteral("show"))
         ));
     }
@@ -78,32 +60,32 @@ public abstract class AbstractSemanticUIModal extends AbstractLicketMultiContain
     public final void hide(BlockBuilder body) {
         body.appendStatement(expressionStatement(
                 functionCall()
-                        .target(semanticModal())
+                        .target(semanticDimmer())
                         .argument(stringLiteral("hide"))
         ));
     }
 
     @OnVueMounted
-    public final void initializeModal(BlockBuilder body) {
+    public final void initializeDimmer(BlockBuilder body) {
         body.appendStatement(expressionStatement(
                 functionCall()
-                        .target(semanticModal())
+                        .target(semanticDimmer())
                         .argument(objectLiteral())
         ));
     }
 
-    private PropertyNameBuilder semanticModal() {
+    private PropertyNameBuilder semanticDimmer() {
         return property(
                 functionCall()
                         .target(name("$"))
                         .argument(property(thisLiteral(), name("$el"))),
-                name("modal")
+                name("dimmer")
         );
     }
 
     @Override
-    public SemanticUIModalAPI api(ComponentFunctionCallback componentFunctionCallback) {
-        return new SemanticUIModalAPI(this, componentFunctionCallback);
+    public SemanticUIDimmerAPI api(ComponentFunctionCallback componentFunctionCallback) {
+        return new SemanticUIDimmerAPI(this, componentFunctionCallback);
     }
 
     @Override

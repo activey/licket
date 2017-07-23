@@ -7,6 +7,7 @@ import org.licket.spring.decorator.LicketComponentDecoratorsConfiguration;
 import org.licket.spring.mount.DefaultMountedComponents;
 import org.licket.spring.resource.LicketResourcesConfiguration;
 import org.licket.spring.surface.LicketSurfaceConfiguration;
+import org.licket.spring.surface.element.render.ComponentRenderingContextFactory;
 import org.licket.spring.web.LicketWebConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -40,5 +41,10 @@ public class LicketAutoconfigure {
     @SessionScope
     public MountedComponents mountedComponents() {
         return new DefaultMountedComponents();
+    }
+
+    @Bean
+    public ComponentRenderingContextFactory renderingContextFactory() {
+        return new ComponentRenderingContextFactory();
     }
 }

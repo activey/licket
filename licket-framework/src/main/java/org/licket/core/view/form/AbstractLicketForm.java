@@ -11,6 +11,7 @@ import org.licket.core.view.hippo.vue.annotation.VueComponent;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
+import org.licket.framework.hippo.FunctionCallBuilder;
 import org.licket.framework.hippo.NameBuilder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -18,6 +19,7 @@ import static org.licket.core.module.application.LicketComponentModelReloader.ca
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
+import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
@@ -30,79 +32,105 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 @VueComponent
 public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer<T> {
 
-    public AbstractLicketForm(String id, Class<T> modelClass, LicketComponentModel<T> model, LicketComponentView componentView) {
-        super(id, modelClass, model, componentView);
-    }
+  public AbstractLicketForm(String id, Class<T> modelClass, LicketComponentModel<T> model, LicketComponentView componentView) {
+    super(id, modelClass, model, componentView);
+  }
 
-    public final LicketRemote remote() {
-        LicketRemote remote = getRemote();
-        checkNotNull(remote, "Licket remote instance must not be null!");
-        return remote;
-    }
+  public final LicketRemote remote() {
+    LicketRemote remote = getRemote();
+    checkNotNull(remote, "Licket remote instance must not be null!");
+    return remote;
+  }
 
-    protected abstract LicketRemote getRemote();
+  protected abstract LicketRemote getRemote();
 
-    @SuppressWarnings("unused")
-    /**
-     * Executed from within LicketFormConmtro
-     */
-    public final void submitForm(T formModelObject, ComponentActionCallback actionCallback) {
-        setComponentModelObject(formModelObject);
-        onSubmit();
-        onAfterSubmit(actionCallback);
-    }
+  @SuppressWarnings("unused")
+  /**
+   * Executed from within LicketFormConmtro
+   */
+  public final void submitForm(T formModelObject, ComponentActionCallback actionCallback) {
+    setComponentModelObject(formModelObject);
+    onSubmit();
+    onAfterSubmit(actionCallback);
+  }
 
-    protected void onSubmit() {}
+  protected void onSubmit() {
+  }
 
-    @Override
-    protected void onRenderContainer(ComponentRenderingContext renderingContext) {
-        renderingContext.onSurfaceElement(element -> {
-            // TODO check if element is in fact a <form>, or not necessary?
-            element.addAttribute("v-on:submit", "submitForm");
-        });
-    }
+  @Override
+  protected void onRenderContainer(ComponentRenderingContext renderingContext) {
+    renderingContext.onSurfaceElement(element -> {
+      // TODO check if element is in fact a <form>, or not necessary?
+      element.addAttribute("v-on:submit", "submitForm");
+    });
+  }
 
-    @VueComponentFunction
-    public final void afterSubmit(@Name("response") NameBuilder response, BlockBuilder functionBody) {
-        // setting current form model directly without event emitter
-        functionBody
+  @VueComponentFunction
+  public final void afterSubmit(@Name("response") NameBuilder response, BlockBuilder functionBody) {
+    // setting current form model directly without event emitter
+    functionBody
             .appendStatement(
-                expressionStatement(assignment().left(property(thisLiteral(), name("model")))
-                    .right(arrayElementGet()
-                        .target(
-                            property(property("response", "body"), "model"))
-                        .element(stringLiteral(getCompositeId().getValue())))));
+                    expressionStatement(assignment().left(property(thisLiteral(), name("model")))
+                            .right(arrayElementGet()
+                                    .target(
+                                            property(property("response", "body"), "model"))
+                                    .element(stringLiteral(getCompositeId().getValue())))));
 
-        // gathering all others
-        ComponentActionCallback componentActionCallback = new ComponentActionCallback();
+    // gathering all others
+    ComponentActionCallback componentActionCallback = new ComponentActionCallback();
 
-        // invoking post action callback
-        onAfterSubmit(componentActionCallback);
+    // invoking post action callback
+    onAfterSubmit(componentActionCallback);
 
-        // sending reload request for gathered components
-        componentActionCallback.forEachToBeReloaded((component, patch) -> functionBody.appendStatement(expressionStatement(callReloadComponent(component, patch))));
+    // sending reload request for gathered components
+    componentActionCallback.forEachToBeReloaded((component, patch) -> functionBody.appendStatement(expressionStatement(callReloadComponent(component, patch))));
 
-        // invoking javascript calls
-        componentActionCallback.forEachCall(call -> functionBody.appendStatement(
-                expressionStatement(call)
-        ));
-    }
+    // invoking javascript calls
+    componentActionCallback.forEachCall(call -> functionBody.appendStatement(
+            expressionStatement(call)
+    ));
+  }
 
-    protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {}
+  protected void onAfterSubmit(ComponentActionCallback componentActionCallback) {
+  }
 
-    @VueComponentFunction
-    public void submitForm(BlockBuilder functionBlock) {
-        functionBlock
+  @VueComponentFunction
+  public void submitForm(BlockBuilder functionBlock) {
+    functionBlock
             .appendStatement(expressionStatement(
                     remote().callSubmitForm(
                             getCompositeId().getValue(), property(thisLiteral(), name("afterSubmit"))
                     )
             ))
             .appendStatement(returnStatement().returnValue(name("false")));
-    }
+  }
 
-    @Override
-    public AbstractLicketFormAPI api(ComponentFunctionCallback functionCallback) {
-        return new AbstractLicketFormAPI(this, functionCallback);
-    }
+  @VueComponentFunction
+  public void showLoading(BlockBuilder body) {
+    body.appendStatement(expressionStatement(
+            functionCall()
+                    .target(property(element(), name("addClass")))
+                    .argument(stringLiteral("loading"))
+    ));
+  }
+
+  @VueComponentFunction
+  public void hideLoading(BlockBuilder body) {
+    body.appendStatement(expressionStatement(
+            functionCall()
+                    .target(property(element(), name("removeClass")))
+                    .argument(stringLiteral("loading"))
+    ));
+  }
+
+  @Override
+  public AbstractLicketFormAPI api(ComponentFunctionCallback functionCallback) {
+    return new AbstractLicketFormAPI(this, functionCallback);
+  }
+
+  private FunctionCallBuilder element() {
+    return functionCall()
+            .target(name("$"))
+            .argument(property(thisLiteral(), name("$el")));
+  }
 }

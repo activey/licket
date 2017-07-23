@@ -1,7 +1,9 @@
 package org.licket.xml.dom;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -10,7 +12,7 @@ import javax.xml.stream.XMLStreamWriter;
  */
 public class Element extends Node {
 
-    private List<Attribute> attributes = new LinkedList<>();
+    private Map<String, Attribute> attributes = new HashMap<>();
     private List<Element> children = new LinkedList<>();
 
     public Element(String localName, String namespace) {
@@ -22,7 +24,7 @@ public class Element extends Node {
     }
 
     public void addAttribute(Attribute attribute) {
-        attributes.add(attribute);
+        attributes.put(attribute.getLocalName(), attribute);
     }
 
     public Iterable<Element> children() {
@@ -30,7 +32,7 @@ public class Element extends Node {
     }
 
     public Iterable<Attribute> attributes() {
-        return attributes;
+        return attributes.values();
     }
 
     public void appendChildElement(Element childElement) {
@@ -50,13 +52,26 @@ public class Element extends Node {
     public final void replaceWith(Element replacement) {
         Element parentElement = getParent();
         if (parentElement == null) {
+            // overwrite current element attributes and children manually
+            attributes.clear();
+            children.clear();
+
+            setLocalName(replacement.getLocalName());
+            replacement.attributes().forEach(attribute -> addAttribute(attribute));
+            replacement.children().forEach(child -> appendChildElement(child));
             return;
         }
         parentElement.replaceChild(this, replacement);
     }
 
     public Element detach() {
-        return getParent().removeChild(this);
+        Element parentElement = getParent();
+        if (parentElement == null) {
+            return this;
+        }
+        Element detached = parentElement.removeChild(this);
+//        setParent(null);
+        return detached;
     }
 
     private Element removeChild(Element childElement) {
@@ -72,13 +87,13 @@ public class Element extends Node {
     public void toXML(XMLStreamWriter writer) throws XMLStreamException {
         if (!writeEmpty() && children.size() == 0) {
             writer.writeEmptyElement(getPrefix(), getLocalName(), getNamespace());
-            for (Attribute attribute : attributes) {
+            for (Attribute attribute : attributes.values()) {
                 attribute.toXML(writer);
             }
             return;
         }
         writer.writeStartElement(getPrefix(), getLocalName(), getNamespace());
-        for (Attribute attribute : attributes) {
+        for (Attribute attribute : attributes.values()) {
             attribute.toXML(writer);
         }
         for (Element element : children) {
