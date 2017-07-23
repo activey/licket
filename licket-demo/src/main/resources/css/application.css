@@ -12,3 +12,25 @@
 #contacts-panel {
     width: 100%;
 }
+
+#contacts-page {
+    margin-top: 5em;
+}
+
+#contacts-page .dimmable {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.ui.footer.segment {
+    margin: 5em 0em 0em;
+    padding: 5em 0em;
+    flex: 1;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
