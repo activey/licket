@@ -17,5 +17,5 @@ public abstract class AbstractStep {
         return decorate(previousStep, componentId);
     }
 
-    protected abstract AbstractAstNodeBuilder<?> decorate(AbstractAstNodeBuilder<?> previousStep, String componentId);
+    protected abstract AbstractAstNodeBuilder<?> decorate(AbstractAstNodeBuilder<?> step, String componentId);
 }

@@ -44,7 +44,8 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
 
             @Override
             protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
-                showDimmer(componentFunctionCallback);
+                dimmer.api(componentFunctionCallback).show(this);
+
             }
 
             protected void onClick(Void modelObject) {
@@ -54,7 +55,8 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
             @Override
             protected void onAfterClick(ComponentActionCallback componentActionCallback) {
                 componentActionCallback.reload(contactsPanel);
-                hideDimmer(componentActionCallback);
+                dimmer.api(componentActionCallback).hide(this);
+
             }
         });
         add(new AbstractLicketLink("add-contact") {
@@ -81,13 +83,5 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
     @Override
     protected void onAfterComponentMounted(ComponentActionCallback componentActionCallback) {
         componentActionCallback.patch(contactsPanel);
-    }
-
-    public void showDimmer(ComponentFunctionCallback componentFunctionCallback) {
-        dimmer.api(componentFunctionCallback).show(this);
-    }
-
-    public void hideDimmer(ComponentActionCallback componentActionCallback) {
-        dimmer.api(componentActionCallback).hide(this);
     }
 }
