@@ -1,7 +1,5 @@
 package org.licket.demo.view;
 
-import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
@@ -27,12 +25,6 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
     @Autowired
     private AddContactPanel addContactPanel;
 
-    @Autowired
-    private LicketComponentModelReloader modelReloader;
-
-    @Autowired
-    private LicketRemote remoteCommunication;
-
     private AbstractSemanticUIDimmer dimmer;
 
     public ContactsAppRoot(String id) {
@@ -48,11 +40,12 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
         add(contactsPanel);
         add(addContactPanel);
 
-        add(new AbstractLicketActionLink<Void>("reload", Void.class, remoteCommunication, modelReloader()) {
+        add(new AbstractLicketActionLink<Void>("reload", Void.class) {
 
             @Override
             protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
-                showDimmer(componentFunctionCallback);
+                dimmer.api(componentFunctionCallback).show(this);
+
             }
 
             protected void onClick(Void modelObject) {
@@ -62,7 +55,8 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
             @Override
             protected void onAfterClick(ComponentActionCallback componentActionCallback) {
                 componentActionCallback.reload(contactsPanel);
-                hideDimmer(componentActionCallback);
+                dimmer.api(componentActionCallback).hide(this);
+
             }
         });
         add(new AbstractLicketLink("add-contact") {
@@ -73,17 +67,12 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
             }
         });
 
-        add(dimmer = new AbstractSemanticUIDimmer("dimmer", new DimmerSettings(true), modelReloader) {
+        add(dimmer = new AbstractSemanticUIDimmer("dimmer", new DimmerSettings(true)) {
             @Override
             protected void onInitializeContent(DimmerContent dimmerContent, String contentId) {
-                dimmerContent.add(new SemanticUILoader(contentId, "Loading...", modelReloader));
+                dimmerContent.add(new SemanticUILoader(contentId, "Loading..."));
             }
         });
-    }
-
-    @Override
-    protected final LicketComponentModelReloader getModelReloader() {
-        return modelReloader;
     }
 
     @Override
@@ -94,13 +83,5 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
     @Override
     protected void onAfterComponentMounted(ComponentActionCallback componentActionCallback) {
         componentActionCallback.patch(contactsPanel);
-    }
-
-    public void showDimmer(ComponentFunctionCallback componentFunctionCallback) {
-        dimmer.api(componentFunctionCallback).show(this);
-    }
-
-    public void hideDimmer(ComponentActionCallback componentActionCallback) {
-        dimmer.api(componentActionCallback).hide(this);
     }
 }

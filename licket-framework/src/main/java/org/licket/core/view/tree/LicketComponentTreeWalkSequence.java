@@ -5,9 +5,9 @@ import org.licket.framework.hippo.AbstractAstNodeBuilder;
 
 import java.util.List;
 import java.util.Optional;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newLinkedList;
-import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
@@ -21,6 +21,7 @@ public class LicketComponentTreeWalkSequence {
     private final LicketComponent<?> target;
 
     private AbstractAstNodeBuilder<?> rootProperty = property(thisLiteral(), name("$parent"));
+    private AbstractAstNodeBuilder<?> childProperty = thisLiteral();
 
     private LicketComponentTreeWalkSequence(LicketComponent<?> source, LicketComponent<?> target) {
         this.source = checkNotNull(source, "Source can not be null.");
@@ -32,6 +33,9 @@ public class LicketComponentTreeWalkSequence {
     }
 
     public final AbstractAstNodeBuilder<?> generateTreeWalkSequence() {
+        if (source.equals(target)) {
+            return thisLiteral();
+        }
         List<AbstractStep> steps = newLinkedList();
         Optional<LicketComponent<?>> commonParent = source.traverseUp(sourceParent -> {
             steps.add(new StepUp(sourceParent.getId()));
@@ -52,12 +56,22 @@ public class LicketComponentTreeWalkSequence {
             return false;
         });
         if (commonParent.isPresent()) {
-            steps.stream().skip(1).forEach(step -> {
-                rootProperty = step.decorate(rootProperty);
-            });
+            steps.stream().skip(1).forEach(step -> rootProperty = step.decorate(rootProperty));
             return rootProperty;
         }
-        return arrayElementGet().target(property(property("this", "$parent"), "$refs")).element(target.getId());
+        // when there is no common parent
+        List<AbstractStep> childSteps = newLinkedList();
+        List<AbstractStep> downSteps = newLinkedList();
+        source.traverseDown(sourceChild -> {
+            downSteps.add(new StepDown(sourceChild.getId()));
+            if (target.getCompositeId().equals(sourceChild.getCompositeId())) {
+                childSteps.addAll(downSteps);
+                return false;
+            }
+            return true;
+        });
+        childSteps.forEach(step -> childProperty = step.decorate(childProperty));
+        return childProperty;
     }
 
     public static class Builder {

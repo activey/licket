@@ -1,10 +1,8 @@
 package org.licket.demo.view;
 
-import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemote;
+import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.form.LicketInput;
-import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.list.AbstractLicketList;
 import org.licket.demo.model.Contact;
@@ -31,12 +29,6 @@ public class AddContactForm extends AbstractSemanticUIForm<Contact> {
     private ContactsService contactsService;
 
     @Autowired
-    private LicketComponentModelReloader modelReloader;
-
-    @Autowired
-    private LicketRemote remote;
-
-    @Autowired
     private IdGenerator idGenerator;
 
     private BiConsumer<Contact, ComponentActionCallback> callback;
@@ -59,15 +51,11 @@ public class AddContactForm extends AbstractSemanticUIForm<Contact> {
         add(new LicketInput("name"));
         add(new LicketInput("description"));
         add(new AbstractLicketList("email", ofString("emails")) {
-            @Override
-            protected LicketComponentModelReloader getModelReloader() {
-                return modelReloader;
-            }
 
             @Override
             protected void onInitializeContainer() {
                 add(new LicketInput("value"));
-                add(new AbstractLicketActionLink<EmailAddress>("delete_email", EmailAddress.class, remote, modelReloader) {
+                add(new AbstractLicketActionLink<EmailAddress>("delete_email", EmailAddress.class) {
 
                     @Override
                     protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
@@ -110,16 +98,6 @@ public class AddContactForm extends AbstractSemanticUIForm<Contact> {
 
     private void clearInput() {
         setComponentModelObject(contactsService.emptyContact());
-    }
-
-    @Override
-    protected LicketComponentModelReloader getModelReloader() {
-        return modelReloader;
-    }
-
-    @Override
-    protected final LicketRemote getRemote() {
-        return remote;
     }
 
     @Override

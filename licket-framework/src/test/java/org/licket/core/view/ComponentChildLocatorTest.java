@@ -3,10 +3,8 @@ package org.licket.core.view;
 import org.junit.Before;
 import org.junit.Test;
 import org.licket.core.id.CompositeId;
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.LicketComponentContainer;
 import org.licket.core.view.container.TestContainer;
-import org.mockito.Mock;
 
 import java.util.Optional;
 
@@ -21,9 +19,6 @@ public class ComponentChildLocatorTest {
 
     private LicketComponentContainer<?> root;
 
-    @Mock
-    private LicketComponentModelReloader reloader;
-
     @Before
     public void before() {
         initMocks(this);
@@ -32,17 +27,17 @@ public class ComponentChildLocatorTest {
     }
 
     private void givenComponentStructure() {
-        root = new TestContainer("1", reloader);
-        LicketComponentContainer<?> level2 = new TestContainer("2", reloader);
+        root = new TestContainer("1");
+        LicketComponentContainer<?> level2 = new TestContainer("2");
         root.add(level2);
 
-        LicketComponentContainer<?> level3 = new TestContainer("3", reloader);
+        LicketComponentContainer<?> level3 = new TestContainer("3");
         level2.add(level3);
 
-        LicketComponentContainer<?> level4 = new TestContainer("4", reloader);
+        LicketComponentContainer<?> level4 = new TestContainer("4");
         level3.add(level4);
 
-        LicketComponentContainer<?> level5 = new TestContainer("5", reloader);
+        LicketComponentContainer<?> level5 = new TestContainer("5");
         level4.add(level5);
     }
 

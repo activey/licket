@@ -1,6 +1,5 @@
 package org.licket.semantic.component.dimmer;
 
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.OnVueMounted;
@@ -23,19 +22,16 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  */
 public abstract class AbstractSemanticUIDimmer extends AbstractLicketMultiContainer<DimmerSettings> {
 
-    private final LicketComponentModelReloader modelReloader;
-
-    public AbstractSemanticUIDimmer(String id, DimmerSettings dimmerSettings, LicketComponentModelReloader modelReloader) {
+    public AbstractSemanticUIDimmer(String id, DimmerSettings dimmerSettings) {
         super(id, DimmerSettings.class, ofModelObject(dimmerSettings), fromComponentClass(AbstractSemanticUIDimmer.class));
-        this.modelReloader = modelReloader;
     }
 
     @Override
     protected final void onInitializeContainer() {
-        add(new SemanticUIDimmerContainer("dimmer-container", getComponentModel().get(), modelReloader) {
+        add(new SemanticUIDimmerContainer("dimmer-container", getComponentModel().get()) {
             @Override
             protected void onInitializeContainer() {
-                add(new DimmerContent("content-section", modelReloader) {
+                add(new DimmerContent("content-section") {
                     @Override
                     protected void onInitializeContainer() {
                         onInitializeContent(this, "content-block");
@@ -86,10 +82,5 @@ public abstract class AbstractSemanticUIDimmer extends AbstractLicketMultiContai
     @Override
     public SemanticUIDimmerAPI api(ComponentFunctionCallback componentFunctionCallback) {
         return new SemanticUIDimmerAPI(this, componentFunctionCallback);
-    }
-
-    @Override
-    public final LicketComponentModelReloader getModelReloader() {
-        return modelReloader;
     }
 }

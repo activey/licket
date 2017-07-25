@@ -26,6 +26,10 @@ public class LicketRemote implements VueClass {
     @Name("http")
     private final HttpCommunicationService httpCommunicationService;
 
+    public static NameBuilder serviceName() {
+        return name("$licketRemoteService");
+    }
+
     public LicketRemote(HttpCommunicationService httpCommunicationService) {
         this.httpCommunicationService = checkNotNull(httpCommunicationService,
             "Http communication service reference must not be null!");
@@ -57,20 +61,20 @@ public class LicketRemote implements VueClass {
 
     @Override
     public NameBuilder vueName() {
-        return NameBuilder.name("$licketRemoteService");
+        return LicketRemote.serviceName();
     }
 
-    public FunctionCallBuilder callSubmitForm(String formId, PropertyNameBuilder callbackFunction) {
+    public static FunctionCallBuilder callSubmitForm(String formId, PropertyNameBuilder callbackFunction) {
         return functionCall()
-                .target(property(property(thisLiteral(), vueName()), name("submitForm")))
+                .target(property(property(thisLiteral(), LicketRemote.serviceName()), name("submitForm")))
                 .argument(stringLiteral(formId))
                 .argument(property(thisLiteral(), name("model")))
                 .argument(callbackFunction);
     }
 
-    public FunctionCallBuilder callMountComponent(String componentId, FunctionNodeBuilder callbackFunction) {
+    public static FunctionCallBuilder callMountComponent(String componentId, FunctionNodeBuilder callbackFunction) {
         return functionCall()
-                .target(property(property(name("vm"), vueName()), name("mountComponent")))
+                .target(property(property(name("vm"), LicketRemote.serviceName()), name("mountComponent")))
                 .argument(stringLiteral(componentId))
                 .argument(property(name("to"), name("params")))
                 .argument(callbackFunction);

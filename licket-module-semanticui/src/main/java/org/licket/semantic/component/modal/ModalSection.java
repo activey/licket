@@ -1,7 +1,5 @@
 package org.licket.semantic.component.modal;
 
-import org.licket.core.model.LicketComponentModel;
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.AbstractLicketMonoContainer;
 
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
@@ -12,15 +10,7 @@ import static org.licket.core.view.LicketComponentView.internalTemplateView;
  */
 public class ModalSection extends AbstractLicketMonoContainer<Void> {
 
-  private final LicketComponentModelReloader modelReloader;
-
-  public ModalSection(String id, LicketComponentModelReloader modelReloader) {
+  public ModalSection(String id) {
     super(id, Void.class, emptyComponentModel(), internalTemplateView());
-    this.modelReloader = modelReloader;
-  }
-
-  @Override
-  public LicketComponentModelReloader getModelReloader() {
-    return modelReloader;
   }
 }

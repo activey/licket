@@ -1,7 +1,6 @@
 package org.licket.core.view.hippo.vue.component;
 
 import com.google.common.io.CharStreams;
-import org.licket.core.module.application.LicketRemote;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.LicketComponent;
@@ -41,9 +40,6 @@ public class VueComponentPropertiesDecorator {
     private ResourceStorage resourceStorage;
 
     @Autowired
-    private LicketRemote licketRemote;
-
-    @Autowired
     private OnVueBeforeRouteEnterDecorator routeEnterDecorator;
 
     public ObjectLiteralBuilder decorate(LicketComponent<?> component, ObjectLiteralBuilder componentObjectBuilder) {
@@ -61,7 +57,6 @@ public class VueComponentPropertiesDecorator {
 
         // if it is mounted component or root
         routeEnterDecorator.decorate(component, componentObjectBuilder);
-//        afterMountDecorator.decorate(component, componentObjectBuilder);
 
         return componentObjectBuilder;
     }

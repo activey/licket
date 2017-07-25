@@ -17,7 +17,7 @@ public class StepDown extends AbstractStep {
     }
 
     @Override
-    protected ArrayElementGetBuilder decorate(AbstractAstNodeBuilder<?> previousStep, String componentId) {
-        return arrayElementGet().target(property(previousStep, name("$refs"))).element(componentId);
+    protected ArrayElementGetBuilder decorate(AbstractAstNodeBuilder<?> step, String componentId) {
+        return arrayElementGet().target(property(step, name("$refs"))).element(componentId);
     }
 }

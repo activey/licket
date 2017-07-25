@@ -1,9 +1,7 @@
 package org.licket.core.resource.vue.boot;
 
 import org.licket.core.LicketApplication;
-import org.licket.core.module.application.LicketRemote;
 import org.licket.core.resource.FootParticipatingResource;
-import org.licket.core.resource.ResourceStorage;
 import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;

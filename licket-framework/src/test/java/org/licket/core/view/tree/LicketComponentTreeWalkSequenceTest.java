@@ -2,10 +2,9 @@ package org.licket.core.view.tree;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.TestContainer;
 import org.licket.framework.hippo.AbstractAstNodeBuilder;
-import org.mockito.Mock;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.licket.core.view.tree.LicketComponentTreeWalkSequence.source;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -26,9 +25,6 @@ public class LicketComponentTreeWalkSequenceTest {
     private TestContainer levelB4;
     private TestContainer levelB5;
     private TestContainer levelB6;
-
-    @Mock
-    private LicketComponentModelReloader modelReloader;
 
     @Before
     public void before() {
@@ -52,20 +48,32 @@ public class LicketComponentTreeWalkSequenceTest {
         // then
         assertThat(sequence.build().toSource()).isEqualTo(
             "this.$parent.$parent.$parent.$parent.$refs[\"levelB2\"].$refs[\"levelB3\"].$refs[\"levelB4\"].$refs[\"levelB5\"].$refs[\"levelB6\"]");
+
+        // when
+        sequence = source(levelA1).target(levelA5).traverseSequence();
+
+        // then
+        assertThat(sequence.build().toSource()).isEqualTo("this.$refs[\"levelA2\"].$refs[\"levelA3\"].$refs[\"levelA4\"].$refs[\"levelA5\"]");
+
+        // when
+        sequence = source(levelA2).target(levelB2).traverseSequence();
+
+        // then
+        assertThat(sequence.build().toSource()).isEqualTo("this.$parent.$refs[\"levelB2\"]");
     }
 
     private void givenComponentTreeStructure() {
-        levelA1 = new TestContainer("levelA1", modelReloader);
-        levelA2 = new TestContainer("levelA2", modelReloader);
-        levelA3 = new TestContainer("levelA3", modelReloader);
-        levelA4 = new TestContainer("levelA4", modelReloader);
-        levelA5 = new TestContainer("levelA5", modelReloader);
+        levelA1 = new TestContainer("levelA1");
+        levelA2 = new TestContainer("levelA2");
+        levelA3 = new TestContainer("levelA3");
+        levelA4 = new TestContainer("levelA4");
+        levelA5 = new TestContainer("levelA5");
 
-        levelB2 = new TestContainer("levelB2", modelReloader);
-        levelB3 = new TestContainer("levelB3", modelReloader);
-        levelB4 = new TestContainer("levelB4", modelReloader);
-        levelB5 = new TestContainer("levelB5", modelReloader);
-        levelB6 = new TestContainer("levelB6", modelReloader);
+        levelB2 = new TestContainer("levelB2");
+        levelB3 = new TestContainer("levelB3");
+        levelB4 = new TestContainer("levelB4");
+        levelB5 = new TestContainer("levelB5");
+        levelB6 = new TestContainer("levelB6");
 
         levelA1.add(levelA2);
         levelA2.add(levelA3);
