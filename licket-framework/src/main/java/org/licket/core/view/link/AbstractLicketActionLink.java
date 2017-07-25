@@ -1,6 +1,5 @@
 package org.licket.core.view.link;
 
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.ComponentActionCallback;
@@ -12,7 +11,6 @@ import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.FunctionCallBuilder;
 import org.licket.framework.hippo.NameBuilder;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
 import static org.licket.core.module.application.LicketComponentModelReloader.callReloadComponent;
 import static org.licket.core.view.LicketComponentView.internalTemplateView;
@@ -29,13 +27,8 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  */
 public abstract class AbstractLicketActionLink<T> extends AbstractLicketComponent<T> {
 
-    private LicketRemote licketRemote;
-    private LicketComponentModelReloader modelReloader;
-
-    public AbstractLicketActionLink(String id, Class<T> modelClass, LicketRemote licketRemote, LicketComponentModelReloader modelReloader) {
+    public AbstractLicketActionLink(String id, Class<T> modelClass) {
         super(id, modelClass, emptyComponentModel(), internalTemplateView());
-        this.licketRemote = checkNotNull(licketRemote, "Licket remote must not be null!");
-        this.modelReloader = checkNotNull(modelReloader, "Licket model reloader must not be null!");
     }
 
     @VueComponentFunction
@@ -63,7 +56,7 @@ public abstract class AbstractLicketActionLink<T> extends AbstractLicketComponen
         ));
 
         FunctionCallBuilder functionCall = functionCall()
-                .target(property(property(thisLiteral(), licketRemote.vueName()), name("handleActionLinkClick")))
+                .target(property(property(thisLiteral(), LicketRemote.serviceName()), name("handleActionLinkClick")))
                 .argument(stringLiteral(getCompositeId().getValue()));
         decorateActionLinkModel(functionCall);
         functionCall.argument(property(thisLiteral(), name("afterClick")));

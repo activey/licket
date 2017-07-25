@@ -1,6 +1,5 @@
 package org.licket.demo.view;
 
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.demo.model.Contacts;
 import org.licket.demo.service.ContactsService;
@@ -14,9 +13,6 @@ import static org.licket.demo.model.Contacts.fromIterable;
  * @author activey
  */
 public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
-
-    @Autowired
-    private LicketComponentModelReloader modelReloader;
 
     @Autowired
     private ContactsList contactsList;
@@ -41,10 +37,5 @@ public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
 
     public void reloadList() {
         readContacts();
-    }
-
-    @Override
-    protected LicketComponentModelReloader getModelReloader() {
-        return modelReloader;
     }
 }

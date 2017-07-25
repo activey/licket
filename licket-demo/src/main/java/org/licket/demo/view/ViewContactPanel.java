@@ -1,11 +1,8 @@
 package org.licket.demo.view;
 
-import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.LicketLabel;
-import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.core.view.list.AbstractLicketList;
 import org.licket.core.view.mount.MountedComponentLink;
@@ -13,6 +10,7 @@ import org.licket.core.view.mount.params.MountingParams;
 import org.licket.demo.model.Contact;
 import org.licket.demo.service.ContactsService;
 import org.licket.semantic.component.button.AbstractSemanticActionLink;
+import org.licket.semantic.component.segment.AbstractSemanticUISegment;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
@@ -25,13 +23,7 @@ import static org.licket.core.view.LicketComponentView.fromComponentClass;
  * @author lukaszgrabski
  */
 @LicketMountPoint("/contact/{id}")
-public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
-
-  @Autowired
-  private LicketComponentModelReloader modelReloader;
-
-  @Autowired
-  private LicketRemote licketRemote;
+public class ViewContactPanel extends AbstractSemanticUISegment<Contact> {
 
   @Autowired
   private ContactsService contactsService;
@@ -49,11 +41,6 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
     add(new AbstractLicketList("email", ofString("emails")) {
 
             @Override
-            protected LicketComponentModelReloader getModelReloader() {
-                return modelReloader;
-            }
-
-            @Override
             protected void onInitializeContainer() {
                 add(new LicketLabel("value"));
             }
@@ -66,7 +53,7 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
 
     add(new LicketLabel("content"));
     add(new MountedComponentLink("rootLink", ContactsAppRoot.class));
-    add(this.deleteLink = new AbstractSemanticActionLink<Contact>("deleteLink", Contact.class, licketRemote, modelReloader()) {
+    add(this.deleteLink = new AbstractSemanticActionLink<Contact>("deleteLink", Contact.class) {
 
       @Override
       protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
@@ -87,8 +74,8 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
   }
 
   @Override
-  protected LicketComponentModelReloader getModelReloader() {
-    return modelReloader;
+  protected void onBeforeComponentMounted(ComponentFunctionCallback componentFunctionCallback) {
+    this.api(componentFunctionCallback).showLoading(this);
   }
 
   @Override
@@ -102,5 +89,10 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
       return;
     }
     setComponentModelObject(contactOptional.get());
+  }
+
+  @Override
+  protected void onAfterComponentMounted(ComponentActionCallback componentActionCallback) {
+    this.api(componentActionCallback).hideLoading(this);
   }
 }

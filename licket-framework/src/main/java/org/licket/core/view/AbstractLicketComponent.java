@@ -7,6 +7,7 @@ import org.licket.core.view.api.AbstractLicketComponentAPI;
 import org.licket.core.view.api.DefaultLicketComponentAPI;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
+import org.licket.core.view.hippo.vue.extend.OnVueBeforeRouteEnterDecorator;
 import org.licket.core.view.mount.params.MountingParams;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
@@ -31,10 +32,15 @@ import static org.licket.core.view.LicketComponentView.noView;
 import static org.licket.core.view.hippo.vue.annotation.VueComponentFunctionPredicate.MOUNTED_ONLY;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
+import static org.licket.framework.hippo.BlockBuilder.block;
+import static org.licket.framework.hippo.EqualCheckExpressionBuilder.equalCheckExpression;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
+import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
+import static org.licket.framework.hippo.IfStatementBuilder.ifStatement;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
+import static org.licket.framework.hippo.ReturnStatementBuilder.returnStatement;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 
 public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
@@ -236,15 +242,20 @@ public abstract class AbstractLicketComponent<T> implements LicketComponent<T> {
         ));
     }
 
+    @VueComponentFunction(predicates = MOUNTED_ONLY)
+    public final void beforeMount(BlockBuilder functionBody) {
+        ComponentFunctionCallback componentFunctionCallback = new ComponentFunctionCallback();
+        onBeforeComponentMounted(componentFunctionCallback);
+        componentFunctionCallback.forEachCall(functionCall -> functionBody.appendStatement(expressionStatement(functionCall)));
+    }
     /**
      * Override to be able to update component model upon mounting params entity
+     *
      * @param componentMountingParams
      */
     protected void onComponentMounted(MountingParams componentMountingParams) {}
 
-    /**
-     *
-     * @param componentActionCallback
-     */
     protected void onAfterComponentMounted(ComponentActionCallback componentActionCallback) {}
+
+    protected void onBeforeComponentMounted(ComponentFunctionCallback componentFunctionCallback) {}
 }

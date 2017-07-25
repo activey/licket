@@ -1,14 +1,12 @@
 package org.licket.demo.view;
 
 import org.licket.core.model.LicketComponentModel;
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.LicketLabel;
 import org.licket.core.view.list.AbstractLicketList;
 import org.licket.core.view.media.LicketImage;
 import org.licket.core.view.mount.MountedComponentLink;
 import org.licket.core.view.mount.params.MountingParamsAggregator;
 import org.licket.demo.model.Contact;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
@@ -16,9 +14,6 @@ import static java.util.Optional.of;
 import static org.licket.core.view.mount.params.MountingParamValueDecorator.fromParentModel;
 
 public class ContactsList extends AbstractLicketList {
-
-    @Autowired
-    private LicketComponentModelReloader modelReloader;
 
     public ContactsList(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
         super(id, enclosingComponentPropertyModel);
@@ -35,11 +30,6 @@ public class ContactsList extends AbstractLicketList {
                 paramsAggregator.name("id").value(fromParentModel("id"));
             }
         });
-    }
-
-    @Override
-    protected LicketComponentModelReloader getModelReloader() {
-        return modelReloader;
     }
 
     @Override

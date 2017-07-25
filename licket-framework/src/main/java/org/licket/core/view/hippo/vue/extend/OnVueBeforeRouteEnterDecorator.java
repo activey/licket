@@ -5,6 +5,7 @@ import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.framework.hippo.FunctionNodeBuilder;
+import org.licket.framework.hippo.KeywordLiteralBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -63,6 +64,9 @@ public class OnVueBeforeRouteEnterDecorator {
             .param(name("vm"))
             .body(
                     block()
+                      .appendStatement(expressionStatement(
+                              functionCall().target(property(name("vm"), "beforeMount"))
+                      ))
                       .appendStatement(licketRemote.callMountComponent(
                               licketComponent.getCompositeId().getValue(),
                               functionNode()

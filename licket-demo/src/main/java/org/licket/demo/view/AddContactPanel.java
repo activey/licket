@@ -1,13 +1,11 @@
 package org.licket.demo.view;
 
-import org.licket.core.module.application.LicketComponentModelReloader;
-import org.licket.core.module.application.LicketRemote;
+import org.licket.core.view.ComponentActionCallback;
+import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.core.view.link.AbstractLicketLink;
-import org.licket.core.view.ComponentActionCallback;
-import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.demo.model.Contact;
 import org.licket.demo.view.modal.AddContactFormActionsSection;
 import org.licket.demo.view.modal.AddContactFormModalSection;
@@ -29,12 +27,6 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
     @Autowired
     private AddContactForm addContactForm;
 
-    @Autowired
-    private LicketRemote remoteCommunication;
-
-    @Autowired
-    private LicketComponentModelReloader modelReloader;
-
     private AbstractSemanticUIModal modal;
     private final ModalSettings modalSettings;
 
@@ -54,11 +46,11 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
 
     @Override
     protected void onInitializeContainer() {
-        add(modal = new AbstractSemanticUIModal("form-modal", modalSettings, modelReloader()) {
+        add(modal = new AbstractSemanticUIModal("form-modal", modalSettings) {
 
             @Override
             protected void onInitializeBody(ModalSection bodySection, String contentId) {
-                bodySection.add(new AddContactFormModalSection(contentId, modelReloader()) {
+                bodySection.add(new AddContactFormModalSection(contentId) {
                     @Override
                     protected void onInitializeContainer() {
                         add(addContactForm);
@@ -68,7 +60,7 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
 
             @Override
             protected void onInitializeActions(ModalSection actionsSection, String contentId) {
-                actionsSection.add(new AddContactFormActionsSection(contentId, modelReloader()) {
+                actionsSection.add(new AddContactFormActionsSection(contentId) {
                     @Override
                     protected void onInitializeContainer() {
                         add(new AbstractLicketLink("add") {
@@ -81,7 +73,7 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                           }
                         });
 
-                        add(new AbstractLicketActionLink<Void>("add_email", Void.class, remoteCommunication, modelReloader()) {
+                        add(new AbstractLicketActionLink<Void>("add_email", Void.class) {
 
                             @Override
                             protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
@@ -100,7 +92,7 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                             }
                         });
 
-                        add(new AbstractLicketActionLink<Void>("add_random", Void.class, remoteCommunication, modelReloader()) {
+                        add(new AbstractLicketActionLink<Void>("add_random", Void.class) {
 
                             @Override
                             protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
@@ -122,11 +114,6 @@ public class AddContactPanel extends AbstractLicketMultiContainer<Void> {
                 });
             }
         });
-    }
-
-    @Override
-    public final LicketComponentModelReloader getModelReloader() {
-        return modelReloader;
     }
 
     public final void showAddContactModal(ComponentFunctionCallback componentActionCallback, LicketComponent<?> caller) {
