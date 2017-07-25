@@ -83,8 +83,8 @@ public class ContactsAppRoot extends AbstractLicketMultiContainer<Void> {
   @Autowired
   private ContactsPanel contactsPanel;
 
-  public ContactsAppRoot(String id, LicketComponentModelReloader modelReloader) {
-      super(id, Void.class, emptyComponentModel(), fromComponentClass(ContactsAppRoot.class), modelReloader);
+  public ContactsAppRoot(String id) {
+      super(id, Void.class, emptyComponentModel(), fromComponentClass(ContactsAppRoot.class));
   }
   
   @Override
@@ -104,7 +104,7 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
 
     @Override
     protected void onInitializeContainer() {
-        add(new ContactsList("contact", new LicketComponentModel("contacts"), modelReloader())); 
+        add(new ContactsList("contact", new LicketComponentModel("contacts"))); 
     }
 
     private void readContacts() {
@@ -114,9 +114,8 @@ public class ContactsPanel extends AbstractLicketContainer<Contacts> {
 
 public class ContactsList extends AbstractLicketList<Contact> {
 
-    public ContactsList(String id, LicketComponentModel<String> enclosingComponentPropertyModel,
-                        LicketComponentModelReloader modelReloader) {
-        super(id, enclosingComponentPropertyModel, Contact.class, modelReloader);
+    public ContactsList(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
+        super(id, enclosingComponentPropertyModel, Contact.class);
 
         add(new LicketLabel("name"));
         add(new LicketLabel("description"));
@@ -131,13 +130,13 @@ Next,coin your own Spring Boot configuration class and glue all together:
 public class LicketConfiguration {
 
     @LicketRootContainer
-    public ContactsAppRoot root(@Autowired LicketComponentModelReloader modelReloader) {
-        return new ContactsAppRoot("contacts-page", modelReloader);
+    public ContactsAppRoot root() {
+        return new ContactsAppRoot("contacts-page");
     }
 
     @LicketComponent
-    public ContactsPanel contactsPanel(@Autowired LicketComponentModelReloader modelReloader) {
-        return new ContactsPanel("contacts-panel", modelReloader);
+    public ContactsPanel contactsPanel() {
+        return new ContactsPanel("contacts-panel");
     }
     
     @Bean

@@ -48,6 +48,18 @@ public class LicketComponentTreeWalkSequenceTest {
         // then
         assertThat(sequence.build().toSource()).isEqualTo(
             "this.$parent.$parent.$parent.$parent.$refs[\"levelB2\"].$refs[\"levelB3\"].$refs[\"levelB4\"].$refs[\"levelB5\"].$refs[\"levelB6\"]");
+
+        // when
+        sequence = source(levelA1).target(levelA5).traverseSequence();
+
+        // then
+        assertThat(sequence.build().toSource()).isEqualTo("this.$refs[\"levelA2\"].$refs[\"levelA3\"].$refs[\"levelA4\"].$refs[\"levelA5\"]");
+
+        // when
+        sequence = source(levelA2).target(levelB2).traverseSequence();
+
+        // then
+        assertThat(sequence.build().toSource()).isEqualTo("this.$parent.$refs[\"levelB2\"]");
     }
 
     private void givenComponentTreeStructure() {

@@ -3,6 +3,7 @@ package org.licket.demo.view;
 import org.licket.core.view.ComponentActionCallback;
 import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.LicketLabel;
+import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.core.view.list.AbstractLicketList;
 import org.licket.core.view.mount.MountedComponentLink;
@@ -18,17 +19,18 @@ import java.util.Optional;
 import static org.licket.core.model.LicketComponentModel.ofModelObject;
 import static org.licket.core.model.LicketComponentModel.ofString;
 import static org.licket.core.view.LicketComponentView.fromComponentClass;
+import static org.licket.core.view.LicketComponentView.internalTemplateView;
 
 /**
  * @author lukaszgrabski
  */
 @LicketMountPoint("/contact/{id}")
-public class ViewContactPanel extends AbstractSemanticUISegment<Contact> {
+public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
 
   @Autowired
   private ContactsService contactsService;
 
-  private AbstractSemanticActionLink<Contact> deleteLink;
+  private AbstractSemanticUISegment<Contact> segment;
 
   public ViewContactPanel(String id) {
     super(id, Contact.class, ofModelObject(new Contact()), fromComponentClass(ViewContactPanel.class));
@@ -36,46 +38,54 @@ public class ViewContactPanel extends AbstractSemanticUISegment<Contact> {
 
   @Override
   protected void onInitializeContainer() {
-    add(new LicketLabel("name"));
-    add(new LicketLabel("description"));
-    add(new AbstractLicketList("email", ofString("emails")) {
+    add(segment = new AbstractSemanticUISegment<Contact>("segment", Contact.class, ofModelObject(getComponentModel().get()), internalTemplateView()) {
 
-            @Override
-            protected void onInitializeContainer() {
-                add(new LicketLabel("value"));
-            }
+      private AbstractSemanticActionLink<Contact> deleteLink;
 
       @Override
-      protected Optional<String> keyPropertyName() {
-        return Optional.of("id");
-      }
-    });
+      protected void onInitializeContainer() {
+        add(new LicketLabel("name"));
+        add(new LicketLabel("description"));
+        add(new AbstractLicketList("email", ofString("emails")) {
 
-    add(new LicketLabel("content"));
-    add(new MountedComponentLink("rootLink", ContactsAppRoot.class));
-    add(this.deleteLink = new AbstractSemanticActionLink<Contact>("deleteLink", Contact.class) {
+          @Override
+          protected void onInitializeContainer() {
+            add(new LicketLabel("value"));
+          }
 
-      @Override
-      protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
-        deleteLink.api(componentFunctionCallback).showLoading(this);
-      }
+          @Override
+          protected Optional<String> keyPropertyName() {
+            return Optional.of("id");
+          }
+        });
 
-      @Override
-      protected void onClick(Contact modelObject) {
-        contactsService.deleteContactById(ViewContactPanel.this.getComponentModel().get().getId());
-      }
+        add(new LicketLabel("content"));
+        add(new MountedComponentLink("rootLink", ContactsAppRoot.class));
+        add(this.deleteLink = new AbstractSemanticActionLink<Contact>("deleteLink", Contact.class) {
 
-      @Override
-      protected void onAfterClick(ComponentActionCallback componentActionCallback) {
-        deleteLink.api(componentActionCallback).hideLoading(this);
-        componentActionCallback.navigateToMounted(ContactsAppRoot.class);
+          @Override
+          protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
+            deleteLink.api(componentFunctionCallback).showLoading(this);
+          }
+
+          @Override
+          protected void onClick(Contact modelObject) {
+            contactsService.deleteContactById(ViewContactPanel.this.getComponentModel().get().getId());
+          }
+
+          @Override
+          protected void onAfterClick(ComponentActionCallback componentActionCallback) {
+            deleteLink.api(componentActionCallback).hideLoading(this);
+            componentActionCallback.navigateToMounted(ContactsAppRoot.class);
+          }
+        });
       }
     });
   }
 
   @Override
   protected void onBeforeComponentMounted(ComponentFunctionCallback componentFunctionCallback) {
-    this.api(componentFunctionCallback).showLoading(this);
+    segment.api(componentFunctionCallback).showLoading(this);
   }
 
   @Override
@@ -88,11 +98,12 @@ public class ViewContactPanel extends AbstractSemanticUISegment<Contact> {
     if (!contactOptional.isPresent()) {
       return;
     }
-    setComponentModelObject(contactOptional.get());
+    segment.setComponentModelObject(contactOptional.get());
   }
 
   @Override
   protected void onAfterComponentMounted(ComponentActionCallback componentActionCallback) {
-    this.api(componentActionCallback).hideLoading(this);
+    segment.api(componentActionCallback).hideLoading(this);
+    componentActionCallback.reload(segment);
   }
 }
