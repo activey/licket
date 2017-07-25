@@ -75,7 +75,7 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
 
       @Override
       protected void onClick(Contact modelObject) {
-        contactsService.deleteContactById(ViewContactPanel.this.getComponentModel().get().getId());
+        contactsService.deleteContactById(modelObject.getId());
       }
 
       @Override
