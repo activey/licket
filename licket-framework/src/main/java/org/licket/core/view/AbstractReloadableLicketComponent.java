@@ -88,16 +88,8 @@ public abstract class AbstractReloadableLicketComponent<T> extends AbstractLicke
     public final void onVueCreated(BlockBuilder body) {
         body.appendStatement(expressionStatement(
                 functionCall()
-                        .target(property(property(thisLiteral(), modelReloader().vueName()), name("listenForModelChange")))
+                        .target(property(property(thisLiteral(), LicketComponentModelReloader.serviceName()), name("listenForModelChange")))
                         .argument(property(thisLiteral(), name("handleModelChanged")))
         ));
     }
-
-    protected final LicketComponentModelReloader modelReloader() {
-        LicketComponentModelReloader modelReloader = getModelReloader();
-        checkNotNull(modelReloader, "Model reloader has to be not null!");
-        return modelReloader;
-    }
-
-    protected abstract LicketComponentModelReloader getModelReloader();
 }

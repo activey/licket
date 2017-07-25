@@ -14,7 +14,6 @@ import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.FunctionCallBuilder;
 import org.licket.framework.hippo.NameBuilder;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.licket.core.module.application.LicketComponentModelReloader.callReloadComponent;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
@@ -35,14 +34,6 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
   public AbstractLicketForm(String id, Class<T> modelClass, LicketComponentModel<T> model, LicketComponentView componentView) {
     super(id, modelClass, model, componentView);
   }
-
-  public final LicketRemote remote() {
-    LicketRemote remote = getRemote();
-    checkNotNull(remote, "Licket remote instance must not be null!");
-    return remote;
-  }
-
-  protected abstract LicketRemote getRemote();
 
   @SuppressWarnings("unused")
   /**
@@ -98,7 +89,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
   public void submitForm(BlockBuilder functionBlock) {
     functionBlock
             .appendStatement(expressionStatement(
-                    remote().callSubmitForm(
+                    LicketRemote.callSubmitForm(
                             getCompositeId().getValue(), property(thisLiteral(), name("afterSubmit"))
                     )
             ))

@@ -1,8 +1,10 @@
-package org.licket.semantic.component.button;
+package org.licket.semantic.component.segment;
 
+import org.licket.core.model.LicketComponentModel;
 import org.licket.core.view.ComponentFunctionCallback;
+import org.licket.core.view.LicketComponentView;
+import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
-import org.licket.core.view.link.AbstractLicketActionLink;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.FunctionCallBuilder;
 
@@ -16,10 +18,18 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
 /**
  * @author lukaszgrabski
  */
-public class AbstractSemanticActionLink<T> extends AbstractLicketActionLink<T> {
+public abstract class AbstractSemanticUISegment<T> extends AbstractLicketMultiContainer<T> {
 
-  public AbstractSemanticActionLink(String id, Class<T> modelClass) {
+  public AbstractSemanticUISegment(String id, Class<T> modelClass) {
     super(id, modelClass);
+  }
+
+  public AbstractSemanticUISegment(String id, Class<T> modelClass, LicketComponentModel<T> componentModel) {
+    super(id, modelClass, componentModel);
+  }
+
+  public AbstractSemanticUISegment(String id, Class<T> modelClass, LicketComponentModel<T> componentModel, LicketComponentView view) {
+    super(id, modelClass, componentModel, view);
   }
 
   @VueComponentFunction
@@ -46,7 +56,7 @@ public class AbstractSemanticActionLink<T> extends AbstractLicketActionLink<T> {
             .argument(property(thisLiteral(), name("$el")));
   }
 
-  public SemanticActionLinkAPI api(ComponentFunctionCallback componentFunctionCallback) {
-    return new SemanticActionLinkAPI(this, componentFunctionCallback);
+  public SemanticSegmentAPI api(ComponentFunctionCallback componentFunctionCallback) {
+    return new SemanticSegmentAPI(this, componentFunctionCallback);
   }
 }

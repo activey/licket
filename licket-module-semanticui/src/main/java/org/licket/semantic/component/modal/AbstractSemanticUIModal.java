@@ -1,6 +1,5 @@
 package org.licket.semantic.component.modal;
 
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
 import org.licket.core.view.hippo.vue.annotation.OnVueMounted;
@@ -24,30 +23,27 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  */
 public abstract class AbstractSemanticUIModal extends AbstractLicketMultiContainer<ModalSettings> {
 
-    private final LicketComponentModelReloader modelReloader;
-
-    public AbstractSemanticUIModal(String id, ModalSettings modalSettings, LicketComponentModelReloader modelReloader) {
+    public AbstractSemanticUIModal(String id, ModalSettings modalSettings) {
         super(id, ModalSettings.class, ofModelObject(modalSettings), fromComponentClass(AbstractSemanticUIModal.class));
-        this.modelReloader = modelReloader;
     }
 
     @Override
     protected final void onInitializeContainer() {
-        add(new ModalSection("header-section", modelReloader()) {
+        add(new ModalSection("header-section") {
             @Override
             protected void onInitializeContainer() {
                 onInitializeHeader(this, "content-block");
             }
         });
 
-        add(new ModalSection("main-section", modelReloader()) {
+        add(new ModalSection("main-section") {
             @Override
             protected void onInitializeContainer() {
                 onInitializeBody(this, "content-block");
             }
         });
 
-        add(new ModalSection("actions-section", modelReloader()) {
+        add(new ModalSection("actions-section") {
             @Override
             protected void onInitializeContainer() {
                 onInitializeActions(this, "content-block");
@@ -104,10 +100,5 @@ public abstract class AbstractSemanticUIModal extends AbstractLicketMultiContain
     @Override
     public SemanticUIModalAPI api(ComponentFunctionCallback componentFunctionCallback) {
         return new SemanticUIModalAPI(this, componentFunctionCallback);
-    }
-
-    @Override
-    public final LicketComponentModelReloader getModelReloader() {
-        return modelReloader;
     }
 }

@@ -33,6 +33,9 @@ public class LicketComponentTreeWalkSequence {
 
     public final AbstractAstNodeBuilder<?> generateTreeWalkSequence() {
         List<AbstractStep> steps = newLinkedList();
+        if (source.equals(target)) {
+            return thisLiteral();
+        }
         Optional<LicketComponent<?>> commonParent = source.traverseUp(sourceParent -> {
             steps.add(new StepUp(sourceParent.getId()));
 
@@ -57,7 +60,7 @@ public class LicketComponentTreeWalkSequence {
             });
             return rootProperty;
         }
-        return arrayElementGet().target(property(property("this", "$parent"), "$refs")).element(target.getId());
+        return arrayElementGet().target(property(property(thisLiteral(), "$parent"), "$refs")).element(target.getId());
     }
 
     public static class Builder {
