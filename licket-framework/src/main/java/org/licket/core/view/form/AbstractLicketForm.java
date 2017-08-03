@@ -11,14 +11,12 @@ import org.licket.core.view.hippo.vue.annotation.VueComponent;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.FunctionCallBuilder;
 import org.licket.framework.hippo.NameBuilder;
 
 import static org.licket.core.module.application.LicketComponentModelReloader.callReloadComponent;
 import static org.licket.framework.hippo.ArrayElementGetBuilder.arrayElementGet;
 import static org.licket.framework.hippo.AssignmentBuilder.assignment;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
-import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.KeywordLiteralBuilder.thisLiteral;
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
@@ -96,32 +94,8 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
             .appendStatement(returnStatement().returnValue(name("false")));
   }
 
-  @VueComponentFunction
-  public void showLoading(BlockBuilder body) {
-    body.appendStatement(expressionStatement(
-            functionCall()
-                    .target(property(element(), name("addClass")))
-                    .argument(stringLiteral("loading"))
-    ));
-  }
-
-  @VueComponentFunction
-  public void hideLoading(BlockBuilder body) {
-    body.appendStatement(expressionStatement(
-            functionCall()
-                    .target(property(element(), name("removeClass")))
-                    .argument(stringLiteral("loading"))
-    ));
-  }
-
   @Override
   public AbstractLicketFormAPI api(ComponentFunctionCallback functionCallback) {
     return new AbstractLicketFormAPI(this, functionCallback);
-  }
-
-  private FunctionCallBuilder element() {
-    return functionCall()
-            .target(name("$"))
-            .argument(property(thisLiteral(), name("$el")));
   }
 }
