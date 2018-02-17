@@ -2,6 +2,7 @@ package org.licket.core.module.application;
 
 import org.licket.core.module.application.resource.ApplicationEventHubResource;
 import org.licket.core.module.application.resource.ApplicationModulePluginResource;
+import org.licket.core.module.application.security.LicketComponentSecurity;
 import org.licket.core.module.resource.HttpCommunicationService;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.view.hippo.vue.VuePlugin;
@@ -18,7 +19,11 @@ public class ApplicationModulePluginConfiguration {
 
     @Bean
     public VuePlugin applicationModulePlugin(@Autowired HttpCommunicationService httpCommunicationService) {
-        return new ApplicationModulePlugin(communicationService(httpCommunicationService), modelReloader());
+        return new ApplicationModulePlugin(
+                communicationService(httpCommunicationService),
+                modelReloader(),
+                componentSecurity()
+        );
     }
 
     @Bean
@@ -29,6 +34,11 @@ public class ApplicationModulePluginConfiguration {
     @Bean
     public LicketComponentModelReloader modelReloader() {
         return new LicketComponentModelReloader();
+    }
+
+    @Bean
+    public LicketComponentSecurity componentSecurity() {
+        return new LicketComponentSecurity();
     }
 
     @Bean

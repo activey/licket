@@ -4,6 +4,8 @@ import org.licket.core.LicketApplication;
 import org.licket.core.module.application.LicketRemote;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
+import org.licket.core.view.hippo.vue.security.VueComponentSecurityGuardDecorator;
+import org.licket.core.view.security.LicketMountPointAccess;
 import org.licket.framework.hippo.FunctionNodeBuilder;
 import org.licket.framework.hippo.KeywordLiteralBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
@@ -31,39 +33,41 @@ public class OnVueBeforeRouteEnterDecorator {
   @Autowired
   private LicketApplication application;
 
+  @Autowired
+  private VueComponentSecurityGuardDecorator securityGuardDecorator;
+
   public final void decorate(LicketComponent<?> licketComponent, ObjectLiteralBuilder objectLiteralBuilder) {
     LicketMountPoint mountPoint = licketComponent.getClass().getAnnotation(LicketMountPoint.class);
     if (mountPoint == null) {
       return;
     }
     objectLiteralBuilder.objectProperty(
-            propertyBuilder().name("beforeRouteEnter").value(beforeRouteEnter(licketComponent))
+            propertyBuilder().name("beforeRouteEnter").value(beforeRouteEnter(licketComponent, mountPoint))
     );
   }
 
-  private FunctionNodeBuilder beforeRouteEnter(LicketComponent<?> licketComponent) {
+  private FunctionNodeBuilder beforeRouteEnter(LicketComponent<?> licketComponent, LicketMountPoint mountPoint) {
     return functionNode()
             .param(name("to"))
             .param(name("from"))
             .param(name("next"))
             .body(block()
-                    .appendStatement(ifStatement()
-                            .condition(equalCheckExpression().left(property("from", "path")).right(property("to", "path")))
-                            .then(block()
-                                    .appendStatement(expressionStatement(functionCall().target(name("next"))))
-                                    .appendStatement(returnStatement())))
                     .appendStatement(expressionStatement(
                             functionCall()
                                     .target(name("next"))
-                                    .argument(nextFunction(licketComponent)))));
+                                    .argument(nextFunction(licketComponent, mountPoint.access())))));
 
   }
 
-  private FunctionNodeBuilder nextFunction(LicketComponent<?> licketComponent) {
+  private FunctionNodeBuilder nextFunction(LicketComponent<?> licketComponent, LicketMountPointAccess access) {
     return functionNode()
             .param(name("vm"))
             .body(
-                    block()
+                    securityGuardDecorator.decorate(block(), access)
+                      .appendStatement(ifStatement()
+                              .condition(equalCheckExpression().left(property("from", "path")).right(property("to", "path")))
+                              .then(block()
+                                      .appendStatement(returnStatement())))
                       .appendStatement(expressionStatement(
                               functionCall().target(property(name("vm"), "beforeMount"))
                       ))

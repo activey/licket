@@ -179,5 +179,7 @@
         <module>licket-framework-hippo</module>
         <module>licket-npm-libraries</module>
         <module>licket-module-semanticui</module>
+
+        <module>licket-gitlab-pipelines</module>
     </modules>
 </project>

@@ -6,6 +6,7 @@ import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.core.view.hippo.vue.component.VueComponentPropertiesDecorator;
+import org.licket.core.view.hippo.vue.security.VueComponentSecurityGuardDecorator;
 import org.licket.core.view.mount.MountedComponents;
 import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.BlockBuilder;
@@ -46,6 +47,9 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
     @Autowired
     private VueComponentPropertiesDecorator componentPropertiesDecorator;
 
+    @Autowired
+    private VueComponentSecurityGuardDecorator componentSecurityGuardDecorator;
+
     @Override
     public String getName() {
         return "Licket.application.js";
@@ -84,6 +88,10 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
         );
     }
 
+    private StringLiteralBuilder applicationRootId() {
+        return stringLiteral(format("#%s", application.rootComponentContainer().getId()));
+    }
+
     private ObjectLiteralBuilder vueRoutesDefinitions() {
         return objectLiteral()
                 .objectProperty(propertyBuilder().name("routes").arrayValue(componentsTree()));
@@ -112,10 +120,6 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
                     componentPropertiesDecorator.decorate(licketComponent, objectLiteral()))
                 )
         );
-    }
-
-    private StringLiteralBuilder applicationRootId() {
-        return stringLiteral(format("#%s", application.rootComponentContainer().getId()));
     }
 
     private void registerMountPoints() {

@@ -22,12 +22,22 @@ public class EqualCheckExpressionBuilder extends AbstractAstNodeBuilder<InfixExp
         return this;
     }
 
+    public EqualCheckExpressionBuilder left(FunctionCallBuilder left) {
+        this.left = left;
+        return this;
+    }
+
     public EqualCheckExpressionBuilder left(NameBuilder left) {
         this.left = left;
         return this;
     }
 
     public EqualCheckExpressionBuilder right(StringLiteralBuilder right) {
+        this.right = right;
+        return this;
+    }
+
+    public EqualCheckExpressionBuilder right(NameBuilder right) {
         this.right = right;
         return this;
     }

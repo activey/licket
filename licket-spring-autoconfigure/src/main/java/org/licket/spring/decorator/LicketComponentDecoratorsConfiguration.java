@@ -2,6 +2,7 @@ package org.licket.spring.decorator;
 
 import org.licket.core.view.hippo.vue.component.VueComponentPropertiesDecorator;
 import org.licket.core.view.hippo.vue.extend.OnVueBeforeRouteEnterDecorator;
+import org.licket.core.view.hippo.vue.security.VueComponentSecurityGuardDecorator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,5 +20,10 @@ public class LicketComponentDecoratorsConfiguration {
   @Bean
   public OnVueBeforeRouteEnterDecorator beforeRouteEnterDecorator() {
     return new OnVueBeforeRouteEnterDecorator();
+  }
+
+  @Bean
+  public VueComponentSecurityGuardDecorator componentSecurityGuardDecorator() {
+    return new VueComponentSecurityGuardDecorator();
   }
 }
