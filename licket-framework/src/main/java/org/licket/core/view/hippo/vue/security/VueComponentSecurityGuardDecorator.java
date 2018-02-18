@@ -5,7 +5,6 @@ import org.licket.core.view.security.LicketComponentSecuritySettings;
 import org.licket.core.view.security.LicketMountPointAccess;
 import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.NameBuilder;
-import org.licket.framework.hippo.PropertyNameBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;

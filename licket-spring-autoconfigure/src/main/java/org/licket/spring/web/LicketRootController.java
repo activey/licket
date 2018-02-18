@@ -7,6 +7,7 @@ import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
+import org.licket.core.view.mount.MountedComponents;
 import org.licket.spring.surface.element.html.compiler.ComponentTemplateCompiler;
 import org.licket.surface.SurfaceContext;
 import org.licket.surface.tag.ElementFactories;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Modifier;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -47,6 +49,9 @@ public class LicketRootController {
   @Autowired
   private ElementFactories surfaceElementFactories;
 
+  @Autowired
+  private MountedComponents mountedComponents;
+
   @PostConstruct
   private void initialize() {
     LOGGER.debug("Initializing Licket application: {}.", licketApplication.getName());
@@ -57,22 +62,40 @@ public class LicketRootController {
       if (mountPoint == null) {
         return true;
       }
-      ComponentTemplateCompiler templateCompiler =
-              new ComponentTemplateCompiler(() -> licketComponent);
-      if (isRootComponent(licketComponent)) {
-        // compiling root component template
-        resourcesStorage.putResource(new ByteArrayResource("index.html", TEXT_HTML_VALUE,
-                templateCompiler.compile(surfaceContext(licketComponent.getCompositeId()))));
-        return true;
-      }
-      resourcesStorage.putResource(new ByteArrayResource(licketComponent.getCompositeId().getValue(), TEXT_HTML_VALUE,
-              templateCompiler.compile(surfaceContext(licketComponent.getCompositeId()))));
+      registerComponentMountPoint(licketComponent, mountPoint.value());
+      compileComponentViewResource(licketComponent);
       return true;
     });
   }
 
+  private void registerComponentMountPoint(LicketComponent<?> licketComponent, String mountPoint) {
+    if (isComponentAbstract(licketComponent)) {
+      LOGGER.warn("Currently not supported to mount abstract component like this one: {}.", licketComponent.getCompositeId().getValue());
+      return;
+    }
+    // registering mounted component
+    mountedComponents.setMountedLink(licketComponent.getClass(), mountPoint);
+  }
+
+  private void compileComponentViewResource(LicketComponent<?> licketComponent) {
+    ComponentTemplateCompiler templateCompiler =
+            new ComponentTemplateCompiler(() -> licketComponent);
+    if (isRootComponent(licketComponent)) {
+      // compiling root component template
+      resourcesStorage.putResource(new ByteArrayResource("index.html", TEXT_HTML_VALUE,
+              templateCompiler.compile(surfaceContext(licketComponent.getCompositeId()))));
+      return;
+    }
+    resourcesStorage.putResource(new ByteArrayResource(licketComponent.getCompositeId().getValue(), TEXT_HTML_VALUE,
+            templateCompiler.compile(surfaceContext(licketComponent.getCompositeId()))));
+  }
+
   private boolean isRootComponent(LicketComponent<?> licketComponent) {
     return licketApplication.rootComponentContainer().getCompositeId().equals(licketComponent.getCompositeId());
+  }
+
+  private boolean isComponentAbstract(LicketComponent<?> licketComponent) {
+    return Modifier.isAbstract(licketComponent.getClass().getModifiers());
   }
 
   private SurfaceContext surfaceContext(CompositeId parentCompositeId) {

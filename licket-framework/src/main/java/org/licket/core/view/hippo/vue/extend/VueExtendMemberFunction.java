@@ -84,7 +84,6 @@ public class VueExtendMemberFunction {
     public FunctionNodeBuilder toFunctionNode(Method method, VueClass vueClass) {
         readMethodMetadata(method);
         on(vueClass).call(method.getName(), arguments);
-
         return functionNode;
     }
 

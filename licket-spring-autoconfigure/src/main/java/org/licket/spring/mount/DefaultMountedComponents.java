@@ -13,16 +13,16 @@ import static com.google.common.collect.Maps.newHashMap;
  */
 public class DefaultMountedComponents implements MountedComponents {
 
-  private Map<Class<? extends LicketComponent>, String> mountMap = newHashMap();
+  private Map<String, String> mountMap = newHashMap();
 
   @Override
   public void setMountedLink(Class<? extends LicketComponent> componentClass, String mountPoint) {
-    mountMap.put(componentClass, mountPoint);
+    mountMap.put(componentClass.getName(), mountPoint);
   }
 
   @Override
   public MountedComponent mountedComponent(Class<? extends LicketComponent> licketComponentClass) {
-    String mountPath = mountMap.get(licketComponentClass);
+    String mountPath = mountMap.get(licketComponentClass.getName());
     if (mountPath == null) {
       // TODO what then?
     }

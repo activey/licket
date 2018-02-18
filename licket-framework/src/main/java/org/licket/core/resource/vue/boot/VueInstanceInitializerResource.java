@@ -13,11 +13,7 @@ import org.licket.framework.hippo.BlockBuilder;
 import org.licket.framework.hippo.ObjectLiteralBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
 import org.licket.framework.hippo.StringLiteralBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.lang.reflect.Modifier;
 
 import static java.lang.String.format;
 import static org.licket.framework.hippo.ArrayLiteralBuilder.arrayLiteral;
@@ -35,8 +31,6 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  * @author activey
  */
 public class VueInstanceInitializerResource extends AbstractJavascriptDynamicResource implements FootParticipatingResource {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(VueInstanceInitializerResource.class);
 
     @Autowired
     private LicketApplication application;
@@ -57,8 +51,6 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
 
     @Override
     protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
-        registerMountPoints();
-
         // initializing VueRouter instance
         PropertyNameBuilder appRouter = property("app", "router");
         scriptBlockBuilder.appendStatement(
@@ -122,28 +114,4 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
         );
     }
 
-    private void registerMountPoints() {
-        application.traverseDown(mountedContainer -> {
-            LicketMountPoint mountPoint = mountedContainer.getClass().getAnnotation(LicketMountPoint.class);
-            if (mountPoint == null) {
-                return false;
-            }
-            // iterating trough components annotated with @LicketMountPoint
-            registerComponentMountPoint(mountedContainer, mountPoint.value());
-            return false;
-        });
-    }
-
-    private void registerComponentMountPoint(LicketComponent<?> licketComponent, String mountPoint) {
-        if (isComponentAbstract(licketComponent)) {
-            LOGGER.warn("Currently not supported to mount abstract component like this one: {}.", licketComponent.getCompositeId().getValue());
-            return;
-        }
-        // registering mounted component
-        mountedComponents.setMountedLink(licketComponent.getClass(), mountPoint);
-    }
-
-    private boolean isComponentAbstract(LicketComponent<?> licketComponent) {
-        return Modifier.isAbstract(licketComponent.getClass().getModifiers());
-    }
 }
