@@ -12,7 +12,7 @@ public class PropertyNameBuilder extends AbstractAstNodeBuilder<PropertyGet> {
     private final AbstractAstNodeBuilder left;
     private NameBuilder right;
 
-    private PropertyNameBuilder(AbstractAstNodeBuilder left, NameBuilder right) {
+    public PropertyNameBuilder(AbstractAstNodeBuilder left, NameBuilder right) {
         this.left = left;
         this.right = right;
     }

@@ -83,11 +83,11 @@ public class LicketRootController {
     if (isRootComponent(licketComponent)) {
       // compiling root component template
       resourcesStorage.putResource(new ByteArrayResource("index.html", TEXT_HTML_VALUE,
-              templateCompiler.compile(surfaceContext(licketComponent.getCompositeId()))));
+              templateCompiler.compile(new SurfaceContext(surfaceElementFactories, licketComponent.getCompositeId()))));
       return;
     }
     resourcesStorage.putResource(new ByteArrayResource(licketComponent.getCompositeId().getValue(), TEXT_HTML_VALUE,
-            templateCompiler.compile(surfaceContext(licketComponent.getCompositeId()))));
+            templateCompiler.compile(new SurfaceContext(surfaceElementFactories, licketComponent.getCompositeId()))));
   }
 
   private boolean isRootComponent(LicketComponent<?> licketComponent) {
@@ -96,10 +96,6 @@ public class LicketRootController {
 
   private boolean isComponentAbstract(LicketComponent<?> licketComponent) {
     return Modifier.isAbstract(licketComponent.getClass().getModifiers());
-  }
-
-  private SurfaceContext surfaceContext(CompositeId parentCompositeId) {
-    return new SurfaceContext(surfaceElementFactories, parentCompositeId);
   }
 
   @GetMapping(value = "/index", produces = TEXT_HTML_VALUE)

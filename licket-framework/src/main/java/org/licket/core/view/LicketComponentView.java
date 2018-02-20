@@ -1,6 +1,5 @@
 package org.licket.core.view;
 
-import java.io.InputStream;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.html.HtmlResource;
 

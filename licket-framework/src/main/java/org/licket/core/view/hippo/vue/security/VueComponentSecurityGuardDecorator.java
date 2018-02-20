@@ -38,7 +38,6 @@ public class VueComponentSecurityGuardDecorator {
                     )
     ));
 
-
     return functionBlock.appendStatement(expressionStatement(componentSecurity.callCheckAuthenticated()));
   }
 }

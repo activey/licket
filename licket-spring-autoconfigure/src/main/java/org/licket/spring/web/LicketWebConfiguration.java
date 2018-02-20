@@ -1,6 +1,7 @@
 package org.licket.spring.web;
 
 import org.licket.core.module.VuePluginsConfiguration;
+import org.licket.spring.web.security.WebSecurityConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@Import(VuePluginsConfiguration.class)
+@Import({ WebSecurityConfiguration.class, VuePluginsConfiguration.class })
 @EnableCaching
 public class LicketWebConfiguration extends WebMvcConfigurerAdapter {
 

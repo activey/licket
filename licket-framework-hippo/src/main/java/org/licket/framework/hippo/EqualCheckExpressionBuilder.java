@@ -10,6 +10,7 @@ public class EqualCheckExpressionBuilder extends AbstractAstNodeBuilder<InfixExp
 
     private AbstractAstNodeBuilder<?> left;
     private AbstractAstNodeBuilder<?> right;
+    private int operator = Token.EQ;
 
     public static EqualCheckExpressionBuilder equalCheckExpression() {
         return new EqualCheckExpressionBuilder();
@@ -52,12 +53,17 @@ public class EqualCheckExpressionBuilder extends AbstractAstNodeBuilder<InfixExp
         return this;
     }
 
+    public EqualCheckExpressionBuilder negative() {
+        this.operator = Token.NE;
+        return this;
+    }
+
     @Override
     public InfixExpression build() {
         InfixExpression infixExpression = new InfixExpression();
         infixExpression.setLeft(left.build());
         infixExpression.setRight(right.build());
-        infixExpression.setOperator(Token.EQ);
+        infixExpression.setOperator(operator);
         return infixExpression;
     }
 }
