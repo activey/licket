@@ -15,22 +15,23 @@ import static org.licket.framework.hippo.PropertyNameBuilder.property;
  */
 public class ComponentFunctionCallback {
 
-    private MountedComponentNavigation mountedComponentNavigation = new MountedComponentNavigation();
-    private List<FunctionCallBuilder> functionCalls = newArrayList();
+  private MountedComponentNavigation mountedComponentNavigation = new MountedComponentNavigation();
+  private List<FunctionCallBuilder> functionCalls = newArrayList();
 
-    public final void call(FunctionCallBuilder functionCallBuilder) {
-        functionCalls.add(functionCallBuilder);
-    }
+  public final void call(FunctionCallBuilder functionCallBuilder) {
+    functionCalls.add(functionCallBuilder);
+  }
 
-    public final void navigateToMounted(Class<? extends LicketComponent<?>> componentClass) {
-        mountedComponentNavigation.navigateToMounted(componentClass, property("this", "$router"), paramsAggregator -> {});
-    }
+  public final void navigateToMounted(Class<? extends LicketComponent<?>> componentClass) {
+    call(mountedComponentNavigation.navigateToMounted(componentClass, property("this", "$router"), paramsAggregator -> {
+    }));
+  }
 
-    public final void navigateToMounted(Class<? extends LicketComponent<?>> componentClass, Consumer<MountingParamsAggregator> params) {
-        mountedComponentNavigation.navigateToMounted(componentClass, property("this", "$router"), params);
-    }
+  public final void navigateToMounted(Class<? extends LicketComponent<?>> componentClass, Consumer<MountingParamsAggregator> params) {
+    call(mountedComponentNavigation.navigateToMounted(componentClass, property("this", "$router"), params));
+  }
 
-    public final void forEachCall(Consumer<FunctionCallBuilder> functionCallConsumer) {
-        functionCalls.forEach(functionCallConsumer);
-    }
+  public final void forEachCall(Consumer<FunctionCallBuilder> functionCallConsumer) {
+    functionCalls.forEach(functionCallConsumer);
+  }
 }
