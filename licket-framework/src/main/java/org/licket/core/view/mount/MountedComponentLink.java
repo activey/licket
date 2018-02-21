@@ -22,6 +22,7 @@ public class MountedComponentLink<T> extends AbstractLicketLink {
     // TODO retrieve component instance knowing it's componentClass
     componentFunctionCallback.navigateToMounted(componentClass, paramsAggregator -> aggregateParams(paramsAggregator));
   }
+
   protected void aggregateParams(MountingParamsAggregator paramsAggregator) {
     // override this to provide mounting parameters
   }

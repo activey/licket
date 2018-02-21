@@ -4,30 +4,22 @@ import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.hippo.vue.extend.AbstractCallableVueClass;
-import org.licket.core.view.hippo.vue.extend.AbstractVueClassCallableAPI;
-import org.licket.core.view.hippo.vue.extend.VueClass;
-import org.licket.core.view.mount.MountedComponent;
-import org.licket.core.view.mount.MountedComponents;
+import org.licket.core.view.mount.MountedComponentNavigation;
 import org.licket.core.view.security.LicketComponentSecuritySettings;
 import org.licket.framework.hippo.BlockBuilder;
-import org.licket.framework.hippo.EqualCheckExpressionBuilder;
 import org.licket.framework.hippo.FunctionCallBuilder;
-import org.licket.framework.hippo.IfStatementBuilder;
 import org.licket.framework.hippo.NameBuilder;
 import org.licket.framework.hippo.PropertyNameBuilder;
-import org.licket.framework.hippo.VariableDeclarationBuilder;
-import org.licket.framework.hippo.VariableInitializerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
+import static org.licket.core.view.mount.params.MountingParamValueDecorator.property;
 import static org.licket.framework.hippo.EqualCheckExpressionBuilder.equalCheckExpression;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
 import static org.licket.framework.hippo.IfStatementBuilder.ifStatement;
 import static org.licket.framework.hippo.NameBuilder.name;
-import static org.licket.framework.hippo.ObjectLiteralBuilder.objectLiteral;
-import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
 import static org.licket.framework.hippo.ReturnStatementBuilder.returnStatement;
 import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
@@ -43,9 +35,7 @@ public class LicketComponentSecurity extends AbstractCallableVueClass {
 
   @Autowired
   private Optional<LicketComponentSecuritySettings> securitySettings;
-
-  @Autowired
-  private MountedComponents mountedComponents;
+  private MountedComponentNavigation mountedComponentNavigation = new MountedComponentNavigation();
 
   @VueComponentFunction
   public void checkAuthenticated(BlockBuilder body) {
@@ -65,19 +55,17 @@ public class LicketComponentSecurity extends AbstractCallableVueClass {
   }
 
   @VueComponentFunction
-  public void displayLoginPanel(@Name("router") NameBuilder router, BlockBuilder body) {
+  public void displayLoginPanel(@Name("router") NameBuilder router, @Name("redirectTo") NameBuilder redirectTo, BlockBuilder body) {
     securitySettings.ifPresent(securitySettings -> {
-      MountedComponent mountedComponent = mountedComponents.mountedComponent(securitySettings.loginPanelComponentClass());
-      body.appendStatement(expressionStatement(functionCall()
-              .target(property(router, "push"))
-              .argument(objectLiteral()
-                      .objectProperty(propertyBuilder().name("name").value(stringLiteral(securitySettings.loginPanelComponentClass().getName())))
-                      .objectProperty(propertyBuilder().name("params").value(mountedComponent.params())))));
+      FunctionCallBuilder routeCall = mountedComponentNavigation.navigateToMounted(
+              securitySettings.loginPanelComponentClass(),
+              router,
+              paramsAggregator -> paramsAggregator
+                      .name("redirectTo")
+                      .value(property(propertyBuilder -> propertyBuilder.value(redirectTo)))
+      );
+      body.appendStatement(expressionStatement(routeCall));
     });
-  }
-
-  @VueComponentFunction
-  public void getAuthenticationToken(BlockBuilder body) {
   }
 
   @VueComponentFunction
@@ -100,7 +88,7 @@ public class LicketComponentSecurity extends AbstractCallableVueClass {
   }
 
   @Override
-  public LicketComponentSecurityCallableAPI call(ComponentFunctionCallback functionCallback) {
+  public LicketComponentSecurityCallableAPI api(ComponentFunctionCallback functionCallback) {
     return new LicketComponentSecurityCallableAPI(functionCallback);
   }
 
@@ -112,6 +100,7 @@ public class LicketComponentSecurity extends AbstractCallableVueClass {
   public FunctionCallBuilder callDisplayLoginPanel(PropertyNameBuilder routerReference) {
     return functionCall()
             .target(property(property(name("vm"), LicketComponentSecurity.serviceName()), name("displayLoginPanel")))
-            .argument(routerReference);
+            .argument(routerReference)
+            .argument(property("to", "fullPath"));
   }
 }

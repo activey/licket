@@ -1,11 +1,11 @@
 package org.licket.core.view.security;
 
-import org.licket.core.view.container.LicketComponentContainer;
+import org.licket.core.view.LicketComponent;
 
 /**
  * @author lukaszgrabski
  */
 public interface LicketComponentSecuritySettings {
 
-  Class<? extends LicketComponentContainer> loginPanelComponentClass();
+  Class<? extends LicketComponent<?>> loginPanelComponentClass();
 }

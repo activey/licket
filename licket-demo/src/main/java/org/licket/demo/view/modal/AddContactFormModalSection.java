@@ -11,8 +11,7 @@ import static org.licket.core.view.LicketComponentView.fromComponentClass;
 public class AddContactFormModalSection extends AbstractLicketMonoContainer<Void> {
 
   public AddContactFormModalSection(String id) {
-    super(id, Void.class, emptyComponentModel(),
-        fromComponentClass(AddContactFormModalSection.class));
+    super(id, Void.class, emptyComponentModel(), fromComponentClass(AddContactFormModalSection.class));
   }
 
 }

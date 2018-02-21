@@ -11,7 +11,7 @@ import org.licket.demo.model.Contact;
 import java.util.Optional;
 
 import static java.util.Optional.of;
-import static org.licket.core.view.mount.params.MountingParamValueDecorator.fromParentModel;
+import static org.licket.core.view.mount.params.MountingParamValueDecorator.fromParentModelProperty;
 
 public class ContactsList extends AbstractLicketList {
 
@@ -27,7 +27,7 @@ public class ContactsList extends AbstractLicketList {
         add(new MountedComponentLink<Contact>("view-contact", ViewContactPanel.class) {
             @Override
             protected void aggregateParams(MountingParamsAggregator paramsAggregator) {
-                paramsAggregator.name("id").value(fromParentModel("id"));
+                paramsAggregator.name("id").value(fromParentModelProperty("id"));
             }
         });
     }

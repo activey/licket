@@ -7,7 +7,7 @@ import org.licket.core.view.ComponentFunctionCallback;
  */
 public abstract class AbstractCallableVueClass implements VueClass {
 
-  public AbstractVueClassCallableAPI call(ComponentFunctionCallback functionCallback) {
+  public AbstractVueClassCallableAPI api(ComponentFunctionCallback functionCallback) {
     return new DefaultVueClassCallableAPI(functionCallback);
   }
 }
