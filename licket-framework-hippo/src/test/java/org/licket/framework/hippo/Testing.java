@@ -53,7 +53,7 @@ public class Testing {
     @Test
     public void test() throws IOException {
         AstRoot astRoot = new Parser().parse(
-            new InputStreamReader(Test.class.getClassLoader().getResourceAsStream("TestSomething.js")), "test.js", 0);
+            new InputStreamReader(Test.class.getClassLoader().getResourceAsStream("TestConcatenate.js")), "test.js", 0);
 
         astRoot.forEach(visitor());
     }

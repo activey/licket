@@ -80,6 +80,11 @@ public class FunctionCallBuilder extends AbstractAstNodeBuilder<FunctionCall> {
         return this;
     }
 
+    public FunctionCallBuilder argument(ConcatenateExpression infixExpressionBuilder) {
+        arguments.add(infixExpressionBuilder);
+        return this;
+    }
+
     @Override
     public FunctionCall build() {
         FunctionCall functionCall = new FunctionCall();

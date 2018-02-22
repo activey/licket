@@ -1,6 +1,7 @@
 package org.licket.core.view.hippo.vue.security;
 
 import org.licket.core.module.application.security.LicketComponentSecurity;
+import org.licket.core.view.hippo.ComponentCallTargetOrigin;
 import org.licket.core.view.security.LicketComponentSecuritySettings;
 import org.licket.core.view.security.LicketMountPointAccess;
 import org.licket.framework.hippo.BlockBuilder;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
+import static org.licket.core.view.hippo.ComponentCallTargetOrigin.fromVm;
 import static org.licket.framework.hippo.BlockBuilder.block;
 import static org.licket.framework.hippo.EqualCheckExpressionBuilder.equalCheckExpression;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
@@ -30,14 +32,12 @@ public class VueComponentSecurityGuardDecorator {
     if (access.isPublic() || !componentSecuritySettings.isPresent()) {
       return functionBlock;
     }
-    functionBlock.appendStatement(expressionStatement(
+    return functionBlock.appendStatement(expressionStatement(
             ifStatement()
-                    .condition(equalCheckExpression().left(componentSecurity.callCheckAuthenticated()).right(NameBuilder.name("false")))
+                    .condition(equalCheckExpression().left(componentSecurity.callCheckAuthenticated(fromVm())).right(NameBuilder.name("false")))
                     .then(
-                            block().appendStatement(expressionStatement(componentSecurity.callDisplayLoginPanel(property("vm", "$router"))))
+                            block().appendStatement(expressionStatement(componentSecurity.callDisplayLoginPanel(fromVm(), property("vm", "$router"))))
                     )
     ));
-
-    return functionBlock.appendStatement(expressionStatement(componentSecurity.callCheckAuthenticated()));
   }
 }

@@ -1,6 +1,7 @@
 package org.licket.core.module.application.security;
 
 import org.licket.core.view.ComponentFunctionCallback;
+import org.licket.core.view.hippo.ComponentCallTargetOrigin;
 import org.licket.core.view.hippo.vue.annotation.Name;
 import org.licket.core.view.hippo.vue.annotation.VueComponentFunction;
 import org.licket.core.view.hippo.vue.extend.AbstractCallableVueClass;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
 import static org.licket.core.view.mount.params.MountingParamValueDecorator.property;
+import static org.licket.framework.hippo.ConcatenateExpression.concatenateExpression;
 import static org.licket.framework.hippo.EqualCheckExpressionBuilder.equalCheckExpression;
 import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionStatement;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;
@@ -35,6 +37,7 @@ public class LicketComponentSecurity extends AbstractCallableVueClass {
 
   @Autowired
   private Optional<LicketComponentSecuritySettings> securitySettings;
+
   private MountedComponentNavigation mountedComponentNavigation = new MountedComponentNavigation();
 
   @VueComponentFunction
@@ -78,6 +81,21 @@ public class LicketComponentSecurity extends AbstractCallableVueClass {
     ));
   }
 
+  @VueComponentFunction
+  public void writeTokenToRequest(@Name("request") NameBuilder request, BlockBuilder body) {
+    body.appendStatement(expressionStatement(
+            functionCall()
+                    .target(property(property("request", "headers"), name("set")))
+                    .argument(stringLiteral("Authorization"))
+                    .argument(concatenateExpression().left(stringLiteral("Bearer ")).right(
+                            functionCall()
+                                    .target(property("localStorage", "getItem"))
+                                    .argument(stringLiteral(AUTHENTICATION_TOKEN_VARIABLE))
+                    ))
+
+    ));
+  }
+
   public static String serviceName() {
     return "$licketComponentSecurity";
   }
@@ -92,15 +110,21 @@ public class LicketComponentSecurity extends AbstractCallableVueClass {
     return new LicketComponentSecurityCallableAPI(functionCallback);
   }
 
-  public FunctionCallBuilder callCheckAuthenticated() {
+  public FunctionCallBuilder callCheckAuthenticated(ComponentCallTargetOrigin targetOrigin) {
     return functionCall()
-            .target(property(property(name("vm"), LicketComponentSecurity.serviceName()), name("checkAuthenticated")));
+            .target(property(property(targetOrigin.buildTargetOrigin(), LicketComponentSecurity.serviceName()), name("checkAuthenticated")));
   }
 
-  public FunctionCallBuilder callDisplayLoginPanel(PropertyNameBuilder routerReference) {
+  public FunctionCallBuilder callDisplayLoginPanel(ComponentCallTargetOrigin targetOrigin, PropertyNameBuilder routerReference) {
     return functionCall()
-            .target(property(property(name("vm"), LicketComponentSecurity.serviceName()), name("displayLoginPanel")))
+            .target(property(property(targetOrigin.buildTargetOrigin(), LicketComponentSecurity.serviceName()), name("displayLoginPanel")))
             .argument(routerReference)
             .argument(property("to", "fullPath"));
+  }
+
+  public FunctionCallBuilder callWriteTokenToRequest(ComponentCallTargetOrigin targetOrigin, NameBuilder requestReference) {
+    return functionCall()
+            .target(property(property(targetOrigin.buildTargetOrigin(), LicketComponentSecurity.serviceName()), name("writeTokenToRequest")))
+            .argument(requestReference);
   }
 }

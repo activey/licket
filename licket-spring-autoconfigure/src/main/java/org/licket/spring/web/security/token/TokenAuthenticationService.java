@@ -2,11 +2,15 @@ package org.licket.spring.web.security.token;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author lukaszgrabski
@@ -37,5 +41,25 @@ public class TokenAuthenticationService {
             .signWith(SignatureAlgorithm.HS512, SECRET)
             .compact();
     httpServletResponse.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+  }
+
+  public Authentication getAuthentication(HttpServletRequest request) {
+    String token = request.getHeader(HEADER_STRING);
+    if (token == null) {
+      return null;
+    }
+    try {
+      String user = Jwts.parser()
+              .setSigningKey(SECRET)
+              .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+              .getBody()
+              .getSubject();
+      if (user != null) {
+        return new UsernamePasswordAuthenticationToken(user, null, newArrayList());
+      }
+    } catch (RuntimeException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
