@@ -7,7 +7,8 @@ public class DimmerSettings {
 
   private boolean pageWide;
 
-  public DimmerSettings() {}
+  public DimmerSettings() {
+  }
 
   public DimmerSettings(boolean pageWide) {
     this.pageWide = pageWide;

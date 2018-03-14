@@ -16,7 +16,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-import static org.licket.core.view.LicketUrls.CONTEXT_RESOURCES;
+import static org.licket.core.LicketUrls.CONTEXT_RESOURCES;
 import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
@@ -28,28 +28,28 @@ import static org.springframework.http.ResponseEntity.status;
 @RequestMapping(CONTEXT_RESOURCES)
 public class LicketResourceController {
 
-    @Autowired
-    private LicketApplication licketApplication;
+  @Autowired
+  private LicketApplication licketApplication;
 
-    @Autowired
-    private ResourceStorage resourcesStorage;
+  @Autowired
+  private ResourceStorage resourcesStorage;
 
-    @GetMapping(value = "/**")
-    public ResponseEntity<InputStreamResource> getResource(HttpServletRequest request) {
-      String path = (String) request.getAttribute(
-              HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-      String bestMatchPattern = (String ) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+  @GetMapping(value = "/**")
+  public ResponseEntity<InputStreamResource> getResource(HttpServletRequest request) {
+    String path = (String) request.getAttribute(
+            HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+    String bestMatchPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 
-      AntPathMatcher antPathMatcher = new AntPathMatcher();
-      String finalPath = antPathMatcher.extractPathWithinPattern(bestMatchPattern, path);
+    AntPathMatcher antPathMatcher = new AntPathMatcher();
+    String finalPath = antPathMatcher.extractPathWithinPattern(bestMatchPattern, path);
 
-      Optional<Resource> resourceOptional = resourcesStorage.getResource(finalPath);
-        if (!resourceOptional.isPresent()) {
-            return status(HttpStatus.NOT_FOUND).contentLength(0).body(null);
-        }
-        Resource resource = resourceOptional.get();
-        return ok()
-                .contentType(parseMediaType(resource.getMimeType()))
-                .body(new InputStreamResource(resource.getStream()));
+    Optional<Resource> resourceOptional = resourcesStorage.getResource(finalPath);
+    if (!resourceOptional.isPresent()) {
+      return status(HttpStatus.NOT_FOUND).contentLength(0).body(null);
     }
+    Resource resource = resourceOptional.get();
+    return ok()
+            .contentType(parseMediaType(resource.getMimeType()))
+            .body(new InputStreamResource(resource.getStream()));
+  }
 }

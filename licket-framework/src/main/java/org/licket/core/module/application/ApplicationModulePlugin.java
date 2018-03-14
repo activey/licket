@@ -1,31 +1,29 @@
 package org.licket.core.module.application;
 
-import static java.util.Arrays.stream;
+import org.licket.core.view.hippo.vue.VuePlugin;
+import org.licket.framework.hippo.PropertyNameBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.function.Consumer;
+
 import static org.licket.framework.hippo.NameBuilder.name;
 import static org.licket.framework.hippo.PropertyNameBuilder.property;
-import org.licket.core.view.hippo.vue.VuePlugin;
-import org.licket.core.view.hippo.vue.extend.VueClass;
-import org.licket.framework.hippo.PropertyNameBuilder;
-
-import java.util.function.Consumer;
 
 /**
  * @author activey
  */
 public class ApplicationModulePlugin implements VuePlugin {
 
-    private VueClass[] moduleServices;
+  @Autowired
+  private List<ApplicationModuleService> moduleServices;
 
-    public ApplicationModulePlugin(VueClass... moduleServices) {
-        this.moduleServices = moduleServices;
-    }
+  @Override
+  public PropertyNameBuilder vueName() {
+    return property(name("app"), name("AppModule"));
+  }
 
-    @Override
-    public PropertyNameBuilder vueName() {
-        return property(name("app"), name("AppModule"));
-    }
-
-    public void forEachService(Consumer<VueClass> serviceConsumer) {
-        stream(moduleServices).forEach(serviceConsumer);
-    }
+  public void forEachService(Consumer<ApplicationModuleService> serviceConsumer) {
+    moduleServices.stream().forEach(serviceConsumer);
+  }
 }

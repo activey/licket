@@ -7,5 +7,5 @@ import org.mozilla.javascript.ast.AstNode;
  */
 public abstract class AbstractAstNodeBuilder<T extends AstNode> {
 
-    public abstract T build();
+  public abstract T build();
 }

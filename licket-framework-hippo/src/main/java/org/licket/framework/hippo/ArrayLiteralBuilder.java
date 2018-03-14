@@ -1,8 +1,6 @@
 package org.licket.framework.hippo;
 
 import org.mozilla.javascript.ast.ArrayLiteral;
-import org.mozilla.javascript.ast.FunctionNode;
-import org.mozilla.javascript.ast.PropertyGet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,47 +10,44 @@ import java.util.List;
  */
 public class ArrayLiteralBuilder extends AbstractAstNodeBuilder<ArrayLiteral> {
 
-    private List<AbstractAstNodeBuilder> elements = new LinkedList<>();
+  private List<AbstractAstNodeBuilder> elements = new LinkedList<>();
 
-    private ArrayLiteralBuilder() {}
+  private ArrayLiteralBuilder() {
+  }
 
-    public static ArrayLiteralBuilder arrayLiteral() {
-        return new ArrayLiteralBuilder();
-    }
+  public static ArrayLiteralBuilder arrayLiteral() {
+    return new ArrayLiteralBuilder();
+  }
 
-    public ArrayLiteralBuilder element(ObjectLiteralBuilder objectLiteral) {
-        elements.add(objectLiteral);
-        return this;
-    }
+  public ArrayLiteralBuilder element(ObjectLiteralBuilder objectLiteral) {
+    elements.add(objectLiteral);
+    return this;
+  }
 
-    public ArrayLiteralBuilder element(NameBuilder name) {
-        elements.add(name);
-        return this;
-    }
+  public ArrayLiteralBuilder element(NameBuilder name) {
+    elements.add(name);
+    return this;
+  }
 
-    public ArrayLiteralBuilder element(PropertyNameBuilder propertyGet) {
-        elements.add(propertyGet);
-        return this;
-    }
+  public ArrayLiteralBuilder element(PropertyNameBuilder propertyGet) {
+    elements.add(propertyGet);
+    return this;
+  }
 
-    public ArrayLiteralBuilder element(FunctionNodeBuilder functionNode) {
-        elements.add(functionNode);
-        return this;
-    }
+  public ArrayLiteralBuilder element(FunctionNodeBuilder functionNode) {
+    elements.add(functionNode);
+    return this;
+  }
 
-    public ArrayLiteralBuilder element(StringLiteralBuilder stringLiteralBuilder) {
-        elements.add(stringLiteralBuilder);
-        return this;
-    }
+  public ArrayLiteralBuilder element(StringLiteralBuilder stringLiteralBuilder) {
+    elements.add(stringLiteralBuilder);
+    return this;
+  }
 
-    @Override
-    public ArrayLiteral build() {
-        ArrayLiteral arrayLiteral = new ArrayLiteral();
-        elements.forEach(element -> arrayLiteral.addElement(element.build()));
-        return arrayLiteral;
-    }
-
-    public final int elementsSize() {
-        return elements.size();
-    }
+  @Override
+  public ArrayLiteral build() {
+    ArrayLiteral arrayLiteral = new ArrayLiteral();
+    elements.forEach(element -> arrayLiteral.addElement(element.build()));
+    return arrayLiteral;
+  }
 }

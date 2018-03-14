@@ -13,15 +13,15 @@ import java.util.function.Predicate;
  */
 public interface LicketApplication {
 
-    String getName();
+  String getName();
 
-    LicketComponentContainer<?> rootComponentContainer();
+  LicketComponentContainer<?> rootComponentContainer();
 
-    Optional<LicketComponent<?>> findComponent(CompositeId compositeId);
+  Optional<LicketComponent<?>> findComponent(CompositeId compositeId);
 
-    Optional<LicketComponent<?>> findComponent(String compositeIdValue);
+  Optional<LicketComponent<?>> findComponent(String compositeIdValue);
 
-    void traverseDown(Predicate<LicketComponent<?>> componentVisitor);
+  void traverseDown(Predicate<LicketComponent<?>> componentVisitor);
 
-    Iterable<VuePlugin> plugins();
+  Iterable<VuePlugin> plugins();
 }

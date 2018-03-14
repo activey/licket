@@ -15,33 +15,33 @@ import static org.licket.spring.surface.element.html.LinkElement.LinkRelType.STY
  */
 public class HeadElement extends SurfaceElement {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HeadElement.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HeadElement.class);
 
-    @Autowired
-    private ResourceStorage resourcesStorage;
+  @Autowired
+  private ResourceStorage resourcesStorage;
 
-    public HeadElement(String name) {
-        super(name, HTML_NAMESPACE);
-    }
+  public HeadElement(String name) {
+    super(name, HTML_NAMESPACE);
+  }
 
-    @Override
-    protected void onFinish(SurfaceContext surfaceContext) {
-        resourcesStorage.getHeadJavascriptResources().forEach(resource -> {
-            LOGGER.debug("Using head JS resource: {}", resource.getName());
+  @Override
+  protected void onFinish(SurfaceContext surfaceContext) {
+    resourcesStorage.getHeadJavascriptResources().forEach(resource -> {
+      LOGGER.debug("Using head JS resource: {}", resource.getName());
 
-            ScriptElement scriptElement = new ScriptElement();
-            scriptElement.setSrc(resourcesStorage.getResourceUrl(resource));
-            addChildElement(scriptElement);
-        });
+      ScriptElement scriptElement = new ScriptElement();
+      scriptElement.setSrc(resourcesStorage.getResourceUrl(resource));
+      addChildElement(scriptElement);
+    });
 
-        resourcesStorage.getStylesheetResources().forEach(resource -> {
-            LOGGER.debug("Using head CSS resource: {}", resource.getName());
+    resourcesStorage.getStylesheetResources().forEach(resource -> {
+      LOGGER.debug("Using head CSS resource: {}", resource.getName());
 
-            LinkElement linkElement = new LinkElement();
-            linkElement.setHref(resourcesStorage.getResourceUrl(resource));
-            linkElement.setType(resource.getMimeType());
-            linkElement.setRelType(STYLESHEET);
-            addChildElement(linkElement);
-        });
-    }
+      LinkElement linkElement = new LinkElement();
+      linkElement.setHref(resourcesStorage.getResourceUrl(resource));
+      linkElement.setType(resource.getMimeType());
+      linkElement.setRelType(STYLESHEET);
+      addChildElement(linkElement);
+    });
+  }
 }

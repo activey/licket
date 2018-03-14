@@ -15,52 +15,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 /**
  * @author activey
  */
 @Configuration
 public class SemanticUIPluginConfiguration {
 
-    @Bean
-    public VuePlugin semanticPlugin() {
-        return new SemanticUIPlugin();
-    }
+  @Bean
+  public VuePlugin semanticPlugin() {
+    return new SemanticUIPlugin();
+  }
 
-    @Bean
-    public HeadParticipatingResource jqueryResource() {
-        return new JqueryLibraryResource();
-    }
+  @Bean
+  public HeadParticipatingResource jqueryResource() {
+    return new JqueryLibraryResource();
+  }
 
-    @Bean
-    public HeadParticipatingResource semanticLibrary() {
-        return new SemanticLibraryResource();
-    }
+  @Bean
+  public HeadParticipatingResource semanticLibrary() {
+    return new SemanticLibraryResource();
+  }
 
-    @Bean
-    public Resource semanticLibraryResource(@Autowired VueLibraryResource vueLibraryResource) {
-        return new SemanticUILibraryResource();
-    }
+  @Bean
+  public Resource semanticLibraryResource(@Autowired VueLibraryResource vueLibraryResource) {
+    return new SemanticUILibraryResource();
+  }
 
-    @Bean
-    public HeadParticipatingResource semanticStylesheet() {
-        return new SemanticStylesheetResource();
-    }
+  @Bean
+  public HeadParticipatingResource semanticStylesheet() {
+    return new SemanticStylesheetResource();
+  }
 
-    @Bean
-    public Resource fonts1() {
-        return new SemanticFonts1Resource();
-    }
+  @Bean
+  public Resource fonts1() {
+    return new SemanticFonts1Resource();
+  }
 
-    @Bean
-    public Resource fonts2() {
-        return new SemanticFonts2Resource();
-    }
+  @Bean
+  public Resource fonts2() {
+    return new SemanticFonts2Resource();
+  }
 
-    @Bean
-    public Resource fonts3() {
-        return new SemanticFonts3Resource();
-    }
+  @Bean
+  public Resource fonts3() {
+    return new SemanticFonts3Resource();
+  }
 }

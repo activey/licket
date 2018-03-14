@@ -8,48 +8,49 @@ import org.mozilla.javascript.ast.IfStatement;
  */
 public class IfStatementBuilder extends AbstractAstNodeBuilder<IfStatement> {
 
-    private AbstractAstNodeBuilder<?> condition;
-    private AbstractAstNodeBuilder<?> thenStatement;
+  private AbstractAstNodeBuilder<?> condition;
+  private AbstractAstNodeBuilder<?> thenStatement;
 
-    public static IfStatementBuilder ifStatement() {
-        return new IfStatementBuilder();
-    }
+  private IfStatementBuilder() {
+  }
 
-    private IfStatementBuilder() {}
+  public static IfStatementBuilder ifStatement() {
+    return new IfStatementBuilder();
+  }
 
-    public IfStatementBuilder condition(EqualCheckExpressionBuilder condition) {
-        this.condition = condition;
-        return this;
-    }
+  public IfStatementBuilder condition(EqualCheckExpressionBuilder condition) {
+    this.condition = condition;
+    return this;
+  }
 
-    public IfStatementBuilder condition(NotEqualCheckExpressionBuilder condition) {
-        this.condition = condition;
-        return this;
-    }
+  public IfStatementBuilder condition(NotEqualCheckExpressionBuilder condition) {
+    this.condition = condition;
+    return this;
+  }
 
-    public IfStatementBuilder then(AssignmentBuilder then) {
-        this.thenStatement = then;
-        return this;
-    }
+  public IfStatementBuilder then(AssignmentBuilder then) {
+    this.thenStatement = then;
+    return this;
+  }
 
-    public IfStatementBuilder then(ReturnStatementBuilder then) {
-        this.thenStatement = then;
-        return this;
-    }
+  public IfStatementBuilder then(ReturnStatementBuilder then) {
+    this.thenStatement = then;
+    return this;
+  }
 
-    public IfStatementBuilder then(BlockBuilder then) {
-        this.thenStatement = then;
-        return this;
-    }
+  public IfStatementBuilder then(BlockBuilder then) {
+    this.thenStatement = then;
+    return this;
+  }
 
-    @Override
-    public IfStatement build() {
-        IfStatement ifStatement = new IfStatement();
-        ifStatement.setCondition(condition.build());
+  @Override
+  public IfStatement build() {
+    IfStatement ifStatement = new IfStatement();
+    ifStatement.setCondition(condition.build());
 
-        AstNode thenNode = thenStatement.build();
+    AstNode thenNode = thenStatement.build();
 //        thenNode.setType(Token.BLOCK);
-        ifStatement.setThenPart(thenNode);
-        return ifStatement;
-    }
+    ifStatement.setThenPart(thenNode);
+    return ifStatement;
+  }
 }

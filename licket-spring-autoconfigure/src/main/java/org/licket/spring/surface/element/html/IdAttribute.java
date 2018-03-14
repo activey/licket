@@ -8,12 +8,12 @@ import org.licket.surface.element.SurfaceElement;
  */
 public class IdAttribute extends BaseAttribute {
 
-    public IdAttribute(String name) {
-        super(name, "");
-    }
+  public IdAttribute(String name) {
+    super(name, "");
+  }
 
-    @Override
-    protected void onStart(SurfaceElement relatedElement) {
-        relatedElement.setComponentId(getValue());
-    }
+  @Override
+  protected void onStart(SurfaceElement relatedElement) {
+    relatedElement.setComponentId(getValue());
+  }
 }

@@ -10,15 +10,15 @@ import static java.lang.String.format;
  */
 public class Comment extends Element {
 
-    private String commentText;
+  private String commentText;
 
-    public Comment(String commentText, String... variables) {
-        super("", "");
-        this.commentText = format(commentText, variables);
-    }
+  public Comment(String commentText, String... variables) {
+    super("", "");
+    this.commentText = format(commentText, variables);
+  }
 
-    @Override
-    public void toXML(XMLStreamWriter writer) throws XMLStreamException {
-        writer.writeComment(commentText);
-    }
+  @Override
+  public void toXML(XMLStreamWriter writer) throws XMLStreamException {
+    writer.writeComment(commentText);
+  }
 }

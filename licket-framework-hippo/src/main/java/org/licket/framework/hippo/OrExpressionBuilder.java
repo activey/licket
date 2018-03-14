@@ -9,31 +9,32 @@ import static org.mozilla.javascript.Token.OR;
  */
 public class OrExpressionBuilder extends AbstractAstNodeBuilder<InfixExpression> {
 
-    private AbstractAstNodeBuilder left;
-    private AbstractAstNodeBuilder right;
+  private AbstractAstNodeBuilder left;
+  private AbstractAstNodeBuilder right;
 
-    private OrExpressionBuilder() {}
+  private OrExpressionBuilder() {
+  }
 
-    public static OrExpressionBuilder orExpression() {
-        return new OrExpressionBuilder();
-    }
+  public static OrExpressionBuilder orExpression() {
+    return new OrExpressionBuilder();
+  }
 
-    public OrExpressionBuilder left(PropertyNameBuilder propertyNameBuilder) {
-        this.left = propertyNameBuilder;
-        return this;
-    }
+  public OrExpressionBuilder left(PropertyNameBuilder propertyNameBuilder) {
+    this.left = propertyNameBuilder;
+    return this;
+  }
 
-    public OrExpressionBuilder right(ParenthesizedExpressionBuilder expressionBuilder) {
-        this.right = expressionBuilder;
-        return this;
-    }
+  public OrExpressionBuilder right(ParenthesizedExpressionBuilder expressionBuilder) {
+    this.right = expressionBuilder;
+    return this;
+  }
 
-    @Override
-    public InfixExpression build() {
-        InfixExpression expression = new InfixExpression();
-        expression.setOperator(OR);
-        expression.setLeft(left.build());
-        expression.setRight(right.build());
-        return expression;
-    }
+  @Override
+  public InfixExpression build() {
+    InfixExpression expression = new InfixExpression();
+    expression.setOperator(OR);
+    expression.setLeft(left.build());
+    expression.setRight(right.build());
+    return expression;
+  }
 }

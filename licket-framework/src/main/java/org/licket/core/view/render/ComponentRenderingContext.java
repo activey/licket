@@ -4,7 +4,6 @@ import org.licket.core.resource.Resource;
 import org.licket.core.view.LicketComponent;
 import org.licket.surface.element.SurfaceElement;
 
-import java.io.InputStream;
 import java.util.function.Consumer;
 
 /**
@@ -12,9 +11,9 @@ import java.util.function.Consumer;
  */
 public interface ComponentRenderingContext {
 
-    void addResource(Resource resource);
+  void addResource(Resource resource);
 
-    void compileComponentTemplateResource(LicketComponent<?> component);
+  void compileComponentTemplateResource(LicketComponent<?> component);
 
-    void onSurfaceElement(Consumer<SurfaceElement> element);
+  void onSurfaceElement(Consumer<SurfaceElement> element);
 }

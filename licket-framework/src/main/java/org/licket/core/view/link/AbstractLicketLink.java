@@ -15,25 +15,31 @@ import static org.licket.framework.hippo.ExpressionStatementBuilder.expressionSt
  */
 public abstract class AbstractLicketLink extends AbstractLicketComponent<Void> {
 
-    public AbstractLicketLink(String id) {
-        super(id, Void.class, emptyComponentModel(), internalTemplateView());
-    }
+  public AbstractLicketLink(String id) {
+    super(id, Void.class, emptyComponentModel(), internalTemplateView());
+  }
 
-    @VueComponentFunction
-    public final void handleClick(BlockBuilder functionBlock) {
-        ComponentFunctionCallback callback = new ComponentFunctionCallback();
-        onClick(callback);
+  @VueComponentFunction
+  public final void handleClick(BlockBuilder functionBlock) {
+    ComponentFunctionCallback callback = new ComponentFunctionCallback();
+    onClick(callback);
 
-        callback.forEachCall(call -> functionBlock.appendStatement(
-                expressionStatement(call)
-        ));
-    }
+    callback.forEachCall(call -> functionBlock.appendStatement(
+            expressionStatement(call)
+    ));
+  }
 
-    protected void onClick(ComponentFunctionCallback callback) {}
+  protected void onClick(ComponentFunctionCallback callback) {
+  }
 
-    @Override
-    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
-        renderingContext
-                .onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("v-on:click", "handleClick"));
-    }
+  @Override
+  protected final void onBeforeRender(ComponentRenderingContext renderingContext) {
+    renderingContext
+            .onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("v-on:click", "handleClick"));
+    onBeforeLinkRender(renderingContext);
+  }
+
+  protected void onBeforeLinkRender(ComponentRenderingContext renderingContext) {
+  }
+
 }

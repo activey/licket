@@ -1,6 +1,5 @@
 package org.licket.demo.licket;
 
-import org.licket.core.model.LicketComponentModel;
 import org.licket.core.resource.Resource;
 import org.licket.demo.resource.ApplicationCssResource;
 import org.licket.demo.view.AddContactForm;
@@ -19,53 +18,54 @@ import org.springframework.context.annotation.Import;
 import org.springframework.util.IdGenerator;
 import org.springframework.util.JdkIdGenerator;
 
+import static org.licket.core.view.hippo.ComponentModelProperty.fromComponentModelProperty;
 import static org.licket.semantic.component.modal.ModalSettingsBuilder.builder;
 
 @Configuration
 @Import(SemanticUIPluginConfiguration.class)
 public class LicketConfiguration {
 
-    @LicketRootContainer
-    public ContactsAppRoot root() {
-        return new ContactsAppRoot("contacts-page");
-    }
+  @LicketRootContainer
+  public ContactsAppRoot root() {
+    return new ContactsAppRoot("contacts-page");
+  }
 
-    @LicketComponent
-    public ContactsPanel contactsPanel() {
-        return new ContactsPanel("contacts-panel");
-    }
+  @LicketComponent
+  public ContactsPanel contactsPanel() {
+    return new ContactsPanel("contacts-panel");
+  }
 
-    @LicketComponent
-    public ContactsList contactsList() {
-        return new ContactsList("contact", new LicketComponentModel("contacts"));
-    }
+  @LicketComponent
+  public ContactsList contactsList() {
+    return new ContactsList("contact", fromComponentModelProperty("contacts"));
+  }
 
-    @LicketComponent
-    public AddContactForm addContactForm() {
-        return new AddContactForm("new-contact-form");
-    }
+  @LicketComponent
+  public AddContactForm addContactForm() {
+    return new AddContactForm("new-contact-form");
+  }
 
-    @LicketComponent
-    public ViewContactPanel viewContactPanel() {
-        return new ViewContactPanel("view-contact-panel");
-    }
+  @LicketComponent
+  public ViewContactPanel viewContactPanel() {
+    return new ViewContactPanel("view-contact-panel");
+  }
 
-    private ModalSettings modalDialogSettings() {
-        return builder().showActions().build();
-    }
+  private ModalSettings modalDialogSettings() {
+    return builder().showActions().build();
+  }
 
-    @LicketComponent
-    public AddContactPanel addContactPanel() {
-        return new AddContactPanel("add-contact-panel", modalDialogSettings());
-    }
+  @LicketComponent
+  public AddContactPanel addContactPanel() {
+    return new AddContactPanel("add-contact-panel", modalDialogSettings());
+  }
 
-    @Bean
-    public IdGenerator idGenerator() {
-        return new JdkIdGenerator();
-    }
+  @Bean
+  public IdGenerator idGenerator() {
+    return new JdkIdGenerator();
+  }
 
-    @Bean
-    public Resource applicationCssResource() {
-        return new ApplicationCssResource();
-    }
+  @Bean
+  public Resource applicationCssResource() {
+    return new ApplicationCssResource();
+  }
 }

@@ -22,65 +22,66 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  */
 public abstract class AbstractSemanticUIDimmer extends AbstractLicketMultiContainer<DimmerSettings> {
 
-    public AbstractSemanticUIDimmer(String id, DimmerSettings dimmerSettings) {
-        super(id, DimmerSettings.class, ofModelObject(dimmerSettings), fromComponentClass(AbstractSemanticUIDimmer.class));
-    }
+  public AbstractSemanticUIDimmer(String id, DimmerSettings dimmerSettings) {
+    super(id, DimmerSettings.class, ofModelObject(dimmerSettings), fromComponentClass(AbstractSemanticUIDimmer.class));
+  }
 
-    @Override
-    protected final void onInitializeContainer() {
-        add(new SemanticUIDimmerContainer("dimmer-container", getComponentModel().get()) {
-            @Override
-            protected void onInitializeContainer() {
-                add(new DimmerContent("content-section") {
-                    @Override
-                    protected void onInitializeContainer() {
-                        onInitializeContent(this, "content-block");
-                    }
-                });
-            }
+  @Override
+  protected final void onInitializeContainer() {
+    add(new SemanticUIDimmerContainer("dimmer-container", getComponentModel().get()) {
+      @Override
+      protected void onInitializeContainer() {
+        add(new DimmerContent("content-section") {
+          @Override
+          protected void onInitializeContainer() {
+            onInitializeContent(this, "content-block");
+          }
         });
-    }
+      }
+    });
+  }
 
-    protected void onInitializeContent(DimmerContent dimmerContent, String contentId) {}
+  protected void onInitializeContent(DimmerContent dimmerContent, String contentId) {
+  }
 
-    @VueComponentFunction
-    public final void show(BlockBuilder body) {
-        body.appendStatement(expressionStatement(
-                functionCall()
-                        .target(semanticDimmer())
-                        .argument(stringLiteral("show"))
-        ));
-    }
+  @VueComponentFunction
+  public final void show(BlockBuilder body) {
+    body.appendStatement(expressionStatement(
+            functionCall()
+                    .target(semanticDimmer())
+                    .argument(stringLiteral("show"))
+    ));
+  }
 
-    @VueComponentFunction
-    public final void hide(BlockBuilder body) {
-        body.appendStatement(expressionStatement(
-                functionCall()
-                        .target(semanticDimmer())
-                        .argument(stringLiteral("hide"))
-        ));
-    }
+  @VueComponentFunction
+  public final void hide(BlockBuilder body) {
+    body.appendStatement(expressionStatement(
+            functionCall()
+                    .target(semanticDimmer())
+                    .argument(stringLiteral("hide"))
+    ));
+  }
 
-    @OnVueMounted
-    public final void initializeDimmer(BlockBuilder body) {
-        body.appendStatement(expressionStatement(
-                functionCall()
-                        .target(semanticDimmer())
-                        .argument(objectLiteral())
-        ));
-    }
+  @OnVueMounted
+  public final void initializeDimmer(BlockBuilder body) {
+    body.appendStatement(expressionStatement(
+            functionCall()
+                    .target(semanticDimmer())
+                    .argument(objectLiteral())
+    ));
+  }
 
-    private PropertyNameBuilder semanticDimmer() {
-        return property(
-                functionCall()
-                        .target(name("$"))
-                        .argument(property(thisLiteral(), name("$el"))),
-                name("dimmer")
-        );
-    }
+  private PropertyNameBuilder semanticDimmer() {
+    return property(
+            functionCall()
+                    .target(name("$"))
+                    .argument(property(thisLiteral(), name("$el"))),
+            name("dimmer")
+    );
+  }
 
-    @Override
-    public SemanticUIDimmerAPI api(ComponentFunctionCallback componentFunctionCallback) {
-        return new SemanticUIDimmerAPI(this, componentFunctionCallback);
-    }
+  @Override
+  public SemanticUIDimmerAPI api(ComponentFunctionCallback componentFunctionCallback) {
+    return new SemanticUIDimmerAPI(this, componentFunctionCallback);
+  }
 }

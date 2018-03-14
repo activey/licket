@@ -27,70 +27,73 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  */
 public abstract class AbstractLicketActionLink<T> extends AbstractLicketComponent<T> {
 
-    public AbstractLicketActionLink(String id, Class<T> modelClass) {
-        super(id, modelClass, emptyComponentModel(), internalTemplateView());
+  public AbstractLicketActionLink(String id, Class<T> modelClass) {
+    super(id, modelClass, emptyComponentModel(), internalTemplateView());
+  }
+
+  @VueComponentFunction
+  public final void afterClick(@Name("response") NameBuilder response, BlockBuilder functionBody) {
+    ComponentActionCallback componentActionCallback = new ComponentActionCallback();
+
+    // invoking post action callback
+    onAfterClick(componentActionCallback);
+
+    // creating all after-click statements
+    componentActionCallback.forEachCall(call -> functionBody.appendStatement(
+            expressionStatement(call)
+    ));
+
+    // sending reload request for gathered components
+    componentActionCallback.forEachToBeReloaded((component, patch) -> functionBody.appendStatement(expressionStatement(callReloadComponent(component, patch))));
+  }
+
+  @VueComponentFunction
+  public final void handleClick(BlockBuilder functionBlock) {
+    ComponentFunctionCallback callback = new ComponentFunctionCallback();
+    onBeforeClick(callback);
+    callback.forEachCall(call -> functionBlock.appendStatement(
+            expressionStatement(call)
+    ));
+
+    FunctionCallBuilder functionCall = functionCall()
+            .target(property(property(thisLiteral(), LicketRemote.serviceName()), name("handleActionLinkClick")))
+            .argument(stringLiteral(getCompositeId().getValue()));
+    decorateActionLinkModel(functionCall);
+    functionCall.argument(property(thisLiteral(), name("afterClick")));
+    functionBlock.appendStatement(expressionStatement(functionCall));
+  }
+
+  private void decorateActionLinkModel(FunctionCallBuilder functionCallBuilder) {
+    if (getComponentModelClass().isAssignableFrom(Void.class)) {
+      functionCallBuilder.argument(objectLiteral());
+      return;
     }
-
-    @VueComponentFunction
-    public final void afterClick(@Name("response") NameBuilder response, BlockBuilder functionBody) {
-        ComponentActionCallback componentActionCallback = new ComponentActionCallback();
-
-        // invoking post action callback
-        onAfterClick(componentActionCallback);
-
-        // creating all after-click statements
-        componentActionCallback.forEachCall(call -> functionBody.appendStatement(
-                expressionStatement(call)
-        ));
-
-        // sending reload request for gathered components
-        componentActionCallback.forEachToBeReloaded((component, patch) -> functionBody.appendStatement(expressionStatement(callReloadComponent(component, patch))));
-    }
-
-    @VueComponentFunction
-    public final void handleClick(BlockBuilder functionBlock) {
-        ComponentFunctionCallback callback = new ComponentFunctionCallback();
-        onBeforeClick(callback);
-        callback.forEachCall(call -> functionBlock.appendStatement(
-                expressionStatement(call)
-        ));
-
-        FunctionCallBuilder functionCall = functionCall()
-                .target(property(property(thisLiteral(), LicketRemote.serviceName()), name("handleActionLinkClick")))
-                .argument(stringLiteral(getCompositeId().getValue()));
-        decorateActionLinkModel(functionCall);
-        functionCall.argument(property(thisLiteral(), name("afterClick")));
-        functionBlock.appendStatement(expressionStatement(functionCall));
-    }
-
-    private void decorateActionLinkModel(FunctionCallBuilder functionCallBuilder) {
-        if (getComponentModelClass().isAssignableFrom(Void.class)) {
-            functionCallBuilder.argument(objectLiteral());
-            return;
-        }
         /*
           TODO if link model class is different than Void we just read parent component model data and send it over,
           maybe it should be more sophisticated
           */
-        functionCallBuilder.argument(property(property("this", "$parent"), "model"));
-    }
+    functionCallBuilder.argument(property(property("this", "$parent"), "model"));
+  }
 
-    @Override
-    protected final void onBeforeRender(ComponentRenderingContext renderingContext) {
-        // basically invokeAction() should handle all the stuff, the rest is done on javascript level
-        renderingContext
+  @Override
+  protected final void onBeforeRender(ComponentRenderingContext renderingContext) {
+    // basically invokeAction() should handle all the stuff, the rest is done on javascript level
+    renderingContext
             .onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("v-on:click", "handleClick"));
-    }
+  }
 
-    @SuppressWarnings("unused")
-    public final void invokeAction(T modelObject, ComponentActionCallback componentActionCallback) {
-        onClick(modelObject);
-        onAfterClick(componentActionCallback);
-    }
+  @SuppressWarnings("unused")
+  public final void invokeAction(T modelObject, ComponentActionCallback componentActionCallback) {
+    onClick(modelObject);
+    onAfterClick(componentActionCallback);
+  }
 
-    protected void onClick(T modelObject) {}
+  protected void onClick(T modelObject) {
+  }
 
-    protected void onAfterClick(ComponentActionCallback componentActionCallback) {}
+  protected void onAfterClick(ComponentActionCallback componentActionCallback) {
+  }
 
-    protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {}
+  protected void onBeforeClick(ComponentFunctionCallback componentFunctionCallback) {
+  }
 }

@@ -5,22 +5,22 @@ package org.licket.semantic.component.modal;
  */
 public class ModalSettings {
 
-    private boolean showActions;
-    private boolean closeable;
+  private boolean showActions;
+  private boolean closeable;
 
-    public boolean isShowActions() {
-        return showActions;
-    }
+  public boolean isShowActions() {
+    return showActions;
+  }
 
-    public void setShowActions(boolean showActions) {
-        this.showActions = showActions;
-    }
+  public void setShowActions(boolean showActions) {
+    this.showActions = showActions;
+  }
 
-    public boolean isCloseable() {
-        return closeable;
-    }
+  public boolean isCloseable() {
+    return closeable;
+  }
 
-    public void setCloseable(boolean closeable) {
-        this.closeable = closeable;
-    }
+  public void setCloseable(boolean closeable) {
+    this.closeable = closeable;
+  }
 }

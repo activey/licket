@@ -7,20 +7,20 @@ import org.mozilla.javascript.ast.Name;
  */
 public class NameBuilder extends AbstractAstNodeBuilder<Name> {
 
-    private String identifier;
+  private String identifier;
 
-    private NameBuilder(String identifier) {
-        this.identifier = identifier;
-    }
+  private NameBuilder(String identifier) {
+    this.identifier = identifier;
+  }
 
-    public static NameBuilder name(String identifier) {
-        return new NameBuilder(identifier);
-    }
+  public static NameBuilder name(String identifier) {
+    return new NameBuilder(identifier);
+  }
 
-    @Override
-    public Name build() {
-        Name name = new Name();
-        name.setIdentifier(identifier);
-        return name;
-    }
+  @Override
+  public Name build() {
+    Name name = new Name();
+    name.setIdentifier(identifier);
+    return name;
+  }
 }

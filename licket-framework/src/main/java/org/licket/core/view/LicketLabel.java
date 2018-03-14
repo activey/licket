@@ -1,57 +1,38 @@
 package org.licket.core.view;
 
-import static java.lang.String.format;
-
-import org.licket.core.model.ComponentIdModel;
-import org.licket.core.model.LicketComponentModel;
-import org.licket.core.view.container.AbstractLicketMultiContainer;
+import org.licket.core.view.hippo.ComponentModelProperty;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.licket.xml.dom.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
+import static java.lang.String.format;
+import static org.licket.core.model.LicketComponentModel.ofModelObject;
 
-public class LicketLabel extends AbstractLicketComponent<String> {
+public class LicketLabel extends AbstractLicketComponent<ComponentModelProperty> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LicketLabel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LicketLabel.class);
 
-    public LicketLabel(String id) {
-        this(id, new ComponentIdModel(id));
-    }
+  public LicketLabel(String id) {
+    this(id, ComponentModelProperty.fromComponentModelProperty(id));
+  }
 
-    /**
-     *
-     * @param id Label component id, unique on given tree level (or at least should be ;P)
-     * @param labelModel Label placeholder model. Keep that in very mind: this model, typed on String, is intended to be
-     * used as a placeholder generator for hippo one-way binding as placeholder is generated upon this schema:
-     *
-     * <code>
-     *  {{%s}}.format(componentModel.get())
-     * </code>
-     *
-     * Thats it no other logic behind.
-     */
-    public LicketLabel(String id, LicketComponentModel<String> labelModel) {
-        super(id, String.class, labelModel);
-    }
+  public LicketLabel(String id, ComponentModelProperty modelLabelProperty) {
+    super(id, ComponentModelProperty.class, ofModelObject(modelLabelProperty));
+  }
 
-    @Override
-    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
-        LOGGER.trace("Rendering LicketLabel: [{}]", getId());
-        renderingContext.onSurfaceElement(element -> {
-            // clearing out whole label content
-            element.removeChildren();
-            // setting up label value template
-            element.appendChildElement(new Text(placeholder()));
-        });
-    }
+  @Override
+  protected final void onBeforeRender(ComponentRenderingContext renderingContext) {
+    LOGGER.trace("Rendering LicketLabel: [{}]", getId());
+    onBeforeLabelRender(renderingContext);
+    renderingContext.onSurfaceElement(element -> {
+      // clearing out whole label content
+      element.removeChildren();
+      // setting up label value template
+      element.appendChildElement(new Text(format("{{%s}}", getComponentModel().get().builder().build().toSource())));
+    });
+  }
 
-    private String placeholder() {
-        Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketMultiContainer);
-        if (parent != null) {
-            return format("{{model.%s}}", getComponentModel().get());
-        }
-        return format("{{%s}}", getComponentModel().get());
-    }
+  protected void onBeforeLabelRender(ComponentRenderingContext renderingContext) {
+  }
 }

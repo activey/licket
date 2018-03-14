@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ResourcePluginConfiguration {
 
-    @Bean
-    public HeadParticipatingResource resourcePluginResource() {
-        return new ResourcePluginResource();
-    }
+  @Bean
+  public HeadParticipatingResource resourcePluginResource() {
+    return new ResourcePluginResource();
+  }
 
-    @Bean
-    public HttpCommunicationService httpCommunicationService() {
-        return new HttpCommunicationService();
-    }
+  @Bean
+  public HttpCommunicationService httpCommunicationService() {
+    return new HttpCommunicationService();
+  }
 }

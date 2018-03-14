@@ -9,36 +9,37 @@ import static org.mozilla.javascript.Token.ASSIGN;
  */
 public class AssignmentBuilder extends AbstractAstNodeBuilder<Assignment> {
 
-    private AbstractAstNodeBuilder<?> left;
-    private AbstractAstNodeBuilder<?> right;
+  private AbstractAstNodeBuilder<?> left;
+  private AbstractAstNodeBuilder<?> right;
 
-    private AssignmentBuilder() {}
+  private AssignmentBuilder() {
+  }
 
-    public static AssignmentBuilder assignment() {
-        return new AssignmentBuilder();
-    }
+  public static AssignmentBuilder assignment() {
+    return new AssignmentBuilder();
+  }
 
-    public AssignmentBuilder left(NameBuilder nameBuilder) {
-        this.left = nameBuilder;
-        return this;
-    }
+  public AssignmentBuilder left(NameBuilder nameBuilder) {
+    this.left = nameBuilder;
+    return this;
+  }
 
-    public AssignmentBuilder left(PropertyNameBuilder propertyNameBuilder) {
-        this.left = propertyNameBuilder;
-        return this;
-    }
+  public AssignmentBuilder left(PropertyNameBuilder propertyNameBuilder) {
+    this.left = propertyNameBuilder;
+    return this;
+  }
 
-    public AssignmentBuilder right(AbstractAstNodeBuilder<?> nodeBuilder) {
-        this.right = nodeBuilder;
-        return this;
-    }
+  public AssignmentBuilder right(AbstractAstNodeBuilder<?> nodeBuilder) {
+    this.right = nodeBuilder;
+    return this;
+  }
 
-    @Override
-    public Assignment build() {
-        Assignment assignment = new Assignment();
-        assignment.setLeft(left.build());
-        assignment.setRight(right.build());
-        assignment.setOperator(ASSIGN);
-        return assignment;
-    }
+  @Override
+  public Assignment build() {
+    Assignment assignment = new Assignment();
+    assignment.setLeft(left.build());
+    assignment.setRight(right.build());
+    assignment.setOperator(ASSIGN);
+    return assignment;
+  }
 }

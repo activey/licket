@@ -10,23 +10,24 @@ import java.util.List;
  */
 public class VariableDeclarationBuilder extends AbstractAstNodeBuilder<VariableDeclaration> {
 
-    private List<VariableInitializerBuilder> variableInitializers = new ArrayList<>();
+  private List<VariableInitializerBuilder> variableInitializers = new ArrayList<>();
 
-    private VariableDeclarationBuilder() {}
+  private VariableDeclarationBuilder() {
+  }
 
-    public static VariableDeclarationBuilder variableDeclaration() {
-        return new VariableDeclarationBuilder();
-    }
+  public static VariableDeclarationBuilder variableDeclaration() {
+    return new VariableDeclarationBuilder();
+  }
 
-    public VariableDeclarationBuilder variable(VariableInitializerBuilder variableInitializer) {
-        variableInitializers.add(variableInitializer);
-        return this;
-    }
+  public VariableDeclarationBuilder variable(VariableInitializerBuilder variableInitializer) {
+    variableInitializers.add(variableInitializer);
+    return this;
+  }
 
-    @Override
-    public VariableDeclaration build() {
-        VariableDeclaration variableDeclaration = new VariableDeclaration();
-        variableInitializers.forEach(variable -> variableDeclaration.addVariable(variable.build()));
-        return variableDeclaration;
-    }
+  @Override
+  public VariableDeclaration build() {
+    VariableDeclaration variableDeclaration = new VariableDeclaration();
+    variableInitializers.forEach(variable -> variableDeclaration.addVariable(variable.build()));
+    return variableDeclaration;
+  }
 }

@@ -11,6 +11,9 @@ import java.util.function.Function;
 public class LicketComponentInfo {
 
   private List<LicketComponentInfo> children;
+  private String id;
+  private String compositeId;
+  private String className;
 
   public static Function<LicketComponent<?>, LicketComponentInfo> fromComponentInstance() {
     return licketComponent -> {
@@ -21,10 +24,6 @@ public class LicketComponentInfo {
       return componentInfo;
     };
   }
-
-  private String id;
-  private String compositeId;
-  private String className;
 
   public String getId() {
     return id;
@@ -50,11 +49,11 @@ public class LicketComponentInfo {
     this.className = className;
   }
 
-  public void setChildren(List<LicketComponentInfo> children) {
-    this.children = children;
-  }
-
   public List<LicketComponentInfo> getChildren() {
     return children;
+  }
+
+  public void setChildren(List<LicketComponentInfo> children) {
+    this.children = children;
   }
 }

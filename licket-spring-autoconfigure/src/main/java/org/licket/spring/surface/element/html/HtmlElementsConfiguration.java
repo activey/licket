@@ -17,39 +17,39 @@ import static org.licket.spring.surface.element.html.SpringAutowiredElementProvi
 @Configuration
 public class HtmlElementsConfiguration {
 
-    @Bean
-    @RequestScope
-    public ElementFactory elementFactory() {
-        return new HtmlElementFactory();
-    }
+  @Bean
+  @RequestScope
+  public ElementFactory elementFactory() {
+    return new HtmlElementFactory();
+  }
 
-    @Bean
-    @RequestScope
-    public ElementProvider headElement() {
-        return provideElement("head", (name) -> new HeadElement(name));
-    }
+  @Bean
+  @RequestScope
+  public ElementProvider headElement() {
+    return provideElement("head", (name) -> new HeadElement(name));
+  }
 
-    @Bean
-    @RequestScope
-    public ElementProvider inputElement() {
-        return provideElement("input", (name) -> new InputElement(name));
-    }
+  @Bean
+  @RequestScope
+  public ElementProvider inputElement() {
+    return provideElement("input", (name) -> new InputElement(name));
+  }
 
-    @Bean
-    @RequestScope
-    public ElementProvider bodyElement() {
-        return provideElement("body", (name) -> new BodyElement(name));
-    }
+  @Bean
+  @RequestScope
+  public ElementProvider bodyElement() {
+    return provideElement("body", (name) -> new BodyElement(name));
+  }
 
-    @Bean(name = "default")
-    @RequestScope
-    public ElementProvider defaultElement() {
-        return provideElement("default-licket-element", (name) -> new DefaultHtmlElement(name));
-    }
+  @Bean(name = "default")
+  @RequestScope
+  public ElementProvider defaultElement() {
+    return provideElement("default-licket-element", (name) -> new DefaultHtmlElement(name));
+  }
 
-    @Bean
-    @RequestScope
-    public AttributeProvider idAttribute() {
-        return provideAttribute("id", (name) -> new IdAttribute(name));
-    }
+  @Bean
+  @RequestScope
+  public AttributeProvider idAttribute() {
+    return provideAttribute("id", (name) -> new IdAttribute(name));
+  }
 }

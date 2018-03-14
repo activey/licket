@@ -9,33 +9,33 @@ import static org.licket.spring.surface.element.html.HtmlElementFactory.HTML_NAM
  */
 public class LinkElement extends SurfaceElement {
 
-    public LinkElement() {
-        super("link", HTML_NAMESPACE);
+  public LinkElement() {
+    super("link", HTML_NAMESPACE);
+  }
+
+  public void setRelType(LinkRelType relType) {
+    addAttribute("rel", relType.getTypeValue());
+  }
+
+  public void setType(String mimetype) {
+    addAttribute("type", mimetype);
+  }
+
+  public void setHref(String href) {
+    addAttribute("href", href);
+  }
+
+  public enum LinkRelType {
+    STYLESHEET("stylesheet");
+
+    private final String typeValue;
+
+    LinkRelType(String typeValue) {
+      this.typeValue = typeValue;
     }
 
-    public void setRelType(LinkRelType relType) {
-        addAttribute("rel", relType.getTypeValue());
+    public String getTypeValue() {
+      return typeValue;
     }
-
-    public void setType(String mimetype) {
-        addAttribute("type", mimetype);
-    }
-
-    public void setHref(String href) {
-        addAttribute("href", href);
-    }
-
-    public enum LinkRelType {
-        STYLESHEET("stylesheet");
-
-        private final String typeValue;
-
-        LinkRelType(String typeValue) {
-            this.typeValue = typeValue;
-        }
-
-        public String getTypeValue() {
-            return typeValue;
-        }
-    }
+  }
 }

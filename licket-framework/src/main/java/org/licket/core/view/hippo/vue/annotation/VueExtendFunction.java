@@ -1,11 +1,11 @@
 package org.licket.core.view.hippo.vue.annotation;
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author activey
@@ -16,5 +16,5 @@ import java.lang.annotation.Target;
 @SuppressWarnings("unused")
 public @interface VueExtendFunction {
 
-    String value() default "";
+  String value() default "";
 }

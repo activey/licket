@@ -16,37 +16,37 @@ import java.util.function.Supplier;
  */
 public class ComponentTemplateCompiler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentTemplateCompiler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComponentTemplateCompiler.class);
 
-    private Supplier<LicketComponent<?>> componentSupplier;
+  private Supplier<LicketComponent<?>> componentSupplier;
 
-    public ComponentTemplateCompiler(Supplier<LicketComponent<?>> componentSupplier) {
-        this.componentSupplier = componentSupplier;
+  public ComponentTemplateCompiler(Supplier<LicketComponent<?>> componentSupplier) {
+    this.componentSupplier = componentSupplier;
+  }
+
+  public Document compileDocument(SurfaceContext surfaceContext) {
+    LicketComponent<?> component = componentSupplier.get();
+    if (component == null) {
+      LOGGER.warn("Unable to find component.");
+      // TODO return empty Document?
     }
+    LicketComponentView componentView = component.getView();
+    return surfaceContext.processTemplateContent(componentView.viewResource().getStream());
+  }
 
-    public Document compileDocument(SurfaceContext surfaceContext) {
-        LicketComponent<?> component = componentSupplier.get();
-        if (component == null) {
-            LOGGER.warn("Unable to find component.");
-            // TODO return empty Document?
-        }
-        LicketComponentView componentView = component.getView();
-        return surfaceContext.processTemplateContent(componentView.viewResource().getStream());
+  public byte[] compile(SurfaceContext surfaceContext) {
+    LicketComponent<?> component = componentSupplier.get();
+    if (component == null) {
+      LOGGER.warn("Unable to find component.");
+      // TODO return empty byte array?
     }
+    LicketComponentView componentView = component.getView();
+    return compileComponentTemplate(componentView.viewResource(), surfaceContext).toByteArray();
+  }
 
-    public byte[] compile(SurfaceContext surfaceContext) {
-        LicketComponent<?> component = componentSupplier.get();
-        if (component == null) {
-            LOGGER.warn("Unable to find component.");
-            // TODO return empty byte array?
-        }
-        LicketComponentView componentView = component.getView();
-        return compileComponentTemplate(componentView.viewResource(), surfaceContext).toByteArray();
-    }
-
-    private ByteArrayOutputStream compileComponentTemplate(Resource componentViewResource, SurfaceContext surfaceContext) {
-        ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-        surfaceContext.processTemplateContent(componentViewResource.getStream(), byteArrayStream);
-        return byteArrayStream;
-    }
+  private ByteArrayOutputStream compileComponentTemplate(Resource componentViewResource, SurfaceContext surfaceContext) {
+    ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
+    surfaceContext.processTemplateContent(componentViewResource.getStream(), byteArrayStream);
+    return byteArrayStream;
+  }
 }

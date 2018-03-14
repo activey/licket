@@ -14,28 +14,27 @@ import static org.licket.demo.model.Contacts.fromIterable;
  */
 public class ContactsPanel extends AbstractLicketMultiContainer<Contacts> {
 
-    @Autowired
-    private ContactsList contactsList;
+  @Autowired
+  private ContactsList contactsList;
 
-    @Autowired
-    private ContactsService contactsService;
+  @Autowired
+  private ContactsService contactsService;
 
-    public ContactsPanel(String id) {
-        super(id, Contacts.class, emptyComponentModel(), internalTemplateView());
-    }
+  public ContactsPanel(String id) {
+    super(id, Contacts.class, emptyComponentModel(), internalTemplateView());
+  }
 
-    @Override
-    protected void onInitializeContainer() {
-        add(contactsList);
+  @Override
+  protected void onInitializeContainer() {
+    add(contactsList);
+    readContacts();
+  }
 
-        readContacts();
-    }
+  private void readContacts() {
+    setComponentModelObject(fromIterable(contactsService.getAllContacts()));
+  }
 
-    private void readContacts() {
-        setComponentModelObject(fromIterable(contactsService.getAllContacts()));
-    }
-
-    public void reloadList() {
-        readContacts();
-    }
+  public void reloadList() {
+    readContacts();
+  }
 }

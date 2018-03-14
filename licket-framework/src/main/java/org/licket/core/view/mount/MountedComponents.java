@@ -11,6 +11,7 @@ public interface MountedComponents {
 
   /**
    * Returns mount point mapping with respect to Vue parametersFormat. Basically it converts /mountedComponent/{variable} format into /mountedComponent/:variable
+   *
    * @param licketComponentClass Component class to render mount mountedComponent to
    * @return String value in format /mountedComponent/:variable
    */

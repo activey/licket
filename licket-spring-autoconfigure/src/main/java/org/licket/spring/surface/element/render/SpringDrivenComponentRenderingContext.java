@@ -12,7 +12,6 @@ import org.licket.surface.element.SurfaceElement;
 import org.licket.surface.tag.ElementFactories;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.InputStream;
 import java.util.function.Consumer;
 
 import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
@@ -22,13 +21,11 @@ import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
  */
 public class SpringDrivenComponentRenderingContext implements ComponentRenderingContext {
 
+  private final SurfaceElement surfaceElement;
   @Autowired
   private ResourceStorage resourcesStorage;
-
   @Autowired
   private ElementFactories surfaceElementFactories;
-
-  private final SurfaceElement surfaceElement;
 
   SpringDrivenComponentRenderingContext(SurfaceElement surfaceElement) {
     this.surfaceElement = surfaceElement;

@@ -6,6 +6,9 @@
   "dependencies": {
     "vue": "2.3.4",
     "vue-router": "2.6.0",
-    "vue-resource": "1.0.3"
+    "vue-resource": "1.0.3",
+    "vue-cookie": "1.1.4",
+    "sockjs-client": "1.1.4",
+    "stompjs": "2.3.3"
   }
 }

@@ -10,8 +10,8 @@ import static com.flipkart.zjsonpatch.JsonDiff.asJson;
  */
 public final class LicketComponentModelPatch<T> {
 
-  private ObjectMapper objectMapper = new ObjectMapper();
   private final JsonNode jsonPatch;
+  private ObjectMapper objectMapper = new ObjectMapper();
 
   public LicketComponentModelPatch(T oldValue, T newValue) {
     jsonPatch = asJson(objectMapper.valueToTree(oldValue), objectMapper.valueToTree(newValue));

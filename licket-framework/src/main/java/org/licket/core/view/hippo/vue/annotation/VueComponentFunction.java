@@ -17,7 +17,7 @@ import static org.licket.core.view.hippo.vue.annotation.VueComponentFunctionPred
 @SuppressWarnings("unused")
 public @interface VueComponentFunction {
 
-    String value() default "";
+  String value() default "";
 
-    VueComponentFunctionPredicate[] predicates() default { ANY };
+  VueComponentFunctionPredicate[] predicates() default {ANY};
 }

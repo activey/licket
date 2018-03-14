@@ -1,8 +1,8 @@
 package org.licket.semantic.component.modal;
 
+import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.api.AbstractLicketComponentAPI;
-import org.licket.core.view.ComponentFunctionCallback;
 
 import static org.licket.core.view.tree.LicketComponentTreeWalkSequence.source;
 import static org.licket.framework.hippo.FunctionCallBuilder.functionCall;

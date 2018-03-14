@@ -7,5 +7,5 @@ import org.licket.framework.hippo.PropertyNameBuilder;
  */
 public interface VuePlugin {
 
-    PropertyNameBuilder vueName();
+  PropertyNameBuilder vueName();
 }

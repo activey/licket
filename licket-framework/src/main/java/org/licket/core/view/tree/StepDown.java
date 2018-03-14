@@ -12,12 +12,12 @@ import static org.licket.framework.hippo.PropertyNameBuilder.property;
  */
 public class StepDown extends AbstractStep {
 
-    public StepDown(String childId) {
-        super(childId);
-    }
+  public StepDown(String childId) {
+    super(childId);
+  }
 
-    @Override
-    protected ArrayElementGetBuilder decorate(AbstractAstNodeBuilder<?> step, String componentId) {
-        return arrayElementGet().target(property(step, name("$refs"))).element(componentId);
-    }
+  @Override
+  protected ArrayElementGetBuilder decorate(AbstractAstNodeBuilder<?> step, String componentId) {
+    return arrayElementGet().target(property(step, name("$refs"))).element(componentId);
+  }
 }

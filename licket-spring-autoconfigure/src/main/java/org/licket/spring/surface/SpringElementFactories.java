@@ -12,11 +12,11 @@ import java.util.Optional;
  */
 public class SpringElementFactories implements ElementFactories {
 
-    @Autowired
-    private Collection<ElementFactory> elementFactories;
+  @Autowired
+  private Collection<ElementFactory> elementFactories;
 
-    @Override
-    public Optional<ElementFactory> getElementFactoryByNamespace(String namespace) {
-        return elementFactories.stream().filter(factory -> factory.matchesNamespace(namespace)).findFirst();
-    }
+  @Override
+  public Optional<ElementFactory> getElementFactoryByNamespace(String namespace) {
+    return elementFactories.stream().filter(factory -> factory.matchesNamespace(namespace)).findFirst();
+  }
 }

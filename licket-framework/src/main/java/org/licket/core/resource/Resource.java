@@ -7,5 +7,5 @@ import java.io.InputStream;
  */
 public interface Resource extends ResourceHeader {
 
-    InputStream getStream();
+  InputStream getStream();
 }

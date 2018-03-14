@@ -7,5 +7,5 @@ import org.licket.xml.dom.Node;
  */
 public interface NodeSupplier<T extends Node> {
 
-    T get(String name);
+  T get(String name);
 }

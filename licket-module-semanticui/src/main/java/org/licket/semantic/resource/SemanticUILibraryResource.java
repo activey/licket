@@ -8,7 +8,7 @@ import org.licket.core.resource.javascript.JavascriptStaticResource;
  */
 public class SemanticUILibraryResource extends JavascriptStaticResource implements HeadParticipatingResource {
 
-    public SemanticUILibraryResource() {
-        super("vue-semantic.js", "js/vue-semantic.js");
-    }
+  public SemanticUILibraryResource() {
+    super("vue-semantic.js", "js/vue-semantic.js");
+  }
 }

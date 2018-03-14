@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
 import static org.licket.core.model.LicketComponentModel.ofModelObject;
-import static org.licket.core.model.LicketComponentModel.ofString;
 import static org.licket.core.view.LicketComponentView.fromComponentClass;
 import static org.licket.core.view.LicketComponentView.internalTemplateView;
+import static org.licket.core.view.hippo.ComponentModelProperty.fromComponentModelProperty;
 
 /**
  * @author lukaszgrabski
@@ -46,7 +46,7 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
       protected void onInitializeContainer() {
         add(new LicketLabel("name"));
         add(new LicketLabel("description"));
-        add(new AbstractLicketList("email", ofString("emails")) {
+        add(new AbstractLicketList("email", fromComponentModelProperty("emails")) {
 
           @Override
           protected void onInitializeContainer() {

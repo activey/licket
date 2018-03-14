@@ -16,30 +16,32 @@ import org.springframework.core.annotation.Order;
 @Configuration
 public class ApplicationModulePluginConfiguration {
 
-    @Bean
-    public VuePlugin applicationModulePlugin(@Autowired HttpCommunicationService httpCommunicationService) {
-        return new ApplicationModulePlugin(communicationService(httpCommunicationService), modelReloader());
-    }
+  @Bean
+  public VuePlugin applicationModulePlugin(@Autowired HttpCommunicationService httpCommunicationService) {
+    return new ApplicationModulePlugin();
+  }
 
-    @Bean
-    public LicketRemote communicationService(@Autowired HttpCommunicationService httpService) {
-        return new LicketRemote(httpService);
-    }
+  @Bean
+  public LicketRemote licketRemote(@Autowired HttpCommunicationService httpService) {
+    return new LicketRemote(httpService);
+  }
 
-    @Bean
-    public LicketComponentModelReloader modelReloader() {
-        return new LicketComponentModelReloader();
-    }
+  @Bean
+  public LicketComponentModelReloader modelReloader() {
+    return new LicketComponentModelReloader();
+  }
 
-    @Bean
-    @Order(1)
-    public HeadParticipatingResource applicationEventHubResource() {
-        return new ApplicationEventHubResource();
-    }
 
-    @Bean
-    @Order(2)
-    public HeadParticipatingResource applicationModulePluginResource() {
-        return new ApplicationModulePluginResource();
-    }
+  @Bean
+  @Order(1)
+  public HeadParticipatingResource applicationEventHubResource() {
+    return new ApplicationEventHubResource();
+  }
+
+  @Bean
+  @Order(2)
+  public HeadParticipatingResource applicationModulePluginResource() {
+    return new ApplicationModulePluginResource();
+  }
+
 }

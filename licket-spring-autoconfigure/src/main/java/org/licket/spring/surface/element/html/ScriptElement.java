@@ -10,16 +10,16 @@ import static org.licket.spring.surface.element.html.HtmlElementFactory.HTML_NAM
  */
 public class ScriptElement extends Element {
 
-    public ScriptElement() {
-        super("script", HTML_NAMESPACE);
-    }
+  public ScriptElement() {
+    super("script", HTML_NAMESPACE);
+  }
 
-    public void setSrc(String src) {
-        addAttribute(new Attribute("src", getNamespace(), src));
-    }
+  public void setSrc(String src) {
+    addAttribute(new Attribute("src", getNamespace(), src));
+  }
 
-    @Override
-    protected boolean writeEmpty() {
-        return true;
-    }
+  @Override
+  protected boolean writeEmpty() {
+    return true;
+  }
 }

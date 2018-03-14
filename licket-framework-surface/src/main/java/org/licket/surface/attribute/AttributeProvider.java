@@ -5,21 +5,21 @@ package org.licket.surface.attribute;
  */
 public interface AttributeProvider {
 
-    String getLocalName();
+  static AttributeProvider empty(String localName) {
+    return new AttributeProvider() {
+      @Override
+      public String getLocalName() {
+        return localName;
+      }
 
-    BaseAttribute provideAttribute();
+      @Override
+      public BaseAttribute provideAttribute() {
+        return null;
+      }
+    };
+  }
 
-    static AttributeProvider empty(String localName) {
-        return new AttributeProvider() {
-            @Override
-            public String getLocalName() {
-                return localName;
-            }
+  String getLocalName();
 
-            @Override
-            public BaseAttribute provideAttribute() {
-                return null;
-            }
-        };
-    }
+  BaseAttribute provideAttribute();
 }

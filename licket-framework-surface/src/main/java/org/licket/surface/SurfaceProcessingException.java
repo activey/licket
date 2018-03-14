@@ -9,15 +9,15 @@ import java.io.IOException;
  */
 public class SurfaceProcessingException extends RuntimeException {
 
-    private SurfaceProcessingException(Throwable cause) {
-        super(cause);
-    }
+  private SurfaceProcessingException(Throwable cause) {
+    super(cause);
+  }
 
-    public static SurfaceProcessingException contentParsingException(ParsingException parsingException) {
-        return new SurfaceProcessingException(parsingException);
-    }
+  public static SurfaceProcessingException contentParsingException(ParsingException parsingException) {
+    return new SurfaceProcessingException(parsingException);
+  }
 
-    public static SurfaceProcessingException ioException(IOException ioException) {
-        return new SurfaceProcessingException(ioException);
-    }
+  public static SurfaceProcessingException ioException(IOException ioException) {
+    return new SurfaceProcessingException(ioException);
+  }
 }

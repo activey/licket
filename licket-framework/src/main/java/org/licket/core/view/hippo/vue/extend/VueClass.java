@@ -1,6 +1,5 @@
 package org.licket.core.view.hippo.vue.extend;
 
-import org.licket.core.LicketApplication;
 import org.licket.framework.hippo.NameBuilder;
 
 /**
@@ -8,6 +7,5 @@ import org.licket.framework.hippo.NameBuilder;
  */
 public interface VueClass {
 
-    NameBuilder vueName();
-
+  NameBuilder vueName();
 }

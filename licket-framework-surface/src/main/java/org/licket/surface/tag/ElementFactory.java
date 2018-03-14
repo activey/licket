@@ -10,11 +10,11 @@ import java.util.Optional;
  */
 public interface ElementFactory {
 
-    SurfaceElement createDefaultElement(String name);
+  SurfaceElement createDefaultElement(String name);
 
-    Optional<SurfaceElement> createElement(String name);
+  Optional<SurfaceElement> createElement(String name);
 
-    Optional<BaseAttribute> createAttribute(String name);
+  Optional<BaseAttribute> createAttribute(String name);
 
-    boolean matchesNamespace(String namespace);
+  boolean matchesNamespace(String namespace);
 }

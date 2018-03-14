@@ -7,16 +7,16 @@ import org.licket.core.resource.AbstractClasspathResource;
  */
 public class WoffFontResource extends AbstractClasspathResource {
 
-    public static final String FONT_MIMETYPE = "application/font-woff2";
-    private String name;
+  public static final String FONT_MIMETYPE = "application/font-woff2";
+  private String name;
 
-    public WoffFontResource(String name, String classpathLocation) {
-        super(classpathLocation, FONT_MIMETYPE);
-        this.name = name;
-    }
+  public WoffFontResource(String name, String classpathLocation) {
+    super(classpathLocation, FONT_MIMETYPE);
+    this.name = name;
+  }
 
-    @Override
-    public String getName() {
-        return name;
-    }
+  @Override
+  public String getName() {
+    return name;
+  }
 }

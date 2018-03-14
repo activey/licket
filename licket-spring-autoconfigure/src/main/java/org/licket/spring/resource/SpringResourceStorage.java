@@ -16,12 +16,12 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.net.MediaType.CSS_UTF_8;
+import static com.google.common.net.MediaType.JAVASCRIPT_UTF_8;
 import static java.lang.String.format;
 import static java.util.Arrays.stream;
 import static java.util.stream.Stream.concat;
-import static org.licket.core.resource.css.StylesheetResource.CSS_MIMETYPE;
-import static org.licket.core.resource.javascript.JavascriptStaticResource.JAVASCRIPT_MIMETYPE;
-import static org.licket.core.view.LicketUrls.CONTEXT_RESOURCES;
+import static org.licket.core.LicketUrls.CONTEXT_RESOURCES;
 
 /**
  * @author activey
@@ -76,17 +76,17 @@ public class SpringResourceStorage implements ResourceStorage {
 
   @Override
   public Stream<HeadParticipatingResource> getHeadJavascriptResources() {
-    return stream(headParticipatingResources).filter(byMimetype(JAVASCRIPT_MIMETYPE));
+    return stream(headParticipatingResources).filter(byMimetype(JAVASCRIPT_UTF_8.toString()));
   }
 
   @Override
   public Stream<FootParticipatingResource> getFootJavascriptResources() {
-    return stream(footParticipatingResources).filter(byMimetype(JAVASCRIPT_MIMETYPE));
+    return stream(footParticipatingResources).filter(byMimetype(JAVASCRIPT_UTF_8.toString()));
   }
 
   @Override
   public Stream<HeadParticipatingResource> getStylesheetResources() {
-    return stream(headParticipatingResources).filter(byMimetype(CSS_MIMETYPE));
+    return stream(headParticipatingResources).filter(byMimetype(CSS_UTF_8.toString()));
   }
 
   @Override
@@ -96,7 +96,6 @@ public class SpringResourceStorage implements ResourceStorage {
 
   @Override
   public String getResourceUrl(Resource resource) {
-    return format("%s%s/%s", servletContext.getContextPath(), CONTEXT_RESOURCES,
-            resource.getName());
+    return format("%s%s/%s", servletContext.getContextPath(), CONTEXT_RESOURCES, resource.getName());
   }
 }

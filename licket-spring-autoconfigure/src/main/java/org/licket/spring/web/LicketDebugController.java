@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.stream.Collectors.toList;
-import static org.licket.core.view.LicketUrls.CONTEXT_DEBUG;
+import static org.licket.core.LicketUrls.CONTEXT_DEBUG;
 
 /**
  * @author lukaszgrabski
@@ -31,12 +31,14 @@ public class LicketDebugController {
   private LicketApplication licketApplication;
 
   @GetMapping(value = "/resources")
-  public @ResponseBody List<ResourceHeader> resourceHeaderList() {
+  public @ResponseBody
+  List<ResourceHeader> resourceHeaderList() {
     return resourcesStorage.getAllResources().collect(toList());
   }
 
   @GetMapping(value = "/components")
-  public @ResponseBody List<LicketComponentInfo> components() {
+  public @ResponseBody
+  List<LicketComponentInfo> components() {
     List<LicketComponentInfo> components = newArrayList();
     licketApplication.traverseDown(licketComponent -> {
       if (licketComponent.getCompositeId().length() > 1) {

@@ -10,25 +10,25 @@ import java.util.List;
  */
 public class Nodes extends Node {
 
-    private List<Node> nodes = new LinkedList();
+  private List<Node> nodes = new LinkedList();
 
-    public Nodes(Node... nodes) {
-        super("", "", "");
+  public Nodes(Node... nodes) {
+    super("", "", "");
 
-        for (Node node : nodes) {
-            this.nodes.add(node);
-        }
+    for (Node node : nodes) {
+      this.nodes.add(node);
     }
+  }
 
-    public Nodes add(Node node) {
-        nodes.add(node);
-        return this;
-    }
+  public Nodes add(Node node) {
+    nodes.add(node);
+    return this;
+  }
 
-    @Override
-    public void toXML(XMLStreamWriter writer) throws XMLStreamException {
-        for (Node node : nodes) {
-            node.toXML(writer);
-        }
+  @Override
+  public void toXML(XMLStreamWriter writer) throws XMLStreamException {
+    for (Node node : nodes) {
+      node.toXML(writer);
     }
+  }
 }

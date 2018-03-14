@@ -7,5 +7,5 @@ import org.licket.core.view.LicketComponent;
  */
 public interface LicketComponentContainer<T> extends LicketComponent<T> {
 
-    void add(LicketComponent<?> licketComponent);
+  void add(LicketComponent<?> licketComponent);
 }

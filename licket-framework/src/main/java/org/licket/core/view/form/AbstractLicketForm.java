@@ -35,7 +35,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
 
   @SuppressWarnings("unused")
   /**
-   * Executed from within LicketFormConmtro
+   * Executed from within LicketFormController
    */
   public final void submitForm(T formModelObject, ComponentActionCallback actionCallback) {
     setComponentModelObject(formModelObject);
@@ -47,7 +47,7 @@ public abstract class AbstractLicketForm<T> extends AbstractLicketMultiContainer
   }
 
   @Override
-  protected void onRenderContainer(ComponentRenderingContext renderingContext) {
+  protected void onBeforeRenderContainer(ComponentRenderingContext renderingContext) {
     renderingContext.onSurfaceElement(element -> {
       // TODO check if element is in fact a <form>, or not necessary?
       element.addAttribute("v-on:submit", "submitForm");

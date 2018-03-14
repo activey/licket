@@ -13,4 +13,5 @@ import org.springframework.context.annotation.Import;
         ResourcePluginConfiguration.class,
         ApplicationModulePluginConfiguration.class
 })
-public class VuePluginsConfiguration {}
+public class VuePluginsConfiguration {
+}
