@@ -8,23 +8,23 @@ import javax.xml.stream.XMLStreamWriter;
  */
 public class Text extends Element {
 
-    private String text;
+  private String text;
 
-    public Text(String text) {
-        super("", "");
-        this.text = text;
-    }
+  public Text(String text) {
+    super("", "");
+    this.text = text;
+  }
 
-    public String getText() {
-        return text;
-    }
+  public String getText() {
+    return text;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public void setText(String text) {
+    this.text = text;
+  }
 
-    @Override
-    public void toXML(XMLStreamWriter writer) throws XMLStreamException {
-        writer.writeCharacters(text);
-    }
+  @Override
+  public void toXML(XMLStreamWriter writer) throws XMLStreamException {
+    writer.writeCharacters(text);
+  }
 }

@@ -5,9 +5,9 @@ package org.licket.surface.element;
  */
 public interface ElementTraverser {
 
-	static ElementTraverser withComponentIdSet() {
-		return element -> element.isComponentIdSet();
-	}
+  static ElementTraverser withComponentIdSet() {
+    return element -> element.isComponentIdSet();
+  }
 
-	boolean elementMatch(SurfaceElement element);
+  boolean elementMatch(SurfaceElement element);
 }

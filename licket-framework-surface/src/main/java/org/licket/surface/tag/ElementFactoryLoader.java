@@ -7,7 +7,7 @@ import java.util.ServiceLoader;
  */
 public class ElementFactoryLoader {
 
-    public static ServiceLoader<ElementFactory> loader() {
-        return ServiceLoader.load(ElementFactory.class);
-    }
+  public static ServiceLoader<ElementFactory> loader() {
+    return ServiceLoader.load(ElementFactory.class);
+  }
 }

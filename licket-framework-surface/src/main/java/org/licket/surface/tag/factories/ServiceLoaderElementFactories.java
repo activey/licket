@@ -14,18 +14,18 @@ import static org.licket.surface.tag.ElementFactoryLoader.loader;
  */
 public class ServiceLoaderElementFactories implements ElementFactories {
 
-    private ServiceLoader<ElementFactory> loader;
+  private ServiceLoader<ElementFactory> loader;
 
-    public ServiceLoaderElementFactories() {
-        loadFactories();
-    }
+  public ServiceLoaderElementFactories() {
+    loadFactories();
+  }
 
-    private void loadFactories() {
-        loader = loader();
-    }
+  private void loadFactories() {
+    loader = loader();
+  }
 
-    @Override
-    public Optional<ElementFactory> getElementFactoryByNamespace(String namespace) {
-        return stream(loader.spliterator(), true).filter(factory -> factory.matchesNamespace(namespace)).findFirst();
-    }
+  @Override
+  public Optional<ElementFactory> getElementFactoryByNamespace(String namespace) {
+    return stream(loader.spliterator(), true).filter(factory -> factory.matchesNamespace(namespace)).findFirst();
+  }
 }

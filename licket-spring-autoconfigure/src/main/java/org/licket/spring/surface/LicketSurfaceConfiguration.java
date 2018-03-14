@@ -14,9 +14,9 @@ import org.springframework.web.context.annotation.RequestScope;
 @ComponentScan(basePackageClasses = HtmlElementsConfiguration.class)
 public class LicketSurfaceConfiguration {
 
-    @Bean
-    @RequestScope
-    public ElementFactories elementFactories() {
-        return new SpringElementFactories();
-    }
+  @Bean
+  @RequestScope
+  public ElementFactories elementFactories() {
+    return new SpringElementFactories();
+  }
 }

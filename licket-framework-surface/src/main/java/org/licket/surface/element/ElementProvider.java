@@ -5,21 +5,21 @@ package org.licket.surface.element;
  */
 public interface ElementProvider {
 
-    String getLocalName();
+  static ElementProvider empty(String localName) {
+    return new ElementProvider() {
+      @Override
+      public String getLocalName() {
+        return localName;
+      }
 
-    SurfaceElement provideElement();
+      @Override
+      public SurfaceElement provideElement() {
+        return null;
+      }
+    };
+  }
 
-    static ElementProvider empty(String localName) {
-        return new ElementProvider() {
-            @Override
-            public String getLocalName() {
-                return localName;
-            }
+  String getLocalName();
 
-            @Override
-            public SurfaceElement provideElement() {
-                return null;
-            }
-        };
-    }
+  SurfaceElement provideElement();
 }

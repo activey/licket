@@ -8,7 +8,7 @@ import org.licket.core.resource.javascript.JavascriptStaticResource;
  */
 public class SemanticLibraryResource extends JavascriptStaticResource implements HeadParticipatingResource {
 
-    public SemanticLibraryResource() {
-        super("semantic.js", "js/semantic.min.js");
-    }
+  public SemanticLibraryResource() {
+    super("semantic.js", "js/semantic.min.js");
+  }
 }

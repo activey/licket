@@ -16,7 +16,7 @@ public class SemanticUIDimmerContainer extends AbstractLicketMultiContainer<Dimm
   }
 
   @Override
-  protected void onRenderContainer(ComponentRenderingContext renderingContext) {
+  protected void onBeforeRenderContainer(ComponentRenderingContext renderingContext) {
     boolean pageWide = getComponentModel().get().isPageWide();
     renderingContext.onSurfaceElement(surfaceElement -> {
       if (pageWide) {

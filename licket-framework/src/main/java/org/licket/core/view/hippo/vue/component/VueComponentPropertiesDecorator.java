@@ -34,94 +34,94 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  */
 public class VueComponentPropertiesDecorator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VueComponentPropertiesDecorator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VueComponentPropertiesDecorator.class);
 
-    @Autowired
-    private ResourceStorage resourceStorage;
+  @Autowired
+  private ResourceStorage resourceStorage;
 
-    @Autowired
-    private OnVueBeforeRouteEnterDecorator routeEnterDecorator;
+  @Autowired
+  private OnVueBeforeRouteEnterDecorator routeEnterDecorator;
 
-    public ObjectLiteralBuilder decorate(LicketComponent<?> component, ObjectLiteralBuilder componentObjectBuilder) {
-        if (component.isStateful()) {
-            componentObjectBuilder.objectProperty(propertyBuilder().name("data").value(data(component)));
-        } else {
-            componentObjectBuilder.objectProperty(propertyBuilder().name("props").value(props()));
-        }
-        componentObjectBuilder
-                .objectProperty(propertyBuilder().name("template").value(template(component)))
-                .objectProperty(propertyBuilder().name("methods").value(methods(component)))
-                .objectProperty(propertyBuilder().name("components").value(nestedComponents(component)))
-                .objectProperty(propertyBuilder().name("created").value(created(component)))
-                .objectProperty(propertyBuilder().name("mounted").value(mounted(component)));
-
-        // if it is mounted component or root
-        routeEnterDecorator.decorate(component, componentObjectBuilder);
-
-        return componentObjectBuilder;
+  public ObjectLiteralBuilder decorate(LicketComponent<?> component, ObjectLiteralBuilder componentObjectBuilder) {
+    if (component.isStateful()) {
+      componentObjectBuilder.objectProperty(propertyBuilder().name("data").value(data(component)));
+    } else {
+      componentObjectBuilder.objectProperty(propertyBuilder().name("props").value(props()));
     }
+    componentObjectBuilder
+            .objectProperty(propertyBuilder().name("template").value(template(component)))
+            .objectProperty(propertyBuilder().name("methods").value(methods(component)))
+            .objectProperty(propertyBuilder().name("components").value(nestedComponents(component)))
+            .objectProperty(propertyBuilder().name("created").value(created(component)))
+            .objectProperty(propertyBuilder().name("mounted").value(mounted(component)));
 
-    private ObjectLiteralBuilder methods(LicketComponent<?> component) {
-        return VueExtendMethodsDecorator.fromClass(component).decorate(objectLiteral());
+    // if it is mounted component or root
+    routeEnterDecorator.decorate(component, componentObjectBuilder);
+
+    return componentObjectBuilder;
+  }
+
+  private ObjectLiteralBuilder methods(LicketComponent<?> component) {
+    return VueExtendMethodsDecorator.fromClass(component).decorate(objectLiteral());
+  }
+
+  private FunctionNodeBuilder data(LicketComponent<?> component) {
+    ObjectLiteralBuilder modelData = objectLiteral();
+    try {
+      fromComponentModel(component.getComponentModel()).decorate(modelData);
+    } catch (IOException e) {
+      LOGGER.error("An error occurred while generating component model data. Returning empty model.", e);
     }
-
-    private FunctionNodeBuilder data(LicketComponent<?> component) {
-        ObjectLiteralBuilder modelData = objectLiteral();
-        try {
-            fromComponentModel(component.getComponentModel()).decorate(modelData);
-        } catch (IOException e) {
-            LOGGER.error("An error occurred while generating component model data. Returning empty model.", e);
-        }
-        functionNode().body(
-                block()
-        );
-        return functionNode().body(block().appendStatement(returnStatement()
+    functionNode().body(
+            block()
+    );
+    return functionNode().body(block().appendStatement(returnStatement()
             .returnValue(objectLiteral().objectProperty(propertyBuilder().name("model").value(modelData)))));
-    }
+  }
 
-    private ArrayLiteralBuilder props() {
-        return arrayLiteral().element(StringLiteralBuilder.stringLiteral("model"));
-    }
+  private ArrayLiteralBuilder props() {
+    return arrayLiteral().element(StringLiteralBuilder.stringLiteral("model"));
+  }
 
-    private ObjectLiteralBuilder nestedComponents(LicketComponent<?> component) {
-        ObjectLiteralBuilder nestedComponents = objectLiteral();
-        component.traverseDown(nestedComponent -> {
-            if (nestedComponent.isCustom() || !nestedComponent.getView().hasTemplate() || !nestedComponent.isStateful()) {
-                return false;
-            }
-            ObjectLiteralBuilder nestedComponentObject = objectLiteral();
-            decorate(nestedComponent, nestedComponentObject);
-            nestedComponents.objectProperty(
-                    propertyBuilder()
-                            .name(stringLiteral(nestedComponent.getCompositeId().getNormalizedValue()))
-                            .value(nestedComponentObject));
+  private ObjectLiteralBuilder nestedComponents(LicketComponent<?> component) {
+    ObjectLiteralBuilder nestedComponents = objectLiteral();
+    component.traverseDown(nestedComponent -> {
+      if (nestedComponent.isCustom() || !nestedComponent.getView().hasTemplate() || !nestedComponent.isStateful()) {
+        return false;
+      }
+      ObjectLiteralBuilder nestedComponentObject = objectLiteral();
+      decorate(nestedComponent, nestedComponentObject);
+      nestedComponents.objectProperty(
+              propertyBuilder()
+                      .name(stringLiteral(nestedComponent.getCompositeId().getNormalizedValue()))
+                      .value(nestedComponentObject));
 
-            return false;
-        });
-        return nestedComponents;
-    }
+      return false;
+    });
+    return nestedComponents;
+  }
 
-    private StringLiteralBuilder template(LicketComponent<?> component) {
-        Optional<Resource> componentViewResourceOptional = resourceStorage
+  private StringLiteralBuilder template(LicketComponent<?> component) {
+    Optional<Resource> componentViewResourceOptional = resourceStorage
             .getResource(component.getCompositeId().getValue());
-        if (componentViewResourceOptional.isPresent()) {
-            try {
-                return stringLiteral(
-                    CharStreams.toString(new InputStreamReader(componentViewResourceOptional.get().getStream())));
-            } catch (IOException e) {
-                LOGGER.error("An error occurred while serializing component view.", e);
-            }
-        }
-        LOGGER.error("Unable to find template resource for component: {}.", component.getCompositeId().getValue());
-
-        return stringLiteral("<!-- Unable to find template resource -->");
+    if (componentViewResourceOptional.isPresent()) {
+      try {
+        return stringLiteral(
+                CharStreams.toString(new InputStreamReader(componentViewResourceOptional.get().getStream())));
+      } catch (IOException e) {
+        LOGGER.error("An error occurred while serializing component view.", e);
+      }
     }
+    LOGGER.error("Unable to find template resource for component: {}.", component.getCompositeId().getValue());
 
-    private FunctionNodeBuilder created(LicketComponent<?> component) {
-        return functionNode().body(OnVueCreatedDecorator.fromVueClass(component).decorate(block()));
-    }
+    return stringLiteral("<!-- Unable to find template resource -->");
+  }
 
-    private FunctionNodeBuilder mounted(LicketComponent<?> component) {
-        return functionNode().body(OnVueMountedDecorator.fromVueClass(component).decorate(block()));
-    }
+  private FunctionNodeBuilder created(LicketComponent<?> component) {
+    return functionNode().body(OnVueCreatedDecorator.fromVueClass(component).decorate(block()));
+  }
+
+  private FunctionNodeBuilder mounted(LicketComponent<?> component) {
+    return functionNode().body(OnVueMountedDecorator.fromVueClass(component).decorate(block()));
+  }
 }

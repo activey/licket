@@ -7,19 +7,19 @@ import java.util.stream.Stream;
  * @author activey
  */
 public interface ResourceStorage {
-    boolean hasResource(String name, String mimetype);
+  boolean hasResource(String name, String mimetype);
 
-    void putResource(Resource resource);
+  void putResource(Resource resource);
 
-    Optional<Resource> getResource(String name);
+  Optional<Resource> getResource(String name);
 
-    Stream<HeadParticipatingResource> getHeadJavascriptResources();
+  Stream<HeadParticipatingResource> getHeadJavascriptResources();
 
-    Stream<FootParticipatingResource> getFootJavascriptResources();
+  Stream<FootParticipatingResource> getFootJavascriptResources();
 
-    Stream<HeadParticipatingResource> getStylesheetResources();
+  Stream<HeadParticipatingResource> getStylesheetResources();
 
-    Stream<Resource> getAllResources();
+  Stream<Resource> getAllResources();
 
-    String getResourceUrl(Resource resource);
+  String getResourceUrl(Resource resource);
 }

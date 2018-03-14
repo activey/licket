@@ -13,15 +13,15 @@ import static com.google.common.base.Throwables.getRootCause;
 @ControllerAdvice
 public class ErrorHandler {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ErrorHandler.class);
+  private final static Logger LOGGER = LoggerFactory.getLogger(ErrorHandler.class);
 
-    @ExceptionHandler(ComponentNotFoundException.class)
-    public void handleComponentNotFound(ComponentNotFoundException notFound) {
-        LOGGER.error(getRootCause(notFound).getMessage(), notFound);
-    }
+  @ExceptionHandler(ComponentNotFoundException.class)
+  public void handleComponentNotFound(ComponentNotFoundException notFound) {
+    LOGGER.error(getRootCause(notFound).getMessage(), notFound);
+  }
 
-    @ExceptionHandler(Throwable.class)
-    public void handleException(Throwable throwable) {
-        LOGGER.error(getRootCause(throwable).getMessage(), throwable);
-    }
+  @ExceptionHandler(Throwable.class)
+  public void handleException(Throwable throwable) {
+    LOGGER.error(getRootCause(throwable).getMessage(), throwable);
+  }
 }

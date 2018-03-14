@@ -8,7 +8,7 @@ import org.licket.core.resource.javascript.JavascriptStaticResource;
  */
 public class ResourcePluginResource extends JavascriptStaticResource implements HeadParticipatingResource {
 
-    public ResourcePluginResource() {
-        super("vue-resource.js", "vue-resource/dist/vue-resource.js");
-    }
+  public ResourcePluginResource() {
+    super("vue-resource.js", "vue-resource/dist/vue-resource.js");
+  }
 }

@@ -8,7 +8,7 @@ import org.licket.core.resource.javascript.JavascriptStaticResource;
  */
 public class JqueryLibraryResource extends JavascriptStaticResource implements HeadParticipatingResource {
 
-    public JqueryLibraryResource() {
-        super("jquery.js", "js/jquery-3.1.0.js");
-    }
+  public JqueryLibraryResource() {
+    super("jquery.js", "js/jquery-3.1.0.js");
+  }
 }

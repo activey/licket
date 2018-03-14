@@ -8,82 +8,84 @@ import org.licket.core.resource.html.HtmlResource;
  */
 public interface LicketComponentView {
 
-    static LicketComponentView fromComponentClass(Class<? extends LicketComponent<?>> componentClass) {
-        return fromClassPathResource(componentClass.getSimpleName(),
+  static LicketComponentView fromComponentClass(Class<? extends LicketComponent<?>> componentClass) {
+    return fromClassPathResource(componentClass.getSimpleName(),
             componentClass.getName().replaceAll("\\.", "/").concat(".html"));
+  }
+
+  static LicketComponentView fromClassPathResource(String name, String resourcePath) {
+    return new ExternalComponentView(new HtmlResource(name, resourcePath));
+  }
+
+  static LicketComponentView internalTemplateView() {
+    return new InternalComponentView();
+  }
+
+  static LicketComponentView noView() {
+    return new NoTemplateComponentView();
+  }
+
+  Resource viewResource();
+
+  boolean hasTemplate();
+
+  boolean isTemplateExternal();
+
+  class NoTemplateComponentView implements LicketComponentView {
+
+    @Override
+    public Resource viewResource() {
+      return null;
     }
 
-    static LicketComponentView fromClassPathResource(String name, String resourcePath) {
-        return new ExternalComponentView(new HtmlResource(name, resourcePath));
+    @Override
+    public boolean hasTemplate() {
+      return false;
     }
 
-    static LicketComponentView internalTemplateView() {
-        return new InternalComponentView();
+    @Override
+    public boolean isTemplateExternal() {
+      return false;
+    }
+  }
+
+  class InternalComponentView implements LicketComponentView {
+
+    @Override
+    public Resource viewResource() {
+      return null;
     }
 
-    static LicketComponentView noView() { return new NoTemplateComponentView(); }
-
-    Resource viewResource();
-
-    boolean hasTemplate();
-
-    boolean isTemplateExternal();
-
-    class NoTemplateComponentView implements LicketComponentView {
-
-        @Override
-        public Resource viewResource() {
-            return null;
-        }
-
-        @Override
-        public boolean hasTemplate() {
-            return false;
-        }
-
-        @Override
-        public boolean isTemplateExternal() {
-            return false;
-        }
+    @Override
+    public boolean hasTemplate() {
+      return true;
     }
 
-    class InternalComponentView implements LicketComponentView {
+    @Override
+    public boolean isTemplateExternal() {
+      return false;
+    }
+  }
 
-        @Override
-        public Resource viewResource() {
-            return null;
-        }
+  class ExternalComponentView implements LicketComponentView {
 
-        @Override
-        public boolean hasTemplate() {
-            return true;
-        }
+    private Resource componentViewResource;
 
-        @Override
-        public boolean isTemplateExternal() {
-            return false;
-        }
+    public ExternalComponentView(Resource componentViewResource) {
+      this.componentViewResource = componentViewResource;
     }
 
-    class ExternalComponentView implements LicketComponentView {
-
-        private Resource componentViewResource;
-
-        public ExternalComponentView(Resource componentViewResource) {
-            this.componentViewResource = componentViewResource;
-        }
-
-        public final Resource viewResource() {
-            return componentViewResource;
-        }
-
-        public boolean hasTemplate() {
-            return true;
-        }
-
-        @Override
-        public boolean isTemplateExternal() {
-            return true;
-        }
+    public final Resource viewResource() {
+      return componentViewResource;
     }
+
+    public boolean hasTemplate() {
+      return true;
+    }
+
+    @Override
+    public boolean isTemplateExternal() {
+      return true;
+    }
+  }
 }

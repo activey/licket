@@ -8,20 +8,20 @@ import org.slf4j.LoggerFactory;
 
 public class LicketStaticLabel extends AbstractLicketComponent<String> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LicketStaticLabel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LicketStaticLabel.class);
 
-    public LicketStaticLabel(String id, LicketComponentModel<String> labelModel) {
-        super(id, String.class, labelModel);
-    }
+  public LicketStaticLabel(String id, LicketComponentModel<String> labelModel) {
+    super(id, String.class, labelModel);
+  }
 
-    @Override
-    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
-        LOGGER.trace("Rendering LicketStaticLabel: [{}]", getId());
-        renderingContext.onSurfaceElement(element -> {
-            // clearing out whole label content
-            element.removeChildren();
-            // setting up label value template
-            element.appendChildElement(new Text(getComponentModel().get()));
-        });
-    }
+  @Override
+  protected void onBeforeRender(ComponentRenderingContext renderingContext) {
+    LOGGER.trace("Rendering LicketStaticLabel: [{}]", getId());
+    renderingContext.onSurfaceElement(element -> {
+      // clearing out whole label content
+      element.removeChildren();
+      // setting up label value template
+      element.appendChildElement(new Text(getComponentModel().get()));
+    });
+  }
 }

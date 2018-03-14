@@ -21,50 +21,50 @@ import static org.licket.framework.hippo.ObjectPropertyBuilder.propertyBuilder;
  */
 public class VueExtendMethodsDecorator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VueExtendMethodsDecorator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VueExtendMethodsDecorator.class);
 
-    private VueClass vueClass;
+  private VueClass vueClass;
 
-    public static VueExtendMethodsDecorator fromClass(VueClass vueClass) {
-        return new VueExtendMethodsDecorator(vueClass);
+  private VueExtendMethodsDecorator(VueClass vueClass) {
+    this.vueClass = vueClass;
+  }
+
+  public static VueExtendMethodsDecorator fromClass(VueClass vueClass) {
+    return new VueExtendMethodsDecorator(vueClass);
+  }
+
+  public ObjectLiteralBuilder decorate(ObjectLiteralBuilder objectLiteral) {
+    stream(vueClass.getClass().getMethods()).forEach(method -> writeMemberFunctionBody(objectLiteral, method));
+    return objectLiteral;
+  }
+
+  private void writeMemberFunctionBody(ObjectLiteralBuilder methodsObject, Method method) {
+    Optional<VueComponentFunction> classFunction = getClassFunction(method);
+    if (!classFunction.isPresent()) {
+      return;
     }
+    // declaring member function
+    VueExtendMemberFunction memberFunction = new VueExtendMemberFunction();
 
-    private VueExtendMethodsDecorator(VueClass vueClass) {
-        this.vueClass = vueClass;
+    // appending extend method declaration
+    methodsObject.objectProperty(
+            propertyBuilder()
+                    .name(firstNonNull(trimToNull(classFunction.get().value()), method.getName()))
+                    .value(memberFunction.toFunctionNode(method, vueClass)));
+  }
+
+  private Optional<VueComponentFunction> getClassFunction(Method method) {
+    if (isPrivate(method.getModifiers())) {
+      LOGGER.warn("Private methods, like {}, are not supported for now.", method.getName());
+      return empty();
     }
-
-    public ObjectLiteralBuilder decorate(ObjectLiteralBuilder objectLiteral) {
-        stream(vueClass.getClass().getMethods()).forEach(method -> writeMemberFunctionBody(objectLiteral, method));
-        return objectLiteral;
+    VueComponentFunction classFunction = method.getAnnotation(VueComponentFunction.class);
+    if (classFunction == null) {
+      return empty();
     }
-
-    private void writeMemberFunctionBody(ObjectLiteralBuilder methodsObject, Method method) {
-        Optional<VueComponentFunction> classFunction = getClassFunction(method);
-        if (!classFunction.isPresent()) {
-            return;
-        }
-        // declaring member function
-        VueExtendMemberFunction memberFunction = new VueExtendMemberFunction();
-
-        // appending extend method declaration
-        methodsObject.objectProperty(
-                propertyBuilder()
-                        .name(firstNonNull(trimToNull(classFunction.get().value()), method.getName()))
-                        .value(memberFunction.toFunctionNode(method, vueClass)));
+    if (!stream(classFunction.predicates()).allMatch(vueClassPredicate -> vueClassPredicate.predicate().test(vueClass))) {
+      return empty();
     }
-
-    private Optional<VueComponentFunction> getClassFunction(Method method) {
-      if (isPrivate(method.getModifiers())) {
-        LOGGER.warn("Private methods, like {}, are not supported for now.", method.getName());
-        return empty();
-      }
-      VueComponentFunction classFunction = method.getAnnotation(VueComponentFunction.class);
-      if (classFunction == null) {
-        return empty();
-      }
-      if (!stream(classFunction.predicates()).allMatch(vueClassPredicate -> vueClassPredicate.predicate().test(vueClass))) {
-          return empty();
-      }
-      return ofNullable(classFunction);
-    }
+    return ofNullable(classFunction);
+  }
 }

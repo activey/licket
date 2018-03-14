@@ -9,9 +9,9 @@ import java.util.Optional;
  */
 public interface ElementFactories {
 
-    static ElementFactories serviceLoaderFactories() {
-        return new ServiceLoaderElementFactories();
-    }
+  static ElementFactories serviceLoaderFactories() {
+    return new ServiceLoaderElementFactories();
+  }
 
-    Optional<ElementFactory> getElementFactoryByNamespace(String namespace);
+  Optional<ElementFactory> getElementFactoryByNamespace(String namespace);
 }

@@ -13,34 +13,35 @@ import java.util.function.Predicate;
  */
 public interface LicketComponent<TYPE> extends VueClass {
 
-    LicketComponentView getView();
+  LicketComponentView getView();
 
-    String getId();
+  String getId();
 
-    CompositeId getCompositeId();
+  CompositeId getCompositeId();
 
-    Class<TYPE> getComponentModelClass();
+  Class<TYPE> getComponentModelClass();
 
-    LicketComponentModel<TYPE> getComponentModel();
+  LicketComponentModel<TYPE> getComponentModel();
 
-    void setComponentModelObject(TYPE componentModelObject);
+  void setComponentModelObject(TYPE componentModelObject);
 
-    void setParent(LicketComponent<?> parent);
+  void setParent(LicketComponent<?> parent);
 
-    void initialize();
+  void initialize();
 
-    void render(ComponentRenderingContext renderingContext);
+  void render(ComponentRenderingContext renderingContext);
 
-    Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser);
+  Optional<LicketComponent<?>> traverseUp(Predicate<LicketComponent<?>> componentTraverser);
 
-    // maybe it would make sense to have some components more complicated inner structure?
-    default void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {}
+  // maybe it would make sense to have some components more complicated inner structure?
+  default void traverseDown(Predicate<LicketComponent<?>> componentConsumer) {
+  }
 
-    default boolean isCustom() {
-        return false;
-    }
+  default boolean isCustom() {
+    return false;
+  }
 
-    default boolean isStateful() {
-        return true;
-    }
+  default boolean isStateful() {
+    return true;
+  }
 }

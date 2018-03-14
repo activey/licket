@@ -8,7 +8,7 @@ import org.licket.core.resource.javascript.JavascriptStaticResource;
  */
 public class VueRouterLibraryResource extends JavascriptStaticResource implements HeadParticipatingResource {
 
-    public VueRouterLibraryResource() {
-        super("vue-router.js", "vue-router/dist/vue-router.js");
-    }
+  public VueRouterLibraryResource() {
+    super("vue-router.js", "vue-router/dist/vue-router.js");
+  }
 }

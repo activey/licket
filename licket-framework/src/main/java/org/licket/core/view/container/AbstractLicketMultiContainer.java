@@ -1,7 +1,6 @@
 package org.licket.core.view.container;
 
 import org.licket.core.model.LicketComponentModel;
-import org.licket.core.module.application.LicketComponentModelReloader;
 import org.licket.core.view.AbstractReloadableLicketComponent;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.LicketComponentView;
@@ -19,51 +18,53 @@ import static com.google.common.collect.Lists.newArrayList;
  */
 public abstract class AbstractLicketMultiContainer<T> extends AbstractReloadableLicketComponent<T> implements LicketComponentContainer<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLicketMultiContainer.class);
-    private List<LicketComponent<?>> items = newArrayList();
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLicketMultiContainer.class);
+  private List<LicketComponent<?>> items = newArrayList();
 
-    public AbstractLicketMultiContainer(String id, Class<T> modelClass) {
-        super(id, modelClass);
+  public AbstractLicketMultiContainer(String id, Class<T> modelClass) {
+    super(id, modelClass);
+  }
+
+  public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel) {
+    super(id, modelClass, componentModel);
+  }
+
+  public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
+                                      LicketComponentView view) {
+    super(id, modelClass, componentModel, view);
+  }
+
+  @Override
+  protected final void onBeforeRender(ComponentRenderingContext renderingContext) {
+    onBeforeRenderContainer(renderingContext);
+  }
+
+  protected void onBeforeRenderContainer(ComponentRenderingContext renderingContext) {
+  }
+
+  public final void add(LicketComponent<?> licketComponent) {
+    if (items.contains(licketComponent)) {
+      LOGGER.trace("Licket component [{}] already used as a leaf!", licketComponent.getCompositeId().getValue());
+      return;
     }
+    licketComponent.setParent(this);
+    items.add(licketComponent);
+  }
 
-    public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel) {
-        super(id, modelClass, componentModel);
-    }
+  @Override
+  protected final void onInitialize() {
+    onInitializeContainer();
+    items.forEach(LicketComponent::initialize);
+  }
 
-    public AbstractLicketMultiContainer(String id, Class<T> modelClass, LicketComponentModel<T> componentModel,
-                                        LicketComponentView view) {
-        super(id, modelClass, componentModel, view);
-    }
+  protected void onInitializeContainer() {
+  }
 
-    @Override
-    protected final void onBeforeRender(ComponentRenderingContext renderingContext) {
-        onRenderContainer(renderingContext);
-    }
-
-    protected void onRenderContainer(ComponentRenderingContext renderingContext) {}
-
-    public final void add(LicketComponent<?> licketComponent) {
-        if (items.contains(licketComponent)) {
-            LOGGER.trace("Licket component [{}] already used as a leaf!", licketComponent.getCompositeId().getValue());
-            return;
-        }
-        licketComponent.setParent(this);
-        items.add(licketComponent);
-    }
-
-    @Override
-    protected final void onInitialize() {
-        onInitializeContainer();
-        items.forEach(LicketComponent::initialize);
-    }
-
-    protected void onInitializeContainer() {}
-
-    public final void traverseDown(Predicate<LicketComponent<?>> componentVisitor) {
-        items.forEach(item -> {
-            if (componentVisitor.test(item)) {
-                item.traverseDown(componentVisitor);
-            }
-        });
-    }
+  public final void traverseDown(Predicate<LicketComponent<?>> componentVisitor) {
+    items.forEach(item -> {
+      if (componentVisitor.test(item)) {
+        item.traverseDown(componentVisitor);
+      }
+    });
+  }
 }

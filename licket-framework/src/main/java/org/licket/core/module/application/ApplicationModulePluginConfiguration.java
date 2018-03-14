@@ -2,10 +2,7 @@ package org.licket.core.module.application;
 
 import org.licket.core.module.application.resource.ApplicationEventHubResource;
 import org.licket.core.module.application.resource.ApplicationModulePluginResource;
-import org.licket.core.module.application.security.LicketComponentSecurity;
-import org.licket.core.module.application.security.LicketComponentSecurityInterceptorResource;
 import org.licket.core.module.resource.HttpCommunicationService;
-import org.licket.core.resource.FootParticipatingResource;
 import org.licket.core.resource.HeadParticipatingResource;
 import org.licket.core.view.hippo.vue.VuePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +18,11 @@ public class ApplicationModulePluginConfiguration {
 
   @Bean
   public VuePlugin applicationModulePlugin(@Autowired HttpCommunicationService httpCommunicationService) {
-    return new ApplicationModulePlugin(
-            communicationService(httpCommunicationService),
-            modelReloader(),
-            componentSecurity()
-    );
+    return new ApplicationModulePlugin();
   }
 
   @Bean
-  public LicketRemote communicationService(@Autowired HttpCommunicationService httpService) {
+  public LicketRemote licketRemote(@Autowired HttpCommunicationService httpService) {
     return new LicketRemote(httpService);
   }
 
@@ -38,10 +31,6 @@ public class ApplicationModulePluginConfiguration {
     return new LicketComponentModelReloader();
   }
 
-  @Bean
-  public LicketComponentSecurity componentSecurity() {
-    return new LicketComponentSecurity();
-  }
 
   @Bean
   @Order(1)
@@ -55,8 +44,4 @@ public class ApplicationModulePluginConfiguration {
     return new ApplicationModulePluginResource();
   }
 
-  @Bean
-  public FootParticipatingResource licketComponentSecurityInterceptorResource() {
-    return new LicketComponentSecurityInterceptorResource();
-  }
 }

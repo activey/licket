@@ -17,8 +17,8 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import static org.licket.core.model.LicketComponentModel.emptyComponentModel;
-import static org.licket.core.model.LicketComponentModel.ofString;
 import static org.licket.core.view.LicketComponentView.internalTemplateView;
+import static org.licket.core.view.hippo.ComponentModelProperty.fromComponentModelProperty;
 
 /**
  * @author activey
@@ -50,7 +50,7 @@ public class AddContactForm extends AbstractSemanticUIForm<Contact> {
     protected void onInitializeContainer() {
         add(new LicketInput("name"));
         add(new LicketInput("description"));
-        add(new AbstractLicketList("email", ofString("emails")) {
+        add(new AbstractLicketList("email", fromComponentModelProperty("emails")) {
 
             @Override
             protected void onInitializeContainer() {

@@ -5,7 +5,7 @@ package org.licket.xml;
  */
 public class ParsingException extends Exception {
 
-    public ParsingException(Throwable throwable) {
-        super(throwable);
-    }
+  public ParsingException(Throwable throwable) {
+    super(throwable);
+  }
 }

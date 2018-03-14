@@ -7,11 +7,11 @@ import static java.lang.String.format;
  */
 public class VueExtendConstructionException extends RuntimeException {
 
-    public VueExtendConstructionException(String messageTemplate, Object... params) {
-        super(format(messageTemplate, params));
-    }
+  public VueExtendConstructionException(String messageTemplate, Object... params) {
+    super(format(messageTemplate, params));
+  }
 
-    public VueExtendConstructionException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public VueExtendConstructionException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

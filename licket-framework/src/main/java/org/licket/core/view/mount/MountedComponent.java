@@ -47,8 +47,8 @@ public class MountedComponent {
   public ObjectLiteralBuilder params() {
     ObjectLiteralBuilder objectLiteralBuilder = objectLiteral();
     pathVariables.forEach(variable -> objectLiteralBuilder.objectProperty(
-        // TODO dummy implementation for now ..
-        propertyBuilder().name(variable).value(property(property("this", "model"), name(variable))))
+            // TODO dummy implementation for now ..
+            propertyBuilder().name(variable).value(property(property("this", "model"), name(variable))))
     );
     return objectLiteralBuilder;
   }

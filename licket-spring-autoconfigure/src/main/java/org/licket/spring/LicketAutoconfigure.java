@@ -28,23 +28,23 @@ import org.springframework.web.context.annotation.SessionScope;
 @PropertySource("classpath:/licket.properties")
 public class LicketAutoconfigure {
 
-    @Value("${application.vueName:default}")
-    private String applicationName;
+  @Value("${application.vueName:default}")
+  private String applicationName;
 
-    @Bean
-    @SessionScope
-    public LicketApplication licketApplication() {
-        return new DefaultLicketApplication(applicationName);
-    }
+  @Bean
+  @SessionScope
+  public LicketApplication licketApplication() {
+    return new DefaultLicketApplication(applicationName);
+  }
 
-    @Bean
-    @SessionScope
-    public MountedComponents mountedComponents() {
-        return new DefaultMountedComponents();
-    }
+  @Bean
+  @SessionScope
+  public MountedComponents mountedComponents() {
+    return new DefaultMountedComponents();
+  }
 
-    @Bean
-    public ComponentRenderingContextFactory renderingContextFactory() {
-        return new ComponentRenderingContextFactory();
-    }
+  @Bean
+  public ComponentRenderingContextFactory renderingContextFactory() {
+    return new ComponentRenderingContextFactory();
+  }
 }

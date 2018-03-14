@@ -7,16 +7,16 @@ import org.licket.spring.surface.element.html.DefaultHtmlElement;
  */
 public class InputElement extends DefaultHtmlElement {
 
-    public InputElement(String name) {
-        super(name);
-    }
+  public InputElement(String name) {
+    super(name);
+  }
 
-    @Override
-    protected boolean writeEmpty() {
-        return false;
-    }
+  @Override
+  protected boolean writeEmpty() {
+    return false;
+  }
 
-    @Override
-    protected void onStart() {
-    }
+  @Override
+  protected void onStart() {
+  }
 }

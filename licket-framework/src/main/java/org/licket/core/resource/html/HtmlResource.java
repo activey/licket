@@ -7,16 +7,16 @@ import org.licket.core.resource.AbstractClasspathResource;
  */
 public class HtmlResource extends AbstractClasspathResource {
 
-    public static final String HTML_MIMETYPE = "text/html";
-    private final String name;
+  public static final String HTML_MIMETYPE = "text/html";
+  private final String name;
 
-    public HtmlResource(String name, String classpathLocation) {
-        super(classpathLocation, HTML_MIMETYPE);
-        this.name = name;
-    }
+  public HtmlResource(String name, String classpathLocation) {
+    super(classpathLocation, HTML_MIMETYPE);
+    this.name = name;
+  }
 
-    @Override
-    public String getName() {
-        return name;
-    }
+  @Override
+  public String getName() {
+    return name;
+  }
 }

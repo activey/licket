@@ -23,82 +23,85 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  */
 public abstract class AbstractSemanticUIModal extends AbstractLicketMultiContainer<ModalSettings> {
 
-    public AbstractSemanticUIModal(String id, ModalSettings modalSettings) {
-        super(id, ModalSettings.class, ofModelObject(modalSettings), fromComponentClass(AbstractSemanticUIModal.class));
-    }
+  public AbstractSemanticUIModal(String id, ModalSettings modalSettings) {
+    super(id, ModalSettings.class, ofModelObject(modalSettings), fromComponentClass(AbstractSemanticUIModal.class));
+  }
 
-    @Override
-    protected final void onInitializeContainer() {
-        add(new ModalSection("header-section") {
-            @Override
-            protected void onInitializeContainer() {
-                onInitializeHeader(this, "content-block");
-            }
-        });
+  @Override
+  protected final void onInitializeContainer() {
+    add(new ModalSection("header-section") {
+      @Override
+      protected void onInitializeContainer() {
+        onInitializeHeader(this, "content-block");
+      }
+    });
 
-        add(new ModalSection("main-section") {
-            @Override
-            protected void onInitializeContainer() {
-                onInitializeBody(this, "content-block");
-            }
-        });
+    add(new ModalSection("main-section") {
+      @Override
+      protected void onInitializeContainer() {
+        onInitializeBody(this, "content-block");
+      }
+    });
 
-        add(new ModalSection("actions-section") {
-            @Override
-            protected void onInitializeContainer() {
-                onInitializeActions(this, "content-block");
-            }
-        });
-    }
+    add(new ModalSection("actions-section") {
+      @Override
+      protected void onInitializeContainer() {
+        onInitializeActions(this, "content-block");
+      }
+    });
+  }
 
-    protected void onInitializeHeader(ModalSection modalSection, String contentId) {}
+  protected void onInitializeHeader(ModalSection modalSection, String contentId) {
+  }
 
-    protected void onInitializeBody(ModalSection content, String contentId) {}
+  protected void onInitializeBody(ModalSection content, String contentId) {
+  }
 
-    protected void onInitializeActions(ModalSection content, String contentId) {}
+  protected void onInitializeActions(ModalSection content, String contentId) {
+  }
 
-    protected void onRenderContainer(ComponentRenderingContext renderingContext) {
-        renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("class", "ui modal"));
-    }
+  protected void onBeforeRenderContainer(ComponentRenderingContext renderingContext) {
+    renderingContext.onSurfaceElement(surfaceElement -> surfaceElement.addAttribute("class", "ui modal"));
+  }
 
-    @VueComponentFunction
-    public final void show(BlockBuilder body) {
-        body.appendStatement(expressionStatement(
-                functionCall()
-                        .target(semanticModal())
-                        .argument(stringLiteral("show"))
-        ));
-    }
+  @VueComponentFunction
+  public final void show(BlockBuilder body) {
+    body.appendStatement(expressionStatement(
+            functionCall()
+                    .target(semanticModal())
+                    .argument(stringLiteral("show"))
+    ));
+  }
 
-    @VueComponentFunction
-    public final void hide(BlockBuilder body) {
-        body.appendStatement(expressionStatement(
-                functionCall()
-                        .target(semanticModal())
-                        .argument(stringLiteral("hide"))
-        ));
-    }
+  @VueComponentFunction
+  public final void hide(BlockBuilder body) {
+    body.appendStatement(expressionStatement(
+            functionCall()
+                    .target(semanticModal())
+                    .argument(stringLiteral("hide"))
+    ));
+  }
 
-    @OnVueMounted
-    public final void initializeModal(BlockBuilder body) {
-        body.appendStatement(expressionStatement(
-                functionCall()
-                        .target(semanticModal())
-                        .argument(objectLiteral())
-        ));
-    }
+  @OnVueMounted
+  public final void initializeModal(BlockBuilder body) {
+    body.appendStatement(expressionStatement(
+            functionCall()
+                    .target(semanticModal())
+                    .argument(objectLiteral())
+    ));
+  }
 
-    private PropertyNameBuilder semanticModal() {
-        return property(
-                functionCall()
-                        .target(name("$"))
-                        .argument(property(thisLiteral(), name("$el"))),
-                name("modal")
-        );
-    }
+  private PropertyNameBuilder semanticModal() {
+    return property(
+            functionCall()
+                    .target(name("$"))
+                    .argument(property(thisLiteral(), name("$el"))),
+            name("modal")
+    );
+  }
 
-    @Override
-    public SemanticUIModalAPI api(ComponentFunctionCallback componentFunctionCallback) {
-        return new SemanticUIModalAPI(this, componentFunctionCallback);
-    }
+  @Override
+  public SemanticUIModalAPI api(ComponentFunctionCallback componentFunctionCallback) {
+    return new SemanticUIModalAPI(this, componentFunctionCallback);
+  }
 }

@@ -5,7 +5,7 @@ package org.licket.spring.surface.element.html;
  */
 public class KeepAliveElement extends DefaultHtmlElement {
 
-    public KeepAliveElement() {
-        super("keep-alive");
-    }
+  public KeepAliveElement() {
+    super("keep-alive");
+  }
 }

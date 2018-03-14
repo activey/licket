@@ -10,8 +10,6 @@ import static org.licket.framework.hippo.PropertyNameBuilder.property;
  */
 public interface ComponentCallTargetOrigin {
 
-  AbstractAstNodeBuilder<?> buildTargetOrigin();
-
   static ComponentCallTargetOrigin fromAppInstance() {
     return () -> property("app", "instance");
   }
@@ -19,4 +17,10 @@ public interface ComponentCallTargetOrigin {
   static ComponentCallTargetOrigin fromVm() {
     return () -> name("vm");
   }
+
+  static ComponentCallTargetOrigin fromThis() {
+    return () -> name("this");
+  }
+
+  AbstractAstNodeBuilder<?> buildTargetOrigin();
 }

@@ -37,11 +37,11 @@ public class VueGlobalInitializationResource extends AbstractJavascriptDynamicRe
       }
 
       scriptBlockBuilder.appendStatement(
-          expressionStatement(functionCall()
-                .target(property("Vue", "component"))
-                // TODO its not really unique ...
-                .argument(stringLiteral(licketComponent.getCompositeId().getNormalizedValue()))
-                .argument(componentPropertiesDecorator.decorate(licketComponent, objectLiteral()))));
+              expressionStatement(functionCall()
+                      .target(property("Vue", "component"))
+                      // TODO its not really unique ...
+                      .argument(stringLiteral(licketComponent.getCompositeId().getNormalizedValue()))
+                      .argument(componentPropertiesDecorator.decorate(licketComponent, objectLiteral()))));
       return true;
     });
   }

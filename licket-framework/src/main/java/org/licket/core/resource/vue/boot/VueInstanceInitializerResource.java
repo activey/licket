@@ -6,7 +6,6 @@ import org.licket.core.resource.javascript.AbstractJavascriptDynamicResource;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.hippo.vue.annotation.LicketMountPoint;
 import org.licket.core.view.hippo.vue.component.VueComponentPropertiesDecorator;
-import org.licket.core.view.hippo.vue.security.VueComponentSecurityGuardDecorator;
 import org.licket.core.view.mount.MountedComponents;
 import org.licket.framework.hippo.ArrayLiteralBuilder;
 import org.licket.framework.hippo.BlockBuilder;
@@ -32,37 +31,34 @@ import static org.licket.framework.hippo.StringLiteralBuilder.stringLiteral;
  */
 public class VueInstanceInitializerResource extends AbstractJavascriptDynamicResource implements FootParticipatingResource {
 
-    @Autowired
-    private LicketApplication application;
+  @Autowired
+  private LicketApplication application;
 
-    @Autowired
-    private MountedComponents mountedComponents;
+  @Autowired
+  private MountedComponents mountedComponents;
 
-    @Autowired
-    private VueComponentPropertiesDecorator componentPropertiesDecorator;
+  @Autowired
+  private VueComponentPropertiesDecorator componentPropertiesDecorator;
 
-    @Autowired
-    private VueComponentSecurityGuardDecorator componentSecurityGuardDecorator;
+  @Override
+  public String getName() {
+    return "Licket.application.js";
+  }
 
-    @Override
-    public String getName() {
-        return "Licket.application.js";
-    }
+  @Override
+  protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
+    // initializing VueRouter instance
+    PropertyNameBuilder appRouter = property("app", "router");
+    scriptBlockBuilder.appendStatement(
+            expressionStatement(assignment()
+                    .left(appRouter)
+                    .right(newExpression()
+                            .target(name("VueRouter"))
+                            .argument(vueRoutesDefinitions())))
+    );
 
-    @Override
-    protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
-        // initializing VueRouter instance
-        PropertyNameBuilder appRouter = property("app", "router");
-        scriptBlockBuilder.appendStatement(
-                expressionStatement(assignment()
-                        .left(appRouter)
-                        .right(newExpression()
-                                .target(name("VueRouter"))
-                                .argument(vueRoutesDefinitions())))
-        );
-
-        // initializing Vue instance
-        scriptBlockBuilder.appendStatement(
+    // initializing Vue instance
+    scriptBlockBuilder.appendStatement(
             expressionStatement(assignment()
                     .left(property(name("app"), name("instance")))
                     .right(newExpression()
@@ -70,48 +66,48 @@ public class VueInstanceInitializerResource extends AbstractJavascriptDynamicRes
                             .argument(objectLiteral().objectProperty(
                                     propertyBuilder().name("router").value(appRouter)
                             ))))
-        );
-        // mounting Vue instance
-        scriptBlockBuilder.appendStatement(
-                expressionStatement(
+    );
+    // mounting Vue instance
+    scriptBlockBuilder.appendStatement(
+            expressionStatement(
                     functionCall()
-                        .target(property(property("app", "instance"), "$mount"))
-                        .argument(applicationRootId()))
-        );
-    }
+                            .target(property(property("app", "instance"), "$mount"))
+                            .argument(applicationRootId()))
+    );
+  }
 
-    private StringLiteralBuilder applicationRootId() {
-        return stringLiteral(format("#%s", application.rootComponentContainer().getId()));
-    }
+  private StringLiteralBuilder applicationRootId() {
+    return stringLiteral(format("#%s", application.rootComponentContainer().getId()));
+  }
 
-    private ObjectLiteralBuilder vueRoutesDefinitions() {
-        return objectLiteral()
-                .objectProperty(propertyBuilder().name("routes").arrayValue(componentsTree()));
-    }
+  private ObjectLiteralBuilder vueRoutesDefinitions() {
+    return objectLiteral()
+            .objectProperty(propertyBuilder().name("routes").arrayValue(componentsTree()));
+  }
 
-    private ArrayLiteralBuilder componentsTree() {
-        ArrayLiteralBuilder components = arrayLiteral();
+  private ArrayLiteralBuilder componentsTree() {
+    ArrayLiteralBuilder components = arrayLiteral();
 
-        // will mount root container to "/"
-        application.traverseDown(mountedContainer -> {
-            LicketMountPoint mountPoint = mountedContainer.getClass().getAnnotation(LicketMountPoint.class);
-            if (mountPoint == null) {
-                return false;
-            }
-            addComponentMountPoint(components, mountedContainer);
-            return false;
-        });
-        return components;
-    }
+    // will mount root container to "/"
+    application.traverseDown(mountedContainer -> {
+      LicketMountPoint mountPoint = mountedContainer.getClass().getAnnotation(LicketMountPoint.class);
+      if (mountPoint == null) {
+        return false;
+      }
+      addComponentMountPoint(components, mountedContainer);
+      return false;
+    });
+    return components;
+  }
 
-    private void addComponentMountPoint(ArrayLiteralBuilder components, LicketComponent<?> licketComponent) {
-        components.element(objectLiteral()
-                .objectProperty(propertyBuilder().name("path").value(stringLiteral(mountedComponents.mountedComponent(licketComponent.getClass()).path())))
-                .objectProperty(propertyBuilder().name("name").value(stringLiteral(licketComponent.getClass().getName())))
-                .objectProperty(propertyBuilder().name("component").value(
+  private void addComponentMountPoint(ArrayLiteralBuilder components, LicketComponent<?> licketComponent) {
+    components.element(objectLiteral()
+            .objectProperty(propertyBuilder().name("path").value(stringLiteral(mountedComponents.mountedComponent(licketComponent.getClass()).path())))
+            .objectProperty(propertyBuilder().name("name").value(stringLiteral(licketComponent.getClass().getName())))
+            .objectProperty(propertyBuilder().name("component").value(
                     componentPropertiesDecorator.decorate(licketComponent, objectLiteral()))
-                )
-        );
-    }
+            )
+    );
+  }
 
 }

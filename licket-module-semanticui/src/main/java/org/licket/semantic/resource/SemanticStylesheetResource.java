@@ -8,7 +8,7 @@ import org.licket.core.resource.css.StylesheetResource;
  */
 public class SemanticStylesheetResource extends StylesheetResource implements HeadParticipatingResource {
 
-    public SemanticStylesheetResource() {
-        super("semantic.css", "css/semantic.min.css");
-    }
+  public SemanticStylesheetResource() {
+    super("semantic.css", "css/semantic.min.css");
+  }
 }

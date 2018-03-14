@@ -1,5 +1,6 @@
 package org.licket.core.resource.css;
 
+import com.google.common.net.MediaType;
 import org.licket.core.resource.AbstractClasspathResource;
 
 /**
@@ -7,16 +8,15 @@ import org.licket.core.resource.AbstractClasspathResource;
  */
 public class StylesheetResource extends AbstractClasspathResource {
 
-    public static final String CSS_MIMETYPE = "text/css";
-    private String name;
+  private String name;
 
-    public StylesheetResource(String name, String classpathLocation) {
-        super(classpathLocation, CSS_MIMETYPE);
-        this.name = name;
-    }
+  public StylesheetResource(String name, String classpathLocation) {
+    super(classpathLocation, MediaType.CSS_UTF_8.toString());
+    this.name = name;
+  }
 
-    @Override
-    public String getName() {
-        return name;
-    }
+  @Override
+  public String getName() {
+    return name;
+  }
 }

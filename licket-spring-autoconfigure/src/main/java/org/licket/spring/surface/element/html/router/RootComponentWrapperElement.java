@@ -7,8 +7,8 @@ import org.licket.spring.surface.element.html.DefaultHtmlElement;
  */
 public class RootComponentWrapperElement extends DefaultHtmlElement {
 
-    public RootComponentWrapperElement(String rootComponentId) {
-        super("div");
-        addAttribute("id", rootComponentId);
-    }
+  public RootComponentWrapperElement(String rootComponentId) {
+    super("div");
+    addAttribute("id", rootComponentId);
+  }
 }

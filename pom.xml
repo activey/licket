@@ -25,7 +25,11 @@
         <!-- Spring related -->
         <org.springframework.version>4.3.2.RELEASE</org.springframework.version>
         <org.springframework.security.version>4.2.3.RELEASE</org.springframework.security.version>
+        <org.springframework.security.oauth2.version>2.2.1.RELEASE</org.springframework.security.oauth2.version>
+
         <org.springframework.boot.spring-boot-starter-web.version>1.4.0.RELEASE</org.springframework.boot.spring-boot-starter-web.version>
+        <org.springframework.boot.spring-boot-starter-websocket.version>1.4.0.RELEASE</org.springframework.boot.spring-boot-starter-websocket.version>
+
         <org.springframework.boot.spring-boot-starter-jetty.version>1.4.0.RELEASE</org.springframework.boot.spring-boot-starter-jetty.version>
         <com.fasterxml.jackson.core.jackson-databind.version>2.5.0</com.fasterxml.jackson.core.jackson-databind.version>
 
@@ -66,6 +70,11 @@
                 <version>${org.springframework.boot.spring-boot-starter-jetty.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-websocket</artifactId>
+                <version>${org.springframework.boot.spring-boot-starter-websocket.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
                 <version>${org.springframework.version}</version>
@@ -84,6 +93,11 @@
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-config</artifactId>
                 <version>${org.springframework.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security.oauth</groupId>
+                <artifactId>spring-security-oauth2</artifactId>
+                <version>${org.springframework.security.oauth2.version}</version>
             </dependency>
 
             <dependency>
@@ -177,6 +191,17 @@
                 <artifactId>licket-npm-libraries</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.licket</groupId>
+                <artifactId>licket-spring-websocket</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.licket</groupId>
+                <artifactId>licket-spring-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -192,5 +217,7 @@
         <module>licket-module-semanticui</module>
 
         <module>licket-gitlab-pipelines</module>
+        <module>licket-spring-websocket</module>
+        <module>licket-spring-security</module>
     </modules>
 </project>

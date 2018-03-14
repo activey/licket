@@ -51,6 +51,9 @@
                     <include>vue/dist/vue.js</include>
                     <include>vue-router/dist/vue-router.js</include>
                     <include>vue-resource/dist/vue-resource.js</include>
+                    <include>tiny-cookie/tiny-cookie.js</include>
+                    <include>sockjs-client/dist/sockjs.js</include>
+                    <include>stompjs/lib/stomp.js</include>
                 </includes>
             </resource>
         </resources>

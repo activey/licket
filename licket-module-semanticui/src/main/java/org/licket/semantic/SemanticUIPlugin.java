@@ -8,8 +8,8 @@ import org.licket.framework.hippo.PropertyNameBuilder;
  */
 public class SemanticUIPlugin implements VuePlugin {
 
-    @Override
-    public PropertyNameBuilder vueName() {
-        return null;
-    }
+  @Override
+  public PropertyNameBuilder vueName() {
+    return null;
+  }
 }

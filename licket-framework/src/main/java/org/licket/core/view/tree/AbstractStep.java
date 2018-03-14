@@ -7,15 +7,15 @@ import org.licket.framework.hippo.AbstractAstNodeBuilder;
  */
 public abstract class AbstractStep {
 
-    private final String componentId;
+  private final String componentId;
 
-    public AbstractStep(String componentId) {
-        this.componentId = componentId;
-    }
+  public AbstractStep(String componentId) {
+    this.componentId = componentId;
+  }
 
-    public final AbstractAstNodeBuilder<?> decorate(AbstractAstNodeBuilder<?> previousStep) {
-        return decorate(previousStep, componentId);
-    }
+  public final AbstractAstNodeBuilder<?> decorate(AbstractAstNodeBuilder<?> previousStep) {
+    return decorate(previousStep, componentId);
+  }
 
-    protected abstract AbstractAstNodeBuilder<?> decorate(AbstractAstNodeBuilder<?> step, String componentId);
+  protected abstract AbstractAstNodeBuilder<?> decorate(AbstractAstNodeBuilder<?> step, String componentId);
 }

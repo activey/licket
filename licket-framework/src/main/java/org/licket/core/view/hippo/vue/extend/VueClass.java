@@ -7,5 +7,5 @@ import org.licket.framework.hippo.NameBuilder;
  */
 public interface VueClass {
 
-    NameBuilder vueName();
+  NameBuilder vueName();
 }

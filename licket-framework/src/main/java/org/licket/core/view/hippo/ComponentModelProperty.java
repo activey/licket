@@ -9,13 +9,13 @@ import static org.licket.framework.hippo.PropertyNameBuilder.property;
  */
 public interface ComponentModelProperty {
 
-  PropertyNameBuilder builder();
-
-  static ComponentModelProperty fromParentModelProperty(String parentModelPropertyName) {
+  static ComponentModelProperty fromComponentParentModelProperty(String parentModelPropertyName) {
     return () -> property(property(property("this", "$parent"), "model"), parentModelPropertyName);
   }
 
-  static ComponentModelProperty fromModelProperty(String modelPropertyName) {
+  static ComponentModelProperty fromComponentModelProperty(String modelPropertyName) {
     return () -> property(property("this", "model"), modelPropertyName);
   }
+
+  PropertyNameBuilder builder();
 }

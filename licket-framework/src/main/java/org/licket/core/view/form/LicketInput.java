@@ -1,49 +1,42 @@
 package org.licket.core.view.form;
 
-import static java.lang.String.format;
-import java.util.Optional;
-import org.licket.core.model.ComponentIdModel;
-import org.licket.core.model.LicketComponentModel;
 import org.licket.core.view.AbstractLicketComponent;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.container.AbstractLicketMultiContainer;
+import org.licket.core.view.hippo.ComponentModelProperty;
 import org.licket.core.view.render.ComponentRenderingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
+
+import static org.licket.core.model.LicketComponentModel.ofModelObject;
+import static org.licket.core.view.hippo.ComponentModelProperty.fromComponentModelProperty;
+
 /**
  * @author activey
  */
-public class LicketInput extends AbstractLicketComponent<String> {
+public class LicketInput extends AbstractLicketComponent<ComponentModelProperty> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LicketInput.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LicketInput.class);
 
-    public LicketInput(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
-        super(id, String.class, enclosingComponentPropertyModel);
-    }
+  public LicketInput(String id, ComponentModelProperty componentModelProperty) {
+    super(id, ComponentModelProperty.class, ofModelObject(componentModelProperty));
+  }
 
-    public LicketInput(String id) {
-        this(id, new ComponentIdModel(id));
-    }
+  public LicketInput(String id) {
+    this(id, fromComponentModelProperty(id));
+  }
 
-    @Override
-    protected void onBeforeRender(ComponentRenderingContext renderingContext) {
-        LOGGER.trace("Rendering LicketInput: [{}]", getId());
+  @Override
+  protected void onBeforeRender(ComponentRenderingContext renderingContext) {
+    LOGGER.trace("Rendering LicketInput: [{}]", getId());
 
-        Optional<LicketComponent<?>> parent = traverseUp(
+    Optional<LicketComponent<?>> parent = traverseUp(
             component -> component instanceof AbstractLicketMultiContainer);
-        if (!parent.isPresent()) {
-            return;
-        }
-        AbstractLicketMultiContainer parentContainer = (AbstractLicketMultiContainer) parent.get();
-        renderingContext.onSurfaceElement(element -> {
-            // TODO refactor
-            String firstPart = "model";
-            if (!parentContainer.getView().hasTemplate()) {
-                firstPart = parentContainer.getId();
-            }
-            element.addAttribute("v-model", format("%s.%s", firstPart, getComponentModel().get()));
-            element.addAttribute("name", getComponentModel().get());
-        });
+    if (!parent.isPresent()) {
+      return;
     }
+    renderingContext.onSurfaceElement(element -> element.addAttribute("v-model", getComponentModel().get().builder().build().toSource()));
+  }
 }

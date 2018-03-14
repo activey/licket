@@ -8,28 +8,28 @@ import org.mozilla.javascript.ast.KeywordLiteral;
  */
 public class KeywordLiteralBuilder extends AbstractAstNodeBuilder<KeywordLiteral> {
 
-    private int tokenValue;
+  private int tokenValue;
 
-    private KeywordLiteralBuilder(int tokenValue) {
-        this.tokenValue = tokenValue;
-    }
+  private KeywordLiteralBuilder(int tokenValue) {
+    this.tokenValue = tokenValue;
+  }
 
-    public static KeywordLiteralBuilder thisLiteral() {
-        return new KeywordLiteralBuilder(Token.THIS);
-    }
+  public static KeywordLiteralBuilder thisLiteral() {
+    return new KeywordLiteralBuilder(Token.THIS);
+  }
 
-    public static KeywordLiteralBuilder trueLiteral() {
-        return new KeywordLiteralBuilder(Token.TRUE);
-    }
+  public static KeywordLiteralBuilder trueLiteral() {
+    return new KeywordLiteralBuilder(Token.TRUE);
+  }
 
-    public static KeywordLiteralBuilder falseLiteral() {
-        return new KeywordLiteralBuilder(Token.FALSE);
-    }
+  public static KeywordLiteralBuilder falseLiteral() {
+    return new KeywordLiteralBuilder(Token.FALSE);
+  }
 
-    @Override
-    public KeywordLiteral build() {
-        KeywordLiteral keywordLiteral = new KeywordLiteral();
-        keywordLiteral.setType(tokenValue);
-        return keywordLiteral;
-    }
+  @Override
+  public KeywordLiteral build() {
+    KeywordLiteral keywordLiteral = new KeywordLiteral();
+    keywordLiteral.setType(tokenValue);
+    return keywordLiteral;
+  }
 }

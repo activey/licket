@@ -1,7 +1,6 @@
 package org.licket.spring.web;
 
 import org.licket.core.LicketApplication;
-import org.licket.core.id.CompositeId;
 import org.licket.core.resource.ByteArrayResource;
 import org.licket.core.resource.Resource;
 import org.licket.core.resource.ResourceStorage;
@@ -99,13 +98,14 @@ public class LicketRootController {
   }
 
   @GetMapping(value = "/index", produces = TEXT_HTML_VALUE)
-  public @ResponseBody ResponseEntity<InputStreamResource> generateRootHtml() {
+  public @ResponseBody
+  ResponseEntity<InputStreamResource> generateRootHtml() {
     Optional<Resource> resourceOptional = resourcesStorage.getResource("index.html");
     if (!resourceOptional.isPresent()) {
       return status(NOT_FOUND).contentLength(0).body(null);
     }
     Resource resource = resourceOptional.get();
     return ok().contentType(parseMediaType(resource.getMimeType()))
-        .body(new InputStreamResource(resource.getStream()));
+            .body(new InputStreamResource(resource.getStream()));
   }
 }

@@ -6,6 +6,7 @@ import org.licket.core.resource.vue.VueLibraryResource;
 import org.licket.core.resource.vue.VueRouterLibraryResource;
 import org.licket.core.resource.vue.boot.VueGlobalInitializationResource;
 import org.licket.core.resource.vue.boot.VueInstanceInitializerResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -25,7 +26,7 @@ public class LicketResourcesConfiguration {
 
   @Bean
   @Order(1)
-  public VueLibraryResource vueLibraryResource() {
+  public VueLibraryResource vueLibraryResource(@Autowired ResourceStorage resourceStorage) {
     return new VueLibraryResource();
   }
 
@@ -50,7 +51,6 @@ public class LicketResourcesConfiguration {
   }
 
   @Bean
-  @Order(5)
   public FastJsonPatchResource jsonPatchResource() {
     return new FastJsonPatchResource();
   }

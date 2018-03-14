@@ -10,12 +10,12 @@ import static org.licket.framework.hippo.NameBuilder.name;
  */
 public class StepUp extends AbstractStep {
 
-    public StepUp(String parentId) {
-        super(parentId);
-    }
+  public StepUp(String parentId) {
+    super(parentId);
+  }
 
-    @Override
-    protected PropertyNameBuilder decorate(AbstractAstNodeBuilder<?> previousStep, String componentId) {
-        return PropertyNameBuilder.property(previousStep, name("$parent"));
-    }
+  @Override
+  protected PropertyNameBuilder decorate(AbstractAstNodeBuilder<?> previousStep, String componentId) {
+    return PropertyNameBuilder.property(previousStep, name("$parent"));
+  }
 }

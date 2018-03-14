@@ -27,65 +27,65 @@ import static org.licket.framework.hippo.ReturnStatementBuilder.returnStatement;
  */
 public class ApplicationModulePluginResource extends AbstractJavascriptDynamicResource implements HeadParticipatingResource {
 
-    @Autowired
-    private ApplicationModulePlugin applicationModulePlugin;
+  @Autowired
+  private ApplicationModulePlugin applicationModulePlugin;
 
-    @Override
-    public String getName() {
-        return "vue-plugin-application-module.js";
-    }
+  @Override
+  public String getName() {
+    return "vue-plugin-application-module.js";
+  }
 
-    @Override
-    protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
-        scriptBlockBuilder.appendStatement(
-                expressionStatement(
-                        assignment()
-                                .left(applicationModulePlugin.vueName())
-                                .right(pluginInitializer())
-                )
-        );
-        scriptBlockBuilder.appendStatement(
-                expressionStatement(
-                        functionCall()
-                                .target(property("Vue", "use"))
-                                .argument(applicationModulePlugin.vueName())
-                )
-        );
-    }
+  @Override
+  protected void buildJavascriptTree(BlockBuilder scriptBlockBuilder) {
+    scriptBlockBuilder.appendStatement(
+            expressionStatement(
+                    assignment()
+                            .left(applicationModulePlugin.vueName())
+                            .right(pluginInitializer())
+            )
+    );
+    scriptBlockBuilder.appendStatement(
+            expressionStatement(
+                    functionCall()
+                            .target(property("Vue", "use"))
+                            .argument(applicationModulePlugin.vueName())
+            )
+    );
+  }
 
-    private FunctionNodeBuilder pluginInitializer() {
-        return functionNode()
-                .param(name("Vue"))
-                .param(name("options"))
-                .body(
-                        block().appendStatement(
-                                functionCall()
-                                        .target(property("Object", "defineProperties"))
-                                        .argument(property("Vue", "prototype"))
-                                        .argument(services())
-                        )
-                );
-    }
+  private FunctionNodeBuilder pluginInitializer() {
+    return functionNode()
+            .param(name("Vue"))
+            .param(name("options"))
+            .body(
+                    block().appendStatement(
+                            functionCall()
+                                    .target(property("Object", "defineProperties"))
+                                    .argument(property("Vue", "prototype"))
+                                    .argument(services())
+                    )
+            );
+  }
 
-    private ObjectLiteralBuilder services() {
-        ObjectLiteralBuilder services = ObjectLiteralBuilder.objectLiteral();
-        applicationModulePlugin.forEachService(service -> services.objectProperty(
-                propertyBuilder()
-                        .name(service.vueName())
-                        .value(objectLiteral().objectProperty(
-                                propertyBuilder()
-                                        .name("get")
-                                        .value(functionNode()
-                                                .body(
-                                                fromVueClassProperties(service).decorate(block())
-                                                        .appendStatement(
-                                                                returnStatement()
-                                                                        .returnValue(serviceMethods(service)))))))
-        ));
-        return services;
-    }
+  private ObjectLiteralBuilder services() {
+    ObjectLiteralBuilder services = ObjectLiteralBuilder.objectLiteral();
+    applicationModulePlugin.forEachService(service -> services.objectProperty(
+            propertyBuilder()
+                    .name(service.vueName())
+                    .value(objectLiteral().objectProperty(
+                            propertyBuilder()
+                                    .name("get")
+                                    .value(functionNode()
+                                            .body(
+                                                    fromVueClassProperties(service).decorate(block())
+                                                            .appendStatement(
+                                                                    returnStatement()
+                                                                            .returnValue(serviceMethods(service)))))))
+    ));
+    return services;
+  }
 
-    private ObjectLiteralBuilder serviceMethods(VueClass service) {
-        return VueExtendMethodsDecorator.fromClass(service).decorate(objectLiteral());
-    }
+  private ObjectLiteralBuilder serviceMethods(VueClass service) {
+    return VueExtendMethodsDecorator.fromClass(service).decorate(objectLiteral());
+  }
 }

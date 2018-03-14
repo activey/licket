@@ -1,8 +1,8 @@
 package org.licket.core.view.mount;
 
+import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.LicketComponent;
 import org.licket.core.view.link.AbstractLicketLink;
-import org.licket.core.view.ComponentFunctionCallback;
 import org.licket.core.view.mount.params.MountingParamsAggregator;
 
 /**

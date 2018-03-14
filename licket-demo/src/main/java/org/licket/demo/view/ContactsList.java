@@ -1,7 +1,7 @@
 package org.licket.demo.view;
 
-import org.licket.core.model.LicketComponentModel;
 import org.licket.core.view.LicketLabel;
+import org.licket.core.view.hippo.ComponentModelProperty;
 import org.licket.core.view.list.AbstractLicketList;
 import org.licket.core.view.media.LicketImage;
 import org.licket.core.view.mount.MountedComponentLink;
@@ -15,25 +15,25 @@ import static org.licket.core.view.mount.params.MountingParamValueDecorator.from
 
 public class ContactsList extends AbstractLicketList {
 
-    public ContactsList(String id, LicketComponentModel<String> enclosingComponentPropertyModel) {
-        super(id, enclosingComponentPropertyModel);
-    }
+  public ContactsList(String id, ComponentModelProperty componentModelProperty) {
+    super(id, componentModelProperty);
+  }
 
-    @Override
-    protected void onInitializeContainer() {
-        add(new LicketImage("pictureUrl"));
-        add(new LicketLabel("name"));
-        add(new LicketLabel("description"));
-        add(new MountedComponentLink<Contact>("view-contact", ViewContactPanel.class) {
-            @Override
-            protected void aggregateParams(MountingParamsAggregator paramsAggregator) {
-                paramsAggregator.name("id").value(fromParentModelProperty("id"));
-            }
-        });
-    }
+  @Override
+  protected void onInitializeContainer() {
+    add(new LicketImage("pictureUrl"));
+    add(new LicketLabel("name"));
+    add(new LicketLabel("description"));
+    add(new MountedComponentLink<Contact>("view-contact", ViewContactPanel.class) {
+      @Override
+      protected void aggregateParams(MountingParamsAggregator paramsAggregator) {
+        paramsAggregator.name("id").value(fromParentModelProperty("id"));
+      }
+    });
+  }
 
-    @Override
-    protected Optional<String> keyPropertyName() {
-        return of("id");
-    }
+  @Override
+  protected Optional<String> keyPropertyName() {
+    return of("id");
+  }
 }

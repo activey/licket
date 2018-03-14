@@ -1,1 +1,1 @@
-"dupa test" + krowa.pies
+this.$parent.model.status === 'failed'

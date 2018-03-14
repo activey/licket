@@ -20,9 +20,9 @@ import java.lang.annotation.Target;
 @Bean
 public @interface LicketComponent {
 
-    @AliasFor("value")
-    String[] name() default {};
+  @AliasFor("value")
+  String[] name() default {};
 
-    @AliasFor("name")
-    String[] value() default {};
+  @AliasFor("name")
+  String[] value() default {};
 }

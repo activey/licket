@@ -23,4 +23,6 @@ public @interface LicketMountPoint {
   String value();
 
   LicketMountPointAccess access() default PUBLIC;
+
+  boolean samePathRouteEnter() default false;
 }

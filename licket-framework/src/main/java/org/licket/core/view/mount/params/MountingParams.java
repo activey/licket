@@ -19,4 +19,8 @@ public class MountingParams {
   public Optional<String> getString(String paramName) {
     return ofNullable(mountingParams.get(paramName));
   }
+
+  public Optional<Long> getLong(String paramName) {
+    return ofNullable(mountingParams.get(paramName)).map(string -> Long.parseLong(string));
+  }
 }
