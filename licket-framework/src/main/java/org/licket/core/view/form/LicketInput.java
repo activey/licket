@@ -35,15 +35,17 @@ public class LicketInput extends AbstractLicketComponent<String> {
         if (!parent.isPresent()) {
             return;
         }
-        AbstractLicketMultiContainer parentContainer = (AbstractLicketMultiContainer) parent.get();
-        renderingContext.onSurfaceElement(element -> {
+        getComponentModel().get().ifPresent(inputName -> renderingContext.onSurfaceElement(element -> {
             // TODO refactor
+            AbstractLicketMultiContainer parentContainer = (AbstractLicketMultiContainer) parent.get();
             String firstPart = "model";
             if (!parentContainer.getView().hasTemplate()) {
                 firstPart = parentContainer.getId();
             }
-            element.addAttribute("v-model", format("%s.%s", firstPart, getComponentModel().get()));
-            element.addAttribute("name", getComponentModel().get());
-        });
+            element.addAttribute("v-model", format("%s.%s", firstPart, inputName ));
+            element.addAttribute("name", inputName);
+        }));
+
+
     }
 }

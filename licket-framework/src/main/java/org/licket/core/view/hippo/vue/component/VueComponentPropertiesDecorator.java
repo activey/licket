@@ -67,11 +67,7 @@ public class VueComponentPropertiesDecorator {
 
     private FunctionNodeBuilder data(LicketComponent<?> component) {
         ObjectLiteralBuilder modelData = objectLiteral();
-        try {
-            fromComponentModel(component.getComponentModel()).decorate(modelData);
-        } catch (IOException e) {
-            LOGGER.error("An error occurred while generating component model data. Returning empty model.", e);
-        }
+        fromComponentModel(component.getComponentModel()).decorate(modelData);
         functionNode().body(
                 block()
         );

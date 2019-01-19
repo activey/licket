@@ -17,11 +17,11 @@ public class LicketStaticLabel extends AbstractLicketComponent<String> {
     @Override
     protected void onBeforeRender(ComponentRenderingContext renderingContext) {
         LOGGER.trace("Rendering LicketStaticLabel: [{}]", getId());
-        renderingContext.onSurfaceElement(element -> {
+        getComponentModel().get().ifPresent(componentModel -> renderingContext.onSurfaceElement(element -> {
             // clearing out whole label content
             element.removeChildren();
             // setting up label value template
-            element.appendChildElement(new Text(getComponentModel().get()));
-        });
+            element.appendChildElement(new Text(componentModel));
+        }));
     }
 }

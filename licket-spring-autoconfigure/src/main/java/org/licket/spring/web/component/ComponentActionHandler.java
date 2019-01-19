@@ -61,8 +61,6 @@ public class ComponentActionHandler {
             LOGGER.trace("Trying to mount component [{}].", component.getCompositeId().getValue());
 
             on(component).call("mountComponent", mountingParamsFromActionRequest(componentMountingParams), componentActionCallback);
-        } catch (JsonProcessingException e) {
-            LOGGER.error("An error occurred while deserializing component model for: {}.", component.getCompositeId().getValue(), e);
         } catch (ReflectException reflectException) {
             LOGGER.error("An error occurred while setting component model for: {}.", component.getCompositeId().getValue(),
                     reflectException);
@@ -73,7 +71,7 @@ public class ComponentActionHandler {
         return new ObjectMapper().treeToValue(formData, component.getComponentModelClass());
     }
 
-    private MountingParams mountingParamsFromActionRequest(JsonNode mountingParams) throws JsonProcessingException {
+    private MountingParams mountingParamsFromActionRequest(JsonNode mountingParams) {
         MountingParams params = new MountingParams();
         mountingParams.fieldNames().forEachRemaining(fieldName -> params.newParam(fieldName, mountingParams.get(fieldName).textValue()));
         return params;

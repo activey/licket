@@ -74,7 +74,7 @@ public class LicketComponentController {
 
         // refreshing component model after mounting operation
         LicketComponentModelGroup modelGroup = new LicketComponentModelGroup();
-        modelGroup.addModel(componentOptional.get().getCompositeId().getValue(), componentOptional.get().getComponentModel().get());
+        componentOptional.get().getComponentModel().get().ifPresent(componentModel -> modelGroup.addModel(componentOptional.get().getCompositeId().getValue(), componentModel));
 
         // sending back list of reloaded component models
         return modelGroup.collectModels(componentActionCallback);

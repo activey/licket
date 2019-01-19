@@ -28,7 +28,7 @@ public abstract class AbstractSemanticUIDimmer extends AbstractLicketMultiContai
 
     @Override
     protected final void onInitializeContainer() {
-        add(new SemanticUIDimmerContainer("dimmer-container", getComponentModel().get()) {
+        add(new SemanticUIDimmerContainer("dimmer-container", getComponentModel().get().orElse(new DimmerSettings())) {
             @Override
             protected void onInitializeContainer() {
                 add(new DimmerContent("content-section") {

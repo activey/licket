@@ -33,13 +33,16 @@ public abstract class AbstractLicketList extends AbstractLicketMultiContainer<St
 
     private void setForAttribute(SurfaceElement element) {
         // TODO check if enclosing property model has collection defined with name from getComponentModel().get()
-        element.addAttribute("v-for", format("%s in model.%s", getId(), getComponentModel().get()));
 
-        Optional<String> keyPropertyName = keyPropertyName();
-        if (!keyPropertyName.isPresent()) {
-            return;
-        }
-        element.addAttribute("v-bind:key", format("%s.%s", getId(), keyPropertyName.get()));
+        getComponentModel().get().ifPresent(componentModel -> {
+            element.addAttribute("v-for", format("%s in model.%s", getId(), componentModel));
+            Optional<String> keyPropertyName = keyPropertyName();
+            if (!keyPropertyName.isPresent()) {
+                return;
+            }
+            element.addAttribute("v-bind:key", format("%s.%s", getId(), keyPropertyName.get()));
+        });
+
     }
 
     protected Optional<String> keyPropertyName() {
