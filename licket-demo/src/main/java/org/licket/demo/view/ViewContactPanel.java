@@ -38,7 +38,7 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
 
   @Override
   protected void onInitializeContainer() {
-    add(segment = new AbstractSemanticUISegment<Contact>("segment", Contact.class, ofModelObject(getComponentModel().get()), internalTemplateView()) {
+    add(segment = new AbstractSemanticUISegment<Contact>("segment", Contact.class, getComponentModel(), internalTemplateView()) {
 
       private AbstractSemanticActionLink<Contact> deleteLink;
 
@@ -60,7 +60,7 @@ public class ViewContactPanel extends AbstractLicketMultiContainer<Contact> {
         });
 
         add(new LicketLabel("content"));
-        add(new MountedComponentLink("rootLink", ContactsAppRoot.class));
+        add(new MountedComponentLink<>("rootLink", ContactsAppRoot.class));
         add(this.deleteLink = new AbstractSemanticActionLink<Contact>("deleteLink", Contact.class) {
 
           @Override

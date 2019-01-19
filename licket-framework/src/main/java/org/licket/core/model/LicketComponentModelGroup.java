@@ -31,10 +31,6 @@ public class LicketComponentModelGroup {
     modelGroup.put(componentId, componentModelObject);
   }
 
-  public void addPatch(String componentId, JsonNode componentModelPatch) {
-    patchGroup.put(componentId, componentModelPatch);
-  }
-
   public LicketComponentModelGroup collectModels(ComponentActionCallback componentActionCallback) {
     componentActionCallback.forEachToBeReloaded(this::addComponentModel);
     return this;
@@ -45,6 +41,11 @@ public class LicketComponentModelGroup {
       addPatch(component.getCompositeId().getValue(), component.getComponentModel().getPatch().getJsonPatch());
       return;
     }
-    addModel(component.getCompositeId().getValue(), component.getComponentModel().get());
+    component.getComponentModel().get().ifPresent(componentModel -> addModel(component.getCompositeId().getValue(), componentModel));
+
+  }
+
+  private void addPatch(String componentId, JsonNode componentModelPatch) {
+    patchGroup.put(componentId, componentModelPatch);
   }
 }

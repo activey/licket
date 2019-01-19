@@ -11,12 +11,14 @@ import static org.licket.core.view.LicketComponentView.fromComponentClass;
  */
 public class SemanticUILoader extends AbstractLicketMonoContainer<String> {
 
+  private static final String DEFAULT_LOADING_TEXT = "Loading ...";
+
   public SemanticUILoader(String id, String label) {
     super(id, String.class, ofString(label), fromComponentClass(SemanticUILoader.class));
   }
 
   @Override
   protected void onInitializeContainer() {
-    add(new LicketStaticLabel("loader-content", ofString(getComponentModel().get())));
+    add(new LicketStaticLabel("loader-content", ofString(getComponentModel().get().orElse(DEFAULT_LOADING_TEXT))));
   }
 }

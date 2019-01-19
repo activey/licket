@@ -50,8 +50,8 @@ public class LicketLabel extends AbstractLicketComponent<String> {
     private String placeholder() {
         Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketMultiContainer);
         if (parent != null) {
-            return format("{{model.%s}}", getComponentModel().get());
+            return format("{{model.%s}}", getComponentModel().get().orElseThrow(() -> new RuntimeException("Unable to read model value!")));
         }
-        return format("{{%s}}", getComponentModel().get());
+        return format("{{%s}}", getComponentModel().get().orElseThrow(() -> new RuntimeException("Unable to read model value!")));
     }
 }

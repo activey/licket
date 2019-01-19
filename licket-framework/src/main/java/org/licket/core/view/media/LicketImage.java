@@ -23,14 +23,15 @@ public class LicketImage extends AbstractLicketComponent<String> {
 
     @Override
     protected void onBeforeRender(ComponentRenderingContext renderingContext) {
-        renderingContext.onSurfaceElement(element -> element.addAttribute("v-bind:src", placeholder()));
+        placeholder().ifPresent(placeholder -> renderingContext.onSurfaceElement(element -> element.addAttribute("v-bind:src", placeholder)));
     }
 
-    private String placeholder() {
-        Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketMultiContainer);
-        if (parent != null) {
-            return format("model.%s", getComponentModel().get());
-        }
-        return format("%s", getComponentModel().get());
+    private Optional<String> placeholder() {
+        return getComponentModel().get().map(modelValue -> {
+            Optional<LicketComponent<?>> parent = traverseUp(component -> component instanceof AbstractLicketMultiContainer);
+            return parent
+                .map(parentModel -> format("model.%s", modelValue))
+                .orElse(format("%s", modelValue));
+        });
     }
 }

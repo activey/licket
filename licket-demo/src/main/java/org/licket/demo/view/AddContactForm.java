@@ -84,8 +84,10 @@ public class AddContactForm extends AbstractSemanticUIForm<Contact> {
 
     @Override
     protected void onSubmit() {
-        contactsService.addContact(getComponentModel().get());
-        clearInput();
+        getComponentModel().get().ifPresent(contact -> {
+            contactsService.addContact(contact);
+            clearInput();
+        });
     }
 
     public void addEmail() {
@@ -105,6 +107,6 @@ public class AddContactForm extends AbstractSemanticUIForm<Contact> {
         if (callback == null) {
             return;
         }
-        callback.accept(getComponentModel().get(), componentActionCallback);
+        getComponentModel().get().ifPresent(contact -> callback.accept(contact, componentActionCallback));
     }
 }
