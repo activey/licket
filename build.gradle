@@ -1,0 +1,22 @@
+subprojects {
+  apply plugin: 'java'
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+  tasks.withType(JavaCompile) {
+  	options.encoding = 'UTF-8'
+  }
+
+  
+  repositories {
+    mavenLocal()
+    
+    maven { url "http://repo.maven.apache.org/maven2" }
+  }
+}
+
+project(':licket-demo') {
+  dependencies {
+    implementation project(':licket-spring-autoconfigure'), project(':licket-module-semanticui')
+  }
+}
+

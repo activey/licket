@@ -1,0 +1,3 @@
+dependencies {
+    compile group: 'com.github.javafaker', name: 'javafaker', version:'0.10'
+}

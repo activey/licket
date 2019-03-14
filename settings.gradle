@@ -1,0 +1,20 @@
+rootProject.name = 'licket-parent'
+include ':licket-common'
+include ':licket-framework'
+include ':licket-xml-parser'
+include ':licket-framework-surface'
+include ':licket-spring-autoconfigure'
+include ':licket-framework-hippo'
+include ':licket-npm-libraries'
+include ':licket-module-semanticui'
+include ':licket-demo'
+
+project(':licket-common').projectDir = "$rootDir/licket-common" as File
+project(':licket-framework').projectDir = "$rootDir/licket-framework" as File
+project(':licket-xml-parser').projectDir = "$rootDir/licket-xml-parser" as File
+project(':licket-framework-surface').projectDir = "$rootDir/licket-framework-surface" as File
+project(':licket-spring-autoconfigure').projectDir = "$rootDir/licket-spring-autoconfigure" as File
+project(':licket-framework-hippo').projectDir = "$rootDir/licket-framework-hippo" as File
+project(':licket-npm-libraries').projectDir = "$rootDir/licket-npm-libraries" as File
+project(':licket-module-semanticui').projectDir = "$rootDir/licket-module-semanticui" as File
+project(':licket-demo').projectDir = "$rootDir/licket-demo" as File
