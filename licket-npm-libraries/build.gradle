@@ -38,14 +38,23 @@ node {
     nodeModulesDir = file("${project.projectDir}")
 }
 
-//sourceSets.main.resources.includes = [ "node_modules/*.js" ]
+jar {
+    
+    into 'vue/dist',{
+        from ('node_modules/vue/dist') {
+            include "vue.js"
+        }
+    }
 
-sourceSets {
-    main {
-        resources {
-            include "node_modules/vue/dist/vue.js"
-            include "node_modules/vue-router/dist/vue-router.js"
-            include "node_modules/vue-resource/dist/vue-resource.js"
+    into 'vue-router/dist',{
+        from ('node_modules/vue-router/dist') {
+            include "vue-router.js"
+        }
+    }
+
+    into 'vue-resource/dist',{
+        from ('node_modules/vue-resource/dist') {
+            include "vue-resource.js"
         }
     }
 }
