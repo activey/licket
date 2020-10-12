@@ -32,7 +32,7 @@
         <com.google.guava.version>16.0</com.google.guava.version>
 
         <!-- Testing -->
-        <junit.junit.version>4.8.1</junit.junit.version>
+        <junit.junit.version>4.13.1</junit.junit.version>
         <org.mockito.version>1.9.0</org.mockito.version>
         <fest-assert.version>1.4</fest-assert.version>
         <pl.pragmatists.JUnitParams.version>1.0.2</pl.pragmatists.JUnitParams.version>
