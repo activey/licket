@@ -24,7 +24,7 @@
 
         <!-- Spring related -->
         <org.springframework.version>4.3.2.RELEASE</org.springframework.version>
-        <org.springframework.boot.spring-boot-starter-web.version>1.4.0.RELEASE</org.springframework.boot.spring-boot-starter-web.version>
+        <org.springframework.boot.spring-boot-starter-web.version>2.5.12</org.springframework.boot.spring-boot-starter-web.version>
         <org.springframework.boot.spring-boot-starter-jetty.version>1.4.0.RELEASE</org.springframework.boot.spring-boot-starter-jetty.version>
         <com.fasterxml.jackson.core.jackson-databind.version>2.5.0</com.fasterxml.jackson.core.jackson-databind.version>
 
